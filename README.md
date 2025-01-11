@@ -1,7 +1,7 @@
-# , Calculus II | MATH 102
+# Calculus II | MATH 102
 
 ## [GO TO COURSE MATERIAL](./docs/MATH102_NOTES.html)
-.
+
 
 ## Course Information
 
