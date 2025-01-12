@@ -26,7 +26,7 @@ begin
 end
 
 # ╔═╡ 71bc54d5-d0ed-42d3-9bc1-48aa86e91d1d
-TableOfContents(title="📚 MATH208: Differential Equations and Linear Algebra", indent=true, depth=4)
+TableOfContents(title="📚 MATH102: Calculus III", indent=true, depth=4)
 
 # ╔═╡ e414122f-b93a-4510-b8ae-026c303e0df9
 begin
@@ -162,7 +162,7 @@ begin
     text_book = post_img("https://www.dropbox.com/scl/fi/upln00gqvnbdy7whr23pj/larson_book.jpg?rlkey=wlkgmzw2ernadd9b8v8qwu2jd&dl=1", 200)
     md""" # Syllabus
     ## Syallbus
-    See here [Term 241 - MATH208 - Syllabus](https://www.dropbox.com/scl/fi/5u3riz5gzbfuj9c5h8bn2/T241MATH208Syllabus.pdf?rlkey=pcjja6yvflfzazbxx1wkkyazo&raw=1)
+    See here [Term 242 - MATH102 - Syllabus](https://www.dropbox.com/scl/fi/5u3riz5gzbfuj9c5h8bn2/T241MATH208Syllabus.pdf?rlkey=pcjja6yvflfzazbxx1wkkyazo&raw=1)
     ## Textbook
     __Textbook: Edwards, C. H., Penney, D. E., and Calvis, D. T., Differential Equations and Linear Algebra, Fourth edition, Pearson, 2021__
     $text_book
@@ -172,8 +172,8 @@ begin
 
     | Day       | Time        |
     |-----------|-------------|
-    | Sunday    | 11:00-11:50AM |
-    | Monday | 12:00-12:50PM |
+    | Sunday    | 02:00-02:50PM |
+    | Tuesday    | 02:00-02:50PM |
     Also you can ask for an online meeting through __TEAMS__.
     """
 end
