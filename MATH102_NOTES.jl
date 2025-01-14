@@ -4,6 +4,18 @@
 using Markdown
 using InteractiveUtils
 
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
+macro bind(def, element)
+    #! format: off
+    quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local el = $(esc(element))
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
+        el
+    end
+    #! format: on
+end
+
 # ╔═╡ f2d4c2a5-f486-407b-b31b-d2efcc7476b3
 begin
     using CommonMark
@@ -44,6 +56,164 @@ end
 # exportqrcode("https://www.mathmatize.com/")
 let 
 	img = LocalImage("./qrcode.png")
+end
+
+# ╔═╡ 8b65d45c-ca7c-4e5d-9cfd-a7348547ebe0
+md"# 5.2 Area"
+
+# ╔═╡ 02c15fce-abf1-427e-b648-2554ee18ed5a
+cm"""
+> __Objectives__
+> 1. Use sigma notation to write and evaluate a sum.
+> 2. Use sigma notation to write and evaluate a sum.
+> 3. Approximate the area of a plane region.
+> 4. Approximate the area of a plane region.
+
+"""
+
+# ╔═╡ 38eabacb-a71a-448d-875d-7f7230dba49e
+md"""
+### Sigma Notation
+The sum of ``n`` terms  ``a_1, a_2, \cdots, a_n`` is written as
+```math
+\sum_{i=1}^n a_i = a_1+ a_2+ \cdots+ a_n
+```
+where ``i`` is the __index of summation__, ``a_i`` is the th __``i``th term__ of the sum, and the upper and lower bounds of summation are ``n`` and ``1``.
+"""
+
+# ╔═╡ bd6fff85-5fcc-4810-898d-d6f22b8e917d
+begin
+    hline = html"<hr>"
+    md"""
+    ####  Summation Properties
+
+    ```math
+
+    \begin{array}{lcl}
+     \displaystyle\sum_{i=1}^n c a_i &=& c\sum_{i=1}^n  a_i \\
+    \\
+     \displaystyle\sum_{i=1}^n (a_i+b_i) &=& \sum_{i=1}^n  a_i+\sum_{i=1}^n  b_i \\
+    \\
+    \displaystyle\sum_{i=1}^n (a_i-b_i) &=& \sum_{i=1}^n  a_i-\sum_{i=1}^n  b_i \\
+    \\
+    \end{array} 
+    ```
+
+    #### Summation Formulas
+
+    ```math
+    \displaystyle
+    \begin{array}{ll}
+    (1) & \displaystyle\sum_{i=1}^n c = cn, \quad c \text{ is a constant} \\
+    \\
+    (2) & \displaystyle\sum_{i=1}^n i = \frac{n(n+1)}{2} \\
+    \\
+    (3) &\displaystyle \sum_{i=1}^n i^2 =  \frac{n(n+1)(2n+1)}{6} \\
+    \\
+    (4) & \displaystyle\sum_{i=1}^n i^3 = \left[\frac{n(n+1)}{2}\right]^2 \\
+    \\
+    \end{array} 
+    ```
+
+
+
+    $hline
+
+    """
+end
+
+# ╔═╡ 6caae83a-3aa3-4f79-9f05-fb969f952286
+md"## Area "
+
+# ╔═╡ 73c7417c-a035-4202-83f1-45e9897e8871
+md"## The Area of a Plane Region"
+
+# ╔═╡ 0e340bfb-9807-4061-8901-62133ac44c5f
+f(x) = 5 - x^2
+
+# ╔═╡ ebd3dd41-7a3b-4d2b-9c1d-adca89f36af7
+begin
+    ns = @bind n NumberField(2:4000, default=4)
+    as = @bind a NumberField(0:1)
+    bs = @bind b NumberField(a+2:10)
+    lrs = @bind lr Select(["l" => "Left", "r" => "Right", "m" => "Midpoint", "rnd" => "Random"])
+
+    md"""
+    n = $ns  a = $as  b = $bs method = $lrs
+
+    """
+end
+
+# ╔═╡ 19354aee-6de7-448f-8091-f6f68efdf84b
+@bind showPlot Radio(["show" => "✅", "hide" => "❌"], default="hide")
+
+# ╔═╡ 7086a5a8-d5ad-444b-8d14-056a3fdb99eb
+@bind showConnc Radio(["show" => "✅", "hide" => "❌"], default="hide")
+
+# ╔═╡ bb77f844-76c9-401f-8c2c-dcc5891b0a09
+(showConnc == "show") ? md"""
+  $$A=\lim_{n\to \infty} R_n =\lim_{n\to \infty} L_n =\frac{22}{3}$$
+  """ : ""
+
+# ╔═╡ 9463762b-50bb-49be-80be-5f67cb141d1c
+md"## Finding Area by the Limit Definition"
+
+# ╔═╡ 01008c60-bcfa-42a1-b5e8-fa67db2131ba
+
+
+# ╔═╡ 45937a8f-4bcf-4c59-bc61-5a6d1eb6f3ac
+
+
+# ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
+rect(x, Δx, xs, f) = Shape([(x, 0), (x + Δx, 0), (x + Δx, f(xs)), (x, f(xs))])
+
+# ╔═╡ 8315fb27-89e4-44a4-a51e-8e55fc3d58e5
+function reimannSum(f, n, a, b; method="l", color=:green, plot_it=false)
+    Δx = (b - a) / n
+    x = a:0.1:b
+    # plot(f;xlim=(-2π,2π), xticks=(-2π:(π/2):2π,["$c π" for c in -2:0.5:2]))
+
+    (partition, recs) = if method == "r"
+        parts = (a+Δx):Δx:b
+        rcs = [rect(p - Δx, Δx, p, f) for p in parts]
+        (parts, rcs)
+    elseif method == "m"
+        parts = (a+(Δx/2)):Δx:(b-(Δx/2))
+        rcs = [rect(p - Δx / 2, Δx, p, f) for p in parts]
+        (parts, rcs)
+    elseif method == "l"
+        parts = a:Δx:(b-Δx)
+        rcs = [rect(p, Δx, p, f) for p in parts]
+        (parts, rcs)
+    else
+        parts = a:Δx:(b-Δx)
+        rcs = [rect(p, Δx, rand(p:0.1:p+Δx), f) for p in parts]
+        (parts, rcs)
+    end
+    # recs= [rect(sample(p,Δx),Δx,p,f) for p in partition]
+    p = plot(x, f.(x); legend=nothing)
+    plot!(p, recs, framestyle=:origin, opacity=0.4, color=color)
+    s = round(sum(f.(partition) * Δx), sigdigits=6)
+    return plot_it ? (p, s) : s
+end
+
+
+# ╔═╡ f80cc26d-120b-4f14-b31e-b50c9283c0b9
+let
+	if showPlot == "show"
+    theme(:wong)
+    anchor1 = 0.5
+    (p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true)
+
+    annotate!(p, [(anchor1, f(anchor1) - 2, text(L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$", 12, n > 500 ? :white : :black))])
+    annotate!(p, [(anchor1 + 0.5, f(anchor1 + 0.1), text(L"$y=%$f(x)$", 12, :black))])
+
+    md""" 	
+
+    $p
+    """
+	end
+
 end
 
 # ╔═╡ ef081dfa-b610-4c7a-a039-7258f4f6e80e
@@ -162,7 +332,7 @@ begin
     text_book = post_img("https://www.dropbox.com/scl/fi/upln00gqvnbdy7whr23pj/larson_book.jpg?rlkey=wlkgmzw2ernadd9b8v8qwu2jd&dl=1", 200)
     md""" # Syllabus
     ## Syallbus
-    See here [Term 242 - MATH102 - Syllabus](https://www.dropbox.com/scl/fi/5u3riz5gzbfuj9c5h8bn2/T241MATH208Syllabus.pdf?rlkey=pcjja6yvflfzazbxx1wkkyazo&raw=1)
+    See here [Term 242 - MATH102 - Syllabus](https://www.dropbox.com/scl/fi/mhlakw1roc1vv0mytjm42/Math102-Syllabus-242.pdf?rlkey=cf4egj8p25d4yrusj28r8nxw5&raw=1)
     ## Textbook
     __Textbook: Edwards, C. H., Penney, D. E., and Calvis, D. T., Differential Equations and Linear Algebra, Fourth edition, Pearson, 2021__
     $text_book
@@ -177,6 +347,143 @@ begin
     Also you can ask for an online meeting through __TEAMS__.
     """
 end
+
+# ╔═╡ d60ca33d-fa31-49a2-9a4a-dfc54aef46ae
+cm"""
+$(ex())
+
+Evaluate ``\displaystyle \sum_{i=1}^n\frac{i+1}{n}`` for ``n=10, 100, 1000`` and ``10,000``.
+
+"""
+
+# ╔═╡ 52333157-9913-489d-8784-dc3b542af1e9
+cm""" 
+
+
+
+In __Euclidean geometry__, the simplest type of plane region is a rectangle. Although people often say that the *formula* for the area of a rectangle is
+```math
+A = bh
+```
+it is actually more proper to say that this is the *definition* of the __area of a rectangle__.
+
+For a triangle ``A=\frac{1}{2}bh``
+
+$(post_img("https://www.dropbox.com/s/sfsg0d4ha1m2gc6/triangle_area.jpg?raw=1", 300))
+"""
+
+
+# ╔═╡ 9f50c8be-95e8-4c28-81b4-8ccd638505af
+cm"""
+
+
+$(ex())
+
+Use __five__ rectangles to find two approximations of the area of the region lying between the graph of
+```math
+f(x)=5-x^2
+```
+and the ``x``-axis between ``x=0`` and ``x=2``.
+"""
+
+# ╔═╡ 15277097-7c11-4b03-8579-8f9c376361cd
+let
+    findingAreaP = plot(0.2:0.1:4, x -> 0.6x^3 - (10 / 3) * x^2 + (13 / 3) * x + 1.4, fillrange=zero, fillalpha=0.35, c=:red, framestyle=:origin, label=nothing, ticks=nothing)
+    plot!(findingAreaP, -0.1:0.1:4.1, x -> 0.6x^3 - (10 / 3) * x^2 + (13 / 3) * x + 1.4, c=:green, label=nothing)
+    annotate!(findingAreaP, [
+        (0.1, 4, text(L"y", 14)),
+        (4.1, 0.1, text(L"x", 14)),
+        (0.2, -0.1, text(L"a", 14)),
+        (4, -0.1, text(L"b", 14)),
+        (3.9, 4, text(L"f", 14))
+    ])
+    cm"""
+    
+    __Find the area of the region is bounded below by the ``x``-axis, and the left and right boundaries of the region are the vertical lines ``x=a`` and ``x=b``.__
+
+    $findingAreaP
+
+    $(post_img("https://www.dropbox.com/s/hnspiptmyybneqn/area_with_lower_and_upper.jpg?raw=1",400))
+    """
+end
+
+# ╔═╡ 8f673110-65a1-4f6d-8de1-ebcfb49fb50d
+cm"""
+$(ex(4,"Finding Upper and Lower Sums for a Region"))
+Find the upper and lower sums for the region bounded by the graph of ``f(x)=x^2`` and the ``x``-axis between ``x=0`` and ``x=2``.
+"""
+
+# ╔═╡ f89bbb38-906b-45f3-9eff-617924e0b719
+cm"""
+$(bth("Limits of the Lower and Upper Sums"))
+
+Let ``f`` be continuous and nonnegative on the interval ``[a,b]``. The limits as ``n\to\infty`` of both the lower and upper sums exist and are equal to each other. That is,
+```math
+\displaystyle \lim_{n\to\infty}s(n)=
+\displaystyle \lim_{n\to\infty}\sum_{i=1}^nf(m_i)\Delta x
+=\displaystyle \lim_{n\to\infty}\sum_{i=1}^nf(M_i)\Delta x
+=\displaystyle \lim_{n\to\infty}S(n)
+```
+‍
+‍
+where  
+```math
+\Delta x = \frac{b-a}{n}
+```
+and ``f(m_i)`` and ``f(M_i)`` are the minimum and maximum values of ``f`` on the ``i``th subinterval.
+
+"""
+
+# ╔═╡ a862aa36-d811-427d-bc1a-4502175b71f4
+cm"""
+$(define("Area of a Region in the Plane"))
+Let ``f`` be continuous and nonnegative on the interval ``[a,b]``.  The area of the region bounded by the graph of ``f`` , the ``x``-axis, and the vertical lines ``x=a`` and ``y=b`` is 
+```math
+\textrm{Area} = \displaystyle \lim_{n\to\infty}\sum_{i=1}^nf(c_i)\Delta x
+```
+where 
+```math
+x_{i-1}\leq c_i\leq x_i\quad \textrm{and}\quad \Delta x =\frac{b-a}{n}.
+```
+See the grpah
+<div class="img-container">
+
+$(post_img("https://www.dropbox.com/s/a3sjz8m9vspp5ec/area_def.jpg?raw=1",300))
+
+</div>
+"""
+
+# ╔═╡ b9434085-81d7-4a3d-bed5-deebea3cd48a
+cm"""
+    $(ex(5,"Finding Area by the Limit Definition"))
+
+    Find the area of the region bounded by the graph of ``f(x)=x^3`` , the ``x``-axis, and the vertical lines ``x=0`` and ``x=1``.
+
+    """
+
+
+# ╔═╡ 1615be4c-fb84-418f-8406-c274550cfb86
+cm"""
+$(ex(7,"A Region Bounded by the y-axis"))
+
+Find the area of the region bounded by the graph of ``f(y)=y^2`` and the ``y``-axis for ``0\leq y\leq 1``.
+
+"""
+
+# ╔═╡ 38ab6c6d-c5e0-49f9-8c76-61e0b8dc13c6
+cm"""
+$(bbl("Midpoint Rule",""))
+
+```math
+\textrm{Area} \approx \sum_{i=1}^n f\left(\frac{x_{i-1}+x_i}{2}\right)\Delta x.
+```
+
+$(ebl())
+
+$(ex(8,"Approximating Area with the Midpoint Rule"))
+
+Use the Midpoint Rule with ``n=4`` to approximate the area of the region bounded by the graph of ``f(x)=\sin x`` and the ``x``-axis for ``0\leq x\leq \pi``, 
+"""
 
 # ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
 initialize_eqref()
@@ -2276,8 +2583,35 @@ version = "1.4.1+1"
 # ╟─e414122f-b93a-4510-b8ae-026c303e0df9
 # ╟─8408e369-40eb-4f9b-a7d7-26cde3e34a74
 # ╟─cd269caf-ef81-43d7-a1a8-6668932b6363
+# ╟─8b65d45c-ca7c-4e5d-9cfd-a7348547ebe0
+# ╟─02c15fce-abf1-427e-b648-2554ee18ed5a
+# ╟─38eabacb-a71a-448d-875d-7f7230dba49e
+# ╟─bd6fff85-5fcc-4810-898d-d6f22b8e917d
+# ╟─d60ca33d-fa31-49a2-9a4a-dfc54aef46ae
+# ╟─6caae83a-3aa3-4f79-9f05-fb969f952286
+# ╟─52333157-9913-489d-8784-dc3b542af1e9
+# ╟─73c7417c-a035-4202-83f1-45e9897e8871
+# ╟─9f50c8be-95e8-4c28-81b4-8ccd638505af
+# ╠═0e340bfb-9807-4061-8901-62133ac44c5f
+# ╟─ebd3dd41-7a3b-4d2b-9c1d-adca89f36af7
+# ╟─19354aee-6de7-448f-8091-f6f68efdf84b
+# ╟─f80cc26d-120b-4f14-b31e-b50c9283c0b9
+# ╟─7086a5a8-d5ad-444b-8d14-056a3fdb99eb
+# ╟─bb77f844-76c9-401f-8c2c-dcc5891b0a09
+# ╟─9463762b-50bb-49be-80be-5f67cb141d1c
+# ╟─15277097-7c11-4b03-8579-8f9c376361cd
+# ╟─8f673110-65a1-4f6d-8de1-ebcfb49fb50d
+# ╟─f89bbb38-906b-45f3-9eff-617924e0b719
+# ╟─a862aa36-d811-427d-bc1a-4502175b71f4
+# ╟─b9434085-81d7-4a3d-bed5-deebea3cd48a
+# ╟─1615be4c-fb84-418f-8406-c274550cfb86
+# ╟─38ab6c6d-c5e0-49f9-8c76-61e0b8dc13c6
+# ╠═01008c60-bcfa-42a1-b5e8-fa67db2131ba
 # ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
-# ╠═ef081dfa-b610-4c7a-a039-7258f4f6e80e
+# ╠═45937a8f-4bcf-4c59-bc61-5a6d1eb6f3ac
+# ╟─b4599a16-e7f7-4a2a-b349-2648ee45208f
+# ╠═8315fb27-89e4-44a4-a51e-8e55fc3d58e5
+# ╟─ef081dfa-b610-4c7a-a039-7258f4f6e80e
 # ╟─da9230a6-088d-4735-b206-9514c12dd223
 # ╟─107407c8-5da0-4833-9965-75a82d84a0fb
 # ╟─00000000-0000-0000-0000-000000000001
