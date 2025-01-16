@@ -65,9 +65,9 @@ md"# 5.2 Area"
 cm"""
 > __Objectives__
 > 1. Use sigma notation to write and evaluate a sum.
-> 2. Use sigma notation to write and evaluate a sum.
-> 3. Approximate the area of a plane region.
-> 4. Approximate the area of a plane region.
+> 1. Understand the concept of area.
+> 1. Approximate the area of a plane region.
+> 1. Find the area of a plane region using limits.
 
 """
 
@@ -158,40 +158,65 @@ end
 # ╔═╡ 9463762b-50bb-49be-80be-5f67cb141d1c
 md"## Finding Area by the Limit Definition"
 
-# ╔═╡ 01008c60-bcfa-42a1-b5e8-fa67db2131ba
+# ╔═╡ ee50e46d-6580-4a68-a061-6179c895a219
+md"""#  5.3 Riemann Sums and Definite Integrals 
+
+> __Objectives__
+> 1. Understand the definition of a Riemann sum.
+> 2. Evaluate a definite integral using limits and geometric formulas.
+> 3. Evaluate a definite integral using properties of definite integrals.
+
+"""
+
+# ╔═╡ 1f0c53c0-611f-4b4e-9718-efac2f0b893d
+begin
+    ns2 = @bind n2 Slider(2:2000, show_value=true, default=4)
+    as2 = @bind a2 NumberField(-10:10, default=0)
+    bs2 = @bind b2 NumberField(a+1:10)
+    lrs2 = @bind lr2 Select(["l" => "Left", "r" => "Right", "m" => "Midpoint", "rnd" => "Random"])
+    md"""
+    n = $ns2  a = $as2  b = $bs2 method = $lrs2
 
 
-# ╔═╡ 45937a8f-4bcf-4c59-bc61-5a6d1eb6f3ac
+    """
+end
 
 
 # ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
-rect(x, Δx, xs, f) = Shape([(x, 0), (x + Δx, 0), (x + Δx, f(xs)), (x, f(xs))])
+function rect(x, Δx, xs, f;direction=:x) 
+	if direction==:y
+		Shape([(0,x), (0,x + Δx), (f(xs), x + Δx), (f(xs), x )])
+	else
+		Shape([(x, 0), (x + Δx, 0), (x + Δx, f(xs)), (x, f(xs))])
+	end
+		
+end
 
 # ╔═╡ 8315fb27-89e4-44a4-a51e-8e55fc3d58e5
-function reimannSum(f, n, a, b; method="l", color=:green, plot_it=false)
+function reimannSum(f, n, a, b; method="l", color=:green, plot_it=false,direction=:x)
     Δx = (b - a) / n
-    x = a:0.1:b
+    x = a:0.01:b
     # plot(f;xlim=(-2π,2π), xticks=(-2π:(π/2):2π,["$c π" for c in -2:0.5:2]))
 
     (partition, recs) = if method == "r"
         parts = (a+Δx):Δx:b
-        rcs = [rect(p - Δx, Δx, p, f) for p in parts]
+        rcs = [rect(p - Δx, Δx, p, f;direction=direction) for p in parts]
         (parts, rcs)
     elseif method == "m"
         parts = (a+(Δx/2)):Δx:(b-(Δx/2))
-        rcs = [rect(p - Δx / 2, Δx, p, f) for p in parts]
+        rcs = [rect(p - Δx / 2, Δx, p, f;direction=direction) for p in parts]
         (parts, rcs)
     elseif method == "l"
         parts = a:Δx:(b-Δx)
-        rcs = [rect(p, Δx, p, f) for p in parts]
+        rcs = [rect(p, Δx, p, f;direction=direction) for p in parts]
         (parts, rcs)
     else
         parts = a:Δx:(b-Δx)
-        rcs = [rect(p, Δx, rand(p:0.1:p+Δx), f) for p in parts]
+        rcs = [rect(p, Δx, rand(p:0.1:p+Δx), f;direction=direction) for p in parts]
         (parts, rcs)
     end
     # recs= [rect(sample(p,Δx),Δx,p,f) for p in partition]
-    p = plot(x, f.(x); legend=nothing)
+    p = direction == :y ? plot(f.(x), x; legend=nothing) : plot(x, f.(x); legend=nothing)
     plot!(p, recs, framestyle=:origin, opacity=0.4, color=color)
     s = round(sum(f.(partition) * Δx), sigdigits=6)
     return plot_it ? (p, s) : s
@@ -214,6 +239,110 @@ let
     """
 	end
 
+end
+
+# ╔═╡ 8c2f85bb-9b81-4b70-b7e8-1a91e2738838
+let
+	n = 4
+	lr="l"
+	f(x)= x^2
+	a,b = 0, 2
+	theme(:wong)
+    anchor1 = 0.5
+    (p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true)
+	sum_text = if lr == "l"
+			L"$\sum_{i=1}^{%$n} f (x_{i-1})\Delta x=%$s$"
+		elseif lr=="r"
+			L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$"
+		else
+			L"$\sum_{i=1}^{%$n} f (x^*_{i})\Delta x=%$s$"
+		end
+    annotate!(p, [(anchor1, f(anchor1) +2, text(sum_text, 12, n > 500 ? :white : :black))])
+    annotate!(p, [(1.2, f(1)+0.1, text(L"$y=%$f(x)$", 12, :black))])
+
+    md""" 	
+
+    $p
+    """
+	
+end
+
+# ╔═╡ 208abdcc-dc12-4a08-a1f8-2177f95886f7
+let
+	n = 4
+	lr="l"
+	f(x)= x^3
+	a,b = 0, 1
+	theme(:wong)
+    anchor1 = 0.5
+	(p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true)
+    sum_text = if lr == "l"
+		L"$\sum_{i=1}^{%$n} f (x_{i-1})\Delta x=%$s$"
+	elseif lr=="r"
+		L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$"
+	else
+		L"$\sum_{i=1}^{%$n} f (x^*_{i})\Delta x=%$s$"
+	end
+	
+    annotate!(p, [(anchor1, f(anchor1)+0.5, text(sum_text, 12, n > 500 ? :white : :black))])
+    
+    md""" 	
+
+    $p
+    """
+	
+end
+
+# ╔═╡ fd7161bc-1e1b-42e3-8758-c8e3e3ec0877
+let
+	n = 4
+	lr="l"
+	f(y)= y^2
+	a,b = 0, 1
+	theme(:wong)
+    anchor1 = 0.5
+	(p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true,direction=:y)
+    sum_text = if lr == "l"
+		L"$\sum_{i=1}^{%$n} f (x_{i-1})\Delta x=%$s$"
+	elseif lr=="r"
+		L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$"
+	else
+		L"$\sum_{i=1}^{%$n} f (x^*_{i})\Delta x=%$s$"
+	end
+	
+    annotate!(p, [(anchor1, f(anchor1)-0.01, text(sum_text, 12, n > 500 ? :white : :black))])
+    
+    md""" 	
+
+    $p
+    """
+	
+end
+
+# ╔═╡ 01008c60-bcfa-42a1-b5e8-fa67db2131ba
+let
+	n = 4
+	lr="m"
+	f(x)= sin(x)
+	a,b = 0, π
+	theme(:wong)
+    anchor1 = 0.5
+	(p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true,direction=:x)
+    sum_text = if lr == "l"
+		L"$\sum_{i=1}^{%$n} f (x_{i-1})\Delta x=%$s$"
+	elseif lr=="r"
+		L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$"
+	else
+		L"$\sum_{i=1}^{%$n} f (x^*_{i})\Delta x=%$s$"
+	end
+	
+    annotate!(p, [(anchor1+0.1, f(anchor1)+0.4, text(sum_text, 12, n > 500 ? :white : :black))])
+    
+    md""" 	
+
+    $p
+    """
+	
 end
 
 # ╔═╡ ef081dfa-b610-4c7a-a039-7258f4f6e80e
@@ -2601,16 +2730,20 @@ version = "1.4.1+1"
 # ╟─9463762b-50bb-49be-80be-5f67cb141d1c
 # ╟─15277097-7c11-4b03-8579-8f9c376361cd
 # ╟─8f673110-65a1-4f6d-8de1-ebcfb49fb50d
+# ╟─8c2f85bb-9b81-4b70-b7e8-1a91e2738838
 # ╟─f89bbb38-906b-45f3-9eff-617924e0b719
 # ╟─a862aa36-d811-427d-bc1a-4502175b71f4
 # ╟─b9434085-81d7-4a3d-bed5-deebea3cd48a
+# ╟─208abdcc-dc12-4a08-a1f8-2177f95886f7
 # ╟─1615be4c-fb84-418f-8406-c274550cfb86
+# ╠═fd7161bc-1e1b-42e3-8758-c8e3e3ec0877
 # ╟─38ab6c6d-c5e0-49f9-8c76-61e0b8dc13c6
 # ╠═01008c60-bcfa-42a1-b5e8-fa67db2131ba
+# ╟─ee50e46d-6580-4a68-a061-6179c895a219
+# ╟─1f0c53c0-611f-4b4e-9718-efac2f0b893d
 # ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
-# ╠═45937a8f-4bcf-4c59-bc61-5a6d1eb6f3ac
 # ╟─b4599a16-e7f7-4a2a-b349-2648ee45208f
-# ╠═8315fb27-89e4-44a4-a51e-8e55fc3d58e5
+# ╟─8315fb27-89e4-44a4-a51e-8e55fc3d58e5
 # ╟─ef081dfa-b610-4c7a-a039-7258f4f6e80e
 # ╟─da9230a6-088d-4735-b206-9514c12dd223
 # ╟─107407c8-5da0-4833-9965-75a82d84a0fb
