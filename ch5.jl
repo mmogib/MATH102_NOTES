@@ -16,62 +16,91 @@ macro bind(def, element)
     #! format: on
 end
 
-# ╔═╡ f2d4c2a5-f486-407b-b31b-d2efcc7476b3
+# ╔═╡ e93c5882-1ef8-43f6-b1ee-ee23c813c91b
 begin
-    using CommonMark
-    using PlutoUI, PlutoExtras
-    using Plots, PlotThemes, LaTeXStrings
-    using Latexify
-    using HypertextLiteral
-    using Colors
-    using LinearAlgebra, Random, Printf, SparseArrays
-    # using Symbolics
+
+    using CommonMark, ImageIO, FileIO, ImageShow
+    using PlutoUI
+    using Plots, PlotThemes, LaTeXStrings, Random
     using SymPy
-    using QRCoders
+    using HypertextLiteral
+    using ImageTransformations
+    using Dates
     using PrettyTables
-	# using Primes
-    # using LinearSolve
-    # using NonlinearSolve
-    # using ForwardDiff
-    # using Integrals
-    # using OrdinaryDiffEq
 end
 
-# ╔═╡ 71bc54d5-d0ed-42d3-9bc1-48aa86e91d1d
-TableOfContents(title="📚 MATH102: Calculus III", indent=true, depth=4)
+# ╔═╡ 69d7b791-2e69-490c-8d10-10fa433f0a72
+@htl("""
+<script src="//unpkg.com/alpinejs" defer></script>
+<style>
+.img-container {
+	display:flex;
+	align-items:center;
+	flex-direction: column;
+}
+blockquote {
+  background: #0e08bf;
+  border-left: 10px solid #0e08bf;
+  margin: 1.5em 10px;
+}
+blockquote:before {
+  color: #0e08bf;
+  content: open-quote;
+  font-size: 3em;
+  line-height: 0.1em;
+  margin-right: 0.25em;
+  vertical-align: -0.4em;
+}
+blockquote p {
+  display: inline;
+}
+blockquote > ol {
+  list-style: none;
+  counter-reset: steps;
+}
+blockquote > ol li {
+  counter-increment: steps;
+}
+blockquote > ol li::before {
+  content: counter(steps);
+  margin-right: 0.5rem;
+  margin-top: 0.5rem;
+  background: #ff6f00;
+  color: white;
+  width: 1.2em;
+  height: 1.2em;
+  border-radius: 50%;
+  display: inline-grid;
+  place-items: center;
+  line-height: 1.2em;
+}
+blockquote > ol ol li::before {
+  background: darkorchid;
+}
+</style>
+""")
 
-# ╔═╡ e414122f-b93a-4510-b8ae-026c303e0df9
-begin
-    struct LocalImage
-        filename
-    end
+# ╔═╡ ad045108-9dca-4a61-ac88-80a3417c95f2
+TableOfContents(title="MATH102 - TERM 222")
 
-    function Base.show(io::IO, ::MIME"image/png", w::LocalImage)
-        write(io, read(w.filename))
-    end
-end
+# ╔═╡ 1e9f4829-1f50-47ae-8745-0daa90e7aa42
+md""" # Chapter 5 
 
-
-# ╔═╡ cd269caf-ef81-43d7-a1a8-6668932b6363
-# exportqrcode("https://www.mathmatize.com/")
-let 
-	img = LocalImage("./qrcode.png")
-end
-
-# ╔═╡ 8b65d45c-ca7c-4e5d-9cfd-a7348547ebe0
-md"# 5.2 Area"
-
-# ╔═╡ 02c15fce-abf1-427e-b648-2554ee18ed5a
-cm"""
-> __Objectives__
-> 1. Use sigma notation to write and evaluate a sum.
-> 1. Understand the concept of area.
-> 1. Approximate the area of a plane region.
-> 1. Find the area of a plane region using limits.
+## Section 5.2
 
 """
 
-# ╔═╡ 38eabacb-a71a-448d-875d-7f7230dba49e
+# ╔═╡ 9ce352ac-f374-4eb1-9a76-524ffd8a7306
+cm"""
+> __Objectives__
+> 1. Use sigma notation to write and evaluate a sum.
+> 2. Use sigma notation to write and evaluate a sum.
+> 3. Approximate the area of a plane region.
+> 4. Approximate the area of a plane region.
+
+"""
+
+# ╔═╡ 254d027d-ab13-4928-89b5-916dbf5f0044
 md"""
 ### Sigma Notation
 The sum of ``n`` terms  ``a_1, a_2, \cdots, a_n`` is written as
@@ -81,7 +110,7 @@ The sum of ``n`` terms  ``a_1, a_2, \cdots, a_n`` is written as
 where ``i`` is the __index of summation__, ``a_i`` is the th __``i``th term__ of the sum, and the upper and lower bounds of summation are ``n`` and ``1``.
 """
 
-# ╔═╡ bd6fff85-5fcc-4810-898d-d6f22b8e917d
+# ╔═╡ 0edc99ec-c39d-4a9e-af0d-c9778c6b4211
 begin
     hline = html"<hr>"
     md"""
@@ -122,18 +151,49 @@ begin
     """
 end
 
-# ╔═╡ 6caae83a-3aa3-4f79-9f05-fb969f952286
-md"## Area "
+# ╔═╡ 164b1c78-9f7b-4f9d-a6a6-fbe754cdb43e
+md"""
+__Example__
 
-# ╔═╡ 73c7417c-a035-4202-83f1-45e9897e8871
-md"## The Area of a Plane Region"
+Evaluate ``\displaystyle \sum_{i=1}^n\frac{i+1}{n}`` for ``n=10, 100, 1000`` and ``10,000``.
 
-# ╔═╡ 0e340bfb-9807-4061-8901-62133ac44c5f
+"""
+
+# ╔═╡ b048a772-05c3-4cd0-97ae-5cf825127584
+md""" 
+### Area 
+
+
+In __Euclidean geometry__, the simplest type of plane region is a rectangle. Although people often say that the *formula* for the area of a rectangle is
+```math
+A = bh
+```
+it is actually more proper to say that this is the *definition* of the __area of a rectangle__.
+
+For a triangle ``A=\frac{1}{2}bh``
+
+$(Resource("https://www.dropbox.com/s/sfsg0d4ha1m2gc6/triangle_area.jpg?raw=1", :width=>300))
+"""
+
+# ╔═╡ f16cb891-26d7-41c9-9747-f7d6cd054bc7
+md"""
+### The Area of a Plane Region
+
+__Example__
+
+Use __five__ rectangles to find two approximations of the area of the region lying between the graph of
+```math
+f(x)=5-x^2
+```
+and the $x$-axis between $x=0$ and $x=2$.
+"""
+
+# ╔═╡ 8ad65bee-9135-11eb-166a-837031c4bc45
 f(x) = 5 - x^2
 
-# ╔═╡ ebd3dd41-7a3b-4d2b-9c1d-adca89f36af7
+# ╔═╡ e7a87684-49b0-428c-9fef-248cf868cf33
 begin
-    ns = @bind n NumberField(2:4000, default=4)
+    ns = @bind n Slider(2:4000, show_value=true, default=4)
     as = @bind a NumberField(0:1)
     bs = @bind b NumberField(a+2:10)
     lrs = @bind lr Select(["l" => "Left", "r" => "Right", "m" => "Midpoint", "rnd" => "Random"])
@@ -144,22 +204,137 @@ begin
     """
 end
 
-# ╔═╡ 19354aee-6de7-448f-8091-f6f68efdf84b
+# ╔═╡ 74f6ac5d-f974-4ea6-801c-b88fe3346e55
 @bind showPlot Radio(["show" => "✅", "hide" => "❌"], default="hide")
 
-# ╔═╡ 7086a5a8-d5ad-444b-8d14-056a3fdb99eb
+# ╔═╡ c894d994-a7fc-4e07-8941-e9f9aa89fef0
+begin
+    if showPlot == "show"
+        Δx = (b - a) / n
+        xx1 = a:0.1:b
+
+        # plot(f;xlim=(-2π,2π), xticks=(-2π:(π/2):2π,["$c π" for c in -2:0.5:2]))
+
+        # recs= [rect(sample(p,Δx),Δx,p,f) for p in partition]
+        # pp1=plot(xx1,f.(xx1);legend=nothing)
+        pp1 = plot(xx1, f.(xx1), fillrange=zero, fillalpha=0.35, c=:blue, framestyle=:origin, label=nothing)
+        anck1 = (b - a) / 2
+        anck2 = f(anck1) / 2
+        annotate!(pp1, [(anck1, anck2, L"$S$", 12)])
+        annotate!(pp1, [(anck1, f(anck1), L"$y=%$f(x)$", 12)])
+    end
+end
+
+# ╔═╡ 2da325ba-48cc-44b3-be34-e0cb46e33068
 @bind showConnc Radio(["show" => "✅", "hide" => "❌"], default="hide")
 
-# ╔═╡ bb77f844-76c9-401f-8c2c-dcc5891b0a09
+# ╔═╡ 8436d1b3-c03e-42e6-bbff-e785738e0f89
 (showConnc == "show") ? md"""
   $$A=\lim_{n\to \infty} R_n =\lim_{n\to \infty} L_n =\frac{22}{3}$$
   """ : ""
 
-# ╔═╡ 9463762b-50bb-49be-80be-5f67cb141d1c
-md"## Finding Area by the Limit Definition"
+# ╔═╡ d00038ba-98e9-45db-91df-dc75cb8ec101
+begin
+    findingAreaP = plot(0.2:0.1:4, x -> 0.6x^3 - (10 / 3) * x^2 + (13 / 3) * x + 1.4, fillrange=zero, fillalpha=0.35, c=:red, framestyle=:origin, label=nothing, ticks=nothing)
+    plot!(findingAreaP, -0.1:0.1:4.1, x -> 0.6x^3 - (10 / 3) * x^2 + (13 / 3) * x + 1.4, c=:green, label=nothing)
+    annotate!(findingAreaP, [
+        (0.1, 4, text(L"y", 14)),
+        (4.1, 0.1, text(L"x", 14)),
+        (0.2, -0.1, text(L"a", 14)),
+        (4, -0.1, text(L"b", 14)),
+        (3.9, 4, text(L"f", 14))
+    ])
+    cm"""
+    ### Finding Area by the Limit Definition
 
-# ╔═╡ ee50e46d-6580-4a68-a061-6179c895a219
-md"""#  5.3 Riemann Sums and Definite Integrals 
+    __Find the area of the region is bounded below by the ``x``-axis, and the left and right boundaries of the region are the vertical lines ``x=a`` and ``x=b``.__
+
+    $findingAreaP
+
+    $(Resource("https://www.dropbox.com/s/hnspiptmyybneqn/area_with_lower_and_upper.jpg?raw=1",:width=>400))
+    """
+end
+
+# ╔═╡ ef203912-b238-40a7-9d1b-4ed9b86ccbd2
+cm"""
+__Example__
+Find the upper and lower sums for the region bounded by the graph of ``f(x)=x^2`` and the ``x``-axis between ``x=0`` and ``x=2``.
+"""
+
+# ╔═╡ 614c0f82-523a-40a6-9b57-d8b16d2b2860
+cm"""
+__Theorem__ *Limits of the Lower and Upper Sums*
+
+Let ``f`` be continuous and nonnegative on the interval ``[a,b]``. The limits as ``n\to\infty`` of both the lower and upper sums exist and are equal to each other. That is,
+```math
+\displaystyle \lim_{n\to\infty}s(n)=
+\displaystyle \lim_{n\to\infty}\sum_{i=1}^nf(m_i)\Delta x
+=\displaystyle \lim_{n\to\infty}\sum_{i=1}^nf(M_i)\Delta x
+=\displaystyle \lim_{n\to\infty}S(n)
+```
+‍
+‍
+where  
+```math
+\Delta x = \frac{b-a}{n}
+```
+and ``f(m_i)`` and ``f(M_i)`` are the minimum and maximum values of ``f`` on the ``i``th subinterval.
+
+"""
+
+# ╔═╡ abd37588-b86f-4e99-8728-5a362ce5f34f
+cm"""
+__Definition of the Area of a Region in the Plane__
+Let ``f`` be continuous and nonnegative on the interval ``[a,b]``.  The area of the region bounded by the graph of ``f`` , the ``x``-axis, and the vertical lines ``x=a`` and ``y=b`` is 
+```math
+\textrm{Area} = \displaystyle \lim_{n\to\infty}\sum_{i=1}^nf(c_i)\Delta x
+```
+where 
+```math
+x_{i-1}\leq c_i\leq x_i\quad \textrm{and}\quad \Delta x =\frac{b-a}{n}.
+```
+See the grpah
+<div class="img-container">
+
+$(Resource("https://www.dropbox.com/s/a3sjz8m9vspp5ec/area_def.jpg?raw=1"))
+
+</div>
+"""
+
+# ╔═╡ 1081bd99-7658-4c32-812c-14235bd82596
+begin
+    cm"""
+    __Example__
+
+    Find the area of the region bounded by the graph of ``f(x)=x^3`` , the ``x``-axis, and the vertical lines ``x=0`` and ``x=1``.
+
+    """
+end
+
+# ╔═╡ c97d5915-7f1f-4fd6-80d3-aecb256ea0de
+cm"""
+__Example__
+
+Find the area of the region bounded by the graph of ``f(y)=y^2`` and the ``y``-axis for ``0\leq y\leq 1``.
+
+"""
+
+# ╔═╡ 55084c2d-6f81-4e55-946c-703245a6bb86
+cm"""
+__Midpoint Rule__
+
+```math
+\textrm{Area} \approx \sum_{i=1}^n f\left(\frac{x_{i-1}+x_i}{2}\right)\Delta x.
+```
+__Example__
+
+Use the Midpoint Rule with ``n=4`` to approximate the area of the region bounded by the graph of ``f(x)=\sin x`` and the ``x``-axis for ``0\leq x\leq \pi``, 
+"""
+
+
+# ╔═╡ 30b561dd-6e6b-4719-abc0-9938099d5487
+md""" ## Section 5.3 
+### Riemann Sums and Definite Integrals
 
 > __Objectives__
 > 1. Understand the definition of a Riemann sum.
@@ -168,7 +343,10 @@ md"""#  5.3 Riemann Sums and Definite Integrals
 
 """
 
-# ╔═╡ 1f0c53c0-611f-4b4e-9718-efac2f0b893d
+# ╔═╡ d854d0ea-c5dd-4efa-9f46-83807339e163
+g(x) = √x
+
+# ╔═╡ bceda6d4-b93f-4282-8f03-fc44132ea1bb
 begin
     ns2 = @bind n2 Slider(2:2000, show_value=true, default=4)
     as2 = @bind a2 NumberField(-10:10, default=0)
@@ -181,15 +359,124 @@ begin
     """
 end
 
+# ╔═╡ 7a4f6354-3d0c-4814-8c4c-2d2200568545
+md"__Use unequal Widths__"
 
-# ╔═╡ 6ecb0430-177c-4097-a94e-edbce61725d1
-md"##  Riemann Sums"
+# ╔═╡ 94b4f73a-ee55-405a-be50-bb92048f4eb2
+md"""
+__Definition of Riemann Sum__
+Let ``f`` be defined on the closed interval ``[a,b]``, and let ``\Delta`` be a partition of ``[a,b]`` given by
 
-# ╔═╡ 04922857-61ca-45a7-a3b4-cf35138e4847
-md"## Definite Integral"
+```math
+a=x_0 < x_1 <x_2<\cdots<x_{n-1}<x_n=b
+```
 
-# ╔═╡ 5156fbdc-002c-4222-aca0-b835061e3fb7
+where ``\Delta x_i`` is the width of the th subinterval
 
+```math
+[x_{i-1},x_i]\quad \color{red}i\textrm{{th subinterval}}
+```
+
+‍
+‍
+If ``c_i``  is any point in the th subinterval, then the sum
+
+```math
+\sum_{i=1}^n f(c_i)\Delta x_i, \quad x_{i-1}\leq c_i\leq x_i
+```
+is called a __Riemann sum__ of ``f`` for the partition ``\Delta``.
+"""
+
+# ╔═╡ 9f9345b8-a29a-41fe-a41b-3dcef2e1a366
+cm"""
+__Remark__
+
+The width of the largest subinterval of a partition ``\Delta`` is the __norm__ of the partition and is denoted by ``\|\Delta\|``. 
+
+- If every subinterval is of equal width, then the partition is __regular__ and the norm is denoted by
+```math
+\|\Delta\| = \Delta x =\frac{b-a}{n} \quad \color{red}{\textrm{Regular partition}}
+```
+
+- For a general partition, the norm is related to the number of subintervals of ``[a,b]`` in the following way.
+```math
+\frac{b-a}{\|\Delta\|}\leq n \quad \color{red}{\textrm{General partition}}
+```
+
+- Note that
+```math
+\|\Delta\|\to 0 \quad \textrm{implies that}\quad n\to \infty.
+```
+
+"""
+
+# ╔═╡ ae6ea7e0-f6f3-4d82-a45d-2c5ed299b223
+cm"""
+### Definition of Definite Integral
+If ``f`` is defined on the closed interval ``[a,b]`` and the limit of Riemann sums over partitions ``\Delta`` 
+```math
+\lim_{\|\Delta\|\to 0}\sum_{i=1}^nf(c_i)\Delta x_i
+```
+‍
+exists, then ``f`` is said to be __integrable__ on ``[a,b]`` and the limit is denoted by
+```math
+\lim_{\|\Delta\|\to 0}\sum_{i=1}^nf(c_i)\Delta x_i = \int_a^b f(x) dx.
+```
+‍
+‍The limit is called the __definite integral__ of ``f`` from ``a`` to ``b``. The number ``a`` is the __lower limit__ of integration, and the number ``b`` is the __upper limit__ of integration.
+"""
+
+# ╔═╡ fd726227-f911-4383-90a7-aaab504b68ef
+cm"""
+__Theorem__ *Continuity Implies Integrability*
+
+If a function ``f`` is continuous on the closed interval ``[a,b]``, then ``f`` is integrable on ``[a,b]``. That is, 
+
+```math
+\int_a^b f(x) dx \quad \textrm{exists}.
+```
+
+"""
+
+# ╔═╡ d76afcb0-4b38-463d-add1-a58dd6acbbc0
+cm"""
+__Theorem__ *The Definite Integral as the Area of a Region*
+
+If ``f`` is continuous and nonnegative on the closed interval ``[a,b]``, then the area of the region bounded by the graph of ``f``, the ``x``-axis, and the vertical lines ``x=a`` and ``x=b`` is
+```math
+\textrm{Area} = \int_a^b f(x) dx
+```
+‍
+‍
+"""
+
+# ╔═╡ e7ea2eb7-b394-4ce6-b0a9-31d229e69787
+cm"""
+__Example__
+
+Evaluate each integral using a geometric formula.
+
+- ``\int_1^3 4 dx``
+- ``\int_0^3 (x+2) dx``
+- ``\int_{-2}^2 \sqrt{4-x^2} dx``
+```
+"""
+
+# ╔═╡ 0a344b61-a226-49ee-ba19-f618390db269
+md"""
+* The definite integral  is a **number**; it does not depend on ``x``. In fact, we could use any letter in place of ``x`` without changing the value of the integral:
+
+```math
+\int_a^b f(x) dx = \int_a^b f(y) dy =\int_a^b f(w) dw =\int_a^b f(😀) d😀 
+```
+"""
+
+# ╔═╡ 4d72f4f3-1dbc-49b9-894f-a521a24e2531
+md""" 
+* The sum ``\sum_{i=1}^n f(x_i^*)\Delta x`` is called **Riemann Sum**.
+"""
+
+# ╔═╡ e427ab16-9d5a-4200-8d96-8e49ec0da312
 begin
     f2(x) = sin(x) + 2
     theme(:wong)
@@ -207,28 +494,122 @@ begin
 
 end
 
+# ╔═╡ 4e0ef31d-05e7-4974-9282-fa4579e16328
+md""" * ``\int_a^b f(x) dx`` is the net area
 
+$(load(download("https://www.dropbox.com/s/ol9l38j2a53usei/note3.png?raw=1")))
+"""
 
-
-
-# ╔═╡ 5f37c3d1-449f-4a6d-9af5-55f9a4c8feec
+# ╔═╡ 2bef2339-7afe-427d-bdc5-19b9e9b43878
 begin
-s52q1Check = @bind s52q1chk Radio(["show", "hide"],default="hide")
-md"""$(s52q1Check)"""
+    s52q1Check = @bind s52q1chk Radio(["show" => "show", "hide" => "hide"], default="hide")
+    q1Img = download("https://www.dropbox.com/s/7esby3czioyzk26/q1.png?dl=0")
+    md""" 
+    **Question 1:** 
+
+    $(load(q1Img))
+
+    where each of the regions ``A, B`` and ``C`` has area equal to 5, then the area between the graph and the x-axis from ``x=-4`` to ``x=2`` is
+
+    $(s52q1Check)
+    	
+    """
+
 end
 
-# ╔═╡ 4aa43e57-d9a4-49da-b7d8-fe39d21df414
-let 
-	val = s52q1chk == "show" ? 15 : ""
-	cm" the nswer is = $val"
+# ╔═╡ 0f3814d4-6ee7-4242-88ea-5ecc7bf752bf
+md" the nswer is = **$((s52q1chk ==\"show\") ?  15 : \"\")**"
+
+# ╔═╡ 05eb2a4e-2552-4bed-9523-d4f4c8760c94
+begin
+    s52q1Check1 = @bind s52q1chk1 Radio(["show" => "show", "hide" => "hide"], default="hide")
+
+    md""" 
+    **Question 2:** 
+
+    $(load(q1Img))
+
+    where each of the regions ``A, B`` and ``C`` has area equal to 5, then 
+    	``\int_{-4}^2 f(x) dx = `` 
+
+    $(s52q1Check1)
+    	
+    """
+
 end
 
-# ╔═╡ 229d9694-2751-479d-9872-218f7cea2261
-md"## Properties of Definite Integrals"
+# ╔═╡ 311050cc-9f52-43e0-afca-66d225c837d2
+md" the nswer is = **$((s52q1chk1 ==\"show\") ?  -5 : \"\")**"
 
-# ╔═╡ 1ffb0970-7422-4cb7-9f84-841f68565b80
+# ╔═╡ f5f43417-abcd-4b20-a9ff-be06157b4a02
+html"<hr>"
+
+# ╔═╡ e6f0b66d-9efa-4d2d-93a7-0d0d82c7948a
+md""" **Theorem**
+If ``f`` is continuous on ``[a,b]``, or if ``f`` has only a finite number of jump discontinuities, then ``f`` is integrable on ``[a,b]``; that is, the definite integral ``\int_a^b f(x)dx`` exists.
+
+"""
+
+# ╔═╡ 784142ee-1416-4ccb-a341-0497422009b6
+html"<hr>"
+
+# ╔═╡ a42d6141-e2e3-4725-ab00-4183c16461e3
+md""" **Theorem**
+
+If ``f`` is integrable on ``[a,b]``, then
+```math 
+\int_a^b f(x) dx = \lim_{n\to \infty} \sum_{i=1}^n f(x_i)\Delta x 
+```
+where
+```math
+\Delta x = \frac{b-a}{n}
+```
+and
+```math
+x_i = a+i\Delta x
+```
+"""
+
+
+
+# ╔═╡ 67a805bd-640d-4d88-8d61-8fef8bb23940
 md"""
-## Summary Evaluating Definite Integrals
+**Question**
+
+What do we mean when we say that a function $f$ is _integrable_?
+##### (A) $f$ is continuous.
+##### (B) $f$ is differentiable.
+##### (C) $f$ has area.
+##### (D) $f$ is discotinuous.
+##### (E) none of the above.
+"""
+
+
+# ╔═╡ 843fec4c-3a4a-4cb2-881c-9a4e3df6a5bb
+cm"""
+### Properties of Definite Integrals
+- If ``f``  is defined at ``x=a``, then ``\displaystyle \int_a^a f(x) dx =0``.
+- If ``f``  is integrable on ``[a,b]``, then ``\displaystyle \int_b^a f(x) dx =- \int_a^b f(x) dx``.
+- If ``f`` is integrable on the three closed intervals determined by ``a, b`` and ``c``, then
+```math
+\int_a^b f(x) dx = \int_a^c f(x) dx + \int_c^b f(x) dx.
+```
+- If ``f``  and ``g`` are integrable on ``[a,b]`` and ``k`` is a constant, then the functions ``kf`` and ``f\pm g`` are integrable on ``[a,b]``, and
+ 	1. ``\displaystyle \int_a^b kf(x) dx = k \int_a^b f(x) dx``.
+	2. ``\displaystyle \int_a^b \left[f(x)\pm g(x)\right] dx = \int_a^b f(x) dx\pm \int_a^b g(x) dx``.
+- If ``f`` is integrable and nonnegative on the closed interval ``[a,b]``, then
+```math
+0\leq \int_a^b f(x) dx.
+```
+- If ``f`` and ``g`` are integrable on the closed interval ``[a,b]`` and ``f(x)\leq g(x)`` for every ``x`` in ``[a,b]`` , then
+```math
+\int_a^b f(x) dx \leq \int_a^b g(x) dx.
+```
+"""
+
+# ╔═╡ 09383e0f-2b37-459e-aeb3-b8eb4f194ddd
+md"""
+### Evaluating Definite Integrals
 
 1. Using the definition
 2. Using a Computer Algebra System
@@ -238,13 +619,12 @@ md"""
 
 """
 
-
-# ╔═╡ 32b71cdc-e93b-4b05-b8f5-4b9d61a2eb62
+# ╔═╡ 0cfb00ed-60fe-4ebb-b5e2-6182ace7a719
 begin
     xx = symbols("xx", real=true)
     sol = integrate(exp(xx), (xx, 1, 3))
     md"""
-    __2. Using a Computer Algebra System__
+    #### 2. Using a Computer Algebra System
 
     **Example:**
 
@@ -257,24 +637,13 @@ begin
 
 end
 
-
-
-
-# ╔═╡ 4e358ab2-9be7-4d7f-b295-1e85943da027
+# ╔═╡ bfd46851-772d-43d4-8875-7d5c5dfb1155
 integrate(exp(xx), (xx, 1, 3))
 
-
-
-
-
-
-
-# ╔═╡ 81e4ac99-3388-49e0-a168-5d9961c80ddf
+# ╔═╡ 19b11522-d11c-4fe1-8f74-5dc975d82bc0
 md"""
-__3. Interpreting as areas__
-
+#### 3. Interpreting as areas
 **Example:**
-
 Evaluate the following integrals by interpreting each in terms of areas
 
 (i) $\int_0^3  \sqrt{9-x^2} dx$  
@@ -285,9 +654,7 @@ Evaluate the following integrals by interpreting each in terms of areas
 (iii) $\int_{-2}^1 xdx$
 """
 
-
-
-# ╔═╡ 02d61e1f-b630-443c-b1dd-1fe5d2c81b2f
+# ╔═╡ 44c9faca-efb6-493c-b751-9fd69e89ecb4
 begin
     f1(x) = sqrt(9 - x^2)
     f3(x) = abs(x)
@@ -297,12 +664,8 @@ begin
 end
 
 
-
-
-
-# ╔═╡ b51c5bc6-9065-4687-b6cb-e67a372a3b4e
-
-md""" __4. Approximating (Midpoint Rule)__
+# ╔═╡ 1ae29d9c-d055-46d8-9a46-0d35a48cc58a
+md""" #### 4. Approximating (Midpoint Rule)
 
 ```math
 \int_a^b f(x) dx \approx \sum_{i=1}^n f(\overline{x_i})\Delta x = \Delta x\left[
@@ -323,18 +686,15 @@ with $n=5$.
 
 """
 
-
-
-
-
-# ╔═╡ e13d39c8-ac62-460d-bf7e-9a994942731d
+# ╔═╡ 8d474b8c-7f6f-4ee4-9282-5e8aa0a2f7b0
 m5 = [0.2 * (1 / x) for x in 1.1:0.2:1.9] |> sum
 
-# ╔═╡ 9a9bff9d-98c3-4300-bc0b-a7b807a43f99
+# ╔═╡ f9e82107-07b9-4697-88fe-81b019640e6a
 integrate(1 / xx, (xx, 1, 2)).n()
 
-# ╔═╡ 124a0bb3-b89e-4ac5-9178-01cda06045ec
+# ╔═╡ be9f84d5-3c65-4ceb-8767-3fdc41429e12
 md""" **Example**
+
 Estimate 
 ```math 
 \int_0^1 e^{-x^2} dx
@@ -342,17 +702,12 @@ Estimate
 
 """
 
-
-
-# ╔═╡ 56a7034f-d702-4877-ab5c-6916ac503043
+# ╔═╡ cf3bce53-0260-403c-8910-b04b05b558fe
 begin
     exact = integrate(exp(-xx^2), (xx, 0, 1)).n()
 end
 
-
-# ╔═╡ 2b5289ee-8f10-4564-98e1-3a43e648d867
-
-
+# ╔═╡ e3d540a3-7da5-4ef6-aa31-e629e752484e
 md"""
 **Exercises:**
 
@@ -362,8 +717,7 @@ $\lim_{n\to \infty}\sum_{i=1}^n\frac{1}{n}\cos\left(1+\frac{i}{n}\right)^2=$
 
 """
 
-
-# ╔═╡ 9d6d8399-d063-42c4-af47-dbf5ab38d434
+# ╔═╡ 7fb16fd7-feac-4a75-bcf0-cf91ca7b3599
 cm"""
 ## Section 5.4
 __The Fundamental Theorem of Calculus__
@@ -376,14 +730,7 @@ __The Fundamental Theorem of Calculus__
 
 """
 
-
-
-
-
-
-
-# ╔═╡ 8cc0d5fd-c988-4f16-a07f-a6439fccbc8a
-
+# ╔═╡ dd5ee5ee-b2a7-46d4-bc43-0b9778eefcc2
 cm"""
 ### The Fundamental Theorem of Calculus
 
@@ -419,13 +766,7 @@ We use the notation
 ```
 """
 
-
-
-
-
-
-# ╔═╡ 66b482d7-4c12-4f41-9d09-3eb723a1001b
-
+# ╔═╡ 4db12c57-014f-4aa0-a5b1-4f12eb3bf834
 cm"""
 __Example__
 
@@ -443,8 +784,7 @@ $("  ")
 - ``\displaystyle \int_{0}^{2} \Big|2x-1\Big| dx``
 """
 
-
-# ╔═╡ 4a9a8e25-2db5-495a-bf55-94d589bdb699
+# ╔═╡ b592499b-cf96-486e-9067-9c79b5894641
 begin
     theme(:wong)
     s54e3_f(x) = 1 / x
@@ -468,9 +808,7 @@ begin
     """
 end
 
-
-# ╔═╡ 269e3d73-0e11-4fcc-a291-031da9817541
-
+# ╔═╡ bfbb3b72-dedc-476d-a028-997e98b61ae4
 begin
     cm"""
     ### The Mean Value Theorem for Integrals
@@ -491,8 +829,7 @@ begin
     """
 end
 
-
-# ╔═╡ e200bd3c-2636-4a91-83dd-de6b0e3d5a32
+# ╔═╡ c3650a10-dff3-4fa2-bb56-3a19e1838766
 cm"""
 ### Average Value of a Function
 
@@ -509,10 +846,7 @@ Find the average value of ``f(x)=3x^2-2x``  on the interval ``[1,4]``.
 
 """
 
-
-
-# ╔═╡ f5c25849-0337-4dca-98cf-dbbc723499f8
-
+# ╔═╡ 16053a54-d268-479b-bd2e-0634c4a1bb89
 cm"""
 ### The Second Fundamental Theorem of Calculus
 
@@ -526,12 +860,7 @@ $(Resource("https://www.dropbox.com/s/knjbngrqs2r2h1z/ftc2.jpg?raw=1",
 
 """
 
-
-
-
-
-
-# ╔═╡ af619399-4655-45a0-847b-60357e53d2a5
+# ╔═╡ 3b115e62-8040-4a2c-8d6e-3d03669e7cd8
 md"""
 Consider the following function 
 
@@ -542,17 +871,13 @@ where ``f`` is a continuous function on the interval ``[a,b]`` and ``x \in [a,b]
 
 """
 
-
-
-# ╔═╡ 9cd59dc0-5971-45d0-b076-69df14c3f4cd
-
+# ╔═╡ 3c16772c-394d-4472-8749-f5990bb69013
 begin
     Slider4 = @bind slider4 Slider(1:0.1:5, show_value=false)
     md"x = $Slider4"
 end
 
-# ╔═╡ 71bca4ec-9d80-423c-bbac-16711deccce1
-
+# ╔═╡ 3644e2e8-9b59-433e-9761-58566f0e1329
 begin
     f4(x) = sin(x) + 2
     theme(:wong)
@@ -574,9 +899,21 @@ begin
 
 end
 
+# ╔═╡ b9d687cc-9c13-4285-85ac-90ef955f94f3
+begin
+    img = load("./imgs/5.3/ex1.png") |> im -> imresize(im, ratio=0.7)
+    md"""
+    **Example** 
+    If ``g(x) = \int_0^x f(t) dt``
 
-# ╔═╡ fb8b488f-f8b4-48e5-9d66-9f3df8919d5d
+    $img
 
+    Find ``g(2)`` 
+
+    """
+end
+
+# ╔═╡ 0ca459b3-36ad-46f0-b49d-af921c57b9df
 cm"""
 __Theorem__ *The Second Fundamental Theorem of Calculus*
 
@@ -589,12 +926,7 @@ If ``f`` is continuous on an open interval ``I`` containing ``a``, then, for eve
 
 """
 
-
-
-
-
-# ╔═╡ d6b066d3-0049-4f3d-9acc-55fc16c40adc
-
+# ╔═╡ 02ff212e-937d-4e8e-96d2-5f982618b92d
 begin
     md"""
 
@@ -615,22 +947,14 @@ begin
     """
 end
 
-
-
-
-# ╔═╡ e8cdbe22-f7e1-47b2-bd3f-6130a6fc6207
-
+# ╔═╡ c8d0298f-2336-41b8-a4f4-a5be5db751f3
 md"""
 💣 BE CAREFUL:
 
 Evaluate ``\large \int_{-3}^6 \frac{1}{x}dx``
 """
 
-
-
-
-# ╔═╡ bb514175-fe2c-498d-8ae5-aa3e59167fa4
-
+# ╔═╡ 4d4b41dc-f02f-4404-96c1-bb78376f010b
 md"""
 **Example:**
 Sketch the region enclosed by the given curves and calculuate its area
@@ -640,58 +964,49 @@ y=2x-x^2, \quad y=0
 Solution: In class
 """
 
-
-
-
-
-# ╔═╡ e4f23df3-6b96-4333-99e0-1b9dfb7b8cba
+# ╔═╡ 018998d3-5c21-468c-b3e8-f413a485eedd
 begin
     pltExmpl = plot(x -> 2 * x - x^2, framestyle=:origin, xlims=(0, 2), ylims=(-1, 2), fill=(0, 0.5, :green), label=nothing)
     plot!(pltExmpl, x -> 2 * x - x^2, framestyle=:origin, xlims=(-1, 3), ylims=(-1, 2), label=nothing)
 end
 
+# ╔═╡ 638eef4b-d46c-453b-ac40-179ce70cc330
+ff(x) = 2 * x - x^2;
+md""" A=$(integrate(ff(xx),(xx,0,2)))""";
 
-# ╔═╡ 42f171ca-09e4-45ed-8910-427ab7dc3aee
-let
-	ff(x) = 2 * x - x^2;
+# ╔═╡ b0fb2fbb-0175-4cce-b90d-3f9fa9b4541e
+begin
+
+    md"""
+    ### Table of Indefinite Integrals
+
+    |  | |  |
+    |--------------|--------------|------- |
+    | $$\int c f(x) dx =c\int  f(x) dx$$ |    | $\int [f(x)+g(x)] dx =\int  f(x) dx+\int g(x) dx$|
+    | | | |
+    |$$\int k dx = kx + C$$ | | $$\int x^n dx = \frac{x^{n+1}}{n+1} + C, n\not=-1$$ 
+    | | | |
+    |$$\int \frac{1}{x} dx = \ln \|x\| + C$$  || $$\int e^x dx = e^x + C$$ 
+    | | | |
+    |$$\int a^x dx = \frac{a^x}{\ln a}+ C$$  || $$\int \sin x dx = -\cos x + C$$ 
+    | | | |
+    |$$\int \cos x dx = \sin x + C$$ || $$\int \sec^2 x dx = \tan x + C$$
+    | | | |
+    |$$\int \csc^2 x dx = -\cot x + C$$ || $$\int \sec x\tan x dx = \sec x + C$$
+    | | | |
+    |$$\int \frac{1}{x^2+1} dx = \tan^{-1} x + C$$ || $$\int \frac{1}{\sqrt{1-x^2}} dx = \sin^{-1} x + C$$
+    | | | |
+    |$$\int \sinh x dx = \cosh x + C$$ || $$\int \cosh x dx = \sinh x + C$$
+    | | | |
+    |$$\int \csc x\cot x dx = -\csc x + C$$ ||
+    | | | |
+    	
 
 
-
-
-md"""
-
-	A=$(integrate(ff(xx),(xx,0,2)))
-
-	
-### Table of Indefinite Integrals
-
-|  | |  |
-|--------------|--------------|------- |
-| $$\int c f(x) dx =c\int  f(x) dx$$ |    | $\int [f(x)+g(x)] dx =\int  f(x) dx+\int g(x) dx$|
-| | | |
-|$$\int k dx = kx + C$$ | | $$\int x^n dx = \frac{x^{n+1}}{n+1} + C, n\not=-1$$ 
-| | | |
-|$$\int \frac{1}{x} dx = \ln \|x\| + C$$  || $$\int e^x dx = e^x + C$$ 
-| | | |
-|$$\int a^x dx = \frac{a^x}{\ln a}+ C$$  || $$\int \sin x dx = -\cos x + C$$ 
-| | | |
-|$$\int \cos x dx = \sin x + C$$ || $$\int \sec^2 x dx = \tan x + C$$
-| | | |
-|$$\int \csc^2 x dx = -\cot x + C$$ || $$\int \sec x\tan x dx = \sec x + C$$
-| | | |
-|$$\int \frac{1}{x^2+1} dx = \tan^{-1} x + C$$ || $$\int \frac{1}{\sqrt{1-x^2}} dx = \sin^{-1} x + C$$
-| | | |
-|$$\int \sinh x dx = \cosh x + C$$ || $$\int \cosh x dx = \sinh x + C$$
-| | | |
-|$$\int \csc x\cot x dx = -\csc x + C$$ ||
-| | | |
-"""
-
+    """
 end
 
-
-# ╔═╡ e6ba3446-cdb3-41c0-8db7-56b63042ddbc
-
+# ╔═╡ 0fd76efb-6d98-43f8-b714-8cf54fd62e7d
 md"""
 __Applications__
 
@@ -727,9 +1042,7 @@ If an object moves along a straight line with position function ``s(t)``, then i
 
 """
 
-
-# ╔═╡ df2a7927-878c-4d11-9e37-9c519672801e
-
+# ╔═╡ 78d480bf-bc4d-48e3-b3aa-100a38d6b4bc
 cm"""
 **Example**
 A particle is moving along aline. Its velocity function (in ``m/s^2``) is given by
@@ -744,11 +1057,10 @@ v(t)=t^3-10t^2+29t-20,
 </ul>
 """
 
-# ╔═╡ 2926bbad-1ba2-4d71-82f7-a56b7bfd8cf4
+# ╔═╡ bc42cf6d-44be-4244-85de-a10d03884dfd
 v(t) = t^3 - 10 * t^2 + 29 * t - 20
 
-# ╔═╡ 8458322d-c34a-475f-b11a-f9cb74a91a95
-
+# ╔═╡ 78d284e8-bd29-4ec3-9470-2141574787eb
 begin
 
     u = symbols("u", real=true)
@@ -798,11 +1110,7 @@ begin
     html""
 end
 
-
-
-
-# ╔═╡ 54c1c251-f740-47ae-8bf5-d33810e5192a
-
+# ╔═╡ 9b822e05-ad44-4238-9bfe-4b54d6e42628
 begin
 
     velFun = @bind velfun TextField()
@@ -816,10 +1124,7 @@ begin
 end
 
 
-
-
-# ╔═╡ 5d0d0bd7-7a85-4b2f-8a39-c6a4ef7d6175
-
+# ╔═╡ 08e5381c-4cf1-4c70-ba74-26a05b8046fa
 md"""
 ## Section 5.5:
 **The Substitution Rule**
@@ -838,19 +1143,10 @@ md"""
 
 """
 
-
-
-
-
-# ╔═╡ 0d547f78-1578-4c4a-9403-bd4ede9a62a7
-
+# ╔═╡ f3e2034d-e259-4d0b-bca4-95fd17f69d56
 cm"### Pattern Recognition"
 
-
-# ╔═╡ 28d201df-5056-4429-b1ba-a4959e75bc51
-
-
-
+# ╔═╡ 805cf044-8187-410e-833d-f4323ce07380
 begin
     f155(x) = x / sqrt(1 - 4 * x^2)
     # ex1_55=plot(-0.49:0.01:0.49,f155.(-0.49:0.01:0.49), framestyle=:origin)
@@ -889,11 +1185,7 @@ begin
     """
 end
 
-
-
-
-# ╔═╡ 2b68430f-08ac-4bfb-a484-e6fbe08738ba
-
+# ╔═╡ 7549863d-1e44-422f-9ddd-beec2ddcd48d
 cm"""
 ### Change of Variables for Indefinite Integrals
 __Example__: Find
@@ -907,9 +1199,8 @@ __Example__: Find
 	
 """
 
-# ╔═╡ 1beace3e-3a7e-411b-b6c0-3eca1fbf8536
 
-
+# ╔═╡ 47d4a0d9-467b-4717-a621-9d37e3870018
 cm"""
 ### The General Power Rule for Integration
 __Theorem__ *The General Power Rule for Integration*
@@ -936,17 +1227,13 @@ __Example__: Find
 
 """
 
-# ╔═╡ 22d44abf-34e3-496c-910a-5e51a7d90e10
+# ╔═╡ afdac3e8-bc84-48fd-8a04-d838e038c16d
 cm"""
 ### Change of Variables for Definite Integrals
 
 """
 
-
-
-
-# ╔═╡ b4279679-50fb-4dfd-9c4e-0e14788e2edd
-
+# ╔═╡ 497ff4cd-2705-49b3-bde6-671352e9b5a0
 begin
     ex2fun1(x) = log(x) / x
     ex2fun2(x) = x
@@ -994,19 +1281,12 @@ begin
     """
 end
 
-
-
-
-# ╔═╡ 4bcc7833-6bfb-421f-b54f-3567aea00c1e
-
+# ╔═╡ 3feca2ed-ff05-4c1a-a614-b1fd23674741
 cm"""
 ### Integration of Even and Odd Functions
 """
 
-
-
-# ╔═╡ 655773ab-44a0-4f6e-95b9-353ea7f694ca
-
+# ╔═╡ 297d7fdb-0117-4bd1-adee-8ad640dbf025
 md"""
 **Integrals of Symmetric Functions**
 
@@ -1030,9 +1310,7 @@ Find
 
 """
 
-
-# ╔═╡ b2873160-bdc6-4883-b6a0-fe2b8295f97d
-
+# ╔═╡ 5bca98c2-c6ef-4e95-a2c6-e99dd88b966b
 cm"""
 ## Section 5.7
 __The Natural Logarithmic Function: Integration__
@@ -1041,11 +1319,7 @@ __The Natural Logarithmic Function: Integration__
 > 2. Integrate trigonometric functions.
 """
 
-
-
-# ╔═╡ 253a5368-72ca-4463-9b59-934f45d77a4e
-
-
+# ╔═╡ 69dc2182-fb24-4db9-9fe6-dc6d9527facd
 cm"""
 ### Log Rule for Integration
 
@@ -1065,9 +1339,7 @@ __Remark__
 ```
 """
 
-
-# ╔═╡ d55a4917-e885-42ee-a8db-24f951501c28
-
+# ╔═╡ 703db4e5-e64a-4b09-ba22-c2808719fd58
 cm"""
 __Example__
 
@@ -1078,11 +1350,7 @@ y = \frac{x}{x^2+1}
 the ``x``-axis, and the line ``x=3``.
 """
 
-
-
-# ╔═╡ e653c7dd-7359-448d-9690-5d4a9780fc70
-
-
+# ╔═╡ 47f63585-6b16-4545-bdf6-5cd7ed470a82
 cm"""
 __Examples__ Find
 ```math
@@ -1096,10 +1364,7 @@ __Examples__ Find
 ```
 """
 
-
-
-
-# ╔═╡ eccd97c8-15b5-47ff-92ef-7e87a054c4ef
+# ╔═╡ a1a49662-a13b-430b-b1d5-47f8f3e72f65
 cm"""
 __Example__ Solve the differential equation
 ```math
@@ -1107,11 +1372,7 @@ __Example__ Solve the differential equation
 ```
 """
 
-# ╔═╡ 01c13365-f758-47c4-9b96-b9f2616b3824
-
-
-
-
+# ╔═╡ 8ff69555-f7f8-4401-82c6-e27cdf65dff3
 cm"""
 ### Integrals of Trigonometric Functions
 __Example__
@@ -1121,8 +1382,7 @@ __Example__
 
 """
 
-
-# ╔═╡ 017d38da-5825-4966-8d89-c75ce0b2af11
+# ╔═╡ 9f7d1862-b413-4292-84da-7c1d76530764
 cm"""
 __Remark__ Add the following to your table of antiderivatives
 ```math
@@ -1138,12 +1398,7 @@ __Remark__ Add the following to your table of antiderivatives
 
 """
 
-# ╔═╡ 85c79ec8-6c95-4c76-9851-a4a0b7ec76d7
-
-
-
-
-
+# ╔═╡ d6f0452c-cefa-49ee-87ec-a92811880ed4
 cm"""
 __Example__ 
 
@@ -1151,8 +1406,7 @@ Evaluate ``\displaystyle \int_{0}^{\pi/4}\sqrt{1+\tan^2 x}dx``
 
 """
 
-# ╔═╡ 9a998b24-6d36-4f47-b4db-9df9b3d138e2
-
+# ╔═╡ da7c0cb8-1d2a-436a-bbb5-b53522dbd755
 cm"""
 ## Section 5.8
 ### Inverse Trigonometric Functions: Integration
@@ -1162,12 +1416,7 @@ cm"""
 > 3. Review the basic integration rules involving elementary functions.
 """
 
-
-
-
-
-# ╔═╡ 238beb06-9d2e-4d15-8eb4-3660aced7ef7
-
+# ╔═╡ 04ce6f4c-1581-4ae1-9e9c-8d4dc75b01c7
 cm"""
 ### Integrals Involving Inverse Trigonometric Functions
 __Theorem__
@@ -1196,11 +1445,7 @@ Find
 ```
 """
 
-
-
-# ╔═╡ 463027a3-7319-43ef-85be-cb8abe5a1d28
-
-
+# ╔═╡ 97a73cbe-6874-4641-9ad8-66df1e8c58c1
 cm"""
 ### Completing the Square
 __Example__
@@ -1217,13 +1462,7 @@ f(x) = \frac{1}{\sqrt{3x-x^2}}
 the ``x``-axis, and the lines ``x=\frac{3}{2}`` and ``x=\frac{9}{4}``.
 """
 
-
-
-
-
-
-# ╔═╡ fb1499e3-0a58-4b34-b452-3bdc31b82504
-
+# ╔═╡ a1439122-d0e6-4f02-9039-41edc141f64f
 cm"""
 ## Section 5.9
 __Hyperbolic Functions__
@@ -1255,10 +1494,7 @@ $(Resource("https://www.dropbox.com/s/iy6fw024c6r50f8/hyperbola.jpg?raw=1"))
 
 """
 
-
-
-# ╔═╡ c3de1903-845e-4779-b67b-817e703fd1ee
-
+# ╔═╡ e306b52c-0508-4314-9358-a12aca62ea9e
 cm"""
 __Definitions of the Hyperbolic Functions__
 ```math
@@ -1279,11 +1515,7 @@ $(Resource("https://www.dropbox.com/s/0q1vcqb77u0ft1t/hyper_graphs.jpg?raw=1"))
 </div>
 """
 
-
-
-
-# ╔═╡ daf5a008-b102-4557-8a18-d83839316eba
-
+# ╔═╡ 47e805e5-8558-4522-a10c-c3c9ae52b17e
 cm"""
 __Hyperbolic Identities__
 ```math
@@ -1313,10 +1545,7 @@ __Hyperbolic Identities__
 ```
 """
 
-
-
-# ╔═╡ 13f007b1-b509-40b2-8ad4-ab50588957b0
-
+# ╔═╡ 21b53a25-5fef-4ac5-aab0-59232566c5d2
 cm"""
 ### Differentiation and Integration of Hyperbolic Functions
 
@@ -1347,8 +1576,7 @@ __Theorem__ Let ``u`` be a differentiable function of ``x``.
 
 """
 
-# ╔═╡ 9c8d6eeb-9d3c-4525-87e3-c540c3a5d38d
-
+# ╔═╡ 23f24ea9-b33b-4aac-b17d-1f749360bfe7
 cm"""
 __Examples__
 
@@ -1373,7 +1601,7 @@ __Example__ Find
 ```
 """
 
-# ╔═╡ 66a05cab-f595-43f8-843d-1f845c953868
+# ╔═╡ 5a3b6e5c-5e6f-4fcd-be83-325974e42008
 cm"""
 __Remark__
 
@@ -1390,7 +1618,7 @@ $(Resource("https://www.dropbox.com/s/24biyozrcl7mk2q/wire.jpg?raw=1"))
 
 """
 
-# ╔═╡ cf16ce47-f360-451b-afae-b1fe8b559fc3
+# ╔═╡ 894378b1-811d-43ac-a700-71350e88ee40
 cm"""
 ### Inverse Hyperbolic Functions
 
@@ -1421,202 +1649,55 @@ __Theorem__ Inverse Hyperbolic Functions
 $(Resource("https://www.dropbox.com/s/yc0305sd3i8yr44/inverse_hyper_graphs.jpg?raw=1"))
 
 </div>
+
 """
 
-# ╔═╡ 663c5894-ba2d-4236-9728-6a3c8db5c8ed
+# ╔═╡ 2460d407-0fff-44c4-90ec-639f32414f49
+embedYouTube(id; title) = """
+ <div style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
 
+ <h5>$title </h5>
 
+ <div  notthestyle="position: relative; right: 0; top: 0; z-index: 300;">
+ 	<iframe width="400" height="250" src="https://www.youtube.com/embed/$id" 	title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+ </div>
+ </div>"""
 
-# ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
-function rect(x, Δx, xs, f;direction=:x) 
-	if direction==:y
-		Shape([(0,x), (0,x + Δx), (f(xs), x + Δx), (f(xs), x )])
-	else
-		Shape([(x, 0), (x + Δx, 0), (x + Δx, f(xs)), (x, f(xs))])
-	end
-		
-end
+# ╔═╡ ad3dd437-7cfc-4cdc-a951-15949d39cf15
+rect(x, Δx, xs, f) = Shape([(x, 0), (x + Δx, 0), (x + Δx, f(xs)), (x, f(xs))])
+#Shape(x .+ [0,Δx,Δx,0], [0,0,f(xs),f(xs)])
 
-# ╔═╡ 8315fb27-89e4-44a4-a51e-8e55fc3d58e5
-function reimannSum(f, n, a, b; method="l", color=:green, plot_it=false,direction=:x)
+# ╔═╡ a9d0c669-f6d7-4e5f-8f57-b6bffe1710ba
+function reimannSum(f, n, a, b; method="l", color=:green, plot_it=false)
     Δx = (b - a) / n
-    x = a:0.01:b
+    x = a:0.1:b
     # plot(f;xlim=(-2π,2π), xticks=(-2π:(π/2):2π,["$c π" for c in -2:0.5:2]))
 
     (partition, recs) = if method == "r"
         parts = (a+Δx):Δx:b
-        rcs = [rect(p - Δx, Δx, p, f;direction=direction) for p in parts]
+        rcs = [rect(p - Δx, Δx, p, f) for p in parts]
         (parts, rcs)
     elseif method == "m"
         parts = (a+(Δx/2)):Δx:(b-(Δx/2))
-        rcs = [rect(p - Δx / 2, Δx, p, f;direction=direction) for p in parts]
+        rcs = [rect(p - Δx / 2, Δx, p, f) for p in parts]
         (parts, rcs)
     elseif method == "l"
         parts = a:Δx:(b-Δx)
-        rcs = [rect(p, Δx, p, f;direction=direction) for p in parts]
+        rcs = [rect(p, Δx, p, f) for p in parts]
         (parts, rcs)
     else
         parts = a:Δx:(b-Δx)
-        rcs = [rect(p, Δx, rand(p:0.1:p+Δx), f;direction=direction) for p in parts]
+        rcs = [rect(p, Δx, rand(p:0.1:p+Δx), f) for p in parts]
         (parts, rcs)
     end
     # recs= [rect(sample(p,Δx),Δx,p,f) for p in partition]
-    p = direction == :y ? plot(f.(x), x; legend=nothing) : plot(x, f.(x); legend=nothing)
+    p = plot(x, f.(x); legend=nothing)
     plot!(p, recs, framestyle=:origin, opacity=0.4, color=color)
     s = round(sum(f.(partition) * Δx), sigdigits=6)
     return plot_it ? (p, s) : s
 end
 
-
-# ╔═╡ f80cc26d-120b-4f14-b31e-b50c9283c0b9
-let
-	if showPlot == "show"
-    theme(:wong)
-    anchor1 = 0.5
-    (p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true)
-
-    annotate!(p, [(anchor1, f(anchor1) - 2, text(L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$", 12, n > 500 ? :white : :black))])
-    annotate!(p, [(anchor1 + 0.5, f(anchor1 + 0.1), text(L"$y=%$f(x)$", 12, :black))])
-
-    md""" 	
-
-    $p
-    """
-	end
-
-end
-
-# ╔═╡ 8c2f85bb-9b81-4b70-b7e8-1a91e2738838
-let
-	n = 4
-	lr="r"
-	f(x)= x^2
-	a,b = 0, 2
-	theme(:wong)
-    anchor1 = 0.5
-    (p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true)
-	sum_text = if lr == "l"
-			L"$\sum_{i=1}^{%$n} f (x_{i-1})\Delta x=%$s$"
-		elseif lr=="r"
-			L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$"
-		else
-			L"$\sum_{i=1}^{%$n} f (x^*_{i})\Delta x=%$s$"
-		end
-    annotate!(p, [(anchor1, f(anchor1) +2, text(sum_text, 12, n > 500 ? :white : :black))])
-    annotate!(p, [(1.2, f(1)+0.1, text(L"$y=%$f(x)$", 12, :black))])
-
-    md""" 	
-
-    $p
-    """
-	
-end
-
-# ╔═╡ 208abdcc-dc12-4a08-a1f8-2177f95886f7
-let
-	n = 300
-	lr="r"
-	f(x)= x^3
-	a,b = 0, 1
-	theme(:wong)
-    anchor1 = 0.5
-	(p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true)
-    sum_text = if lr == "l"
-		L"$\sum_{i=1}^{%$n} f (x_{i-1})\Delta x=%$s$"
-	elseif lr=="r"
-		L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$"
-	else
-		L"$\sum_{i=1}^{%$n} f (x^*_{i})\Delta x=%$s$"
-	end
-	
-    annotate!(p, [(anchor1, f(anchor1)+0.5, text(sum_text, 12, n > 500 ? :white : :black))])
-    
-    md""" 	
-
-    $p
-    """
-	
-end
-
-# ╔═╡ fd7161bc-1e1b-42e3-8758-c8e3e3ec0877
-let
-	n = 400
-	lr="l"
-	f(y)= y^2
-	a,b = 0, 1
-	theme(:wong)
-    anchor1 = 0.5
-	(p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true,direction=:y)
-    sum_text = if lr == "l"
-		L"$\sum_{i=1}^{%$n} f (x_{i-1})\Delta x=%$s$"
-	elseif lr=="r"
-		L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$"
-	else
-		L"$\sum_{i=1}^{%$n} f (x^*_{i})\Delta x=%$s$"
-	end
-	
-    annotate!(p, [(anchor1, f(anchor1)-0.01, text(sum_text, 12, n > 500 ? :white : :black))])
-    
-    md""" 	
-
-    $p
-    """
-	
-end
-
-# ╔═╡ 01008c60-bcfa-42a1-b5e8-fa67db2131ba
-let
-	n = 4
-	lr="m"
-	f(x)= sin(x)
-	a,b = 0, π
-	theme(:wong)
-    anchor1 = 0.5
-	(p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true,direction=:x)
-    sum_text = if lr == "l"
-		L"$\sum_{i=1}^{%$n} f (x_{i-1})\Delta x=%$s$"
-	elseif lr=="r"
-		L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$"
-	else
-		L"$\sum_{i=1}^{%$n} f (x^*_{i})\Delta x=%$s$"
-	end
-	
-    annotate!(p, [(anchor1+0.1, f(anchor1)+0.4, text(sum_text, 12, n > 500 ? :white : :black))])
-    
-    md""" 	
-
-    $p
-    """
-	
-end
-
-# ╔═╡ a7c8710c-2256-425e-a946-0e2791773592
-let
-	n = n2
-	lr=lr2
-	f(x) = √x
-	a,b = a2, b2
-	theme(:wong)
-    anchor1 = 0.15
-	(p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true,direction=:x)
-    sum_text = if lr == "l"
-		L"$\sum_{i=1}^{%$n} f (x_{i-1})\Delta x=%$s$"
-	elseif lr=="r"
-		L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$"
-	else
-		L"$\sum_{i=1}^{%$n} f (x^*_{i})\Delta x=%$s$"
-	end
-	
-    annotate!(p, [(anchor1+0.1, f(anchor1)+0.4, text(sum_text, 12, n > 500 ? :white : :black))])
-    
-    md""" 	
-
-    $p
-    """
-	
-end
-
-# ╔═╡ cad95270-ba9f-4821-87da-e457a00b9617
+# ╔═╡ d34b4862-9135-11eb-120f-6f82295f0759
 begin
     theme(:wong)
     anchor1 = 0.5
@@ -1632,11 +1713,7 @@ begin
 
 end
 
-# ╔═╡ 9b02faca-b5cb-442d-8a63-82f584b054fd
-
-
-
-
+# ╔═╡ 27e1d120-c3e1-4f3d-a263-d63204034814
 begin
     left_sum = reimannSum(f, n, a, b; method="l")
     right_sum = reimannSum(f, n, a, b; method="r")
@@ -1648,606 +1725,109 @@ begin
 
 end
 
-
-# ╔═╡ ef081dfa-b610-4c7a-a039-7258f4f6e80e
+# ╔═╡ cbf534bd-a329-4bc2-9940-f53a22e6d17e
 begin
-    function add_space(n=1)
-        repeat("&nbsp;", n)
-    end
-    function post_img(img::String, w=500)
-        res = Resource(img, :width => w)
-        cm"""
-      <div class="img-container">
+    theme(:wong)
 
-      $(res)
+    (p2, s2) = reimannSum(g, n2, a2, b2; method=lr2, color=:blue, plot_it=true)
 
-      </div>"""
-    end
-    function poolcode()
-        cm"""
-      <div class="img-container">
+    annotate!(p2, [(0.25, 0.8, (L"$\sum_{i=1}^{%$n2} f (x^*_{i})\Delta x=%$s2$", 12))])
 
-      $(Resource("https://www.dropbox.com/s/cat9ots4ausfzyc/qrcode_itempool.com_kfupm.png?raw=1",:width=>300))
+    md""" 	
 
-      </div>"""
-    end
-    function define(t="")
-        beginBlock("Definition", t)
-    end
-    function remark(t="")
-        beginBlock("Remark", t)
-    end
-    function remarks(t="")
-        beginBlock("Remarks", t)
-    end
-    function bbl(t)
-        beginBlock(t, "")
-    end
-    function bbl(t, s)
-        beginBlock(t, s)
-    end
-    ebl() = endBlock()
-    function theorem(s)
-        bth(s)
-    end
-    function bth(s)
-        beginTheorem(s)
-    end
-    eth() = endTheorem()
-    ex(n::Int; s::String="") = ex("Example $n", s)
-    ex(t::Int, s::String) = example("Example $t", s)
-    ex(t, s) = example(t, s)
-    function beginBlock(title, subtitle)
-        """<div style="box-sizing: border-box;">
-       	<div style="display: flex;flex-direction: column;border: 6px solid rgba(200,200,200,0.5);box-sizing: border-box;">
-       	<div style="display: flex;">
-       	<div style="background-color: #FF9733;
-       	    border-left: 10px solid #df7300;
-       	    padding: 5px 10px;
-       	    color: #fff!important;
-       	    clear: left;
-       	    margin-left: 0;font-size: 112%;
-       	    line-height: 1.3;
-       	    font-weight: 600;">$title</div>  <div style="olor: #000!important;
-       	    margin: 0 0 20px 25px;
-       	    float: none;
-       	    clear: none;
-       	    padding: 5px 0 0 0;
-       	    margin: 0 0 0 20px;
-       	    background-color: transparent;
-       	    border: 0;
-       	    overflow: hidden;
-       	    min-width: 100px;font-weight: 600;
-       	    line-height: 1.5;">$subtitle</div>
-       	</div>
-       	<p style="padding:5px;">
-       """
-    end
-    function beginTheorem(subtitle)
-        beginBlock("Theorem", subtitle)
-    end
-    function endBlock()
-        """</p></div></div>"""
-    end
-    function endTheorem()
-        endBlock()
-    end
-    ex() = example("Example", "")
-    function example(lable, desc)
-        """<div style="display:flex;">
-       <div style="
-       font-size: 112%;
-           line-height: 1.3;
-           font-weight: 600;
-           color: #f9ce4e;
-           float: left;
-           background-color: #5c5c5c;
-           border-left: 10px solid #474546;
-           padding: 5px 10px;
-           margin: 0 12px 20px 0;
-           border-radius: 0;
-       ">$lable:</div>
-       <div style="flex-grow:3;
-       line-height: 1.3;
-           font-weight: 600;
-           float: left;
-           padding: 5px 10px;
-           margin: 0 12px 20px 0;
-           border-radius: 0;
-       ">$desc</div>
-       </div>"""
-    end
-    @htl("")
-end
-
-# ╔═╡ 8408e369-40eb-4f9b-a7d7-26cde3e34a74
-begin
-    text_book = post_img("https://www.dropbox.com/scl/fi/upln00gqvnbdy7whr23pj/larson_book.jpg?rlkey=wlkgmzw2ernadd9b8v8qwu2jd&dl=1", 200)
-    md""" # Syllabus
-    ## Syallbus
-    See here [Term 242 - MATH102 - Syllabus](https://www.dropbox.com/scl/fi/mhlakw1roc1vv0mytjm42/Math102-Syllabus-242.pdf?rlkey=cf4egj8p25d4yrusj28r8nxw5&raw=1)
-    ## Textbook
-    __Textbook: Edwards, C. H., Penney, D. E., and Calvis, D. T., Differential Equations and Linear Algebra, Fourth edition, Pearson, 2021__
-    $text_book
-
-    ## Office Hours
-    I strongly encourage all students to make use of my office hours. These dedicated times are a valuable opportunity for you to ask questions, seek clarification on lecture material, discuss challenging problems, and get personalized feedback on your work. Engaging with me during office hours can greatly enhance your understanding of the course content and improve your performance. Whether you're struggling with a specific concept or simply want to delve deeper into the subject, I am here to support your learning journey. Don't hesitate to drop by; __your success is my priority__.
-
-    | Day       | Time        |
-    |-----------|-------------|
-    | Sunday    | 02:00-02:50PM |
-    | Tuesday    | 02:00-02:50PM |
-    Also you can ask for an online meeting through __TEAMS__.
+    $p2
     """
+
 end
 
-# ╔═╡ d60ca33d-fa31-49a2-9a4a-dfc54aef46ae
-cm"""
-$(ex())
+# ╔═╡ 6a5d1a86-4b9e-4d65-9bd7-f39ef8b6d9b4
+StartPause() = @htl("""
+<div>
+<button>Start</button>
 
-Evaluate ``\displaystyle \sum_{i=1}^n\frac{i+1}{n}`` for ``n=10, 100, 1000`` and ``10,000``.
+<script>
 
-"""
+	// Select elements relative to `currentScript`
+	var div = currentScript.parentElement
+	var button = div.querySelector("button")
 
-# ╔═╡ 52333157-9913-489d-8784-dc3b542af1e9
-cm""" 
+	// we wrapped the button in a `div` to hide its default behaviour from Pluto
 
+	var count = false
 
+	button.addEventListener("click", (e) => {
+		count = !count
 
-In __Euclidean geometry__, the simplest type of plane region is a rectangle. Although people often say that the *formula* for the area of a rectangle is
-```math
-A = bh
-```
-it is actually more proper to say that this is the *definition* of the __area of a rectangle__.
+		// we dispatch the input event on the div, not the button, because 
+		// Pluto's `@bind` mechanism listens for events on the **first element** in the
+		// HTML output. In our case, that's the div.
 
-For a triangle ``A=\frac{1}{2}bh``
+		div.value = count
+		div.dispatchEvent(new CustomEvent("input"))
+		e.preventDefault()
+		button.innerHTML = count? "Pause" : "Start"
+	})
+	// Set the initial value
+	div.value = count
 
-$(post_img("https://www.dropbox.com/s/sfsg0d4ha1m2gc6/triangle_area.jpg?raw=1", 300))
-"""
-
-
-# ╔═╡ 9f50c8be-95e8-4c28-81b4-8ccd638505af
-cm"""
-
-
-$(ex())
-
-Use __five__ rectangles to find two approximations of the area of the region lying between the graph of
-```math
-f(x)=5-x^2
-```
-and the ``x``-axis between ``x=0`` and ``x=2``.
-"""
-
-# ╔═╡ 15277097-7c11-4b03-8579-8f9c376361cd
-let
-    findingAreaP = plot(0.2:0.1:4, x -> 0.6x^3 - (10 / 3) * x^2 + (13 / 3) * x + 1.4, fillrange=zero, fillalpha=0.35, c=:red, framestyle=:origin, label=nothing, ticks=nothing)
-    plot!(findingAreaP, -0.1:0.1:4.1, x -> 0.6x^3 - (10 / 3) * x^2 + (13 / 3) * x + 1.4, c=:green, label=nothing)
-    annotate!(findingAreaP, [
-        (0.1, 4, text(L"y", 14)),
-        (4.1, 0.1, text(L"x", 14)),
-        (0.2, -0.1, text(L"a", 14)),
-        (4, -0.1, text(L"b", 14)),
-        (3.9, 4, text(L"f", 14))
-    ])
-    cm"""
-    
-    __Find the area of the region is bounded below by the ``x``-axis, and the left and right boundaries of the region are the vertical lines ``x=a`` and ``x=b``.__
-
-    $findingAreaP
-
-    $(post_img("https://www.dropbox.com/s/hnspiptmyybneqn/area_with_lower_and_upper.jpg?raw=1",400))
-    """
-end
-
-# ╔═╡ 8f673110-65a1-4f6d-8de1-ebcfb49fb50d
-cm"""
-$(ex(4,"Finding Upper and Lower Sums for a Region"))
-Find the upper and lower sums for the region bounded by the graph of ``f(x)=x^2`` and the ``x``-axis between ``x=0`` and ``x=2``.
-"""
-
-# ╔═╡ f89bbb38-906b-45f3-9eff-617924e0b719
-cm"""
-$(bth("Limits of the Lower and Upper Sums"))
-
-Let ``f`` be continuous and nonnegative on the interval ``[a,b]``. The limits as ``n\to\infty`` of both the lower and upper sums exist and are equal to each other. That is,
-```math
-\displaystyle \lim_{n\to\infty}s(n)=
-\displaystyle \lim_{n\to\infty}\sum_{i=1}^nf(m_i)\Delta x
-=\displaystyle \lim_{n\to\infty}\sum_{i=1}^nf(M_i)\Delta x
-=\displaystyle \lim_{n\to\infty}S(n)
-```
-‍
-‍
-where  
-```math
-\Delta x = \frac{b-a}{n}
-```
-and ``f(m_i)`` and ``f(M_i)`` are the minimum and maximum values of ``f`` on the ``i``th subinterval.
-
-"""
-
-# ╔═╡ a862aa36-d811-427d-bc1a-4502175b71f4
-cm"""
-$(define("Area of a Region in the Plane"))
-Let ``f`` be continuous and nonnegative on the interval ``[a,b]``.  The area of the region bounded by the graph of ``f`` , the ``x``-axis, and the vertical lines ``x=a`` and ``y=b`` is 
-```math
-\textrm{Area} = \displaystyle \lim_{n\to\infty}\sum_{i=1}^nf(c_i)\Delta x
-```
-where 
-```math
-x_{i-1}\leq c_i\leq x_i\quad \textrm{and}\quad \Delta x =\frac{b-a}{n}.
-```
-See the grpah
-<div class="img-container">
-
-$(post_img("https://www.dropbox.com/s/a3sjz8m9vspp5ec/area_def.jpg?raw=1",300))
-
+</script>
 </div>
-"""
-
-# ╔═╡ b9434085-81d7-4a3d-bed5-deebea3cd48a
-cm"""
-    $(ex(5,"Finding Area by the Limit Definition"))
-
-    Find the area of the region bounded by the graph of ``f(x)=x^3`` , the ``x``-axis, and the vertical lines ``x=0`` and ``x=1``.
-
-    """
-
-
-# ╔═╡ 1615be4c-fb84-418f-8406-c274550cfb86
-cm"""
-$(ex(7,"A Region Bounded by the y-axis"))
-
-Find the area of the region bounded by the graph of ``f(y)=y^2`` and the ``y``-axis for ``0\leq y\leq 1``.
-
-"""
-
-# ╔═╡ 38ab6c6d-c5e0-49f9-8c76-61e0b8dc13c6
-cm"""
-$(bbl("Midpoint Rule",""))
-
-```math
-\textrm{Area} \approx \sum_{i=1}^n f\left(\frac{x_{i-1}+x_i}{2}\right)\Delta x.
-```
-
-$(ebl())
-
-$(ex(8,"Approximating Area with the Midpoint Rule"))
-
-Use the Midpoint Rule with ``n=4`` to approximate the area of the region bounded by the graph of ``f(x)=\sin x`` and the ``x``-axis for ``0\leq x\leq \pi``, 
-"""
-
-# ╔═╡ 845d8b0a-6550-49f4-9308-13ec2b2bd0c1
-cm"""
-$(ex(1,"A Partition with Subintervals of Unequal Widths"))
-Consider the region bounded by the graph of ``f(x)=\sqrt{x}`` and the ``x``-axis for ``0 \leq x \leq 1``, as shown in Figure 5.18. Evaluate the limit
-```math
-\lim _{n \rightarrow \infty} \sum_{i=1}^n f\left(c_i\right) \Delta x_i
-```
-where ``c_i`` is the right endpoint of the partition given by ``c_i=i^2 / n^2`` and ``\Delta x_i`` is the width of the ``i`` th interval.
-"""
-
-# ╔═╡ f98989fb-b59a-496f-be73-322b4dcb4960
-cm"""
-$(define("Riemann Sum"))
-Let ``f`` be defined on the closed interval ``[a,b]``, and let ``\Delta`` be a partition of ``[a,b]`` given by
-
-```math
-a=x_0 < x_1 < x_2< \cdots< x_{n-1}< x_n=b
-```
-
-where ``\Delta x_i`` is the width of the th subinterval
-
-```math
-[x_{i-1},x_i]\quad \color{red}i\textrm{{th subinterval}}
-```
-
-‍
-‍
-If ``c_i``  is any point in the th subinterval, then the sum
-
-```math
-\sum_{i=1}^n f(c_i)\Delta x_i, \quad x_{i-1}\leq c_i\leq x_i
-```
-is called a __Riemann sum__ of ``f`` for the partition ``\Delta``.
-"""
-
-
-# ╔═╡ 7e49b1d2-b6c5-4b84-ae6b-ac62d3f58d0c
-cm"""
-$(bbl("Remark",""))
-
-The width of the largest subinterval of a partition ``\Delta`` is the __norm__ of the partition and is denoted by ``\|\Delta\|``. 
-
-- If every subinterval is of equal width, then the partition is __regular__ and the norm is denoted by
-```math
-\|\Delta\| = \Delta x =\frac{b-a}{n} \quad \color{red}{\textrm{Regular partition}}
-```
-
-- For a general partition, the norm is related to the number of subintervals of ``[a,b]`` in the following way.
-```math
-\frac{b-a}{\|\Delta\|}\leq n \quad \color{red}{\textrm{General partition}}
-```
-
-- Note that
-```math
-\|\Delta\|\to 0 \quad \textrm{implies that}\quad n\to \infty.
-```
-
-"""
-
-
-
-
-
-# ╔═╡ c19ba868-ca3b-4987-8e9b-eacffd6f9158
-cm"""
-$(define("Definite Integral"))
-If ``f`` is defined on the closed interval ``[a,b]`` and the limit of Riemann sums over partitions ``\Delta`` 
-```math
-\lim_{\|\Delta\|\to 0}\sum_{i=1}^nf(c_i)\Delta x_i
-```
-‍
-exists, then ``f`` is said to be __integrable__ on ``[a,b]`` and the limit is denoted by
-```math
-\lim_{\|\Delta\|\to 0}\sum_{i=1}^nf(c_i)\Delta x_i = \int_a^b f(x) dx.
-```
-‍
-‍The limit is called the __definite integral__ of ``f`` from ``a`` to ``b``. The number ``a`` is the __lower limit__ of integration, and the number ``b`` is the __upper limit__ of integration.
-"""
-
-
-
-# ╔═╡ 982c228a-a8cd-42cd-a437-1b8c80c89cef
-cm"""
-$(bbl("Remark",""))
-The definite integral  is a **number**; it does not depend on ``x``. In fact, we could use any letter in place of ``x`` without changing the value of the integral:
-
-```math
-\int_a^b f(x) dx = \int_a^b f(y) dy =\int_a^b f(w) dw =\int_a^b f(😀) d😀 
-```
-"""
-
-# ╔═╡ 3d54c0f4-3324-4bd6-adee-c343c5153392
-cm"""
-$(bth("Continuity Implies Integrability"))
-
-If a function ``f`` is continuous on the closed interval ``[a,b]``, then ``f`` is integrable on ``[a,b]``. That is, 
-
-```math
-\int_a^b f(x) dx \quad \textrm{exists}.
-```
-
-"""
-
-
-# ╔═╡ 1937220c-4467-430b-a745-42294765b6a5
-
-cm"""
-
-$(ex(2,"Evaluating a Definite Integral as a Limit"))
-```math
-\int_{-2}^1 2x dx
-```
-
-
-
-"""
-
-
-
-# ╔═╡ 1681a378-aea4-4e23-85a7-5c5731742ad8
-cm"""
-$(bth("The Definite Integral as the Area of a Region"))
-
-If ``f`` is continuous and nonnegative on the closed interval ``[a,b]``, then the area of the region bounded by the graph of ``f``, the ``x``-axis, and the vertical lines ``x=a`` and ``x=b`` is
-```math
-\textrm{Area} = \int_a^b f(x) dx
-```
-‍
-‍
-"""
-
-# ╔═╡ 7f7b1152-5dd0-4f97-b931-4fe74c51b3a3
-cm"""
-$(ex(3))
- Sketch the region corresponding to each definite integral. Then evaluate each integral using a geometric formula.
-
-- (a) ``\displaystyle \int_1^3 4 dx``
-- (b) ``\displaystyle \int_0^3 (x+2) dx``
-- (c) ``\displaystyle \int_{-2}^2 \sqrt{4-x^2} dx``
-
-"""
-
-# ╔═╡ b5d1d68a-ad7e-4140-a818-addead342c53
-cm""" 
-
-- ``\displaystyle \int_a^b f(x) dx`` is the net area
-
-$(post_img("https://www.dropbox.com/s/ol9l38j2a53usei/note3.png?raw=1"))
-"""
-
-
-
-
-
-# ╔═╡ d7cb77c3-7875-43d8-bab6-7281455700b0
-begin
-    
-    cm""" 
-    **Question 1:** 
-
-    $(post_img("https://www.dropbox.com/s/7esby3czioyzk26/q1.png?dl=1"))
-
-    where each of the regions ``A, B`` and ``C`` has area equal to 5, then the area between the graph and the x-axis from ``x=-4`` to ``x=2`` is
-
-   
-    	
-    """
-
-end
-
-
-
-
-
-
-# ╔═╡ a41fcefd-00dd-45c5-86a0-7fe076460674
-begin
-    s52q1Check1 = @bind s52q1chk1 Radio(["show" => "show", "hide" => "hide"], default="hide")
-
-    md""" 
-    **Question 2:** 
-
-    $(post_img("https://www.dropbox.com/s/7esby3czioyzk26/q1.png?dl=1"))
-
-    where each of the regions ``A, B`` and ``C`` has area equal to 5, then 
-    	``\int_{-4}^2 f(x) dx = `` 
-
-    $(s52q1Check1)
-    	
-    """
-
-end
-
-
-
-
-
-# ╔═╡ 07f45116-ff8b-4d2c-a7e3-46a4581afc16
-md" the nswer is = **$((s52q1chk1 ==\"show\") ?  -5 : \"\")**"
-
-# ╔═╡ 8b1d06a8-dbd0-4dc4-b12a-15425960ecc4
-cm"""
-$(define("Two Special Definite Integrals"))
-1. If ``f``  is defined at ``x=a``, then ``\displaystyle \int_a^a f(x) dx =0``.
-2. If ``f``  is integrable on ``[a,b]``, then ``\displaystyle \int_b^a f(x) dx =- \int_a^b f(x) dx``.
-$(ebl())
-
-"""
-
-
-
-# ╔═╡ 5e23a09b-c96f-40e0-bd8f-af18041f2be9
-cm"""
-$(ex(4," Evaluating Definite Integrals"))
-Evaluate each definite integral.
-
-1. ``\displaystyle\int_\pi^\pi \sin x d x``
-
-2. ``\displaystyle\int_3^0(x+2) d x``
-"""
-
-# ╔═╡ 874e3ccf-4309-42d4-af8d-3921b025239e
-cm"""
-$(bth("Additive Interval Property"))
-If ``f`` is integrable on the three closed intervals determined by ``a, b`` and ``c``, then
-```math
-\int_a^b f(x) dx = \int_a^c f(x) dx + \int_c^b f(x) dx.
-```
-$(ebl())
-
-$(bth("Properties of Definite Integrals"))
-If ``f``  and ``g`` are integrable on ``[a,b]`` and ``k`` is a constant, then the functions ``kf`` and ``f\pm g`` are integrable on ``[a,b]``, and
-1. ``\displaystyle \int_a^b kf(x) dx = k \int_a^b f(x) dx``.
-2. ``\displaystyle \int_a^b \left[f(x)\pm g(x)\right] dx = \int_a^b f(x) dx\pm \int_a^b g(x) dx``.
-$(ebl())
-
-$(bth("Preservation of Inequality"))
-- If ``f`` is integrable and nonnegative on the closed interval ``[a,b]``, then
-```math
-0\leq \int_a^b f(x) dx.
-```
-- If ``f`` and ``g`` are integrable on the closed interval ``[a,b]`` and ``f(x)\leq g(x)`` for every ``x`` in ``[a,b]`` , then
-```math
-\int_a^b f(x) dx \leq \int_a^b g(x) dx.
-```
-$(ebl())
-"""
-
-# ╔═╡ 4ff28842-9307-4813-8791-197fd6ca5238
-cm"""
-$(ex(6,"Evaluation of a Definite Integral"))
-Evaluate ``\int_1^3\left(-x^2+4 x-3\right) d x`` using each of the following values.
-```math
-\int_1^3 x^2 d x=\frac{26}{3}, \quad \int_1^3 x d x=4, \quad \int_1^3 d x=2
-```
-"""
-
-# ╔═╡ f64e2917-76fc-4ba8-8a47-d8c4c3654880
-
-begin
-    cm"""
-    **Example** 
-    If ``g(x) = \int_0^x f(t) dt``
-
-    $(post_img("./imgs/5.3/ex1.png"))
-
-    Find ``g(2)`` 
-
-    """
-end
-
-
-
-# ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
-initialize_eqref()
-
-# ╔═╡ 107407c8-5da0-4833-9965-75a82d84a0fb
-@htl("""
-<style>
-@import url("https://mmogib.github.io/math102/custom.css");
-
-ul {
-  list-style: none;
-}
-
-ul li:before {
-  content: '💡 ';
-}
-
-.p40 {
-	padding-left: 40px;
-}
-</style>
-
-</style>
 """)
+
+# ╔═╡ 5f0d5f9c-f0c4-43cd-8f2a-5d4c18955717
+@bind start_animation StartPause()
+
+# ╔═╡ 7d30f1de-0225-4a1e-a76e-3c305615cbe2
+if (start_animation)
+    gif(anim, "anim_fps125.gif", fps=10)
+end
+
+# ╔═╡ 7f819c41-370f-49b2-9e9b-e3233ac560fd
+begin
+    velfunTr = replace(velfun, "t" => "tttt")
+    velFun1 = Meta.parse(velfunTr)
+    ex = eval(:velFun1)
+    isValidVel = Meta.isexpr(ex, :call)
+    function myVel(i)
+        global tttt = i
+
+        if isValidVel
+            return eval(ex)
+        end
+    end
+end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
-Colors = "5ae59095-9a9b-59fe-a467-6f913c188581"
 CommonMark = "a80b9123-70ca-4bc0-993e-6e3bcb318db6"
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
 HypertextLiteral = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
+ImageIO = "82e4d734-157c-48bb-816b-45c225c6df19"
+ImageShow = "4e3cecfd-b093-5904-9786-8bbb286a6a31"
+ImageTransformations = "02fcd773-0e25-5acc-982a-7f6622650795"
 LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
-Latexify = "23fbe1c1-3f47-55db-b15f-69d7ec21a316"
-LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 PlotThemes = "ccf2f8ad-2431-5c83-bf29-c5338b663b6a"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
-PlutoExtras = "ed5d0301-4775-4676-b788-cf71e66ff8ed"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 PrettyTables = "08abe8d2-0d0c-5749-adfa-8a2ac140af0d"
-Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
-QRCoders = "f42e9828-16f3-11ed-2883-9126170b272d"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
-SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 SymPy = "24249f21-da20-56a4-8eb1-6a02cf4ae2e6"
 
 [compat]
-Colors = "~0.12.11"
-CommonMark = "~0.8.15"
-HypertextLiteral = "~0.9.5"
-LaTeXStrings = "~1.3.1"
-Latexify = "~0.16.5"
-PlotThemes = "~3.2.0"
-Plots = "~1.40.8"
-PlutoExtras = "~0.7.13"
-PlutoUI = "~0.7.60"
-PrettyTables = "~2.4.0"
-QRCoders = "~1.4.5"
-SymPy = "~2.2.0"
+CommonMark = "~0.8.6"
+FileIO = "~1.15.0"
+HypertextLiteral = "~0.9.4"
+ImageIO = "~0.6.6"
+ImageShow = "~0.3.6"
+ImageTransformations = "~0.9.5"
+LaTeXStrings = "~1.3.0"
+PlotThemes = "~3.0.0"
+Plots = "~1.31.7"
+PlutoUI = "~0.7.39"
+PrettyTables = "~1.3.1"
+SymPy = "~1.1.7"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -2256,21 +1836,18 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.11.2"
 manifest_format = "2.0"
-project_hash = "7da05748dac78c02b49902a8bf42c86d7c455cde"
+project_hash = "3a6158af984a471f9e7686ba6ca4a4e720a7bcf0"
 
 [[deps.AbstractFFTs]]
 deps = ["LinearAlgebra"]
 git-tree-sha1 = "d92ad398961a3ed262d8bf04a1a2b8340f915fef"
 uuid = "621f4979-c628-5d54-868e-fcf4e3e8185c"
 version = "1.5.0"
+weakdeps = ["ChainRulesCore", "Test"]
 
     [deps.AbstractFFTs.extensions]
     AbstractFFTsChainRulesCoreExt = "ChainRulesCore"
     AbstractFFTsTestExt = "Test"
-
-    [deps.AbstractFFTs.weakdeps]
-    ChainRulesCore = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
-    Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [[deps.AbstractPlutoDingetjes]]
 deps = ["Pkg"]
@@ -2285,6 +1862,12 @@ version = "1.1.2"
 [[deps.Artifacts]]
 uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
 version = "1.11.0"
+
+[[deps.AxisAlgorithms]]
+deps = ["LinearAlgebra", "Random", "SparseArrays", "WoodburyMatrices"]
+git-tree-sha1 = "66771c8d21c8ff5e3a93379480a2307ac36863f7"
+uuid = "13072b0f-2c55-5437-9ae7-d433b7a33950"
+version = "1.0.1"
 
 [[deps.AxisArrays]]
 deps = ["Dates", "IntervalSets", "IterTools", "RangeArrays"]
@@ -2303,9 +1886,9 @@ version = "0.1.9"
 
 [[deps.Bzip2_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "9e2a6b69137e6969bab0152632dcb3bc108c8bdd"
+git-tree-sha1 = "8873e196c2eb87962a2048b3b8e08946535864a1"
 uuid = "6e34b625-4abd-537c-b88f-471c36dfa7a0"
-version = "1.0.8+1"
+version = "1.0.8+4"
 
 [[deps.CEnum]]
 git-tree-sha1 = "389ad5c84de1ae7cf0e28e381131c98ea87d54fc"
@@ -2317,6 +1900,16 @@ deps = ["Artifacts", "Bzip2_jll", "CompilerSupportLibraries_jll", "Fontconfig_jl
 git-tree-sha1 = "009060c9a6168704143100f36ab08f06c2af4642"
 uuid = "83423d85-b0ee-5818-9007-b63ccbeb887a"
 version = "1.18.2+1"
+
+[[deps.ChainRulesCore]]
+deps = ["Compat", "LinearAlgebra"]
+git-tree-sha1 = "1713c74e00545bfe14605d2a2be1712de8fbcb58"
+uuid = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
+version = "1.25.1"
+weakdeps = ["SparseArrays"]
+
+    [deps.ChainRulesCore.extensions]
+    ChainRulesCoreSparseArraysExt = "SparseArrays"
 
 [[deps.CodecZlib]]
 deps = ["TranscodingStreams", "Zlib_jll"]
@@ -2381,9 +1974,9 @@ version = "1.1.1+0"
 
 [[deps.ConcurrentUtilities]]
 deps = ["Serialization", "Sockets"]
-git-tree-sha1 = "ea32b83ca4fefa1768dc84e504cc0a94fb1ab8d1"
+git-tree-sha1 = "f36e5e8fdffcb5646ea5da81495a5a7566005127"
 uuid = "f0e56b4a-5159-44fe-b623-3e5288b988bb"
-version = "2.4.2"
+version = "2.4.3"
 
 [[deps.Conda]]
 deps = ["Downloads", "JSON", "VersionParsing"]
@@ -2403,10 +1996,15 @@ weakdeps = ["IntervalSets", "LinearAlgebra", "StaticArrays"]
     ConstructionBaseStaticArraysExt = "StaticArrays"
 
 [[deps.Contour]]
-deps = ["StaticArrays"]
-git-tree-sha1 = "9f02045d934dc030edad45944ea80dbd1f0ebea7"
+git-tree-sha1 = "439e35b0b36e2e5881738abc8857bd92ad6ff9a8"
 uuid = "d38c429a-6771-53c6-b99e-75d170b6e991"
-version = "0.5.7"
+version = "0.6.3"
+
+[[deps.CoordinateTransformations]]
+deps = ["LinearAlgebra", "StaticArrays"]
+git-tree-sha1 = "f9d7112bfff8a19a3a4ea4e03a8e6a91fe8456bf"
+uuid = "150eb455-5306-5404-9cee-2592286d6298"
+version = "0.6.3"
 
 [[deps.Crayons]]
 git-tree-sha1 = "249fe38abf76d48563e2f4556bebd215aa317e15"
@@ -2470,26 +2068,26 @@ version = "2.2.4+0"
 
 [[deps.EpollShim_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "8e9441ee83492030ace98f9789a654a6d0b1f643"
+git-tree-sha1 = "8a4be429317c42cfae6a7fc03c31bad1970c310d"
 uuid = "2702e6a9-849d-5ed8-8c21-79e8b8f9ee43"
-version = "0.0.20230411+0"
+version = "0.0.20230411+1"
 
 [[deps.ExceptionUnwrapping]]
 deps = ["Test"]
-git-tree-sha1 = "dcb08a0d93ec0b1cdc4af184b26b591e9695423a"
+git-tree-sha1 = "d36f682e590a83d63d1c7dbd287573764682d12a"
 uuid = "460bff9d-24e4-43bc-9d9f-a8973cb893f4"
-version = "0.1.10"
+version = "0.1.11"
 
 [[deps.Expat_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "1c6317308b9dc757616f0b5cb379db10494443a7"
+git-tree-sha1 = "e51db81749b0777b2147fbe7b783ee79045b8e99"
 uuid = "2e619515-83b5-522b-bb60-26c02a35a201"
-version = "2.6.2+0"
+version = "2.6.4+3"
 
 [[deps.Extents]]
-git-tree-sha1 = "81023caa0021a41712685887db1fc03db26f41f5"
+git-tree-sha1 = "063512a13dbe9c40d999c439268539aa552d1ae6"
 uuid = "411431e0-e8b7-467b-b5e0-f676ba4f2910"
-version = "0.1.4"
+version = "0.1.5"
 
 [[deps.FFMPEG]]
 deps = ["FFMPEG_jll"]
@@ -2498,16 +2096,16 @@ uuid = "c87230d0-a227-11e9-1b43-d7ebe4e7570a"
 version = "0.4.2"
 
 [[deps.FFMPEG_jll]]
-deps = ["Artifacts", "Bzip2_jll", "FreeType2_jll", "FriBidi_jll", "JLLWrappers", "LAME_jll", "Libdl", "Ogg_jll", "OpenSSL_jll", "Opus_jll", "PCRE2_jll", "Zlib_jll", "libaom_jll", "libass_jll", "libfdk_aac_jll", "libvorbis_jll", "x264_jll", "x265_jll"]
-git-tree-sha1 = "466d45dc38e15794ec7d5d63ec03d776a9aff36e"
+deps = ["Artifacts", "Bzip2_jll", "FreeType2_jll", "FriBidi_jll", "JLLWrappers", "LAME_jll", "Libdl", "Ogg_jll", "OpenSSL_jll", "Opus_jll", "PCRE2_jll", "Pkg", "Zlib_jll", "libaom_jll", "libass_jll", "libfdk_aac_jll", "libvorbis_jll", "x264_jll", "x265_jll"]
+git-tree-sha1 = "74faea50c1d007c85837327f6775bea60b5492dd"
 uuid = "b22a6f82-2f65-5046-a5b2-351ab43fb4e5"
-version = "4.4.4+1"
+version = "4.4.2+2"
 
 [[deps.FileIO]]
 deps = ["Pkg", "Requires", "UUIDs"]
-git-tree-sha1 = "82d8afa92ecf4b52d78d869f038ebfb881267322"
+git-tree-sha1 = "94f5101b96d2d968ace56f7f2db19d0a5f592e28"
 uuid = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
-version = "1.16.3"
+version = "1.15.0"
 
 [[deps.FileWatching]]
 uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
@@ -2521,67 +2119,56 @@ version = "0.8.5"
 
 [[deps.Fontconfig_jll]]
 deps = ["Artifacts", "Bzip2_jll", "Expat_jll", "FreeType2_jll", "JLLWrappers", "Libdl", "Libuuid_jll", "Zlib_jll"]
-git-tree-sha1 = "db16beca600632c95fc8aca29890d83788dd8b23"
+git-tree-sha1 = "21fac3c77d7b5a9fc03b0ec503aa1a6392c34d2b"
 uuid = "a3f928ae-7b40-5064-980b-68af3947d34b"
-version = "2.13.96+0"
+version = "2.15.0+0"
 
-[[deps.Format]]
-git-tree-sha1 = "9c68794ef81b08086aeb32eeaf33531668d5f5fc"
-uuid = "1fa38f19-a742-5d3f-a2b9-30dd87b9d5f8"
-version = "1.3.7"
-
-[[deps.FreeType]]
-deps = ["CEnum", "FreeType2_jll"]
-git-tree-sha1 = "907369da0f8e80728ab49c1c7e09327bf0d6d999"
-uuid = "b38be410-82b0-50bf-ab77-7b57e271db43"
-version = "4.1.1"
+[[deps.Formatting]]
+deps = ["Logging", "Printf"]
+git-tree-sha1 = "fb409abab2caf118986fc597ba84b50cbaf00b87"
+uuid = "59287772-0a20-5a39-b81b-1366585eb4c0"
+version = "0.4.3"
 
 [[deps.FreeType2_jll]]
 deps = ["Artifacts", "Bzip2_jll", "JLLWrappers", "Libdl", "Zlib_jll"]
-git-tree-sha1 = "5c1d8ae0efc6c2e7b1fc502cbe25def8f661b7bc"
+git-tree-sha1 = "786e968a8d2fb167f2e4880baba62e0e26bd8e4e"
 uuid = "d7e528f0-a631-5988-bf34-fe36492bcfd7"
-version = "2.13.2+0"
-
-[[deps.FreeTypeAbstraction]]
-deps = ["ColorVectorSpace", "Colors", "FreeType", "GeometryBasics"]
-git-tree-sha1 = "b5c7fe9cea653443736d264b85466bad8c574f4a"
-uuid = "663a7486-cb36-511b-a19d-713bb74d65c9"
-version = "0.9.9"
+version = "2.13.3+1"
 
 [[deps.FriBidi_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "1ed150b39aebcc805c26b93a8d0122c940f64ce2"
+git-tree-sha1 = "846f7026a9decf3679419122b49f8a1fdb48d2d5"
 uuid = "559328eb-81f9-559d-9380-de523a88c83c"
-version = "1.0.14+0"
+version = "1.0.16+0"
 
 [[deps.GLFW_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libglvnd_jll", "Xorg_libXcursor_jll", "Xorg_libXi_jll", "Xorg_libXinerama_jll", "Xorg_libXrandr_jll", "libdecor_jll", "xkbcommon_jll"]
-git-tree-sha1 = "532f9126ad901533af1d4f5c198867227a7bb077"
+git-tree-sha1 = "fcb0584ff34e25155876418979d4c8971243bb89"
 uuid = "0656b61e-2033-5cc2-a64a-77c0f6c09b89"
-version = "3.4.0+1"
+version = "3.4.0+2"
 
 [[deps.GR]]
-deps = ["Artifacts", "Base64", "DelimitedFiles", "Downloads", "GR_jll", "HTTP", "JSON", "Libdl", "LinearAlgebra", "Preferences", "Printf", "Qt6Wayland_jll", "Random", "Serialization", "Sockets", "TOML", "Tar", "Test", "p7zip_jll"]
-git-tree-sha1 = "629693584cef594c3f6f99e76e7a7ad17e60e8d5"
+deps = ["Base64", "DelimitedFiles", "GR_jll", "HTTP", "JSON", "Libdl", "LinearAlgebra", "Pkg", "Printf", "Random", "RelocatableFolders", "Serialization", "Sockets", "Test", "UUIDs"]
+git-tree-sha1 = "cf0a9940f250dc3cb6cc6c6821b4bf8a4286cf9c"
 uuid = "28b8d3ca-fb5f-59d9-8090-bfdbd6d07a71"
-version = "0.73.7"
+version = "0.66.2"
 
 [[deps.GR_jll]]
-deps = ["Artifacts", "Bzip2_jll", "Cairo_jll", "FFMPEG_jll", "Fontconfig_jll", "FreeType2_jll", "GLFW_jll", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "Pixman_jll", "Qt6Base_jll", "Zlib_jll", "libpng_jll"]
-git-tree-sha1 = "a8863b69c2a0859f2c2c87ebdc4c6712e88bdf0d"
+deps = ["Artifacts", "Bzip2_jll", "Cairo_jll", "FFMPEG_jll", "Fontconfig_jll", "GLFW_jll", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "Pixman_jll", "Pkg", "Qt5Base_jll", "Zlib_jll", "libpng_jll"]
+git-tree-sha1 = "bc9f7725571ddb4ab2c4bc74fa397c1c5ad08943"
 uuid = "d2c73de3-f751-5644-a686-071e5b155ba9"
-version = "0.73.7+0"
+version = "0.69.1+0"
 
 [[deps.GeoFormatTypes]]
-git-tree-sha1 = "59107c179a586f0fe667024c5eb7033e81333271"
+git-tree-sha1 = "ce573eab15760315756de2c82df7406c870c7187"
 uuid = "68eda718-8dee-11e9-39e7-89f7f65f511f"
-version = "0.4.2"
+version = "0.4.3"
 
 [[deps.GeoInterface]]
-deps = ["Extents", "GeoFormatTypes"]
-git-tree-sha1 = "2f6fce56cdb8373637a6614e14a5768a88450de2"
+deps = ["DataAPI", "Extents", "GeoFormatTypes"]
+git-tree-sha1 = "f4ee66b6b1872a4ca53303fbb51d158af1bf88d4"
 uuid = "cf35fbd7-0cd7-5166-be24-54bfbe79505f"
-version = "1.3.7"
+version = "1.4.0"
 
 [[deps.GeometryBasics]]
 deps = ["EarCut_jll", "Extents", "GeoInterface", "IterTools", "LinearAlgebra", "StaticArrays", "StructArrays", "Tables"]
@@ -2595,29 +2182,23 @@ git-tree-sha1 = "9b02998aba7bf074d14de89f9d37ca24a1a0b046"
 uuid = "78b55507-aeef-58d4-861c-77aaff3498b1"
 version = "0.21.0+0"
 
-[[deps.Ghostscript_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "43ba3d3c82c18d88471cfd2924931658838c9d8f"
-uuid = "61579ee1-b43e-5ca0-a5da-69d92c66a64b"
-version = "9.55.0+4"
-
 [[deps.Glib_jll]]
 deps = ["Artifacts", "Gettext_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Libiconv_jll", "Libmount_jll", "PCRE2_jll", "Zlib_jll"]
-git-tree-sha1 = "674ff0db93fffcd11a3573986e550d66cd4fd71f"
+git-tree-sha1 = "b0036b392358c80d2d2124746c2bf3d48d457938"
 uuid = "7746bdde-850d-59dc-9ae8-88ece973131d"
-version = "2.80.5+0"
+version = "2.82.4+0"
 
 [[deps.Graphics]]
 deps = ["Colors", "LinearAlgebra", "NaNMath"]
-git-tree-sha1 = "d61890399bc535850c4bf08e4e0d3a7ad0f21cbd"
+git-tree-sha1 = "a641238db938fff9b2f60d08ed9030387daf428c"
 uuid = "a2bd30eb-e257-5431-a919-1863eab51364"
-version = "1.1.2"
+version = "1.1.3"
 
 [[deps.Graphite2_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "344bf40dcab1073aca04aa0df4fb092f920e4011"
+git-tree-sha1 = "01979f9b37367603e2848ea225918a3b3861b606"
 uuid = "3b182d85-2403-5c21-9c21-1e1f0cc25472"
-version = "1.3.14+0"
+version = "1.3.14+1"
 
 [[deps.Grisu]]
 git-tree-sha1 = "53bb909d1151e57e2484c3d1b53e19552b887fb2"
@@ -2625,16 +2206,16 @@ uuid = "42e2da0e-8278-4e71-bc24-59509adca0fe"
 version = "1.0.2"
 
 [[deps.HTTP]]
-deps = ["Base64", "CodecZlib", "ConcurrentUtilities", "Dates", "ExceptionUnwrapping", "Logging", "LoggingExtras", "MbedTLS", "NetworkOptions", "OpenSSL", "Random", "SimpleBufferStream", "Sockets", "URIs", "UUIDs"]
-git-tree-sha1 = "d1d712be3164d61d1fb98e7ce9bcbc6cc06b45ed"
+deps = ["Base64", "CodecZlib", "ConcurrentUtilities", "Dates", "ExceptionUnwrapping", "Logging", "LoggingExtras", "MbedTLS", "NetworkOptions", "OpenSSL", "PrecompileTools", "Random", "SimpleBufferStream", "Sockets", "URIs", "UUIDs"]
+git-tree-sha1 = "c67b33b085f6e2faf8bf79a61962e7339a81129c"
 uuid = "cd3eb016-35fb-5094-929b-558a96fad6f3"
-version = "1.10.8"
+version = "1.10.15"
 
 [[deps.HarfBuzz_jll]]
 deps = ["Artifacts", "Cairo_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "Graphite2_jll", "JLLWrappers", "Libdl", "Libffi_jll"]
-git-tree-sha1 = "401e4f3f30f43af2c8478fc008da50096ea5240f"
+git-tree-sha1 = "55c53be97790242c29031e5cd45e8ac296dadda3"
 uuid = "2e76f6c2-a576-52d4-95c1-20adfe4de566"
-version = "8.3.1+0"
+version = "8.5.0+0"
 
 [[deps.Hyperscript]]
 deps = ["Test"]
@@ -2678,23 +2259,23 @@ git-tree-sha1 = "437abb322a41d527c197fa800455f79d414f0a3c"
 uuid = "82e4d734-157c-48bb-816b-45c225c6df19"
 version = "0.6.8"
 
-[[deps.ImageMagick]]
-deps = ["FileIO", "ImageCore", "ImageMagick_jll", "InteractiveUtils", "Libdl", "Pkg", "Random"]
-git-tree-sha1 = "5bc1cb62e0c5f1005868358db0692c994c3a13c6"
-uuid = "6218d12a-5da1-5696-b52f-db25d2ecc6d1"
-version = "1.2.1"
-
-[[deps.ImageMagick_jll]]
-deps = ["Artifacts", "Ghostscript_jll", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "OpenJpeg_jll", "Zlib_jll", "libpng_jll"]
-git-tree-sha1 = "d65554bad8b16d9562050c67e7223abf91eaba2f"
-uuid = "c73af94c-d91f-53ed-93a7-00f77d67a9d7"
-version = "6.9.13+0"
-
 [[deps.ImageMetadata]]
 deps = ["AxisArrays", "ImageAxes", "ImageBase", "ImageCore"]
 git-tree-sha1 = "355e2b974f2e3212a75dfb60519de21361ad3cb7"
 uuid = "bc367c6b-8a6b-528e-b4bd-a4b897500b49"
 version = "0.9.9"
+
+[[deps.ImageShow]]
+deps = ["Base64", "ColorSchemes", "FileIO", "ImageBase", "ImageCore", "OffsetArrays", "StackViews"]
+git-tree-sha1 = "3b5344bcdbdc11ad58f3b1956709b5b9345355de"
+uuid = "4e3cecfd-b093-5904-9786-8bbb286a6a31"
+version = "0.3.8"
+
+[[deps.ImageTransformations]]
+deps = ["AxisAlgorithms", "ColorVectorSpace", "CoordinateTransformations", "ImageBase", "ImageCore", "Interpolations", "OffsetArrays", "Rotations", "StaticArrays"]
+git-tree-sha1 = "8717482f4a2108c9358e5c3ca903d3a6113badc9"
+uuid = "02fcd773-0e25-5acc-982a-7f6622650795"
+version = "0.9.5"
 
 [[deps.Imath_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -2716,6 +2297,12 @@ version = "0.1.5"
 deps = ["Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 version = "1.11.0"
+
+[[deps.Interpolations]]
+deps = ["AxisAlgorithms", "ChainRulesCore", "LinearAlgebra", "OffsetArrays", "Random", "Ratios", "Requires", "SharedArrays", "SparseArrays", "StaticArrays", "WoodburyMatrices"]
+git-tree-sha1 = "00a19d6ab0cbdea2978fc23c5a6482e02c192501"
+uuid = "a98d9a8b-a2ab-59e6-89dd-64a1c18fca59"
+version = "0.14.0"
 
 [[deps.IntervalSets]]
 git-tree-sha1 = "dba9ddf07f77f60450fe5d2e2beb9854d9a49bd0"
@@ -2743,17 +2330,11 @@ git-tree-sha1 = "a3f24677c21f5bbe9d2a714f95dcd58337fb2856"
 uuid = "82899510-4779-5014-852e-03e436cf321d"
 version = "1.0.0"
 
-[[deps.JLFzf]]
-deps = ["Pipe", "REPL", "Random", "fzf_jll"]
-git-tree-sha1 = "39d64b09147620f5ffbf6b2d3255be3c901bec63"
-uuid = "1019f520-868f-41f5-a6de-eb00f4b6a39c"
-version = "0.1.8"
-
 [[deps.JLLWrappers]]
 deps = ["Artifacts", "Preferences"]
-git-tree-sha1 = "f389674c99bfcde17dc57454011aa44d5a260a40"
+git-tree-sha1 = "a007feb38b422fbdab534406aeca1b86823cb4d6"
 uuid = "692b3bcd-3c85-4b1f-b108-f13ce0eb3210"
-version = "1.6.0"
+version = "1.7.0"
 
 [[deps.JSON]]
 deps = ["Dates", "Mmap", "Parsers", "Unicode"]
@@ -2769,9 +2350,9 @@ version = "0.1.5"
 
 [[deps.JpegTurbo_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "25ee0be4d43d0269027024d75a24c24d6c6e590c"
+git-tree-sha1 = "eac1206917768cb54957c65a615460d87b455fc1"
 uuid = "aacddb02-875f-59d6-b918-886e6ef4fbf8"
-version = "3.0.4+0"
+version = "3.1.1+0"
 
 [[deps.LAME_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -2793,9 +2374,9 @@ version = "18.1.7+0"
 
 [[deps.LZO_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "854a9c268c43b77b0a27f22d7fab8d33cdb3a731"
+git-tree-sha1 = "1c602b1127f4751facb671441ca72715cc95938a"
 uuid = "dd4b983a-f0e5-5f8d-a1b7-129d4a5fb1ac"
-version = "2.10.2+1"
+version = "2.10.3+0"
 
 [[deps.LaTeXStrings]]
 git-tree-sha1 = "50901ebc375ed41dbf8058da26f9de442febbbec"
@@ -2803,19 +2384,21 @@ uuid = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
 version = "1.3.1"
 
 [[deps.Latexify]]
-deps = ["Format", "InteractiveUtils", "LaTeXStrings", "MacroTools", "Markdown", "OrderedCollections", "Requires"]
-git-tree-sha1 = "ce5f5621cac23a86011836badfedf664a612cee4"
+deps = ["Formatting", "InteractiveUtils", "LaTeXStrings", "MacroTools", "Markdown", "OrderedCollections", "Printf", "Requires"]
+git-tree-sha1 = "8c57307b5d9bb3be1ff2da469063628631d4d51e"
 uuid = "23fbe1c1-3f47-55db-b15f-69d7ec21a316"
-version = "0.16.5"
+version = "0.15.21"
 
     [deps.Latexify.extensions]
     DataFramesExt = "DataFrames"
-    SparseArraysExt = "SparseArrays"
+    DiffEqBiologicalExt = "DiffEqBiological"
+    ParameterizedFunctionsExt = "DiffEqBase"
     SymEngineExt = "SymEngine"
 
     [deps.Latexify.weakdeps]
     DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
-    SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
+    DiffEqBase = "2b5f629d-d688-5b77-993f-72d75c75574e"
+    DiffEqBiological = "eb300fae-53e8-50a0-950c-e21f52c2b7e0"
     SymEngine = "123dc426-2d89-5057-bbad-38513e3affd8"
 
 [[deps.LazyModules]]
@@ -2854,68 +2437,62 @@ version = "1.11.0"
 
 [[deps.Libffi_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "0b4a5d71f3e5200a7dff793393e09dfc2d874290"
+git-tree-sha1 = "27ecae93dd25ee0909666e6835051dd684cc035e"
 uuid = "e9f186c6-92d2-5b65-8a66-fee21dc1b490"
-version = "3.2.2+1"
+version = "3.2.2+2"
 
 [[deps.Libgcrypt_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libgpg_error_jll"]
-git-tree-sha1 = "9fd170c4bbfd8b935fdc5f8b7aa33532c991a673"
+git-tree-sha1 = "8be878062e0ffa2c3f67bb58a595375eda5de80b"
 uuid = "d4300ac3-e22c-5743-9152-c294e39db1e4"
-version = "1.8.11+0"
+version = "1.11.0+0"
 
 [[deps.Libglvnd_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg", "Xorg_libX11_jll", "Xorg_libXext_jll"]
-git-tree-sha1 = "6f73d1dd803986947b2c750138528a999a6c7733"
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libX11_jll", "Xorg_libXext_jll"]
+git-tree-sha1 = "ff3b4b9d35de638936a525ecd36e86a8bb919d11"
 uuid = "7e76a0d4-f3c7-5321-8279-8d96eeed0f29"
-version = "1.6.0+0"
+version = "1.7.0+0"
 
 [[deps.Libgpg_error_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "fbb1f2bef882392312feb1ede3615ddc1e9b99ed"
+git-tree-sha1 = "df37206100d39f79b3376afb6b9cee4970041c61"
 uuid = "7add5ba3-2f88-524e-9cd5-f83b8a55f7b8"
-version = "1.49.0+0"
+version = "1.51.1+0"
 
 [[deps.Libiconv_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "f9557a255370125b405568f9767d6d195822a175"
+git-tree-sha1 = "be484f5c92fad0bd8acfef35fe017900b0b73809"
 uuid = "94ce4f54-9a6c-5748-9c1c-f9c7231a4531"
-version = "1.17.0+0"
+version = "1.18.0+0"
 
 [[deps.Libmount_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "0c4f9c4f1a50d8f35048fa0532dabbadf702f81e"
+git-tree-sha1 = "89211ea35d9df5831fca5d33552c02bd33878419"
 uuid = "4b2f31a3-9ecc-558c-b454-b3730dcb73e9"
-version = "2.40.1+0"
+version = "2.40.3+0"
 
 [[deps.Libtiff_jll]]
-deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "LERC_jll", "Libdl", "XZ_jll", "Zlib_jll", "Zstd_jll"]
-git-tree-sha1 = "2da088d113af58221c52828a80378e16be7d037a"
+deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "LERC_jll", "Libdl", "Pkg", "Zlib_jll", "Zstd_jll"]
+git-tree-sha1 = "3eb79b0ca5764d4799c06699573fd8f533259713"
 uuid = "89763e89-9b03-5906-acba-b20f662cd828"
-version = "4.5.1+1"
+version = "4.4.0+0"
 
 [[deps.Libuuid_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "5ee6203157c120d79034c748a2acba45b82b8807"
+git-tree-sha1 = "e888ad02ce716b319e6bdb985d2ef300e7089889"
 uuid = "38a345b3-de98-5d2b-a5d3-14cd9215e700"
-version = "2.40.1+0"
+version = "2.40.3+0"
 
 [[deps.LinearAlgebra]]
 deps = ["Libdl", "OpenBLAS_jll", "libblastrampoline_jll"]
 uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 version = "1.11.0"
 
-[[deps.LittleCMS_jll]]
-deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll"]
-git-tree-sha1 = "fa7fd067dca76cadd880f1ca937b4f387975a9f5"
-uuid = "d3a379c0-f9a3-5b72-a4c0-6bf4d2e8af0f"
-version = "2.16.0+0"
-
 [[deps.LogExpFunctions]]
 deps = ["DocStringExtensions", "IrrationalConstants", "LinearAlgebra"]
-git-tree-sha1 = "a2d09619db4e765091ee5c6ffe8872849de0feea"
+git-tree-sha1 = "13ca9e2586b89836fd20cccf56e57e2b9ae7f38f"
 uuid = "2ab3a3ac-af41-5b50-aa03-7779005ae688"
-version = "0.3.28"
+version = "0.3.29"
 
     [deps.LogExpFunctions.extensions]
     LogExpFunctionsChainRulesCoreExt = "ChainRulesCore"
@@ -2933,9 +2510,9 @@ version = "1.11.0"
 
 [[deps.LoggingExtras]]
 deps = ["Dates", "Logging"]
-git-tree-sha1 = "c1dd6d7978c12545b4179fb6153b9250c96b0075"
+git-tree-sha1 = "f02b56007b064fbfddb4c9cd60161b6dd0f40df3"
 uuid = "e6f89c97-d47a-5376-807f-9c37f3926c36"
-version = "1.0.3"
+version = "1.1.0"
 
 [[deps.MIMEs]]
 git-tree-sha1 = "65f28ad4b594aebe22157d6fac869786a255b7eb"
@@ -2943,21 +2520,14 @@ uuid = "6c6e2e6c-3030-632d-7369-2d6c69616d65"
 version = "0.1.4"
 
 [[deps.MacroTools]]
-deps = ["Markdown", "Random"]
-git-tree-sha1 = "2fa9ee3e63fd3a4f7a9a4f4744a52f4856de82df"
+git-tree-sha1 = "72aebe0b5051e5143a079a4685a46da330a40472"
 uuid = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
-version = "0.5.13"
+version = "0.5.15"
 
 [[deps.MappedArrays]]
 git-tree-sha1 = "2dab0221fe2b0f2cb6754eaa743cc266339f527e"
 uuid = "dbb5928d-eab1-5f90-85c2-b9b0edb7c900"
 version = "0.4.2"
-
-[[deps.MarchingCubes]]
-deps = ["PrecompileTools", "StaticArrays"]
-git-tree-sha1 = "27d162f37cc29de047b527dab11a826dd3a650ad"
-uuid = "299715c1-40a9-479a-aaf9-4a633d36f717"
-version = "0.1.9"
 
 [[deps.Markdown]]
 deps = ["Base64"]
@@ -3002,9 +2572,9 @@ version = "2023.12.12"
 
 [[deps.NaNMath]]
 deps = ["OpenLibm_jll"]
-git-tree-sha1 = "0877504529a3e5c3343c6f8b4c0381e57e4387e4"
+git-tree-sha1 = "030ea22804ef91648f29b7ad3fc15fa49d0e6e71"
 uuid = "77ba4419-2d1f-58cd-9bb1-8ffee604a2e3"
-version = "1.0.2"
+version = "1.0.3"
 
 [[deps.Netpbm]]
 deps = ["FileIO", "ImageCore", "ImageMetadata"]
@@ -3017,9 +2587,9 @@ uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
 version = "1.2.0"
 
 [[deps.OffsetArrays]]
-git-tree-sha1 = "1a27764e945a152f7ca7efa04de513d473e9542e"
+git-tree-sha1 = "5e1897147d1ff8d98883cda2be2187dcf57d8f0c"
 uuid = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
-version = "1.14.1"
+version = "1.15.0"
 
     [deps.OffsetArrays.extensions]
     OffsetArraysAdaptExt = "Adapt"
@@ -3040,21 +2610,15 @@ version = "0.3.27+1"
 
 [[deps.OpenEXR]]
 deps = ["Colors", "FileIO", "OpenEXR_jll"]
-git-tree-sha1 = "327f53360fdb54df7ecd01e96ef1983536d1e633"
+git-tree-sha1 = "97db9e07fe2091882c765380ef58ec553074e9c7"
 uuid = "52e1d378-f018-4a11-a4be-720524705ac7"
-version = "0.3.2"
+version = "0.3.3"
 
 [[deps.OpenEXR_jll]]
 deps = ["Artifacts", "Imath_jll", "JLLWrappers", "Libdl", "Zlib_jll"]
 git-tree-sha1 = "8292dd5c8a38257111ada2174000a33745b06d4e"
 uuid = "18a262bb-aa17-5467-a713-aee519bc75cb"
 version = "3.2.4+0"
-
-[[deps.OpenJpeg_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Libtiff_jll", "LittleCMS_jll", "libpng_jll"]
-git-tree-sha1 = "f4cb457ffac5f5cf695699f82c537073958a6a6c"
-uuid = "643b3616-a352-519d-856d-80112ee9badc"
-version = "2.5.2+0"
 
 [[deps.OpenLibm_jll]]
 deps = ["Artifacts", "Libdl"]
@@ -3069,15 +2633,15 @@ version = "1.4.3"
 
 [[deps.OpenSSL_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "7493f61f55a6cce7325f197443aa80d32554ba10"
+git-tree-sha1 = "ad31332567b189f508a3ea8957a2640b1147ab00"
 uuid = "458c3c95-2e84-50aa-8efc-19380b2a3a95"
-version = "3.0.15+1"
+version = "1.1.23+1"
 
 [[deps.OpenSpecFun_jll]]
-deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "13652491f6856acfd2db29360e1bbcd4565d04f1"
+deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl"]
+git-tree-sha1 = "1346c9208249809840c91b26703912dff463d335"
 uuid = "efe28fd5-8261-553b-a9e1-b2916fc3738e"
-version = "0.5.5+0"
+version = "0.5.6+0"
 
 [[deps.Opus_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -3086,9 +2650,9 @@ uuid = "91d4177d-7536-5919-b921-800302f37372"
 version = "1.3.3+0"
 
 [[deps.OrderedCollections]]
-git-tree-sha1 = "dfdf5519f235516220579f949664f1bf44e741c5"
+git-tree-sha1 = "12f1439c4f986bb868acda6ea33ebc78e19b95ad"
 uuid = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
-version = "1.6.3"
+version = "1.7.0"
 
 [[deps.PCRE2_jll]]
 deps = ["Artifacts", "Libdl"]
@@ -3109,20 +2673,15 @@ version = "0.5.12"
 
 [[deps.Pango_jll]]
 deps = ["Artifacts", "Cairo_jll", "Fontconfig_jll", "FreeType2_jll", "FriBidi_jll", "Glib_jll", "HarfBuzz_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "e127b609fb9ecba6f201ba7ab753d5a605d53801"
+git-tree-sha1 = "ed6834e95bd326c52d5675b4181386dfbe885afb"
 uuid = "36c8627f-9965-5494-a995-c6b170f724f3"
-version = "1.54.1+0"
+version = "1.55.5+0"
 
 [[deps.Parsers]]
 deps = ["Dates", "PrecompileTools", "UUIDs"]
 git-tree-sha1 = "8489905bcdbcfac64d1daa51ca07c0d8f0283821"
 uuid = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
 version = "2.8.1"
-
-[[deps.Pipe]]
-git-tree-sha1 = "6842804e7867b115ca9de748a0cf6b364523c16d"
-uuid = "b98c9c47-44ae-5843-9183-064241ee97a0"
-version = "1.3.0"
 
 [[deps.Pixman_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "LLVMOpenMP_jll", "Libdl"]
@@ -3147,41 +2706,21 @@ version = "0.3.3"
 
 [[deps.PlotThemes]]
 deps = ["PlotUtils", "Statistics"]
-git-tree-sha1 = "6e55c6841ce3411ccb3457ee52fc48cb698d6fb0"
+git-tree-sha1 = "8162b2f8547bc23876edd0c5181b27702ae58dce"
 uuid = "ccf2f8ad-2431-5c83-bf29-c5338b663b6a"
-version = "3.2.0"
+version = "3.0.0"
 
 [[deps.PlotUtils]]
-deps = ["ColorSchemes", "Colors", "Dates", "PrecompileTools", "Printf", "Random", "Reexport", "Statistics"]
-git-tree-sha1 = "7b1a9df27f072ac4c9c7cbe5efb198489258d1f5"
+deps = ["ColorSchemes", "Colors", "Dates", "PrecompileTools", "Printf", "Random", "Reexport", "StableRNGs", "Statistics"]
+git-tree-sha1 = "3ca9a356cd2e113c420f2c13bea19f8d3fb1cb18"
 uuid = "995b91a9-d308-5afd-9ec6-746e21dbc043"
-version = "1.4.1"
+version = "1.4.3"
 
 [[deps.Plots]]
-deps = ["Base64", "Contour", "Dates", "Downloads", "FFMPEG", "FixedPointNumbers", "GR", "JLFzf", "JSON", "LaTeXStrings", "Latexify", "LinearAlgebra", "Measures", "NaNMath", "Pkg", "PlotThemes", "PlotUtils", "PrecompileTools", "Printf", "REPL", "Random", "RecipesBase", "RecipesPipeline", "Reexport", "RelocatableFolders", "Requires", "Scratch", "Showoff", "SparseArrays", "Statistics", "StatsBase", "TOML", "UUIDs", "UnicodeFun", "UnitfulLatexify", "Unzip"]
-git-tree-sha1 = "45470145863035bb124ca51b320ed35d071cc6c2"
+deps = ["Base64", "Contour", "Dates", "Downloads", "FFMPEG", "FixedPointNumbers", "GR", "GeometryBasics", "JSON", "LaTeXStrings", "Latexify", "LinearAlgebra", "Measures", "NaNMath", "Pkg", "PlotThemes", "PlotUtils", "Printf", "REPL", "Random", "RecipesBase", "RecipesPipeline", "Reexport", "Requires", "Scratch", "Showoff", "SparseArrays", "Statistics", "StatsBase", "UUIDs", "UnicodeFun", "Unzip"]
+git-tree-sha1 = "a19652399f43938413340b2068e11e55caa46b65"
 uuid = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
-version = "1.40.8"
-
-    [deps.Plots.extensions]
-    FileIOExt = "FileIO"
-    GeometryBasicsExt = "GeometryBasics"
-    IJuliaExt = "IJulia"
-    ImageInTerminalExt = "ImageInTerminal"
-    UnitfulExt = "Unitful"
-
-    [deps.Plots.weakdeps]
-    FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
-    GeometryBasics = "5c1252a2-5f33-56bf-86c9-59e7332b4326"
-    IJulia = "7073ff75-c697-5162-941a-fcdaad2a7d2a"
-    ImageInTerminal = "d8c32880-2388-543b-8c61-d9f865259254"
-    Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
-
-[[deps.PlutoExtras]]
-deps = ["AbstractPlutoDingetjes", "DocStringExtensions", "HypertextLiteral", "InteractiveUtils", "Markdown", "PlutoUI", "REPL", "Random"]
-git-tree-sha1 = "681f89bdd5c1da76b31a524af798efb5eb332ee9"
-uuid = "ed5d0301-4775-4676-b788-cf71e66ff8ed"
-version = "0.7.13"
+version = "1.31.7"
 
 [[deps.PlutoUI]]
 deps = ["AbstractPlutoDingetjes", "Base64", "ColorTypes", "Dates", "FixedPointNumbers", "Hyperscript", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "MIMEs", "Markdown", "Random", "Reexport", "URIs", "UUIDs"]
@@ -3202,10 +2741,10 @@ uuid = "21216c6a-2e73-6563-6e65-726566657250"
 version = "1.4.3"
 
 [[deps.PrettyTables]]
-deps = ["Crayons", "LaTeXStrings", "Markdown", "PrecompileTools", "Printf", "Reexport", "StringManipulation", "Tables"]
-git-tree-sha1 = "1101cd475833706e4d0e7b122218257178f48f34"
+deps = ["Crayons", "Formatting", "Markdown", "Reexport", "Tables"]
+git-tree-sha1 = "dfb54c4e414caa595a1f2ed759b160f5a3ddcba5"
 uuid = "08abe8d2-0d0c-5749-adfa-8a2ac140af0d"
-version = "2.4.0"
+version = "1.3.1"
 
 [[deps.Printf]]
 deps = ["Unicode"]
@@ -3226,39 +2765,21 @@ version = "1.96.4"
 
 [[deps.QOI]]
 deps = ["ColorTypes", "FileIO", "FixedPointNumbers"]
-git-tree-sha1 = "18e8f4d1426e965c7b532ddd260599e1510d26ce"
+git-tree-sha1 = "8b3fc30bc0390abdce15f8822c889f669baed73d"
 uuid = "4b34888f-f399-49d4-9bb3-47ed5cae4e65"
-version = "1.0.0"
+version = "1.0.1"
 
-[[deps.QRCoders]]
-deps = ["FileIO", "ImageCore", "ImageIO", "ImageMagick", "StatsBase", "UnicodePlots"]
-git-tree-sha1 = "b3e5fcc7a7ade2d43f0ffd178c299b7a264c268a"
-uuid = "f42e9828-16f3-11ed-2883-9126170b272d"
-version = "1.4.5"
+[[deps.Qt5Base_jll]]
+deps = ["Artifacts", "CompilerSupportLibraries_jll", "Fontconfig_jll", "Glib_jll", "JLLWrappers", "Libdl", "Libglvnd_jll", "OpenSSL_jll", "Pkg", "Xorg_libXext_jll", "Xorg_libxcb_jll", "Xorg_xcb_util_image_jll", "Xorg_xcb_util_keysyms_jll", "Xorg_xcb_util_renderutil_jll", "Xorg_xcb_util_wm_jll", "Zlib_jll", "xkbcommon_jll"]
+git-tree-sha1 = "0c03844e2231e12fda4d0086fd7cbe4098ee8dc5"
+uuid = "ea2cea3b-5b76-57ae-a6ef-0a8af62496e1"
+version = "5.15.3+2"
 
-[[deps.Qt6Base_jll]]
-deps = ["Artifacts", "CompilerSupportLibraries_jll", "Fontconfig_jll", "Glib_jll", "JLLWrappers", "Libdl", "Libglvnd_jll", "OpenSSL_jll", "Vulkan_Loader_jll", "Xorg_libSM_jll", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Xorg_libxcb_jll", "Xorg_xcb_util_cursor_jll", "Xorg_xcb_util_image_jll", "Xorg_xcb_util_keysyms_jll", "Xorg_xcb_util_renderutil_jll", "Xorg_xcb_util_wm_jll", "Zlib_jll", "libinput_jll", "xkbcommon_jll"]
-git-tree-sha1 = "492601870742dcd38f233b23c3ec629628c1d724"
-uuid = "c0090381-4147-56d7-9ebc-da0b1113ec56"
-version = "6.7.1+1"
-
-[[deps.Qt6Declarative_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Qt6Base_jll", "Qt6ShaderTools_jll"]
-git-tree-sha1 = "e5dd466bf2569fe08c91a2cc29c1003f4797ac3b"
-uuid = "629bc702-f1f5-5709-abd5-49b8460ea067"
-version = "6.7.1+2"
-
-[[deps.Qt6ShaderTools_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Qt6Base_jll"]
-git-tree-sha1 = "1a180aeced866700d4bebc3120ea1451201f16bc"
-uuid = "ce943373-25bb-56aa-8eca-768745ed7b5a"
-version = "6.7.1+1"
-
-[[deps.Qt6Wayland_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Qt6Base_jll", "Qt6Declarative_jll"]
-git-tree-sha1 = "729927532d48cf79f49070341e1d918a65aba6b0"
-uuid = "e99dba38-086e-5de3-a5b1-6e4c66e897c3"
-version = "6.7.1+1"
+[[deps.Quaternions]]
+deps = ["LinearAlgebra", "Random", "RealDot"]
+git-tree-sha1 = "994cc27cdacca10e68feb291673ec3a76aa2fae9"
+uuid = "94ee1d12-ae83-5a48-8b1c-48b8ff168ae0"
+version = "0.7.6"
 
 [[deps.REPL]]
 deps = ["InteractiveUtils", "Markdown", "Sockets", "StyledStrings", "Unicode"]
@@ -3274,6 +2795,22 @@ version = "1.11.0"
 git-tree-sha1 = "b9039e93773ddcfc828f12aadf7115b4b4d225f5"
 uuid = "b3c3ace0-ae52-54e7-9d0b-2c1406fd6b9d"
 version = "0.3.2"
+
+[[deps.Ratios]]
+deps = ["Requires"]
+git-tree-sha1 = "1342a47bf3260ee108163042310d26f2be5ec90b"
+uuid = "c84ed2f1-dad5-54f0-aa8e-dbefe2724439"
+version = "0.4.5"
+weakdeps = ["FixedPointNumbers"]
+
+    [deps.Ratios.extensions]
+    RatiosFixedPointNumbersExt = "FixedPointNumbers"
+
+[[deps.RealDot]]
+deps = ["LinearAlgebra"]
+git-tree-sha1 = "9f0a1b71baaf7650f4fa8a1d168c7fb6ee41f0c9"
+uuid = "c1ae055f-0cd5-4b69-90a6-9a35b1a98df9"
+version = "0.1.0"
 
 [[deps.RecipesBase]]
 deps = ["PrecompileTools"]
@@ -3294,9 +2831,9 @@ version = "1.2.2"
 
 [[deps.RelocatableFolders]]
 deps = ["SHA", "Scratch"]
-git-tree-sha1 = "ffdaf70d81cf6ff22c2b6e733c900c3321cab864"
+git-tree-sha1 = "22c5201127d7b243b9ee1de3b43c408879dff60f"
 uuid = "05181044-ff0b-4ac5-8273-598c1e38db00"
-version = "1.0.1"
+version = "0.3.0"
 
 [[deps.Requires]]
 deps = ["UUIDs"]
@@ -3304,15 +2841,25 @@ git-tree-sha1 = "838a3a4188e2ded87a4f9f184b4b0d78a1e91cb7"
 uuid = "ae029012-a4dd-5104-9daa-d747884805df"
 version = "1.3.0"
 
+[[deps.Rotations]]
+deps = ["LinearAlgebra", "Quaternions", "Random", "StaticArrays"]
+git-tree-sha1 = "5680a9276685d392c87407df00d57c9924d9f11e"
+uuid = "6038ab10-8711-5258-84ad-4b1120ba62dc"
+version = "1.7.1"
+weakdeps = ["RecipesBase"]
+
+    [deps.Rotations.extensions]
+    RotationsRecipesBaseExt = "RecipesBase"
+
 [[deps.SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
 version = "0.7.0"
 
 [[deps.SIMD]]
 deps = ["PrecompileTools"]
-git-tree-sha1 = "98ca7c29edd6fc79cd74c61accb7010a4e7aee33"
+git-tree-sha1 = "fea870727142270bdf7624ad675901a1ee3b4c87"
 uuid = "fdea26ae-647d-5447-a871-4b548cad5224"
-version = "3.6.0"
+version = "3.7.1"
 
 [[deps.Scratch]]
 deps = ["Dates"]
@@ -3322,6 +2869,11 @@ version = "1.2.1"
 
 [[deps.Serialization]]
 uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
+version = "1.11.0"
+
+[[deps.SharedArrays]]
+deps = ["Distributed", "Mmap", "Random", "Serialization"]
+uuid = "1a1011a3-84de-559e-8e89-a11a2f7dc383"
 version = "1.11.0"
 
 [[deps.Showoff]]
@@ -3364,15 +2916,19 @@ version = "1.11.0"
 
 [[deps.SpecialFunctions]]
 deps = ["IrrationalConstants", "LogExpFunctions", "OpenLibm_jll", "OpenSpecFun_jll"]
-git-tree-sha1 = "2f5d4697f21388cbe1ff299430dd169ef97d7e14"
+git-tree-sha1 = "64cca0c26b4f31ba18f13f6c12af7c85f478cfde"
 uuid = "276daf66-3868-5448-9aa4-cd146d93841b"
-version = "2.4.0"
+version = "2.5.0"
+weakdeps = ["ChainRulesCore"]
 
     [deps.SpecialFunctions.extensions]
     SpecialFunctionsChainRulesCoreExt = "ChainRulesCore"
 
-    [deps.SpecialFunctions.weakdeps]
-    ChainRulesCore = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
+[[deps.StableRNGs]]
+deps = ["Random"]
+git-tree-sha1 = "83e6cce8324d49dfaf9ef059227f91ed4441a8e5"
+uuid = "860ef19b-820b-49d6-a774-d7a799459cd3"
+version = "1.0.2"
 
 [[deps.StackViews]]
 deps = ["OffsetArrays"]
@@ -3382,17 +2938,14 @@ version = "0.1.1"
 
 [[deps.StaticArrays]]
 deps = ["LinearAlgebra", "PrecompileTools", "Random", "StaticArraysCore"]
-git-tree-sha1 = "eeafab08ae20c62c44c8399ccb9354a04b80db50"
+git-tree-sha1 = "47091a0340a675c738b1304b58161f3b0839d454"
 uuid = "90137ffa-7385-5640-81b9-e52037218182"
-version = "1.9.7"
+version = "1.9.10"
+weakdeps = ["ChainRulesCore", "Statistics"]
 
     [deps.StaticArrays.extensions]
     StaticArraysChainRulesCoreExt = "ChainRulesCore"
     StaticArraysStatisticsExt = "Statistics"
-
-    [deps.StaticArrays.weakdeps]
-    ChainRulesCore = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
-    Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 
 [[deps.StaticArraysCore]]
 git-tree-sha1 = "192954ef1208c7019899fbf8049e717f92959682"
@@ -3421,27 +2974,24 @@ git-tree-sha1 = "d1bf48bfcc554a3761a133fe3a9bb01488e06916"
 uuid = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 version = "0.33.21"
 
-[[deps.StringManipulation]]
-deps = ["PrecompileTools"]
-git-tree-sha1 = "a6b1675a536c5ad1a60e5a5153e1fee12eb146e3"
-uuid = "892a3eda-7b42-436c-8928-eab12a02cf0e"
-version = "0.4.0"
-
 [[deps.StructArrays]]
 deps = ["ConstructionBase", "DataAPI", "Tables"]
-git-tree-sha1 = "f4dc295e983502292c4c3f951dbb4e985e35b3be"
+git-tree-sha1 = "9537ef82c42cdd8c5d443cbc359110cbb36bae10"
 uuid = "09ab397b-f2b6-538f-b94a-2f83cf4a842a"
-version = "0.6.18"
+version = "0.6.21"
 
     [deps.StructArrays.extensions]
     StructArraysAdaptExt = "Adapt"
-    StructArraysGPUArraysCoreExt = "GPUArraysCore"
+    StructArraysGPUArraysCoreExt = ["GPUArraysCore", "KernelAbstractions"]
+    StructArraysLinearAlgebraExt = "LinearAlgebra"
     StructArraysSparseArraysExt = "SparseArrays"
     StructArraysStaticArraysExt = "StaticArrays"
 
     [deps.StructArrays.weakdeps]
     Adapt = "79e6a3ab-5dfb-504d-930d-738a2a938a0e"
     GPUArraysCore = "46192b85-c4d5-4398-a991-12ede77f4527"
+    KernelAbstractions = "63c18a36-062a-441e-b654-da1e3ab1ce7c"
+    LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
     SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
     StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 
@@ -3455,22 +3005,16 @@ uuid = "bea87d4a-7f5b-5778-9afe-8cc45184846c"
 version = "7.7.0+0"
 
 [[deps.SymPy]]
-deps = ["CommonEq", "CommonSolve", "LinearAlgebra", "PyCall", "SpecialFunctions", "SymPyCore"]
-git-tree-sha1 = "d35b297be048dfac05bcff29e55d6106808e3c5a"
+deps = ["CommonEq", "CommonSolve", "Latexify", "LinearAlgebra", "Markdown", "PyCall", "RecipesBase", "SpecialFunctions"]
+git-tree-sha1 = "04f5a3cf4e9f451c81bcac8ea9b57bfda7f22e34"
 uuid = "24249f21-da20-56a4-8eb1-6a02cf4ae2e6"
-version = "2.2.0"
+version = "1.1.14"
 
-[[deps.SymPyCore]]
-deps = ["CommonEq", "CommonSolve", "Latexify", "LinearAlgebra", "Markdown", "RecipesBase", "SpecialFunctions"]
-git-tree-sha1 = "bef92ec4c31804bdc9c44cb00eaf0348eac383fb"
-uuid = "458b697b-88f0-4a86-b56b-78b75cfb3531"
-version = "0.2.5"
+    [deps.SymPy.extensions]
+    SymPySymbolicUtilsExt = "SymbolicUtils"
 
-    [deps.SymPyCore.extensions]
-    SymPyCoreTermInterfaceExt = "TermInterface"
-
-    [deps.SymPyCore.weakdeps]
-    TermInterface = "8ea1fca8-c5ef-4a55-8b96-4e9afe9c9a3c"
+    [deps.SymPy.weakdeps]
+    SymbolicUtils = "d1185830-fcd6-423d-90d6-eec64667417b"
 
 [[deps.TOML]]
 deps = ["Dates"]
@@ -3507,9 +3051,9 @@ version = "1.11.0"
 
 [[deps.TiffImages]]
 deps = ["ColorTypes", "DataStructures", "DocStringExtensions", "FileIO", "FixedPointNumbers", "IndirectArrays", "Inflate", "Mmap", "OffsetArrays", "PkgVersion", "ProgressMeter", "SIMD", "UUIDs"]
-git-tree-sha1 = "657f0a3fdc8ff4a1802b984872468ae1649aebb3"
+git-tree-sha1 = "38f139cc4abf345dd4f22286ec000728d5e8e097"
 uuid = "731e570b-9d59-4bfa-96dc-6df516fadf69"
-version = "0.10.1"
+version = "0.10.2"
 
 [[deps.TranscodingStreams]]
 git-tree-sha1 = "0c45878dcfdcfa8480052b6ab162cdd138781742"
@@ -3541,173 +3085,123 @@ git-tree-sha1 = "53915e50200959667e78a92a418594b428dffddf"
 uuid = "1cfade01-22cf-5700-b092-accc4b62d6e1"
 version = "0.4.1"
 
-[[deps.UnicodePlots]]
-deps = ["ColorTypes", "Contour", "Crayons", "Dates", "FileIO", "FreeTypeAbstraction", "LazyModules", "LinearAlgebra", "MarchingCubes", "NaNMath", "Printf", "SparseArrays", "StaticArrays", "StatsBase", "Unitful"]
-git-tree-sha1 = "ae67ab0505b9453655f7d5ea65183a1cd1b3cfa0"
-uuid = "b8865327-cd53-5732-bb35-84acbb429228"
-version = "2.12.4"
-
-[[deps.Unitful]]
-deps = ["Dates", "LinearAlgebra", "Random"]
-git-tree-sha1 = "d95fe458f26209c66a187b1114df96fd70839efd"
-uuid = "1986cc42-f94f-5a68-af5c-568840ba703d"
-version = "1.21.0"
-
-    [deps.Unitful.extensions]
-    ConstructionBaseUnitfulExt = "ConstructionBase"
-    InverseFunctionsUnitfulExt = "InverseFunctions"
-
-    [deps.Unitful.weakdeps]
-    ConstructionBase = "187b0558-2788-49d3-abe0-74a17ed4e7c9"
-    InverseFunctions = "3587e190-3f89-42d0-90ee-14403ec27112"
-
-[[deps.UnitfulLatexify]]
-deps = ["LaTeXStrings", "Latexify", "Unitful"]
-git-tree-sha1 = "975c354fcd5f7e1ddcc1f1a23e6e091d99e99bc8"
-uuid = "45397f5d-5981-4c77-b2b3-fc36d6e9b728"
-version = "1.6.4"
-
 [[deps.Unzip]]
-git-tree-sha1 = "ca0969166a028236229f63514992fc073799bb78"
+git-tree-sha1 = "34db80951901073501137bdbc3d5a8e7bbd06670"
 uuid = "41fe7b60-77ed-43a1-b4f0-825fd5a5650d"
-version = "0.2.0"
+version = "0.1.2"
 
 [[deps.VersionParsing]]
 git-tree-sha1 = "58d6e80b4ee071f5efd07fda82cb9fbe17200868"
 uuid = "81def892-9a0e-5fdd-b105-ffc91e053289"
 version = "1.3.0"
 
-[[deps.Vulkan_Loader_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Wayland_jll", "Xorg_libX11_jll", "Xorg_libXrandr_jll", "xkbcommon_jll"]
-git-tree-sha1 = "2f0486047a07670caad3a81a075d2e518acc5c59"
-uuid = "a44049a8-05dd-5a78-86c9-5fde0876e88c"
-version = "1.3.243+0"
-
 [[deps.Wayland_jll]]
 deps = ["Artifacts", "EpollShim_jll", "Expat_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Pkg", "XML2_jll"]
-git-tree-sha1 = "7558e29847e99bc3f04d6569e82d0f5c54460703"
+git-tree-sha1 = "85c7811eddec9e7f22615371c3cc81a504c508ee"
 uuid = "a2964d1f-97da-50d4-b82a-358c7fce9d89"
-version = "1.21.0+1"
+version = "1.21.0+2"
 
 [[deps.Wayland_protocols_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "93f43ab61b16ddfb2fd3bb13b3ce241cafb0e6c9"
+git-tree-sha1 = "5db3e9d307d32baba7067b13fc7b5aa6edd4a19a"
 uuid = "2381bf8a-dfd0-557d-9999-79630e7b1b91"
-version = "1.31.0+0"
+version = "1.36.0+0"
+
+[[deps.WoodburyMatrices]]
+deps = ["LinearAlgebra", "SparseArrays"]
+git-tree-sha1 = "5f24e158cf4cee437052371455fe361f526da062"
+uuid = "efce3f68-66dc-5838-9240-27a6d6f5f9b6"
+version = "0.5.6"
 
 [[deps.XML2_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libiconv_jll", "Zlib_jll"]
-git-tree-sha1 = "1165b0443d0eca63ac1e32b8c0eb69ed2f4f8127"
+git-tree-sha1 = "a2fccc6559132927d4c5dc183e3e01048c6dcbd6"
 uuid = "02c8fc9c-b97f-50b9-bbe4-9be30ff0a78a"
-version = "2.13.3+0"
+version = "2.13.5+0"
 
 [[deps.XSLT_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libgcrypt_jll", "Libgpg_error_jll", "Libiconv_jll", "XML2_jll", "Zlib_jll"]
-git-tree-sha1 = "a54ee957f4c86b526460a720dbc882fa5edcbefc"
+git-tree-sha1 = "7d1671acbe47ac88e981868a078bd6b4e27c5191"
 uuid = "aed1982a-8fda-507f-9586-7b0439959a61"
-version = "1.1.41+0"
-
-[[deps.XZ_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "ac88fb95ae6447c8dda6a5503f3bafd496ae8632"
-uuid = "ffd25f8a-64ca-5728-b0f7-c24cf3aae800"
-version = "5.4.6+0"
-
-[[deps.Xorg_libICE_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "326b4fea307b0b39892b3e85fa451692eda8d46c"
-uuid = "f67eecfb-183a-506d-b269-f58e52b52d7c"
-version = "1.1.1+0"
-
-[[deps.Xorg_libSM_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libICE_jll"]
-git-tree-sha1 = "3796722887072218eabafb494a13c963209754ce"
-uuid = "c834827a-8449-5923-a945-d239c165b7dd"
-version = "1.2.4+0"
+version = "1.1.42+0"
 
 [[deps.Xorg_libX11_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libxcb_jll", "Xorg_xtrans_jll"]
-git-tree-sha1 = "afead5aba5aa507ad5a3bf01f58f82c8d1403495"
+git-tree-sha1 = "9dafcee1d24c4f024e7edc92603cedba72118283"
 uuid = "4f6342f7-b3d2-589e-9d20-edeb45f2b2bc"
-version = "1.8.6+0"
+version = "1.8.6+3"
 
 [[deps.Xorg_libXau_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "6035850dcc70518ca32f012e46015b9beeda49d8"
+git-tree-sha1 = "e9216fdcd8514b7072b43653874fd688e4c6c003"
 uuid = "0c0b7dd1-d40b-584c-a123-a41640f87eec"
-version = "1.0.11+0"
+version = "1.0.12+0"
 
 [[deps.Xorg_libXcursor_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg", "Xorg_libXfixes_jll", "Xorg_libXrender_jll"]
-git-tree-sha1 = "12e0eb3bc634fa2080c1c37fccf56f7c22989afd"
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libXfixes_jll", "Xorg_libXrender_jll"]
+git-tree-sha1 = "807c226eaf3651e7b2c468f687ac788291f9a89b"
 uuid = "935fb764-8cf2-53bf-bb30-45bb1f8bf724"
-version = "1.2.0+4"
+version = "1.2.3+0"
 
 [[deps.Xorg_libXdmcp_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "34d526d318358a859d7de23da945578e8e8727b7"
+git-tree-sha1 = "89799ae67c17caa5b3b5a19b8469eeee474377db"
 uuid = "a3789734-cfe1-5b06-b2d0-1dd0d9d62d05"
-version = "1.1.4+0"
+version = "1.1.5+0"
 
 [[deps.Xorg_libXext_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libX11_jll"]
-git-tree-sha1 = "d2d1a5c49fae4ba39983f63de6afcbea47194e85"
+git-tree-sha1 = "d7155fea91a4123ef59f42c4afb5ab3b4ca95058"
 uuid = "1082639a-0dae-5f34-9b06-72781eeb8cb3"
-version = "1.3.6+0"
+version = "1.3.6+3"
 
 [[deps.Xorg_libXfixes_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg", "Xorg_libX11_jll"]
-git-tree-sha1 = "0e0dc7431e7a0587559f9294aeec269471c991a4"
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libX11_jll"]
+git-tree-sha1 = "6fcc21d5aea1a0b7cce6cab3e62246abd1949b86"
 uuid = "d091e8ba-531a-589c-9de9-94069b037ed8"
-version = "5.0.3+4"
+version = "6.0.0+0"
 
 [[deps.Xorg_libXi_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg", "Xorg_libXext_jll", "Xorg_libXfixes_jll"]
-git-tree-sha1 = "89b52bc2160aadc84d707093930ef0bffa641246"
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libXext_jll", "Xorg_libXfixes_jll"]
+git-tree-sha1 = "984b313b049c89739075b8e2a94407076de17449"
 uuid = "a51aa0fd-4e3c-5386-b890-e753decda492"
-version = "1.7.10+4"
+version = "1.8.2+0"
 
 [[deps.Xorg_libXinerama_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg", "Xorg_libXext_jll"]
-git-tree-sha1 = "26be8b1c342929259317d8b9f7b53bf2bb73b123"
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libXext_jll"]
+git-tree-sha1 = "a1a7eaf6c3b5b05cb903e35e8372049b107ac729"
 uuid = "d1454406-59df-5ea1-beac-c340f2130bc3"
-version = "1.1.4+4"
+version = "1.1.5+0"
 
 [[deps.Xorg_libXrandr_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg", "Xorg_libXext_jll", "Xorg_libXrender_jll"]
-git-tree-sha1 = "34cea83cb726fb58f325887bf0612c6b3fb17631"
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libXext_jll", "Xorg_libXrender_jll"]
+git-tree-sha1 = "b6f664b7b2f6a39689d822a6300b14df4668f0f4"
 uuid = "ec84b674-ba8e-5d96-8ba1-2a689ba10484"
-version = "1.5.2+4"
+version = "1.5.4+0"
 
 [[deps.Xorg_libXrender_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libX11_jll"]
-git-tree-sha1 = "47e45cd78224c53109495b3e324df0c37bb61fbe"
+git-tree-sha1 = "a490c6212a0e90d2d55111ac956f7c4fa9c277a6"
 uuid = "ea2f1a96-1ddc-540d-b46f-429655e07cfa"
-version = "0.9.11+0"
+version = "0.9.11+1"
 
 [[deps.Xorg_libpthread_stubs_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "8fdda4c692503d44d04a0603d9ac0982054635f9"
+git-tree-sha1 = "c57201109a9e4c0585b208bb408bc41d205ac4e9"
 uuid = "14d82f49-176c-5ed1-bb49-ad3f5cbd8c74"
-version = "0.1.1+0"
+version = "0.1.2+0"
 
 [[deps.Xorg_libxcb_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "XSLT_jll", "Xorg_libXau_jll", "Xorg_libXdmcp_jll", "Xorg_libpthread_stubs_jll"]
-git-tree-sha1 = "bcd466676fef0878338c61e655629fa7bbc69d8e"
+git-tree-sha1 = "1a74296303b6524a0472a8cb12d3d87a78eb3612"
 uuid = "c7cfdc94-dc32-55de-ac96-5a1b8d977c5b"
-version = "1.17.0+0"
+version = "1.17.0+3"
 
 [[deps.Xorg_libxkbfile_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libX11_jll"]
-git-tree-sha1 = "730eeca102434283c50ccf7d1ecdadf521a765a4"
+git-tree-sha1 = "dbc53e4cf7701c6c7047c51e17d6e64df55dca94"
 uuid = "cc61e674-0454-545c-8b26-ed2c68acab7a"
-version = "1.1.2+0"
-
-[[deps.Xorg_xcb_util_cursor_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_xcb_util_image_jll", "Xorg_xcb_util_jll", "Xorg_xcb_util_renderutil_jll"]
-git-tree-sha1 = "04341cb870f29dcd5e39055f895c39d016e18ccd"
-uuid = "e920d4aa-a673-5f3a-b3d7-f755a4d47c43"
-version = "0.1.4+0"
+version = "1.1.2+1"
 
 [[deps.Xorg_xcb_util_image_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg", "Xorg_xcb_util_jll"]
@@ -3741,9 +3235,9 @@ version = "0.4.1+1"
 
 [[deps.Xorg_xkbcomp_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libxkbfile_jll"]
-git-tree-sha1 = "330f955bc41bb8f5270a369c473fc4a5a4e4d3cb"
+git-tree-sha1 = "ab2221d309eda71020cdda67a973aa582aa85d69"
 uuid = "35661453-b289-5fab-8a00-3d9160c6a3a4"
-version = "1.4.6+0"
+version = "1.4.6+1"
 
 [[deps.Xorg_xkeyboard_config_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_xkbcomp_jll"]
@@ -3753,9 +3247,9 @@ version = "2.39.0+0"
 
 [[deps.Xorg_xtrans_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "e92a1a012a10506618f10b7047e478403a046c77"
+git-tree-sha1 = "6dba04dbfb72ae3ebe5418ba33d087ba8aa8cb00"
 uuid = "c5fb5394-a638-5e4d-96e5-b29de1b5cf10"
-version = "1.5.0+0"
+version = "1.5.1+0"
 
 [[deps.Zlib_jll]]
 deps = ["Libdl"]
@@ -3764,33 +3258,15 @@ version = "1.2.13+1"
 
 [[deps.Zstd_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "555d1076590a6cc2fdee2ef1469451f872d8b41b"
+git-tree-sha1 = "622cf78670d067c738667aaa96c553430b65e269"
 uuid = "3161d3a3-bdf6-5164-811a-617609db77b4"
-version = "1.5.6+1"
-
-[[deps.eudev_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg", "gperf_jll"]
-git-tree-sha1 = "431b678a28ebb559d224c0b6b6d01afce87c51ba"
-uuid = "35ca27e7-8b34-5b7f-bca9-bdc33f59eb06"
-version = "3.2.9+0"
-
-[[deps.fzf_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "936081b536ae4aa65415d869287d43ef3cb576b2"
-uuid = "214eeab7-80f7-51ab-84ad-2988db7cef09"
-version = "0.53.0+0"
-
-[[deps.gperf_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "3516a5630f741c9eecb3720b1ec9d8edc3ecc033"
-uuid = "1a1c6b14-54f6-533d-8383-74cd7377aa70"
-version = "3.1.1+0"
+version = "1.5.7+0"
 
 [[deps.libaom_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "1827acba325fdcdf1d2647fc8d5301dd9ba43a9d"
+git-tree-sha1 = "522c1df09d05a71785765d19c9524661234738e9"
 uuid = "a4ae2306-e953-59d6-aa16-d00cac43593b"
-version = "3.9.0+0"
+version = "3.11.0+0"
 
 [[deps.libass_jll]]
 deps = ["Artifacts", "Bzip2_jll", "FreeType2_jll", "FriBidi_jll", "HarfBuzz_jll", "JLLWrappers", "Libdl", "Zlib_jll"]
@@ -3809,47 +3285,29 @@ git-tree-sha1 = "9bf7903af251d2050b467f76bdbe57ce541f7f4f"
 uuid = "1183f4f0-6f2a-5f1a-908b-139f9cdfea6f"
 version = "0.2.2+0"
 
-[[deps.libevdev_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "141fe65dc3efabb0b1d5ba74e91f6ad26f84cc22"
-uuid = "2db6ffa8-e38f-5e21-84af-90c45d0032cc"
-version = "1.11.0+0"
-
 [[deps.libfdk_aac_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
 git-tree-sha1 = "8a22cf860a7d27e4f3498a0fe0811a7957badb38"
 uuid = "f638f0a6-7fb0-5443-88ba-1cc74229b280"
 version = "2.0.3+0"
 
-[[deps.libinput_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg", "eudev_jll", "libevdev_jll", "mtdev_jll"]
-git-tree-sha1 = "ad50e5b90f222cfe78aa3d5183a20a12de1322ce"
-uuid = "36db933b-70db-51c0-b978-0f229ee0e533"
-version = "1.18.0+0"
-
 [[deps.libpng_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Zlib_jll"]
-git-tree-sha1 = "b70c870239dc3d7bc094eb2d6be9b73d27bef280"
+git-tree-sha1 = "d7b5bbf1efbafb5eca466700949625e07533aff2"
 uuid = "b53b4c65-9356-5827-b1ea-8c7a1a84506f"
-version = "1.6.44+0"
+version = "1.6.45+1"
 
 [[deps.libsixel_jll]]
-deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Pkg", "libpng_jll"]
-git-tree-sha1 = "7dfa0fd9c783d3d0cc43ea1af53d69ba45c447df"
+deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "Libdl", "libpng_jll"]
+git-tree-sha1 = "bf6bb896bd59692d1074fd69af0e5a1b64e64d5e"
 uuid = "075b6546-f08a-558a-be8f-8157d0f608a5"
-version = "1.10.3+1"
+version = "1.10.4+1"
 
 [[deps.libvorbis_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Ogg_jll", "Pkg"]
 git-tree-sha1 = "490376214c4721cdaca654041f635213c6165cb3"
 uuid = "f27f6e37-5d2b-51aa-960f-b287f2bc3b7a"
 version = "1.3.7+2"
-
-[[deps.mtdev_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "814e154bdb7be91d78b6802843f76b6ece642f11"
-uuid = "009596ad-96f7-51b1-9f1b-5ce2d5e8a71e"
-version = "1.1.6+0"
 
 [[deps.nghttp2_jll]]
 deps = ["Artifacts", "Libdl"]
@@ -3875,137 +3333,129 @@ version = "3.5.0+0"
 
 [[deps.xkbcommon_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg", "Wayland_jll", "Wayland_protocols_jll", "Xorg_libxcb_jll", "Xorg_xkeyboard_config_jll"]
-git-tree-sha1 = "9c304562909ab2bab0262639bd4f444d7bc2be37"
+git-tree-sha1 = "63406453ed9b33a0df95d570816d5366c92b7809"
 uuid = "d8fb68d0-12a3-5cfd-a85a-d49703b185fd"
-version = "1.4.1+1"
+version = "1.4.1+2"
 """
 
 # ╔═╡ Cell order:
-# ╟─71bc54d5-d0ed-42d3-9bc1-48aa86e91d1d
-# ╟─e414122f-b93a-4510-b8ae-026c303e0df9
-# ╟─8408e369-40eb-4f9b-a7d7-26cde3e34a74
-# ╟─cd269caf-ef81-43d7-a1a8-6668932b6363
-# ╟─8b65d45c-ca7c-4e5d-9cfd-a7348547ebe0
-# ╟─02c15fce-abf1-427e-b648-2554ee18ed5a
-# ╟─38eabacb-a71a-448d-875d-7f7230dba49e
-# ╟─bd6fff85-5fcc-4810-898d-d6f22b8e917d
-# ╟─d60ca33d-fa31-49a2-9a4a-dfc54aef46ae
-# ╟─6caae83a-3aa3-4f79-9f05-fb969f952286
-# ╟─52333157-9913-489d-8784-dc3b542af1e9
-# ╟─73c7417c-a035-4202-83f1-45e9897e8871
-# ╟─9f50c8be-95e8-4c28-81b4-8ccd638505af
-# ╠═0e340bfb-9807-4061-8901-62133ac44c5f
-# ╟─ebd3dd41-7a3b-4d2b-9c1d-adca89f36af7
-# ╟─19354aee-6de7-448f-8091-f6f68efdf84b
-# ╟─f80cc26d-120b-4f14-b31e-b50c9283c0b9
-# ╟─7086a5a8-d5ad-444b-8d14-056a3fdb99eb
-# ╟─bb77f844-76c9-401f-8c2c-dcc5891b0a09
-# ╟─9463762b-50bb-49be-80be-5f67cb141d1c
-# ╟─15277097-7c11-4b03-8579-8f9c376361cd
-# ╟─8f673110-65a1-4f6d-8de1-ebcfb49fb50d
-# ╠═8c2f85bb-9b81-4b70-b7e8-1a91e2738838
-# ╟─f89bbb38-906b-45f3-9eff-617924e0b719
-# ╟─a862aa36-d811-427d-bc1a-4502175b71f4
-# ╟─b9434085-81d7-4a3d-bed5-deebea3cd48a
-# ╠═208abdcc-dc12-4a08-a1f8-2177f95886f7
-# ╟─1615be4c-fb84-418f-8406-c274550cfb86
-# ╠═fd7161bc-1e1b-42e3-8758-c8e3e3ec0877
-# ╟─38ab6c6d-c5e0-49f9-8c76-61e0b8dc13c6
-# ╟─01008c60-bcfa-42a1-b5e8-fa67db2131ba
-# ╟─ee50e46d-6580-4a68-a061-6179c895a219
-# ╟─845d8b0a-6550-49f4-9308-13ec2b2bd0c1
-# ╟─1f0c53c0-611f-4b4e-9718-efac2f0b893d
-# ╟─a7c8710c-2256-425e-a946-0e2791773592
-# ╟─6ecb0430-177c-4097-a94e-edbce61725d1
-# ╟─f98989fb-b59a-496f-be73-322b4dcb4960
-# ╟─7e49b1d2-b6c5-4b84-ae6b-ac62d3f58d0c
-# ╟─04922857-61ca-45a7-a3b4-cf35138e4847
-# ╟─c19ba868-ca3b-4987-8e9b-eacffd6f9158
-# ╟─982c228a-a8cd-42cd-a437-1b8c80c89cef
-# ╟─3d54c0f4-3324-4bd6-adee-c343c5153392
-# ╟─1937220c-4467-430b-a745-42294765b6a5
-# ╟─1681a378-aea4-4e23-85a7-5c5731742ad8
-# ╟─5156fbdc-002c-4222-aca0-b835061e3fb7
-# ╟─7f7b1152-5dd0-4f97-b931-4fe74c51b3a3
-# ╟─b5d1d68a-ad7e-4140-a818-addead342c53
-# ╟─d7cb77c3-7875-43d8-bab6-7281455700b0
-# ╟─5f37c3d1-449f-4a6d-9af5-55f9a4c8feec
-# ╟─4aa43e57-d9a4-49da-b7d8-fe39d21df414
-# ╟─a41fcefd-00dd-45c5-86a0-7fe076460674
-# ╟─07f45116-ff8b-4d2c-a7e3-46a4581afc16
-# ╟─229d9694-2751-479d-9872-218f7cea2261
-# ╟─8b1d06a8-dbd0-4dc4-b12a-15425960ecc4
-# ╟─5e23a09b-c96f-40e0-bd8f-af18041f2be9
-# ╟─874e3ccf-4309-42d4-af8d-3921b025239e
-# ╟─4ff28842-9307-4813-8791-197fd6ca5238
-# ╠═1ffb0970-7422-4cb7-9f84-841f68565b80
-# ╟─32b71cdc-e93b-4b05-b8f5-4b9d61a2eb62
-# ╟─4e358ab2-9be7-4d7f-b295-1e85943da027
-# ╟─81e4ac99-3388-49e0-a168-5d9961c80ddf
-# ╟─02d61e1f-b630-443c-b1dd-1fe5d2c81b2f
-# ╟─b51c5bc6-9065-4687-b6cb-e67a372a3b4e
-# ╠═e13d39c8-ac62-460d-bf7e-9a994942731d
-# ╟─9a9bff9d-98c3-4300-bc0b-a7b807a43f99
-# ╟─124a0bb3-b89e-4ac5-9178-01cda06045ec
-# ╟─56a7034f-d702-4877-ab5c-6916ac503043
-# ╟─2b5289ee-8f10-4564-98e1-3a43e648d867
-# ╟─9d6d8399-d063-42c4-af47-dbf5ab38d434
-# ╟─8cc0d5fd-c988-4f16-a07f-a6439fccbc8a
-# ╟─66b482d7-4c12-4f41-9d09-3eb723a1001b
-# ╟─4a9a8e25-2db5-495a-bf55-94d589bdb699
-# ╟─269e3d73-0e11-4fcc-a291-031da9817541
-# ╟─e200bd3c-2636-4a91-83dd-de6b0e3d5a32
-# ╟─f5c25849-0337-4dca-98cf-dbbc723499f8
-# ╟─af619399-4655-45a0-847b-60357e53d2a5
-# ╟─9cd59dc0-5971-45d0-b076-69df14c3f4cd
-# ╟─71bca4ec-9d80-423c-bbac-16711deccce1
-# ╟─f64e2917-76fc-4ba8-8a47-d8c4c3654880
-# ╟─fb8b488f-f8b4-48e5-9d66-9f3df8919d5d
-# ╟─d6b066d3-0049-4f3d-9acc-55fc16c40adc
-# ╟─e8cdbe22-f7e1-47b2-bd3f-6130a6fc6207
-# ╟─bb514175-fe2c-498d-8ae5-aa3e59167fa4
-# ╠═e4f23df3-6b96-4333-99e0-1b9dfb7b8cba
-# ╟─42f171ca-09e4-45ed-8910-427ab7dc3aee
-# ╟─e6ba3446-cdb3-41c0-8db7-56b63042ddbc
-# ╟─df2a7927-878c-4d11-9e37-9c519672801e
-# ╠═2926bbad-1ba2-4d71-82f7-a56b7bfd8cf4
-# ╠═8458322d-c34a-475f-b11a-f9cb74a91a95
-# ╠═54c1c251-f740-47ae-8bf5-d33810e5192a
-# ╟─5d0d0bd7-7a85-4b2f-8a39-c6a4ef7d6175
-# ╟─0d547f78-1578-4c4a-9403-bd4ede9a62a7
-# ╟─28d201df-5056-4429-b1ba-a4959e75bc51
-# ╟─2b68430f-08ac-4bfb-a484-e6fbe08738ba
-# ╟─1beace3e-3a7e-411b-b6c0-3eca1fbf8536
-# ╟─22d44abf-34e3-496c-910a-5e51a7d90e10
-# ╠═b4279679-50fb-4dfd-9c4e-0e14788e2edd
-# ╟─4bcc7833-6bfb-421f-b54f-3567aea00c1e
-# ╟─655773ab-44a0-4f6e-95b9-353ea7f694ca
-# ╟─b2873160-bdc6-4883-b6a0-fe2b8295f97d
-# ╟─253a5368-72ca-4463-9b59-934f45d77a4e
-# ╟─d55a4917-e885-42ee-a8db-24f951501c28
-# ╟─e653c7dd-7359-448d-9690-5d4a9780fc70
-# ╟─eccd97c8-15b5-47ff-92ef-7e87a054c4ef
-# ╟─01c13365-f758-47c4-9b96-b9f2616b3824
-# ╟─017d38da-5825-4966-8d89-c75ce0b2af11
-# ╟─85c79ec8-6c95-4c76-9851-a4a0b7ec76d7
-# ╟─9a998b24-6d36-4f47-b4db-9df9b3d138e2
-# ╟─238beb06-9d2e-4d15-8eb4-3660aced7ef7
-# ╟─463027a3-7319-43ef-85be-cb8abe5a1d28
-# ╟─fb1499e3-0a58-4b34-b452-3bdc31b82504
-# ╟─c3de1903-845e-4779-b67b-817e703fd1ee
-# ╟─daf5a008-b102-4557-8a18-d83839316eba
-# ╟─13f007b1-b509-40b2-8ad4-ab50588957b0
-# ╟─9c8d6eeb-9d3c-4525-87e3-c540c3a5d38d
-# ╟─66a05cab-f595-43f8-843d-1f845c953868
-# ╟─cf16ce47-f360-451b-afae-b1fe8b559fc3
-# ╠═cad95270-ba9f-4821-87da-e457a00b9617
-# ╟─9b02faca-b5cb-442d-8a63-82f584b054fd
-# ╠═663c5894-ba2d-4236-9728-6a3c8db5c8ed
-# ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
-# ╟─b4599a16-e7f7-4a2a-b349-2648ee45208f
-# ╟─8315fb27-89e4-44a4-a51e-8e55fc3d58e5
-# ╟─ef081dfa-b610-4c7a-a039-7258f4f6e80e
-# ╟─da9230a6-088d-4735-b206-9514c12dd223
-# ╟─107407c8-5da0-4833-9965-75a82d84a0fb
+# ╟─69d7b791-2e69-490c-8d10-10fa433f0a72
+# ╟─ad045108-9dca-4a61-ac88-80a3417c95f2
+# ╟─1e9f4829-1f50-47ae-8745-0daa90e7aa42
+# ╟─9ce352ac-f374-4eb1-9a76-524ffd8a7306
+# ╟─254d027d-ab13-4928-89b5-916dbf5f0044
+# ╟─0edc99ec-c39d-4a9e-af0d-c9778c6b4211
+# ╟─164b1c78-9f7b-4f9d-a6a6-fbe754cdb43e
+# ╟─b048a772-05c3-4cd0-97ae-5cf825127584
+# ╟─f16cb891-26d7-41c9-9747-f7d6cd054bc7
+# ╠═8ad65bee-9135-11eb-166a-837031c4bc45
+# ╠═e7a87684-49b0-428c-9fef-248cf868cf33
+# ╠═74f6ac5d-f974-4ea6-801c-b88fe3346e55
+# ╠═c894d994-a7fc-4e07-8941-e9f9aa89fef0
+# ╠═d34b4862-9135-11eb-120f-6f82295f0759
+# ╟─27e1d120-c3e1-4f3d-a263-d63204034814
+# ╟─2da325ba-48cc-44b3-be34-e0cb46e33068
+# ╟─8436d1b3-c03e-42e6-bbff-e785738e0f89
+# ╟─d00038ba-98e9-45db-91df-dc75cb8ec101
+# ╟─ef203912-b238-40a7-9d1b-4ed9b86ccbd2
+# ╟─614c0f82-523a-40a6-9b57-d8b16d2b2860
+# ╟─abd37588-b86f-4e99-8728-5a362ce5f34f
+# ╟─1081bd99-7658-4c32-812c-14235bd82596
+# ╟─c97d5915-7f1f-4fd6-80d3-aecb256ea0de
+# ╟─55084c2d-6f81-4e55-946c-703245a6bb86
+# ╟─30b561dd-6e6b-4719-abc0-9938099d5487
+# ╠═d854d0ea-c5dd-4efa-9f46-83807339e163
+# ╟─bceda6d4-b93f-4282-8f03-fc44132ea1bb
+# ╟─cbf534bd-a329-4bc2-9940-f53a22e6d17e
+# ╟─7a4f6354-3d0c-4814-8c4c-2d2200568545
+# ╟─94b4f73a-ee55-405a-be50-bb92048f4eb2
+# ╟─9f9345b8-a29a-41fe-a41b-3dcef2e1a366
+# ╟─ae6ea7e0-f6f3-4d82-a45d-2c5ed299b223
+# ╟─fd726227-f911-4383-90a7-aaab504b68ef
+# ╟─d76afcb0-4b38-463d-add1-a58dd6acbbc0
+# ╟─e7ea2eb7-b394-4ce6-b0a9-31d229e69787
+# ╟─0a344b61-a226-49ee-ba19-f618390db269
+# ╟─4d72f4f3-1dbc-49b9-894f-a521a24e2531
+# ╟─e427ab16-9d5a-4200-8d96-8e49ec0da312
+# ╟─4e0ef31d-05e7-4974-9282-fa4579e16328
+# ╟─2bef2339-7afe-427d-bdc5-19b9e9b43878
+# ╟─0f3814d4-6ee7-4242-88ea-5ecc7bf752bf
+# ╟─05eb2a4e-2552-4bed-9523-d4f4c8760c94
+# ╟─311050cc-9f52-43e0-afca-66d225c837d2
+# ╟─f5f43417-abcd-4b20-a9ff-be06157b4a02
+# ╟─e6f0b66d-9efa-4d2d-93a7-0d0d82c7948a
+# ╟─784142ee-1416-4ccb-a341-0497422009b6
+# ╟─a42d6141-e2e3-4725-ab00-4183c16461e3
+# ╟─67a805bd-640d-4d88-8d61-8fef8bb23940
+# ╟─843fec4c-3a4a-4cb2-881c-9a4e3df6a5bb
+# ╟─09383e0f-2b37-459e-aeb3-b8eb4f194ddd
+# ╟─0cfb00ed-60fe-4ebb-b5e2-6182ace7a719
+# ╟─bfd46851-772d-43d4-8875-7d5c5dfb1155
+# ╟─19b11522-d11c-4fe1-8f74-5dc975d82bc0
+# ╟─44c9faca-efb6-493c-b751-9fd69e89ecb4
+# ╟─1ae29d9c-d055-46d8-9a46-0d35a48cc58a
+# ╠═8d474b8c-7f6f-4ee4-9282-5e8aa0a2f7b0
+# ╠═f9e82107-07b9-4697-88fe-81b019640e6a
+# ╟─be9f84d5-3c65-4ceb-8767-3fdc41429e12
+# ╠═cf3bce53-0260-403c-8910-b04b05b558fe
+# ╟─e3d540a3-7da5-4ef6-aa31-e629e752484e
+# ╟─7fb16fd7-feac-4a75-bcf0-cf91ca7b3599
+# ╟─dd5ee5ee-b2a7-46d4-bc43-0b9778eefcc2
+# ╟─4db12c57-014f-4aa0-a5b1-4f12eb3bf834
+# ╟─b592499b-cf96-486e-9067-9c79b5894641
+# ╟─bfbb3b72-dedc-476d-a028-997e98b61ae4
+# ╟─c3650a10-dff3-4fa2-bb56-3a19e1838766
+# ╟─16053a54-d268-479b-bd2e-0634c4a1bb89
+# ╟─3b115e62-8040-4a2c-8d6e-3d03669e7cd8
+# ╟─3c16772c-394d-4472-8749-f5990bb69013
+# ╟─3644e2e8-9b59-433e-9761-58566f0e1329
+# ╟─b9d687cc-9c13-4285-85ac-90ef955f94f3
+# ╟─0ca459b3-36ad-46f0-b49d-af921c57b9df
+# ╟─02ff212e-937d-4e8e-96d2-5f982618b92d
+# ╟─c8d0298f-2336-41b8-a4f4-a5be5db751f3
+# ╟─4d4b41dc-f02f-4404-96c1-bb78376f010b
+# ╟─018998d3-5c21-468c-b3e8-f413a485eedd
+# ╟─638eef4b-d46c-453b-ac40-179ce70cc330
+# ╟─b0fb2fbb-0175-4cce-b90d-3f9fa9b4541e
+# ╟─0fd76efb-6d98-43f8-b714-8cf54fd62e7d
+# ╟─78d480bf-bc4d-48e3-b3aa-100a38d6b4bc
+# ╠═bc42cf6d-44be-4244-85de-a10d03884dfd
+# ╟─5f0d5f9c-f0c4-43cd-8f2a-5d4c18955717
+# ╟─7d30f1de-0225-4a1e-a76e-3c305615cbe2
+# ╟─78d284e8-bd29-4ec3-9470-2141574787eb
+# ╟─9b822e05-ad44-4238-9bfe-4b54d6e42628
+# ╟─08e5381c-4cf1-4c70-ba74-26a05b8046fa
+# ╟─f3e2034d-e259-4d0b-bca4-95fd17f69d56
+# ╟─805cf044-8187-410e-833d-f4323ce07380
+# ╟─7549863d-1e44-422f-9ddd-beec2ddcd48d
+# ╟─47d4a0d9-467b-4717-a621-9d37e3870018
+# ╟─afdac3e8-bc84-48fd-8a04-d838e038c16d
+# ╟─497ff4cd-2705-49b3-bde6-671352e9b5a0
+# ╟─3feca2ed-ff05-4c1a-a614-b1fd23674741
+# ╟─297d7fdb-0117-4bd1-adee-8ad640dbf025
+# ╟─5bca98c2-c6ef-4e95-a2c6-e99dd88b966b
+# ╟─69dc2182-fb24-4db9-9fe6-dc6d9527facd
+# ╟─703db4e5-e64a-4b09-ba22-c2808719fd58
+# ╟─47f63585-6b16-4545-bdf6-5cd7ed470a82
+# ╟─a1a49662-a13b-430b-b1d5-47f8f3e72f65
+# ╟─8ff69555-f7f8-4401-82c6-e27cdf65dff3
+# ╟─9f7d1862-b413-4292-84da-7c1d76530764
+# ╟─d6f0452c-cefa-49ee-87ec-a92811880ed4
+# ╟─da7c0cb8-1d2a-436a-bbb5-b53522dbd755
+# ╟─04ce6f4c-1581-4ae1-9e9c-8d4dc75b01c7
+# ╟─97a73cbe-6874-4641-9ad8-66df1e8c58c1
+# ╟─a1439122-d0e6-4f02-9039-41edc141f64f
+# ╟─e306b52c-0508-4314-9358-a12aca62ea9e
+# ╟─47e805e5-8558-4522-a10c-c3c9ae52b17e
+# ╟─21b53a25-5fef-4ac5-aab0-59232566c5d2
+# ╟─23f24ea9-b33b-4aac-b17d-1f749360bfe7
+# ╟─5a3b6e5c-5e6f-4fcd-be83-325974e42008
+# ╟─894378b1-811d-43ac-a700-71350e88ee40
+# ╟─2460d407-0fff-44c4-90ec-639f32414f49
+# ╠═a9d0c669-f6d7-4e5f-8f57-b6bffe1710ba
+# ╠═ad3dd437-7cfc-4cdc-a951-15949d39cf15
+# ╠═6a5d1a86-4b9e-4d65-9bd7-f39ef8b6d9b4
+# ╠═7f819c41-370f-49b2-9e9b-e3233ac560fd
+# ╠═e93c5882-1ef8-43f6-b1ee-ee23c813c91b
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
