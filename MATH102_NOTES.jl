@@ -35,6 +35,7 @@ begin
     # using ForwardDiff
     # using Integrals
     # using OrdinaryDiffEq
+	using IntervalArithmetic
 end
 
 # ╔═╡ 71bc54d5-d0ed-42d3-9bc1-48aa86e91d1d
@@ -261,12 +262,10 @@ end
 
 
 # ╔═╡ 4e358ab2-9be7-4d7f-b295-1e85943da027
-integrate(exp(xx), (xx, 1, 3))
-
-
-
-
-
+let 
+	x = symbols("x", real=true)
+	integrate(exp(x))
+end
 
 
 # ╔═╡ 81e4ac99-3388-49e0-a168-5d9961c80ddf
@@ -364,9 +363,8 @@ $\lim_{n\to \infty}\sum_{i=1}^n\frac{1}{n}\cos\left(1+\frac{i}{n}\right)^2=$
 
 
 # ╔═╡ 9d6d8399-d063-42c4-af47-dbf5ab38d434
-cm"""
-## Section 5.4
-__The Fundamental Theorem of Calculus__
+md"""
+#  5.4 The Fundamental Theorem of Calculus
 > __Objectives__
 > 1. Evaluate a definite integral using the Fundamental Theorem of Calculus.
 > 2. Understand and use the Mean Value Theorem for Integrals.
@@ -382,167 +380,49 @@ __The Fundamental Theorem of Calculus__
 
 
 
-# ╔═╡ 8cc0d5fd-c988-4f16-a07f-a6439fccbc8a
+# ╔═╡ 2543320e-dd76-4edf-adb8-ceac71805337
+md"## The Fundamental Theorem of Calculus"
 
-cm"""
-### The Fundamental Theorem of Calculus
+# ╔═╡ fa78d2d3-afc7-40d8-9e06-4df6f65321ac
+md"## The Mean Value Theorem for Integrals"
 
-__Antidifferentiation and Definite Integration__
+# ╔═╡ fa3f03ce-66a3-447b-ae37-47eef4f10aaa
+md"## Average Value of a Function"
 
-<div class="img-container">
+# ╔═╡ 56153ee8-aa22-40ba-bab3-235cc8b1fef6
+let
+	x = symbols("x", real=true)
+	end_points = [0.0; 11.5;22.0;32.0;50.0;80.0]
+	end_points_zipped = collect(zip(end_points[1:end-1],end_points[2:end]))
+	As = map(((a,b,),)->interval(a,b), end_points_zipped)
+	piece_wise(x) = findlast(x->x,map(t->in_interval(x,t),As))
+	fns =[x->-4*x+341
+		x-> 295.0 + x - x
+		x-> (3/4)*x+278.5
+		x-> (3/2)*x+254.5
+		x-> -(3/2)*x+404.5
+	]
+	fns_sym = map(f->f(x),fns)
+	fns_int = [
+		integrate(fns_sym[1],x)
+		integrate(fns_sym[2],x)
+		integrate(fns_sym[3],x)
+		integrate(fns_sym[4],x)
+		integrate(fns_sym[5],x)
+	]
+	
+	s(x) = fns[piece_wise(x)](x)
+	
+	n = 100
+	xs =  range(0.0,80.0, length=n)
+	plot(xs, s.(xs))
+	distanse_0_80= map( ((i,(a,b),),)->subs(fns_int[i],x,b)-subs(fns_int[i],x,a), enumerate(end_points_zipped)) |> sum
 
-$(Resource("https://www.dropbox.com/s/8f52dty2aywwr92/diff_vs_antidiff.jpg?raw=1",:width=>600))
-
-</div>
-
-
-* ✒ ``\displaystyle \int_a^b f(x) dx``
-    * definite integral
-    * number              
-* ✒ ``\displaystyle \int f(x) dx``
-    * indefinite integral 
-    * function
-
-__Theorem__ *The Fundamental Theorem of Calculus*
-
-If a function ``f`` is continuous on the closed interval ``[a,b]`` and ``F`` is an antiderivative of ``f`` on the interval ``[a,b]``, then
-```math
-\int_a^b f(x) dx = F(b) - F(a).
-```
-
-__Remark:__
-
-We use the notation 
-```math
-\int_a^b f(x) dx = \bigl. F(x)\Biggr|_a^b= F(b)-F(a) \quad \textrm{or}\quad 
-\int_a^b f(x) dx =\Bigl[F(x)\Bigr]_a^b = F(b)-F(a)
-```
-"""
-
-
-
-
-
-
-# ╔═╡ 66b482d7-4c12-4f41-9d09-3eb723a1001b
-
-cm"""
-__Example__
-
-Evaluate each definite integral.
-
-- ``\displaystyle \int_1^2 (x^2-3) dx``
-
-$("  ")
-- ``\displaystyle \int_1^4 3\sqrt{x} dx``
-
-$("  ")
-- ``\displaystyle \int_{0}^{\pi/4} \sec^2 x dx``
-
-$("  ")
-- ``\displaystyle \int_{0}^{2} \Big|2x-1\Big| dx``
-"""
-
-
-# ╔═╡ 4a9a8e25-2db5-495a-bf55-94d589bdb699
-begin
-    theme(:wong)
-    s54e3_f(x) = 1 / x
-    s54e3_x = 1:0.1:exp(1)
-    s54e3_p = plot(s54e3_x, s54e3_f.(s54e3_x), label=nothing, c=:green)
-    plot!(s54e3_p, s54e3_x, s54e3_f.(s54e3_x) / 2, ribbon=s54e3_f.(s54e3_x) / 2, linestyle=:dot, linealpha=0.1, framestyle=:origin, xticks=(1:4, [:1, :2, :3]), label=nothing, ylims=(-0.1, 1.5), xlims=(-0.1, 3))
-    annotate!(s54e3_p, [(2, 1, L"y=\frac{1}{x}"), (exp(1), -0.1, L"e")])
-    cm"""
-    	
-    __Example__
-
-    Find the area of the region bounded by the graph of
-    ```math
-    y=\frac{1}{x}
-    ```
-    the ``x``-axis, and the vertical lines ``x=1`` and ``x=e``.
-
-
-    $s54e3_p
-
-    """
+	Average_speed = (1/80)*distanse_0_80
 end
 
-
-# ╔═╡ 269e3d73-0e11-4fcc-a291-031da9817541
-
-begin
-    cm"""
-    ### The Mean Value Theorem for Integrals
-
-    __Theorem__ *Mean Value Theorem for Integrals*
-
-    If ``f`` is continuous on the closed interval ``[a,b]``, then there exists a number ``c`` in the closed interval ``[a,b]`` such that
-    ```math
-    \int_a^b f(x) dx =f(c)(b-a).
-    ```
-
-    <div class="img-container">
-
-    $(Resource("https://www.dropbox.com/s/7fnr2kfq082kq0y/mvt.jpg?raw=1",
-    :style=>"display:flex;align-items:center;flex-direction: column;"))
-    </div>
-
-    """
-end
-
-
-# ╔═╡ e200bd3c-2636-4a91-83dd-de6b0e3d5a32
-cm"""
-### Average Value of a Function
-
-__Definition of the Average Value of a Function on an Interval__
-
-If ``f`` is integrable on the closed interval ``[a.b``, then the __average value__ of ``f`` on the interval is
-```math
-\textbf{Avergae value} = \frac{1}{b-a}\int_a^b f(x) dx
-```
-
-__Example__
-
-Find the average value of ``f(x)=3x^2-2x``  on the interval ``[1,4]``.
-
-"""
-
-
-
-# ╔═╡ f5c25849-0337-4dca-98cf-dbbc723499f8
-
-cm"""
-### The Second Fundamental Theorem of Calculus
-
-<div class="img-container">
-
-$(Resource("https://www.dropbox.com/s/knjbngrqs2r2h1z/ftc2.jpg?raw=1",
-:style=>"margin-top:20px;"
-))
-
-</div>
-
-"""
-
-
-
-
-
-
-# ╔═╡ af619399-4655-45a0-847b-60357e53d2a5
-md"""
-Consider the following function 
-
-```math 
-F(x) = \int_a^x f(t) dt
-```
-where ``f`` is a continuous function on the interval ``[a,b]`` and ``x \in [a,b]``.
-
-"""
-
-
+# ╔═╡ b25051b6-8b33-4976-86b9-4db2166c291c
+md"## The Second Fundamental Theorem of Calculus"
 
 # ╔═╡ 9cd59dc0-5971-45d0-b076-69df14c3f4cd
 
@@ -573,49 +453,6 @@ begin
     """
 
 end
-
-
-# ╔═╡ fb8b488f-f8b4-48e5-9d66-9f3df8919d5d
-
-cm"""
-__Theorem__ *The Second Fundamental Theorem of Calculus*
-
-If ``f`` is continuous on an open interval ``I`` containing ``a``, then, for every ``x`` in the interval,
-
-```math
-
-\frac{d}{dx}\left[\int_a^x f(t) \right] = f(x).
-```
-
-"""
-
-
-
-
-
-# ╔═╡ d6b066d3-0049-4f3d-9acc-55fc16c40adc
-
-begin
-    md"""
-
-    ##### Remarks
-    * ``{\large \frac{d}{dx}\left( \int_a^x f(u) du\right) = f(x)}``
-    * ``g(x)`` is an **antiderivative** of ``f``
-
-    ##### Examples
-    Find the derivative of 	
-    	
-    (1) ``g_1(x) = \int_0^x \sqrt{1+t} dt``.
-
-    (2) ``g_2(x) = \int_x^0 \sqrt{1+t} dt``.
-    	
-    (3) ``g_3(x) = \int_0^{x^2} \sqrt{1+t} dt``.
-    	
-    (4) ``g_4(x) = \int_{\sin(x)}^{\cos(x)} \sqrt{1+t} dt``.
-    """
-end
-
-
 
 
 # ╔═╡ e8cdbe22-f7e1-47b2-bd3f-6130a6fc6207
@@ -660,10 +497,10 @@ let
 
 md"""
 
-	A=$(integrate(ff(xx),(xx,0,2)))
+A=$(integrate(ff(xx),(xx,0,2)))
 
 	
-### Table of Indefinite Integrals
+## Table of Indefinite Integrals
 
 |  | |  |
 |--------------|--------------|------- |
@@ -690,74 +527,20 @@ md"""
 end
 
 
-# ╔═╡ e6ba3446-cdb3-41c0-8db7-56b63042ddbc
-
-md"""
-__Applications__
-
-**Question:** If $y=F(x)$, then what does $F'(x)$ represents?
-### Net Change Theorem 
-
-__Theorem__ *The Net Change Theorem*
-
-If ``F'(x)`` is the rate of change of a quantity ``F(x)`` , then the definite integral of ``F'(x)`` from ``a`` to ``b`` gives the total change, or __net change__, of ``F(x)`` on the interval ``[a,b]``.
-
-```math
-\int_a^b F'(x) dx = F(b) - F(a) \qquad \color{red}{\textrm{Net change of } F(x)}
-```
-- There are many applications, we will focus on one
-
-If an object moves along a straight line with position function ``s(t)``, then its velocity is ``v(t)=s'(t)``, so
-```math
-\int_{t_1}^{t_2}v(t) dt = s(t_2)-s(t_1) 
-```
-
-- **Remarks**
-```math
-\begin{array}{rcl}
-\text{displacement} &=& \int_{t_1}^{t_2}v(t) dt\\
-\\
-\text{total distance traveled} &=& \int_{t_1}^{t_2}|v(t)| dt \\ \\
-\end{array}
-```
-- The acceleration of the object is ``a(t)=v'(t)``, so
-```math
-\int_{t_1}^{t_2}a(t) dt = v(t_2)-v(t_1) \quad \text { is the change in velocity from time  to time .}
-```
-
-"""
-
-
-# ╔═╡ df2a7927-878c-4d11-9e37-9c519672801e
-
-cm"""
-**Example**
-A particle is moving along aline. Its velocity function (in ``m/s^2``) is given by
-```math
-v(t)=t^3-10t^2+29t-20,
-```
-<ul style="list-style-type: lower-alpha;">
-
-<li> What is the <b>displacement</b> of the particle on the time interval 1≤ t≤ 5?</li>
-<li>What is the <b>total distance</b> traveled by the particle on the time interval 1≤ t≤ 5?</li>
-
-</ul>
-"""
-
-# ╔═╡ 2926bbad-1ba2-4d71-82f7-a56b7bfd8cf4
-v(t) = t^3 - 10 * t^2 + 29 * t - 20
+# ╔═╡ df2dff93-465a-404a-9bf5-581907b99f42
+md"## Net Change Theorem "
 
 # ╔═╡ 8458322d-c34a-475f-b11a-f9cb74a91a95
 
-begin
-
+let
+	v(t) = t^3 - 10 * t^2 + 29 * t - 20
     u = symbols("u", real=true)
     v1(t) = v(t)
     s1(t) = convert(Float64, integrate(v1(u), (u, 0, t)).n())
 
     theme(:default)
-    a1, b1 = 1, 5
-    t1 = a1:0.1:b1
+    a1, b1 = 1, 6
+    t1 = a1:0.01:b1
     timeLength = length(t1)
     xxx = s1.(t1)
     vvv = v1.(t1)
@@ -784,35 +567,18 @@ begin
             vvv[1:i],
             xlims=(0, myXlims[2]),
             ylims=myYlims,
-            xticks=(1:5, [:1, :2, :3, :4, :5]),
+            xticks=(1:b1, map(i->Symbol("$i"),1:b1)),
             framestyle=:origin,
             label=nothing,
             xlabel="x",
             subplot=2,
             title="Velocity Graph"
         )
-        annotate!(pp, [(xxx[i], 0.2, "time=$(t1[i])")], subplot=1)
+        annotate!(pp, [(xxx[i], 0.1, "t=$(t1[i])")], subplot=1)
         # annotate!(pp,[(5,8.2,("velocity graph",10))], subplot=2)
     end
 
-    html""
-end
-
-
-
-
-# ╔═╡ 54c1c251-f740-47ae-8bf5-d33810e5192a
-
-begin
-
-    velFun = @bind velfun TextField()
-    md"""
-    Enter the velocity function
-
-    ``v(t)`` = $velFun
-
-    """
-    html""
+	gif(anim,"net_change_ex10.gif", fps=15)
 end
 
 
@@ -821,8 +587,7 @@ end
 # ╔═╡ 5d0d0bd7-7a85-4b2f-8a39-c6a4ef7d6175
 
 md"""
-## Section 5.5:
-**The Substitution Rule**
+# 5.5 Integration By Substitution
 > __Objectives__
 > 1. Use pattern recognition to find an indefinite integral.
 > 2. Use a change of variables to find an indefinite integral.
@@ -2175,21 +1940,277 @@ Evaluate ``\int_1^3\left(-x^2+4 x-3\right) d x`` using each of the following val
 ```
 """
 
-# ╔═╡ f64e2917-76fc-4ba8-8a47-d8c4c3654880
+# ╔═╡ 8cc0d5fd-c988-4f16-a07f-a6439fccbc8a
 
+cm"""
+
+__Antidifferentiation and Definite Integration__
+
+<div class="img-container">
+
+$(Resource("https://www.dropbox.com/s/8f52dty2aywwr92/diff_vs_antidiff.jpg?raw=1",:width=>600))
+
+</div>
+
+
+* ✒ ``\displaystyle \int_a^b f(x) dx``
+    * definite integral
+    * number              
+* ✒ ``\displaystyle \int f(x) dx``
+    * indefinite integral 
+    * function
+
+$(bth("The Fundamental Theorem of Calculus"))
+
+If a function ``f`` is continuous on the closed interval ``[a,b]`` and ``F`` is an antiderivative of ``f`` on the interval ``[a,b]``, then
+```math
+\int_a^b f(x) dx = F(b) - F(a).
+```
+$(ebl())
+
+$(bbl("Remark",""))
+
+We use the notation 
+```math
+\int_a^b f(x) dx = \bigl. F(x)\Biggr|_a^b= F(b)-F(a) \quad \textrm{or}\quad 
+\int_a^b f(x) dx =\Bigl[F(x)\Bigr]_a^b = F(b)-F(a)
+```
+"""
+
+
+
+
+
+
+# ╔═╡ 66b482d7-4c12-4f41-9d09-3eb723a1001b
+
+cm"""
+$(ex(1))
+
+Evaluate each definite integral.
+
+- __(a)__ ``\displaystyle \int_1^2 (x^2-3) dx``
+
+$("  ")
+- __(b)__ ``\displaystyle \int_1^4 3\sqrt{x} dx``
+
+$("  ")
+- __(c)__ ``\displaystyle \int_{0}^{\pi/4} \sec^2 x dx``
+
+$(ex(2))
+Evaluate
+$("  ")
+- ``\displaystyle \int_{0}^{2} \Big|2x-1\Big| dx``
+"""
+
+
+# ╔═╡ 4a9a8e25-2db5-495a-bf55-94d589bdb699
 begin
-    cm"""
-    **Example** 
-    If ``g(x) = \int_0^x f(t) dt``
+    theme(:wong)
+    s54e3_f(x) = 1 / x
+    s54e3_x = 1:0.1:exp(1)
+    s54e3_p = plot(s54e3_x, s54e3_f.(s54e3_x), label=nothing, c=:green)
+    plot!(s54e3_p, s54e3_x, s54e3_f.(s54e3_x) / 2, ribbon=s54e3_f.(s54e3_x) / 2, linestyle=:dot, linealpha=0.1, framestyle=:origin, xticks=(1:4, [:1, :2, :3]), label=nothing, ylims=(-0.1, 1.5), xlims=(-0.1, 3))
+    annotate!(s54e3_p, [(2, 1, L"y=\frac{1}{x}"), (exp(1), -0.1, L"e")])
+	plot!(s54e3_p,[1,1,NaN,exp(1),exp(1)],[0,1.0,NaN,0.0,exp(-1)],label=nothing, c=:black,lw=3)
+cm"""
+$(ex(3))
+Find the area of the region bounded by the graph of
+```math
+y=\frac{1}{x}
+```
+the ``x``-axis, and the vertical lines ``x=1`` and ``x=e``.
+$(ebl())
 
-    $(post_img("./imgs/5.3/ex1.png"))
+$s54e3_p
 
-    Find ``g(2)`` 
-
-    """
+"""
 end
 
 
+# ╔═╡ 269e3d73-0e11-4fcc-a291-031da9817541
+
+cm"""
+
+
+$(bth("Mean Value Theorem for Integrals"))
+
+If ``f`` is continuous on the closed interval ``[a,b]``, then there exists a number ``c`` in the closed interval ``[a,b]`` such that
+```math
+\int_a^b f(x) dx =f(c)(b-a).
+```
+$(post_img("https://www.dropbox.com/s/7fnr2kfq082kq0y/mvt.jpg?raw=1",400))
+
+"""
+
+# ╔═╡ e200bd3c-2636-4a91-83dd-de6b0e3d5a32
+cm"""
+
+$(define("the Average Value of a Function on an Interval"))
+
+If ``f`` is integrable on the closed interval ``[a.b``, then the __average value__ of ``f`` on the interval is
+```math
+\textbf{Avergae value} = \frac{1}{b-a}\int_a^b f(x) dx
+```
+$(ebl())
+
+$(ex(4))
+
+Find the average value of ``f(x)=3x^2-2x``  on the interval ``[1,4]``.
+
+"""
+
+
+
+# ╔═╡ 1af2a723-f74f-47b1-a46f-a5452b7da7b1
+cm"""
+$(ex(5,"The Speed of Sound"))
+At different altitudes in Earth's atmosphere, sound travels at different speeds. The speed of sound ``s(x)``, in meters per second, can be modeled by
+```math
+s(x)= \begin{cases}-4 x+341, & 0 \leq x<11.5 \\ 295, & 11.5 \leq x<22 \\ \frac{3}{4} x+278.5, & 22 \leq x<32 \\ \frac{3}{2} x+254.5, & 32 \leq x<50 \\ -\frac{3}{2} x+404.5, & 50 \leq x \leq 80\end{cases}
+```
+where ``x`` is the altitude in kilometers . What is the average speed of sound over the interval ``[0,80]`` ?
+"""
+
+# ╔═╡ f5c25849-0337-4dca-98cf-dbbc723499f8
+
+cm"""
+$(post_img("https://www.dropbox.com/s/knjbngrqs2r2h1z/ftc2.jpg?raw=1",600))
+"""
+
+
+
+
+
+
+# ╔═╡ af619399-4655-45a0-847b-60357e53d2a5
+cm"""
+$(bbl("Exploration",""))
+Consider the following function 
+
+```math 
+F(x) = \int_a^x f(t) dt
+```
+where ``f`` is a continuous function on the interval ``[a,b]`` and ``x \in [a,b]``.
+
+"""
+
+
+
+# ╔═╡ f64e2917-76fc-4ba8-8a47-d8c4c3654880
+cm"""
+**Example** 
+If ``g(x) = \int_0^x f(t) dt``
+
+$(post_img("https://www.dropbox.com/scl/fi/ozabhnwfju0zskug7quzl/ex_5_3.png?rlkey=zcdt9bn7p9s6dsuvep7y547vk&dl=1"))
+
+Find ``g(2)`` 
+
+"""
+
+
+
+# ╔═╡ fb8b488f-f8b4-48e5-9d66-9f3df8919d5d
+cm"""
+$(bth("The Second Fundamental Theorem of Calculus"))
+
+If ``f`` is continuous on an open interval ``I`` containing ``a``, then, for every ``x`` in the interval,
+
+```math
+
+\frac{d}{dx}\left[\int_a^x f(t) \right] = f(x).
+```
+"""
+
+# ╔═╡ d6b066d3-0049-4f3d-9acc-55fc16c40adc
+cm"""
+
+$(bbl("Remarks",""))
+* ``{\large \frac{d}{dx}\left( \int_a^x f(u) du\right) = f(x)}``
+* ``g(x)`` is an **antiderivative** of ``f``
+
+"""
+
+
+
+
+# ╔═╡ 14f0a7a7-2264-4170-832e-837a54cd935c
+cm"""
+$(ex(7))
+Evaluate
+```math
+\frac{d}{dx}\left[\int_0^x \sqrt{1+t} dt\right].
+```
+
+$(ex(8))
+Evaluate
+```math
+\frac{d}{dx}\left[\int_{\pi/2}^{x^3} \cos{t} dt\right].
+```
+
+$(ex(-8))
+Evaluate
+```math
+\frac{d}{dx}\left[\int_{\sin(x)}^{\cos(x)} \sqrt{1+t} dt\right].
+```
+
+"""
+
+# ╔═╡ e6ba3446-cdb3-41c0-8db7-56b63042ddbc
+cm"""
+__Applications__
+
+**Question:** If ``y=F(x)``, then what does ``F'(x)`` represents?
+
+
+$(bth("The Net Change Theorem*"))
+
+If ``F'(x)`` is the rate of change of a quantity ``F(x)`` , then the definite integral of ``F'(x)`` from ``a`` to ``b`` gives the total change, or __net change__, of ``F(x)`` on the interval ``[a,b]``.
+
+```math
+\int_a^b F'(x) dx = F(b) - F(a) \qquad \color{red}{\textrm{Net change of } F(x)}
+```
+
+$(ebl())
+
+- There are many applications, we will focus on one
+
+If an object moves along a straight line with position function ``s(t)``, then its velocity is ``v(t)=s'(t)``, so
+```math
+\int_{t_1}^{t_2}v(t) dt = s(t_2)-s(t_1) 
+```
+
+- **Remarks**
+```math
+\begin{array}{rcl}
+\text{displacement} &=& \int_{t_1}^{t_2}v(t) dt\\
+\\
+\text{total distance traveled} &=& \int_{t_1}^{t_2}|v(t)| dt \\ \\
+\end{array}
+```
+- The acceleration of the object is ``a(t)=v'(t)``, so
+```math
+\int_{t_1}^{t_2}a(t) dt = v(t_2)-v(t_1) \quad \text { is the change in velocity from time  to time .}
+```
+
+"""
+
+
+# ╔═╡ df2a7927-878c-4d11-9e37-9c519672801e
+
+cm"""
+$(ex(10,"Solving a Particle Motion Problem"))
+A particle is moving along aline. Its velocity function (in ``m/s^2``) is given by
+```math
+v(t)=t^3-10t^2+29t-20,
+```
+<ul style="list-style-type: lower-alpha;">
+
+<li> What is the <b>displacement</b> of the particle on the time interval 1≤ t≤ 5?</li>
+<li>What is the <b>total distance</b> traveled by the particle on the time interval 1≤ t≤ 5?</li>
+
+</ul>
+"""
 
 # ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
 initialize_eqref()
@@ -2221,6 +2242,7 @@ PLUTO_PROJECT_TOML_CONTENTS = """
 Colors = "5ae59095-9a9b-59fe-a467-6f913c188581"
 CommonMark = "a80b9123-70ca-4bc0-993e-6e3bcb318db6"
 HypertextLiteral = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
+IntervalArithmetic = "d1acc4aa-44c8-5952-acd4-ba5d80a2a253"
 LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
 Latexify = "23fbe1c1-3f47-55db-b15f-69d7ec21a316"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
@@ -2239,6 +2261,7 @@ SymPy = "24249f21-da20-56a4-8eb1-6a02cf4ae2e6"
 Colors = "~0.12.11"
 CommonMark = "~0.8.15"
 HypertextLiteral = "~0.9.5"
+IntervalArithmetic = "~0.22.21"
 LaTeXStrings = "~1.3.1"
 Latexify = "~0.16.5"
 PlotThemes = "~3.2.0"
@@ -2254,9 +2277,9 @@ SymPy = "~2.2.0"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.11.2"
+julia_version = "1.11.3"
 manifest_format = "2.0"
-project_hash = "7da05748dac78c02b49902a8bf42c86d7c455cde"
+project_hash = "81a86a43942ca0d9cd7492fade0513388f9b8155"
 
 [[deps.AbstractFFTs]]
 deps = ["LinearAlgebra"]
@@ -2311,6 +2334,12 @@ version = "1.0.8+1"
 git-tree-sha1 = "389ad5c84de1ae7cf0e28e381131c98ea87d54fc"
 uuid = "fa961155-64e5-5f13-b03f-caf6b980ea82"
 version = "0.5.0"
+
+[[deps.CRlibm_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "e329286945d0cfc04456972ea732551869af1cfc"
+uuid = "4e9b3aee-d8a1-5a3d-ad8b-7d824db253f0"
+version = "1.0.1+0"
 
 [[deps.Cairo_jll]]
 deps = ["Artifacts", "Bzip2_jll", "CompilerSupportLibraries_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "JLLWrappers", "LZO_jll", "Libdl", "Pixman_jll", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Zlib_jll", "libpng_jll"]
@@ -2716,6 +2745,24 @@ version = "0.1.5"
 deps = ["Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 version = "1.11.0"
+
+[[deps.IntervalArithmetic]]
+deps = ["CRlibm_jll", "LinearAlgebra", "MacroTools", "RoundingEmulator"]
+git-tree-sha1 = "ffb76d09ab0dc9f5a27edac2acec13c74a876cc6"
+uuid = "d1acc4aa-44c8-5952-acd4-ba5d80a2a253"
+version = "0.22.21"
+
+    [deps.IntervalArithmetic.extensions]
+    IntervalArithmeticDiffRulesExt = "DiffRules"
+    IntervalArithmeticForwardDiffExt = "ForwardDiff"
+    IntervalArithmeticIntervalSetsExt = "IntervalSets"
+    IntervalArithmeticRecipesBaseExt = "RecipesBase"
+
+    [deps.IntervalArithmetic.weakdeps]
+    DiffRules = "b552c78f-8df3-52c6-915a-8e097449b14b"
+    ForwardDiff = "f6369f11-7733-5829-9624-2563aa707210"
+    IntervalSets = "8197267c-284f-5f27-9208-e0e47529a953"
+    RecipesBase = "3cdcf5f2-1ef4-517c-9805-6587b60abb01"
 
 [[deps.IntervalSets]]
 git-tree-sha1 = "dba9ddf07f77f60450fe5d2e2beb9854d9a49bd0"
@@ -3303,6 +3350,11 @@ deps = ["UUIDs"]
 git-tree-sha1 = "838a3a4188e2ded87a4f9f184b4b0d78a1e91cb7"
 uuid = "ae029012-a4dd-5104-9daa-d747884805df"
 version = "1.3.0"
+
+[[deps.RoundingEmulator]]
+git-tree-sha1 = "40b9edad2e5287e05bd413a38f61a8ff55b9557b"
+uuid = "5eaf0fd0-dfba-4ccb-bf02-d820a40db705"
+version = "0.2.1"
 
 [[deps.SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
@@ -3938,9 +3990,9 @@ version = "1.4.1+1"
 # ╟─5e23a09b-c96f-40e0-bd8f-af18041f2be9
 # ╟─874e3ccf-4309-42d4-af8d-3921b025239e
 # ╟─4ff28842-9307-4813-8791-197fd6ca5238
-# ╠═1ffb0970-7422-4cb7-9f84-841f68565b80
+# ╟─1ffb0970-7422-4cb7-9f84-841f68565b80
 # ╟─32b71cdc-e93b-4b05-b8f5-4b9d61a2eb62
-# ╟─4e358ab2-9be7-4d7f-b295-1e85943da027
+# ╠═4e358ab2-9be7-4d7f-b295-1e85943da027
 # ╟─81e4ac99-3388-49e0-a168-5d9961c80ddf
 # ╟─02d61e1f-b630-443c-b1dd-1fe5d2c81b2f
 # ╟─b51c5bc6-9065-4687-b6cb-e67a372a3b4e
@@ -3950,11 +4002,17 @@ version = "1.4.1+1"
 # ╟─56a7034f-d702-4877-ab5c-6916ac503043
 # ╟─2b5289ee-8f10-4564-98e1-3a43e648d867
 # ╟─9d6d8399-d063-42c4-af47-dbf5ab38d434
+# ╟─2543320e-dd76-4edf-adb8-ceac71805337
 # ╟─8cc0d5fd-c988-4f16-a07f-a6439fccbc8a
 # ╟─66b482d7-4c12-4f41-9d09-3eb723a1001b
 # ╟─4a9a8e25-2db5-495a-bf55-94d589bdb699
+# ╟─fa78d2d3-afc7-40d8-9e06-4df6f65321ac
 # ╟─269e3d73-0e11-4fcc-a291-031da9817541
+# ╟─fa3f03ce-66a3-447b-ae37-47eef4f10aaa
 # ╟─e200bd3c-2636-4a91-83dd-de6b0e3d5a32
+# ╟─1af2a723-f74f-47b1-a46f-a5452b7da7b1
+# ╠═56153ee8-aa22-40ba-bab3-235cc8b1fef6
+# ╟─b25051b6-8b33-4976-86b9-4db2166c291c
 # ╟─f5c25849-0337-4dca-98cf-dbbc723499f8
 # ╟─af619399-4655-45a0-847b-60357e53d2a5
 # ╟─9cd59dc0-5971-45d0-b076-69df14c3f4cd
@@ -3962,15 +4020,15 @@ version = "1.4.1+1"
 # ╟─f64e2917-76fc-4ba8-8a47-d8c4c3654880
 # ╟─fb8b488f-f8b4-48e5-9d66-9f3df8919d5d
 # ╟─d6b066d3-0049-4f3d-9acc-55fc16c40adc
+# ╟─14f0a7a7-2264-4170-832e-837a54cd935c
 # ╟─e8cdbe22-f7e1-47b2-bd3f-6130a6fc6207
 # ╟─bb514175-fe2c-498d-8ae5-aa3e59167fa4
-# ╠═e4f23df3-6b96-4333-99e0-1b9dfb7b8cba
+# ╟─e4f23df3-6b96-4333-99e0-1b9dfb7b8cba
 # ╟─42f171ca-09e4-45ed-8910-427ab7dc3aee
+# ╟─df2dff93-465a-404a-9bf5-581907b99f42
 # ╟─e6ba3446-cdb3-41c0-8db7-56b63042ddbc
 # ╟─df2a7927-878c-4d11-9e37-9c519672801e
-# ╠═2926bbad-1ba2-4d71-82f7-a56b7bfd8cf4
-# ╠═8458322d-c34a-475f-b11a-f9cb74a91a95
-# ╠═54c1c251-f740-47ae-8bf5-d33810e5192a
+# ╟─8458322d-c34a-475f-b11a-f9cb74a91a95
 # ╟─5d0d0bd7-7a85-4b2f-8a39-c6a4ef7d6175
 # ╟─0d547f78-1578-4c4a-9403-bd4ede9a62a7
 # ╟─28d201df-5056-4429-b1ba-a4959e75bc51
