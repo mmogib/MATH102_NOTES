@@ -609,58 +609,19 @@ md"""
 
 # ╔═╡ 0d547f78-1578-4c4a-9403-bd4ede9a62a7
 
-cm"### Pattern Recognition"
+cm"## Pattern Recognition"
 
 
-# ╔═╡ 28d201df-5056-4429-b1ba-a4959e75bc51
+# ╔═╡ 8a584c0c-3017-4958-b611-772b3a6e44c5
+md"## Change of Variables for Indefinite Integrals"
 
-
-
-begin
-    f155(x) = x / sqrt(1 - 4 * x^2)
-    # ex1_55=plot(-0.49:0.01:0.49,f155.(-0.49:0.01:0.49), framestyle=:origin)
-    cm"""
-    __Theorem__ *Antidifferentiation of a Composite Function*
-    Let ``g`` be a function whose range is an interval ``I``, and let ``f`` be a function that is continuous on ``I``. If ``g`` is differentiable on its domain and  ``F`` is an antiderivative of ``f`` on ``I``, then
-    ```math
-    \int f(g(x))g'(x)dx = F(g(x)) + C.
-    ```
-    Letting ``u=g(x)`` gives ``du=g'(x)dx`` and
-    ```math
-    \int f(u) du = F(u) + C.
-    ```
-
-    <div class="img-container">
-
-    $(Resource("https://www.dropbox.com/s/uua8vuahfxnp48c/subs_th.jpg?raw=1"))
-
-    </div>
-
-    **Substitution Rule says:** It is permissible to operate with ``dx`` and ``du`` after integral signs as if they were differentials.
-
-    **Example**
-    Find 
-    ```math
-    \begin{array}{ll}
-    (i) & \int \bigl(x^2+1 \bigr)^2 (2x) dx \\ \\
-    (ii) & \int 5e^{5x} dx \\ \\
-    (iii) & \int \frac{x}{\sqrt{1-4x^2}} dx \\ \\
-    (iv) & \int \sqrt{1+x^2} \;\; x^5 dx \\ \\ 
-    (v) & \int \tan x dx \\ \\
-    \end{array}
-    ```
-
-
-    """
-end
-
-
+# ╔═╡ a73db7b8-3464-4852-a9ef-5d0de43d4395
 
 
 # ╔═╡ 2b68430f-08ac-4bfb-a484-e6fbe08738ba
 
 cm"""
-### Change of Variables for Indefinite Integrals
+
 __Example__: Find
 ```math
 	\begin{array}{ll}
@@ -672,135 +633,27 @@ __Example__: Find
 	
 """
 
-# ╔═╡ 1beace3e-3a7e-411b-b6c0-3eca1fbf8536
-
-
-cm"""
-### The General Power Rule for Integration
-__Theorem__ *The General Power Rule for Integration*
-If ``g`` is a differentiable function of ``x``, then
-```math
-\int\bigl[g(x)\bigr]^ng'(x) dx = \frac{\bigl[g(x)\bigr]^{n+1}}{n+1} + C, \quad n\neq -1.
-```
-‍Equivalently, if ``u=g(x)``, then
-```math
-\int u^n du = \frac{u^{n+1}}{n+1} + C, \quad n\neq -1.
-```
-‍
-__Example__: Find
-```math
-	\begin{array}{ll}
-	(i) & \int 3(3x-1)^4 dx \\ \\
-	(ii) & \int (e^x+1)(e^x+x) dx \\ \\
-	(iii) & \int 3x^2\sqrt{x^3-2} \;dx \\ \\
-	(iv) & \displaystyle \int \frac{-4x}{(1-2x^2)^2}\; dx \\ \\
-	(v) & \int \cos^2 x\sin x \;dx \\ \\
-	\end{array}
-```
-	
-
-"""
-
 # ╔═╡ 22d44abf-34e3-496c-910a-5e51a7d90e10
-cm"""
-### Change of Variables for Definite Integrals
+md"""
+## Change of Variables for Definite Integrals
 
 """
-
-
-
-
-# ╔═╡ b4279679-50fb-4dfd-9c4e-0e14788e2edd
-
-begin
-    ex2fun1(x) = log(x) / x
-    ex2fun2(x) = x
-    ex2x1 = 1:0.1:exp(1)
-    ex2x12 = 0:0.1:1
-    ex2x2 = 0.6:0.1:4
-    ex2x22 = log(0.6):0.1:log(4)
-
-    ex2y1 = ex2fun1.(ex2x1)
-    ex2y12 = ex2fun2.(ex2x12)
-    ex2y2 = ex2fun1.(ex2x2)
-    ex2y22 = ex2fun2.(ex2x22)
-    theme(:wong)
-    ex2plt1 = plot(ex2x1, ex2y1, framestyle=:origin, xlims=(0, exp(1)), ylims=(-1, 1), fillrange=0, fillalpha=0.5, c=:red, label=nothing)
-    plot!(ex2plt1, ex2x2, ex2y2, c=:red, label=nothing)
-    xlims!(ex2plt1, -1, 4)
-    annotate!(ex2plt1, [(2, 0.5, L"y=\frac{\ln x}{x}"), (exp(1), -0.05, text(L"e", 12))])
-    plot!(ex2plt1, [exp(1), exp(1)], [0, ex2fun1(exp(1))], c=:red, linewidth=3, label=nothing)
-
-    ex2plt2 = plot(ex2x12, ex2y12, framestyle=:origin, xlims=(0, 1), ylims=(-1, 1), fillrange=0, fillalpha=0.5, c=:red, label=nothing)
-    plot!(ex2plt2, ex2x22, ex2y22, c=:red, label=nothing)
-    xlims!(ex2plt2, -1, 4)
-    annotate!(ex2plt2, [(2, 0.5, L"v=u")])
-    # ylims!()
-    # plot!(ex2plt2,ex2x,ex2y, framestyle=:origin, xlims=(1,exp(1)), fillrange =0,fillalpha=0.5,c=:red)
-    # xlims!(ex2plt1,-1,2)
-    # plot!(ex2plt1, fill=(0, 0.5, :red), xlims=(1,2))
-    md""" 
-    ### Substitution: Definite Integrals
-    **Example:**
-    	Evaluate
-
-    ```math
-    \begin{array}{ll}
-    (i) & \int_1^2 \frac{dx}{\left(3-5x\right)^2} \\ \\
-    (ii) & \int_1^e \frac{\ln x}{x} dx \\ \\ 
-    (iii) & \int_0^1 x(x^2+1)^3 \;dx \\ \\ 
-    (iv) & \int_1^5 \frac{x}{\sqrt{2x-1}}\;dx \\ \\ 
-    \end{array}
-    ```
-    $ex2plt1	
-
-    $ex2plt2
-
-    """
-end
 
 
 
 
 # ╔═╡ 4bcc7833-6bfb-421f-b54f-3567aea00c1e
 
-cm"""
-### Integration of Even and Odd Functions
-"""
-
-
-
-# ╔═╡ 655773ab-44a0-4f6e-95b9-353ea7f694ca
-
 md"""
-**Integrals of Symmetric Functions**
-
-Suppose ``f`` is continuous on **``[-a,a]``**.
-
-* If ``f`` is **even** ``\left[f(-x)=f(x)\right]``, then 
-```math
-\int_{-a}^a f(x) dx = 2\int_0^a f(x) dx
-```
-
-* If ``f`` is **odd** ``\left[f(-x)=-f(x)\right]``, then 
-```math
-\int_{-a}^a f(x) dx = 0
-```
-
-**Example**
-Find 
-```math
-\int_{-1}^1 \frac{\tan x}{1+x^2+x^4} dx 
-```
-
+## Integration of Even and Odd Functions
 """
+
 
 
 # ╔═╡ b2873160-bdc6-4883-b6a0-fe2b8295f97d
 
-cm"""
-## Section 5.7
-__The Natural Logarithmic Function: Integration__
+md"""
+# 5.7 The Natural Logarithmic Function: Integration
 > __Objectives__
 > 1. Use the Log Rule for Integration to integrate a rational function.
 > 2. Integrate trigonometric functions.
@@ -808,119 +661,14 @@ __The Natural Logarithmic Function: Integration__
 
 
 
-# ╔═╡ 253a5368-72ca-4463-9b59-934f45d77a4e
+# ╔═╡ 6406249d-f7ac-4ed7-a175-71e6dcdf55f2
+md"## Log Rule for Integration"
 
-
-cm"""
-### Log Rule for Integration
-
-__Theorem__ *Log Rule for Integration*
-
-Let ``u``  be a differentiable function of ``x``.
-```math
-	\begin{array}{llll}
-	\textrm{(i) }& \displaystyle \int \frac{1}{x} dx &=& \ln|x| + C  \\ \\
-	\textrm{(ii) }& \displaystyle \int \frac{1}{u} du &=& \ln|u| + C  \\ \\
-	\end{array}
-```
-
-__Remark__
-```math
- \displaystyle \int \frac{u'}{u} dx = \ln|u| + C
-```
-"""
-
-
-# ╔═╡ d55a4917-e885-42ee-a8db-24f951501c28
-
-cm"""
-__Example__
-
-Find the area of the region bounded by the graph of
-```math
-y = \frac{x}{x^2+1}
-```
-the ``x``-axis, and the line ``x=3``.
-"""
-
-
-
-# ╔═╡ e653c7dd-7359-448d-9690-5d4a9780fc70
-
-
-cm"""
-__Examples__ Find
-```math
-	\begin{array}{llll}
-	\textrm{(i) }& \displaystyle \int \frac{1}{4x-1} dx   \\ \\
-	\textrm{(ii) }& \displaystyle \int \frac{3x^2+1}{x^3+x} dx   \\ \\
-	\textrm{(iii) }& \displaystyle \int \frac{\sec^2x}{\tan x} dx   \\ \\
-	\textrm{(iv) }& \displaystyle \int \frac{x^2+x+1}{x^2+1} dx   \\ \\
-	\textrm{(v) }& \displaystyle \int \frac{2x}{(x+1)^2} dx   \\ \\
-	\end{array}
-```
-"""
-
-
-
-
-# ╔═╡ eccd97c8-15b5-47ff-92ef-7e87a054c4ef
-cm"""
-__Example__ Solve the differential equation
-```math
-\frac{dy}{dx}=\frac{1}{x\ln x}
-```
-"""
-
-# ╔═╡ 01c13365-f758-47c4-9b96-b9f2616b3824
-
-
-
-
-cm"""
-### Integrals of Trigonometric Functions
-__Example__
-```math
-\int \tan x dx, \quad \int \sec x dx
-```
-
-"""
-
-
-# ╔═╡ 017d38da-5825-4966-8d89-c75ce0b2af11
-cm"""
-__Remark__ Add the following to your table of antiderivatives
-```math
-	\begin{array}{llll}
-	\displaystyle \int \sin u du &=& -\cos u + C &\qquad&  \displaystyle \int \cos u du &=& \sin u + C \\ \\
-
-	\displaystyle \int \tan u du &=& -\ln|\cos u| + C &\qquad&  \displaystyle \int \cot u du &=& \ln|\sin u| + C \\ \\
-
-
-	\displaystyle \int \sec u du &=& \ln|\sec u +\tan u| + C &\qquad&  \displaystyle \int \csc u du &=& -\ln|\csc u +\cot u| + C \\ \\
-	\end{array}
-```
-
-"""
-
-# ╔═╡ 85c79ec8-6c95-4c76-9851-a4a0b7ec76d7
-
-
-
-
-
-cm"""
-__Example__ 
-
-Evaluate ``\displaystyle \int_{0}^{\pi/4}\sqrt{1+\tan^2 x}dx``
-
-"""
+# ╔═╡ c9a96c8c-94a5-4b5a-853e-60b35bc7621a
+md"#  5.8 Inverse Trigonometric functions: Integration"
 
 # ╔═╡ 9a998b24-6d36-4f47-b4db-9df9b3d138e2
-
-cm"""
-## Section 5.8
-### Inverse Trigonometric Functions: Integration
+md"""
 > __Objectives__
 > 1. Integrate functions whose antiderivatives involve inverse trigonometric functions.
 > 2. Use the method of completing the square to integrate a function.
@@ -2210,6 +1958,281 @@ v(t)=t^3-10t^2+29t-20,
 <li>What is the <b>total distance</b> traveled by the particle on the time interval 1≤ t≤ 5?</li>
 
 </ul>
+"""
+
+# ╔═╡ 28d201df-5056-4429-b1ba-a4959e75bc51
+begin
+    f155(x) = x / sqrt(1 - 4 * x^2)
+    # ex1_55=plot(-0.49:0.01:0.49,f155.(-0.49:0.01:0.49), framestyle=:origin)
+cm"""
+$(bth("Antidifferentiation of a Composite Function"))
+Let ``g`` be a function whose range is an interval ``I``, and let ``f`` be a function that is continuous on ``I``. If ``g`` is differentiable on its domain and  ``F`` is an antiderivative of ``f`` on ``I``, then
+```math
+\int f(g(x))g'(x)dx = F(g(x)) + C.
+```
+Letting ``u=g(x)`` gives ``du=g'(x)dx`` and
+```math
+\int f(u) du = F(u) + C.
+```
+$(ebl())
+<div class="img-container">
+
+$(Resource("https://www.dropbox.com/s/uua8vuahfxnp48c/subs_th.jpg?raw=1"))
+
+</div>
+
+$(bbl("Remark","Substitution Rule says:"))
+It is permissible to operate with ``dx`` and ``du`` after integral signs as if they were differentials.
+$(ebl())
+
+$(ex())
+Find 
+```math
+\begin{array}{ll}
+(i) & \int \bigl(x^2+1 \bigr)^2 (2x) dx \\ \\
+(ii) & \int 5e^{5x} dx \\ \\
+(iii) & \int \frac{x}{\sqrt{1-4x^2}} dx \\ \\
+(iv) & \int \sqrt{1+x^2} \;\; x^5 dx \\ \\ 
+(v) & \int \tan x dx \\ \\
+\end{array}
+```
+
+
+    """
+end
+
+
+
+
+# ╔═╡ 1beace3e-3a7e-411b-b6c0-3eca1fbf8536
+cm"""
+$(bth("The General Power Rule for Integration"))
+__Theorem__ *The General Power Rule for Integration*
+If ``g`` is a differentiable function of ``x``, then
+```math
+\int\bigl[g(x)\bigr]^ng'(x) dx = \frac{\bigl[g(x)\bigr]^{n+1}}{n+1} + C, \quad n\neq -1.
+```
+‍Equivalently, if ``u=g(x)``, then
+```math
+\int u^n du = \frac{u^{n+1}}{n+1} + C, \quad n\neq -1.
+```
+‍$(ebl())
+
+$(ex()) Find
+```math
+	\begin{array}{ll}
+	(i) & \int 3(3x-1)^4 dx \\ \\
+	(ii) & \int (e^x+1)(e^x+x) dx \\ \\
+	(iii) & \int 3x^2\sqrt{x^3-2} \;dx \\ \\
+	(iv) & \displaystyle \int \frac{-4x}{(1-2x^2)^2}\; dx \\ \\
+	(v) & \int \cos^2 x\sin x \;dx \\ \\
+	\end{array}
+```
+	
+
+"""
+
+# ╔═╡ b4279679-50fb-4dfd-9c4e-0e14788e2edd
+
+begin
+    ex2fun1(x) = log(x) / x
+    ex2fun2(x) = x
+    ex2x1 = 1:0.1:exp(1)
+    ex2x12 = 0:0.1:1
+    ex2x2 = 0.6:0.1:4
+    ex2x22 = log(0.6):0.1:log(4)
+
+    ex2y1 = ex2fun1.(ex2x1)
+    ex2y12 = ex2fun2.(ex2x12)
+    ex2y2 = ex2fun1.(ex2x2)
+    ex2y22 = ex2fun2.(ex2x22)
+    theme(:wong)
+    ex2plt1 = plot(ex2x1, ex2y1, framestyle=:origin, xlims=(0, exp(1)), ylims=(-1, 1), fillrange=0, fillalpha=0.5, c=:red, label=nothing)
+    plot!(ex2plt1, ex2x2, ex2y2, c=:red, label=nothing)
+    xlims!(ex2plt1, -1, 4)
+    annotate!(ex2plt1, [(2, 0.5, L"y=\frac{\ln x}{x}"), (exp(1), -0.05, text(L"e", 12))])
+    plot!(ex2plt1, [exp(1), exp(1)], [0, ex2fun1(exp(1))], c=:red, linewidth=3, label=nothing)
+
+    ex2plt2 = plot(ex2x12, ex2y12, framestyle=:origin, xlims=(0, 1), ylims=(-1, 1), fillrange=0, fillalpha=0.5, c=:red, label=nothing)
+    plot!(ex2plt2, ex2x22, ex2y22, c=:red, label=nothing)
+    xlims!(ex2plt2, -1, 4)
+    annotate!(ex2plt2, [(2, 0.5, L"v=u")])
+    # ylims!()
+    # plot!(ex2plt2,ex2x,ex2y, framestyle=:origin, xlims=(1,exp(1)), fillrange =0,fillalpha=0.5,c=:red)
+    # xlims!(ex2plt1,-1,2)
+    # plot!(ex2plt1, fill=(0, 0.5, :red), xlims=(1,2))
+    cm""" 
+    $(ex())
+    	Evaluate
+
+    ```math
+    \begin{array}{ll}
+    (i) & \int_1^2 \frac{dx}{\left(3-5x\right)^2} \\ \\
+    (ii) & \int_1^e \frac{\ln x}{x} dx \\ \\ 
+    (iii) & \int_0^1 x(x^2+1)^3 \;dx \\ \\ 
+    (iv) & \int_1^5 \frac{x}{\sqrt{2x-1}}\;dx \\ \\ 
+    \end{array}
+    ```
+    $ex2plt1	
+
+    $ex2plt2
+
+    """
+end
+
+
+
+
+# ╔═╡ 655773ab-44a0-4f6e-95b9-353ea7f694ca
+cm"""
+$(bth("Integration of even and Odd Function"))
+
+Suppose ``f`` is continuous on **``[-a,a]``**.
+
+* If ``f`` is **even** ``\left[f(-x)=f(x)\right]``, then 
+```math
+\int_{-a}^a f(x) dx = 2\int_0^a f(x) dx
+```
+
+* If ``f`` is **odd** ``\left[f(-x)=-f(x)\right]``, then 
+```math
+\int_{-a}^a f(x) dx = 0
+```
+$(ebl())
+
+$(ex())
+Find 
+```math
+\int_{-1}^1 \frac{\tan x}{1+x^2+x^4} dx 
+```
+
+"""
+
+
+# ╔═╡ 253a5368-72ca-4463-9b59-934f45d77a4e
+cm"""
+$(bth("Log Rule for Integration"))
+
+Let ``u``  be a differentiable function of ``x``.
+```math
+	\begin{array}{llll}
+	\textrm{(i) }& \displaystyle \int \frac{1}{x} dx &=& \ln|x| + C  \\ \\
+	\textrm{(ii) }& \displaystyle \int \frac{1}{u} du &=& \ln|u| + C  \\ \\
+	\end{array}
+```
+$(ebl())
+
+$(bbl("Remark",""))
+```math
+ \displaystyle \int \frac{u'}{u} dx = \ln|u| + C
+```
+"""
+
+
+# ╔═╡ d55a4917-e885-42ee-a8db-24f951501c28
+cm"""
+$(ex(1,"Using the Log Rule for Integration"))
+Evaluate ``\displaystyle \int\frac{2}{x}dx``.
+
+$(ex(2,"Using the Log Rule with a Change of Variables"))
+Evaluate ``\displaystyle \int\frac{1}{4x-1}dx``.
+
+$(ex(3,"Finding Area with the Log Rule"))
+Find the area of the region bounded by the graph of
+```math
+y = \frac{x}{x^2+1}
+```
+the ``x``-axis, and the line ``x=3``.
+"""
+
+
+
+# ╔═╡ e653c7dd-7359-448d-9690-5d4a9780fc70
+cm"""
+$(ex(4,"Recognizing Quotient Forms of the Log Rule"))
+```math
+	\begin{array}{llll}
+	\textrm{(a) }& \displaystyle \int \frac{3x^2+1}{x^3+x} dx   \\ \\
+	\textrm{(b) }& \displaystyle \int \frac{\sec^2x}{\tan x} dx   \\ \\
+	\textrm{(c) }& \displaystyle \int \frac{x+1}{x^2+2x} dx   \\ \\
+	\textrm{(d) }& \displaystyle \int \frac{1}{3x+2} dx   \\ \\
+	\end{array}
+```
+"""
+
+# ╔═╡ a5b5ae97-b4af-435e-a3fb-5a23edf8b0c9
+cm"""
+$(ex(5,"Using Long Division Before Integrating"))
+Find the indefinite integral.
+```math
+\displaystyle \int \frac{x^2+x+1}{x^2+1} dx  
+```
+$(ex(6,"Change of Variables with the Log Rule"))
+Find the indefinite integral.
+```math
+\displaystyle \int \frac{2x}{(x+1)^2} dx  
+```
+
+"""
+
+# ╔═╡ eccd97c8-15b5-47ff-92ef-7e87a054c4ef
+cm"""
+$(ex(7,"u-Substitution and the Log Rule"))
+Solve the differential equation
+```math
+\frac{dy}{dx}=\frac{1}{x\ln x}
+```
+"""
+
+# ╔═╡ 01c13365-f758-47c4-9b96-b9f2616b3824
+let 
+	t = md"## Integrals of Trigonometric Functions"
+
+
+
+cm"""
+$(t)
+
+$(ex(8,"Using a trigonometric Identity"))
+```math
+\int \tan x dx, \quad \int \sec x dx
+```
+
+"""
+end
+
+
+# ╔═╡ 017d38da-5825-4966-8d89-c75ce0b2af11
+cm"""
+$(bbl("INTEGRALS OF THE SIX BASIC TRIGONOMETRIC FUNCTIONS",""))
+
+```math
+	\begin{array}{llll}
+	\displaystyle \int \sin u du &=& -\cos u + C &\qquad&  \displaystyle \int \cos u du &=& \sin u + C \\ \\
+
+	\displaystyle \int \tan u du &=& -\ln|\cos u| + C &\qquad&  \displaystyle \int \cot u du &=& \ln|\sin u| + C \\ \\
+
+
+	\displaystyle \int \sec u du &=& \ln|\sec u +\tan u| + C &\qquad&  \displaystyle \int \csc u du &=& -\ln|\csc u +\cot u| + C \\ \\
+	\end{array}
+```
+
+"""
+
+# ╔═╡ 85c79ec8-6c95-4c76-9851-a4a0b7ec76d7
+cm"""
+$(ex(10,"Integrating trigonometric Functions"))
+Evaluate ``\displaystyle \int_{0}^{\pi/4}\sqrt{1+\tan^2 x}dx``
+
+$(ex(11,"Finding an Average Value"))
+Find the average value of
+```math
+f(x)=\tan x
+```
+on the interval ``[0, \frac{\pi}{4}]``.
+
+
+
 """
 
 # ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
@@ -4032,20 +4055,25 @@ version = "1.4.1+1"
 # ╟─5d0d0bd7-7a85-4b2f-8a39-c6a4ef7d6175
 # ╟─0d547f78-1578-4c4a-9403-bd4ede9a62a7
 # ╟─28d201df-5056-4429-b1ba-a4959e75bc51
+# ╟─8a584c0c-3017-4958-b611-772b3a6e44c5
+# ╠═a73db7b8-3464-4852-a9ef-5d0de43d4395
 # ╟─2b68430f-08ac-4bfb-a484-e6fbe08738ba
 # ╟─1beace3e-3a7e-411b-b6c0-3eca1fbf8536
 # ╟─22d44abf-34e3-496c-910a-5e51a7d90e10
-# ╠═b4279679-50fb-4dfd-9c4e-0e14788e2edd
+# ╟─b4279679-50fb-4dfd-9c4e-0e14788e2edd
 # ╟─4bcc7833-6bfb-421f-b54f-3567aea00c1e
 # ╟─655773ab-44a0-4f6e-95b9-353ea7f694ca
 # ╟─b2873160-bdc6-4883-b6a0-fe2b8295f97d
+# ╟─6406249d-f7ac-4ed7-a175-71e6dcdf55f2
 # ╟─253a5368-72ca-4463-9b59-934f45d77a4e
 # ╟─d55a4917-e885-42ee-a8db-24f951501c28
 # ╟─e653c7dd-7359-448d-9690-5d4a9780fc70
+# ╟─a5b5ae97-b4af-435e-a3fb-5a23edf8b0c9
 # ╟─eccd97c8-15b5-47ff-92ef-7e87a054c4ef
 # ╟─01c13365-f758-47c4-9b96-b9f2616b3824
 # ╟─017d38da-5825-4966-8d89-c75ce0b2af11
 # ╟─85c79ec8-6c95-4c76-9851-a4a0b7ec76d7
+# ╟─c9a96c8c-94a5-4b5a-853e-60b35bc7621a
 # ╟─9a998b24-6d36-4f47-b4db-9df9b3d138e2
 # ╟─238beb06-9d2e-4d15-8eb4-3660aced7ef7
 # ╟─463027a3-7319-43ef-85be-cb8abe5a1d28
