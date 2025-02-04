@@ -679,61 +679,39 @@ md"""
 
 
 
-# ╔═╡ 238beb06-9d2e-4d15-8eb4-3660aced7ef7
+# ╔═╡ cd76f697-ce0b-4dba-b818-65ee5b6de23d
+md"## Integrals Involving Inverse Trigonometric Functions"
 
+# ╔═╡ efb4d714-dea7-428a-858c-70c9193ce150
+md"## Completing the Square"
+
+# ╔═╡ b0716945-c4e6-4d3d-a29d-864ff023b0fc
+md"##  Review of Basic Integration Rules"
+
+# ╔═╡ 49fe4d0b-124f-4dd8-a34d-9aaf80705175
 cm"""
-### Integrals Involving Inverse Trigonometric Functions
-__Theorem__
-
-Let ``u`` be a differential function of ``x``, and let ``a>0``.
-```math
-\begin{array}{lllll}
-\textrm{1.} & \displaystyle \int\frac{du}{\sqrt{a^2-u^2}} &=&\arcsin\frac{u}{a} + C \\ \\
-
-\textrm{2.} & \displaystyle \int\frac{du}{a^2+u^2} &=&\frac{1}{a}\arctan\frac{u}{a} + C \\ \\
-
-\textrm{3.} & \displaystyle \int\frac{du}{u\sqrt{u^2-a^2}} &=&\frac{1}{a}\text{arcsec}\frac{|u|}{a} + C \\ \\
-\end{array}
-```
-
-__Examples__
-Find
-```math
-\begin{array}{lllll}
-\textrm{➡} & \displaystyle \int\frac{dx}{\sqrt{4-x^2}}, \\ \\
-\textrm{➡} & \displaystyle \int\frac{dx}{2+9x^2}, \\ \\
-\textrm{➡} & \displaystyle \int\frac{dx}{x\sqrt{4x^2-9}}, \\ \\
-\textrm{➡} & \displaystyle \int\frac{dx}{\sqrt{e^{2x}-1}}, \\ \\
-\textrm{➡} & \displaystyle \int\frac{x+2}{\sqrt{4-x^2}}dx. \\ \\
-\end{array}
-```
+BASIC INTEGRATION RULES ``(a>0)``
+1. ``\displaystyle\int k f(u) d u=k \int f(u) d u``
+2. ``\displaystyle\int[f(u) \pm g(u)] d u=\int f(u) d u \pm \int g(u) d u``
+3. ``\displaystyle\int d u=u+C``
+4. ``\displaystyle\int u^n d u=\frac{u^{n+1}}{n+1}+C, \quad n \neq-1``
+5. ``\displaystyle\int \frac{d u}{u}=\ln |u|+C``
+6. ``\displaystyle\int e^u d u=e^u+C``
+7. ``\displaystyle\int a^u d u=\left(\frac{1}{\ln a}\right) a^u+C``
+8. ``\displaystyle\int \sin u d u=-\cos u+C``
+9. ``\displaystyle\int \cos u d u=\sin u+C``
+10. ``\displaystyle\int \tan u d u=-\ln |\cos u|+C``
+11. ``\displaystyle\int \cot u d u=\ln |\sin u|+C``
+12. ``\displaystyle\int \sec u d u=\ln |\sec u+\tan u|+C``
+13. ``\displaystyle\int \csc u d u=-\ln |\csc u+\cot u|+C``
+14. ``\displaystyle\int \sec ^2 u d u=\tan u+C``
+15. ``\displaystyle\int \csc ^2 u d u=-\cot u+C``
+16. ``\displaystyle\int \sec u \tan u d u=\sec u+C``
+17. ``\displaystyle\int \csc u \cot u d u=-\csc u+C``
+18. ``\displaystyle\int \frac{d u}{\sqrt{a^2-u^2}}=\arcsin \frac{u}{a}+C``
+19. ``\displaystyle\int \frac{d u}{a^2+u^2}=\frac{1}{a} \arctan \frac{u}{a}+C``
+20. ``\displaystyle\int \frac{d u}{u \sqrt{u^2-a^2}}=\frac{1}{a} \operatorname{arcsec} \frac{|u|}{a}+C``
 """
-
-
-
-# ╔═╡ 463027a3-7319-43ef-85be-cb8abe5a1d28
-
-
-cm"""
-### Completing the Square
-__Example__
-Find
-```math
-\int\frac{dx}{x^2-4x+7}.
-```
-__Example__
-
-Find the area of the region bounded by the graph of
-```math
-f(x) = \frac{1}{\sqrt{3x-x^2}}
-```
-the ``x``-axis, and the lines ``x=\frac{3}{2}`` and ``x=\frac{9}{4}``.
-"""
-
-
-
-
-
 
 # ╔═╡ fb1499e3-0a58-4b34-b452-3bdc31b82504
 
@@ -2234,6 +2212,59 @@ on the interval ``[0, \frac{\pi}{4}]``.
 
 
 """
+
+# ╔═╡ 238beb06-9d2e-4d15-8eb4-3660aced7ef7
+cm"""
+$(bth(" Integrals Involving Inverse Trigonometric functions"))
+
+Let ``u`` be a differential function of ``x``, and let ``a>0``.
+```math
+\begin{array}{lllll}
+\textrm{1.} & \displaystyle \int\frac{du}{\sqrt{a^2-u^2}} &=&\arcsin\frac{u}{a} + C \\ \\
+
+\textrm{2.} & \displaystyle \int\frac{du}{a^2+u^2} &=&\frac{1}{a}\arctan\frac{u}{a} + C \\ \\
+
+\textrm{3.} & \displaystyle \int\frac{du}{u\sqrt{u^2-a^2}} &=&\frac{1}{a}\text{arcsec}\frac{|u|}{a} + C \\ \\
+\end{array}
+```
+$(ebl())
+
+$(ex("Examples","Integration with Inverse Trigonometric functions"))
+Find
+```math
+\begin{array}{lllll}
+\textrm{➡} & \displaystyle \int\frac{dx}{\sqrt{4-x^2}}, \\ \\
+\textrm{➡} & \displaystyle \int\frac{dx}{2+9x^2}, \\ \\
+\textrm{➡} & \displaystyle \int\frac{dx}{x\sqrt{4x^2-9}}, \\ \\
+\textrm{➡} & \displaystyle \int\frac{dx}{\sqrt{e^{2x}-1}}, \\ \\
+\textrm{➡} & \displaystyle \int\frac{x+2}{\sqrt{4-x^2}}dx. \\ \\
+\end{array}
+```
+"""
+
+
+
+# ╔═╡ 463027a3-7319-43ef-85be-cb8abe5a1d28
+cm"""
+#
+$(ex(4,"Completing the Square"))
+Find
+```math
+\int\frac{dx}{x^2-4x+7}.
+```
+
+$(ex(5,"Completing the Square"))
+Find the area of the region bounded by the graph of
+```math
+f(x) = \frac{1}{\sqrt{3x-x^2}}
+```
+the ``x``-axis, and the lines ``x=\frac{3}{2}`` and ``x=\frac{9}{4}``.
+"""
+
+
+
+
+
 
 # ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
 initialize_eqref()
@@ -4075,9 +4106,13 @@ version = "1.4.1+1"
 # ╟─85c79ec8-6c95-4c76-9851-a4a0b7ec76d7
 # ╟─c9a96c8c-94a5-4b5a-853e-60b35bc7621a
 # ╟─9a998b24-6d36-4f47-b4db-9df9b3d138e2
+# ╟─cd76f697-ce0b-4dba-b818-65ee5b6de23d
 # ╟─238beb06-9d2e-4d15-8eb4-3660aced7ef7
+# ╟─efb4d714-dea7-428a-858c-70c9193ce150
 # ╟─463027a3-7319-43ef-85be-cb8abe5a1d28
-# ╟─fb1499e3-0a58-4b34-b452-3bdc31b82504
+# ╟─b0716945-c4e6-4d3d-a29d-864ff023b0fc
+# ╟─49fe4d0b-124f-4dd8-a34d-9aaf80705175
+# ╠═fb1499e3-0a58-4b34-b452-3bdc31b82504
 # ╟─c3de1903-845e-4779-b67b-817e703fd1ee
 # ╟─daf5a008-b102-4557-8a18-d83839316eba
 # ╟─13f007b1-b509-40b2-8ad4-ab50588957b0
