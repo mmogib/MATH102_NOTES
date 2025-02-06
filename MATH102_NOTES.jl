@@ -685,6 +685,12 @@ md"## Integrals Involving Inverse Trigonometric Functions"
 # ╔═╡ efb4d714-dea7-428a-858c-70c9193ce150
 md"## Completing the Square"
 
+# ╔═╡ 4a12a1b2-2f3b-4cfc-93f2-aea73d2d6e4b
+let 
+qcode = QRCode("https://www.mathmatize.com/c/1507?task=da5b4a7f-e713-49db-8b2d-393bd81b01ef")
+	
+end
+
 # ╔═╡ b0716945-c4e6-4d3d-a29d-864ff023b0fc
 md"##  Review of Basic Integration Rules"
 
@@ -4110,6 +4116,7 @@ version = "1.4.1+1"
 # ╟─238beb06-9d2e-4d15-8eb4-3660aced7ef7
 # ╟─efb4d714-dea7-428a-858c-70c9193ce150
 # ╟─463027a3-7319-43ef-85be-cb8abe5a1d28
+# ╟─4a12a1b2-2f3b-4cfc-93f2-aea73d2d6e4b
 # ╟─b0716945-c4e6-4d3d-a29d-864ff023b0fc
 # ╟─49fe4d0b-124f-4dd8-a34d-9aaf80705175
 # ╠═fb1499e3-0a58-4b34-b452-3bdc31b82504
