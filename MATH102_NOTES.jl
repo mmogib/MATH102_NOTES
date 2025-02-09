@@ -189,29 +189,6 @@ md"##  Riemann Sums"
 # ╔═╡ 04922857-61ca-45a7-a3b4-cf35138e4847
 md"## Definite Integral"
 
-# ╔═╡ 5156fbdc-002c-4222-aca0-b835061e3fb7
-
-begin
-    f2(x) = sin(x) + 2
-    theme(:wong)
-    x = 1:0.1:5
-    y = f2.(x)
-    p3 = plot(x, y, label=nothing)
-    plot!(p3, x, y / 2, ribbon=y / 2, linestyle=:dot, linealpha=0.1, framestyle=:origin, xticks=(1:5, [:a, "", "", "", :b]), label=nothing, ylims=(-1, 4))
-    annotate!(p3, [(3.5, 2.5, L"y=f(x)"), (5.2, 0, L"x"), (0.2, 4, L"y")])
-    # annotate!(p2,[(4,0.51,(L"$\sum_{i=1}^{%$n2} f (x^*_{i})\Delta x=%$s2$",12))])
-
-    md""" * If ``f(x)\ge 0``, the integral ``\int_a^b f(x) dx`` is the area under the curve ``y=f(x)`` from ``a`` to ``b``.	
-
-    $p3
-    """
-
-end
-
-
-
-
-
 # ╔═╡ 5f37c3d1-449f-4a6d-9af5-55f9a4c8feec
 begin
 s52q1Check = @bind s52q1chk Radio(["show", "hide"],default="hide")
@@ -283,19 +260,6 @@ Evaluate the following integrals by interpreting each in terms of areas
 
 (iii) $\int_{-2}^1 xdx$
 """
-
-
-
-# ╔═╡ 02d61e1f-b630-443c-b1dd-1fe5d2c81b2f
-begin
-    f1(x) = sqrt(9 - x^2)
-    f3(x) = abs(x)
-    theme(:wong)
-    pp = plot(f1, xlims=[-4, 4], ylims=[-4, 4], framestyle=:origin, xtick=-4:1:4, yticks=-4:1:4)
-    md"$pp"
-end
-
-
 
 
 
@@ -685,12 +649,6 @@ md"## Integrals Involving Inverse Trigonometric Functions"
 # ╔═╡ efb4d714-dea7-428a-858c-70c9193ce150
 md"## Completing the Square"
 
-# ╔═╡ 4a12a1b2-2f3b-4cfc-93f2-aea73d2d6e4b
-let 
-qcode = QRCode("https://www.mathmatize.com/c/1507?task=da5b4a7f-e713-49db-8b2d-393bd81b01ef")
-	
-end
-
 # ╔═╡ b0716945-c4e6-4d3d-a29d-864ff023b0fc
 md"##  Review of Basic Integration Rules"
 
@@ -719,11 +677,9 @@ BASIC INTEGRATION RULES ``(a>0)``
 20. ``\displaystyle\int \frac{d u}{u \sqrt{u^2-a^2}}=\frac{1}{a} \operatorname{arcsec} \frac{|u|}{a}+C``
 """
 
-# ╔═╡ fb1499e3-0a58-4b34-b452-3bdc31b82504
-
-cm"""
-## Section 5.9
-__Hyperbolic Functions__
+# ╔═╡ f608e3b8-4a16-40c9-8ffd-d02af53146e6
+md"""
+# 5.9 Hyperbolic Functions
 
 > __Objectives__
 > 1. Develop properties of hyperbolic functions.
@@ -731,7 +687,12 @@ __Hyperbolic Functions__
 > 3. Develop properties of inverse hyperbolic functions.
 > 4. Differentiate and integrate functions involving inverse hyperbolic functions.
 
-### Hyperbolic Functions
+## Hyperbolic Functions
+
+"""
+
+# ╔═╡ fb1499e3-0a58-4b34-b452-3bdc31b82504
+cm"""
 
 __Circle__: ``x^2+y^2=1``
 
@@ -779,97 +740,6 @@ $(Resource("https://www.dropbox.com/s/0q1vcqb77u0ft1t/hyper_graphs.jpg?raw=1"))
 
 
 
-# ╔═╡ daf5a008-b102-4557-8a18-d83839316eba
-
-cm"""
-__Hyperbolic Identities__
-```math
-\begin{array}{rllllll}
-\cosh^2 x - \sinh^2 x &=& 1, &\qquad& 
-\sinh (x+y)\;  &=& \sinh x\cosh y +\cosh x\sinh y\\ \\
-
-\tanh^2 x + \text{sech}^2 x &=& 1, &\qquad& 
-\sinh (x-y)\;  &=& \sinh x\cosh y -\cosh x\sinh y\\ \\
-
-
-\coth^2 x - \text{csch}^2 x &=& 1, &\qquad& 
-\cosh (x+y)\;  &=& \cosh x\cosh y +\sinh x\sinh y\\ \\
-
- &&  &\qquad& 
-\cosh (x-y)\;  &=& \cosh x\cosh y -\sinh x\sinh y\\ \\
-
-\sinh^2 x &=& \displaystyle\frac{\cosh 2x -1}{2}, &\qquad& 
-\cosh^2 x\;  &=& \displaystyle\frac{\cosh 2x +1}{2}\\ \\
-
-
-\sin 2x &=& 2\sinh x\cosh x, &\qquad& 
-\cosh 2x\;  &=& \cosh^2 x +\sinh^2 x\\ \\
-
-
-\end{array}
-```
-"""
-
-
-
-# ╔═╡ 13f007b1-b509-40b2-8ad4-ab50588957b0
-
-cm"""
-### Differentiation and Integration of Hyperbolic Functions
-
-__Theorem__ Let ``u`` be a differentiable function of ``x``.
-```math
-\begin{array}{rllllll}
-\displaystyle \frac{d}{dx}\left(\sinh u\right) &=& \left(\cosh u\right)u', &\qquad& 
-\displaystyle \int \cosh u du  &=& \sinh u \; +\; C\\ \\
-
-\displaystyle \frac{d}{dx}\left(\cosh u\right) &=& \left(\sinh u\right)u', &\qquad& 
-\displaystyle \int \sinh u du  &=& \cosh u \; +\; C\\ \\
-
-\displaystyle \frac{d}{dx}\left(\tanh u\right) &=& \left(\text{sech}^2 u\right)u', &\qquad& 
-\displaystyle \int \text{sech}^2 u du  &=& \tanh u \; +\; C\\ \\
-
-\displaystyle \frac{d}{dx}\left(\coth u\right) &=& -\left(\text{csch}^2 u\right)u', &\qquad& 
-\displaystyle \int \text{csch}^2 u du  &=& -\coth u \; +\; C\\ \\
-
-\displaystyle \frac{d}{dx}\left(\text{sech} u\right) &=& -\left(\text{sech }u \tanh u\right)u', &\qquad& 
-\displaystyle \int \text{sech } u\tanh u du  &=& -\text{sech } u \; +\; C\\ \\
-
-
-\displaystyle \frac{d}{dx}\left(\text{csch} u\right) &=& -\left(\text{csch }u \coth u\right)u', &\qquad& 
-\displaystyle \int \text{csch } u\coth u du  &=& -\text{csch } u \; +\; C\\ \\
-
-\end{array}
-```
-
-"""
-
-# ╔═╡ 9c8d6eeb-9d3c-4525-87e3-c540c3a5d38d
-
-cm"""
-__Examples__
-
-Find
-```math
-\begin{array}{llll}
-\text{(a)} & \displaystyle \frac{d}{dx}\left[\sinh(x^2-3)\right]\\\\
-\text{(b)} & \displaystyle \frac{d}{dx}\bigl[\ln\left(\cosh x\right)\bigr]\\\\
-\end{array}
-```
-
-__Example__
-
-Find the relative extrema of
-```math
-f(x) = (x-1)\cosh x \; -\; \sinh x.
-```
-
-__Example__ Find
-```math
-\displaystyle \int_{5/3}^2 \csch(3x-4)\coth(3x-4) dx
-```
-"""
-
 # ╔═╡ 66a05cab-f595-43f8-843d-1f845c953868
 cm"""
 __Remark__
@@ -887,42 +757,697 @@ $(Resource("https://www.dropbox.com/s/24biyozrcl7mk2q/wire.jpg?raw=1"))
 
 """
 
-# ╔═╡ cf16ce47-f360-451b-afae-b1fe8b559fc3
-cm"""
-### Inverse Hyperbolic Functions
-
-__Theorem__ Inverse Hyperbolic Functions
-```math
-\begin{array}{llllll}
-\textbf{Function} &  & &\qquad& \textbf{Domain}\\ \\
-
-\sinh^{-1}x & = & \ln\left(x+\sqrt{x^2+1}\right) &\qquad& \left(-\infty,\infty\right)\\ \\
-
-\cosh^{-1}x & = & \ln\left(x+\sqrt{x^2-1}\right) &\qquad& \left[1,\infty\right)\\ \\
-
-\tanh^{-1}x & = & \displaystyle\frac{1}{2}\ln\left(\frac{1+x}{1-x}\right) &\qquad& \left(-1,1\right)\\ \\
-
-
-\coth^{-1}x & = & \displaystyle\frac{1}{2}\ln\left(\frac{x+1}{x-1}\right) &\qquad& \left(-\infty,-1\right)\cup \left(1,\infty\right)\\ \\
-
-
-\text{sech}^{-1}x & = & \displaystyle\ln\left(\frac{1+\sqrt{1-x^2}}{x}\right) &\qquad& \left(0,1\right]\\ \\
-
-\text{csch}^{-1}x & = & \displaystyle\ln\left(\frac{1}{x}+\frac{\sqrt{1+x^2}}{|x|}\right) &\qquad& \left(-\infty,0\right)\cup \left(0,\infty\right)\\ \\
-
-\end{array}
-```
-
-<div class="img-container">
-
-$(Resource("https://www.dropbox.com/s/yc0305sd3i8yr44/inverse_hyper_graphs.jpg?raw=1"))
-
-</div>
-"""
+# ╔═╡ db150ea2-4895-415e-97a9-f7eff4180d63
+md"## Inverse Hyperbolic Functions"
 
 # ╔═╡ 663c5894-ba2d-4236-9728-6a3c8db5c8ed
 
 
+
+# ╔═╡ 1f1b3439-630e-4db6-9a01-321ed75bed84
+## Section 7.1
+### Area of a Region Between Two Curves
+
+> __Objectives__
+> - Find the area of a region between two curves using integration.
+> - Find the area of a region between intersecting curves using integration.
+> - Describe integration as an accumulation process.
+
+"""
+
+# ╔═╡ 3df06d3d-7bd1-45fe-bd46-c1429b11ee14
+begin
+	cnstSlider = @bind cnstslider Slider(-2:1:2, default=0)
+	n1Slider = @bind n1slider Slider(1:200, default=1,show_value=true)
+	md"""
+	| | |
+	|---|---|
+	|move $cnstSlider| ``n`` = $n1Slider|
+	|||
+	"""
+end
+
+# ╔═╡ 004ab021-15d7-40d8-ace7-41dd5f8b2237
+md"""
+
+**Remark**
+- Area = ``y_{top}-y_{bottom}``.
+
+**Example 1**
+
+Find the area of the region bounded above by $y=e^x$, bounded below by $y=x$, bounded on the sides by $x=0$ and $x=1$.
+
+---
+"""
+
+# ╔═╡ 932e13f0-0949-4e77-b3a8-f344784b1f1d
+begin
+	ex1x=0:0.01:1
+	ex1y=exp.(ex1x)
+	ex1plt=plot(ex1x,ex1y,label=nothing,fill=(0,0.5,:red))
+	plot!(ex1plt,ex1x,ex1x,fill=(0,0,:white),label=nothing)
+	plot!(;p1Opt...,xlims=(-0.4,1.5),ylims=(-0.4,3.5),label=nothing,xticks=[0,0,1])
+	ex1Rect = Shape([(0.5,0.55),(0.55,0.55),(0.55,exp(0.55)),(0.5,exp(0.55))])
+	plot!(ex1Rect,label=nothing)
+	annotate!([	(0.77,0.6,L"y=x")
+			  ,	(0.7,exp(0.7)+0.2,L"y=e^x")
+			  , (1.1,1.7,L"x=1")
+			  , (-0.1,0.5,L"x=0")
+			  , (0.54,0.44,text(L"\Delta x",10))
+			  ])
+	md"""
+	**Solution**
+	$ex1plt
+	"""
+end
+
+# ╔═╡ 693ca0c0-2f10-447b-88db-e9fb530b1336
+md"""
+### Area of a Region Between Intersecting Curves
+In geberal,
+
+$p2
+	
+```math
+Area = \int_a^b \left|f(x) - g(x)\right| dx
+```
+
+"""
+
+# ╔═╡ bdccc1f5-2d8e-4ecd-a63e-7228566a20fb
+html"<hr>"
+
+# ╔═╡ ac6fde80-be6b-4292-911a-b51c43de3199
+md"""
+**Example 2**
+
+Find the area of the region enclosed by the parabolas $y=x^2$ and $y=2x-x^2$.
+
+*Solution in class*
+
+---
+"""
+
+# ╔═╡ 57d8a03b-71a0-46d9-b908-af7028195db2
+md"""
+**Example 3**
+
+Find the area of the region bounded by the curves 
+
+```math 
+y=\cos(x), \;\; y=\sin(2x), \;\; x=0, \;\; x=\frac{\pi}{2}
+```
+
+
+---
+"""
+
+# ╔═╡ a2a2d894-7588-48a8-84fd-65e5ead80072
+begin
+	ex3f1(x) = cos(x)
+	ex3f2(x) = sin(2x)
+	ex3X=0:0.01:(π+0.019)/2
+	
+	ex3Y1=ex3f1.(ex3X)
+	ex3Y2=ex3f2.(ex3X)
+	ex3P = plot(ex3X,ex3Y1,label=L"y=\cos(x)", c=:red)
+	plot!(ex3P,ex3X,ex3Y1,fill=(ex3Y2,0.25,:green),label=nothing,c=nothing)
+	plot!(ex3P,ex3X,ex3Y2,label=L"y=\sin(2x)",c=:blue)
+	plot!(ex3P;p1Opt...,xlims=(-1,π),ylims=(-1.1,1.1))
+	scatter!(ex3P,(π/6,ex3f1(π/6)),label=nothing,c=:black)
+	
+	md"""
+	**Solution**
+	
+	$ex3P
+	"""
+end
+
+# ╔═╡ f03e35fd-ba04-4692-8e4a-b0880c703e8e
+begin
+	img1 = load(download("https://www.dropbox.com/s/r39ny15umqafmls/wrty.png?raw=1"))
+	img1 = imresize(img1,ratio=1.5)
+	md"""
+	### Integrating with Respect to ``y``
+	
+	$img1
+	
+	"""
+	
+end
+
+# ╔═╡ 0b5e8985-ecf6-4e84-860b-0891c9638aeb
+md"""
+**Example 4**
+
+Find the area enclosed by the line ``y=x-1``  and the parabola ``y^2=2x+6``.
+
+"""
+
+# ╔═╡ 64ee7ca1-4feb-470a-900c-fbb8a413b3f5
+begin
+	ex4FRight(y)=-3+y^2/2
+	ex4FLeft(y)=y+1
+	ex4p = plot(x->x^2/2 -3,x->x,-5,6,c=:blue,label=L"y^2=2x+6")
+	ex4Rect = Shape([ (ex4FRight(1.8),2)
+					, (ex4FLeft(2),2)
+					, (ex4FLeft(2),1.8)
+					, (ex4FRight(1.8),1.8)
+					])
+	plot!(ex4Rect,label=nothing)
+	plot!(ex4p,x->x,x->x-1,-5,6;p1Opt...,c=:red,label=L"y=x-1",xticks=-3:1:15)
+	(ex4poi1,ex4poi2)=solve([y^2-2*x-6,y-x+1],[x,y]) 
+	scatter!([ex4poi1,ex4poi2],xlims=(-3.5,7),label=nothing,legend=:topleft)
+	md"""
+	**Solution:**
+	$ex4p
+	"""
+end
+
+# ╔═╡ 358c0e61-da8c-4eba-9765-58760940c7c3
+# integrate(y+1-(y^2/2-3),(y,-2,4))
+
+# ╔═╡ e0d5df0d-03bb-45f7-9f36-909830e6203f
+md"""
+**Example 5**
+
+Find the area of the region enclosed by the curves ``y= {1\over x}``, ``y=x``, and ``y={1\over 4} x``, using
+* ``x`` as the variable of integration and
+* ``y`` as the variable of integration.
+
+
+"""
+
+# ╔═╡ 42053189-d0d4-4c70-9c4c-41fbacae9891
+begin
+	x5=0.1:0.1:10
+	x51=0:0.1:1
+	p5 = plot(x->x/4, xlims=(-1,10), framestyle=:origin, aspectratio=1,label=nothing)
+	plot!(x->x,c=:red,label=nothing)
+	# plot!(x51,1 ./ x51,fill=(x51/4,0.5,:blue),c=:white)
+	plot!(x5,1 ./ x5,c=:green,label=nothing)
+	xlims!(-0.1,3)
+	ylims!(-0.1,2)
+end
+
+# ╔═╡ fd39a8f1-60f5-46e7-8595-0ab20a5e3b4d
+cm"""
+## Section 7.2
+### Volume: The Disk Method
+> __Objectives__
+> - Find the volume of a solid of revolution using the disk method.
+> - Find the volume of a solid of revolution using the washer method.
+> - Find the volume of a solid with known cross sections.
+
+**Solids of Revolution**
+
+<div class="img-container">
+
+$(Resource("https://www.dropbox.com/s/z2k777veuxiaorq/solids_of_revs.png?raw=1"))
+</div>
+
+
+<div class="img-container">
+
+$(Resource("https://www.dropbox.com/s/ik73cokibh1fuj6/disk_volume.png?raw=1"))
+
+__Volume of a disk__
+```math
+V = \pi R^2 w
+```
+</div>
+
+<div class="img-container">
+
+__Disk Method__
+
+$(Resource("https://www.dropbox.com/s/odttq795nrpcznw/disk_method.png?raw=1"))
+</div>
+
+```math
+\begin{array}{lcl}
+\textrm{Volume of solid} & \approx &\displaystyle \sum_{i=1}^n\pi\bigl[R(x_i)\bigr]^2 \Delta x \\
+	& = &\displaystyle \pi\sum_{i=1}^n\bigl[R(x_i)\bigr]^2 \Delta x
+\end{array}
+```
+Taking the limit ``\|\Delta\|\to 0 (n\to \infty)``, we get
+
+
+```math
+\begin{array}{lcl}
+\textrm{Volume of solid} & = &\displaystyle\lim_{\|\Delta\|\to 0}\pi \sum_{i=1}^n\bigl[R(x_i)\bigr]^2 \Delta x \end{array} = \pi \int_{a}^{b}\bigl[R(x)\bigr]^2 dx.
+```
+
+<div class="img-container">
+
+__Disk Method__
+
+__To find the volume of a solid of revolution with the disk method, use one of the formulas below__
+
+$(Resource("https://www.dropbox.com/s/9kpj2dcrwj5y5h8/disk_volume_v_h.png?raw=1"))
+</div>
+
+"""
+
+# **Volumes**
+
+# Let's start with a simple solid **`cylinders`**
+
+# $(Resource("https://www.dropbox.com/s/mofqdenjokjci44/img1.png?raw=1"))
+
+# ### Cross-Section Method
+# $(Resource("https://www.dropbox.com/s/xz80mrwj2fserd5/img2.png?raw=1"))
+
+# Let's now try to find a formula for finding the volume of this solid
+
+# $(Resource("https://www.dropbox.com/s/uvz7my3n08fgm6w/img3.png?raw=1"))
+
+# ╔═╡ 3d609c61-d2a0-40ae-bbee-77e7b694d482
+cm"""
+__Example 1:__
+Find the volume of the solid formed by revolving the region bounded by the graph of
+```math
+f(x) = \sqrt{\sin x}
+```
+and the ``x``-axis (``0\leq x\leq \pi``) about the ``x``-axis
+"""
+
+# ╔═╡ 8889cb18-f44b-4dbd-9ff5-9535f250a8bf
+cm"""
+__Example 2__:
+Find the volume of the solid formed by revolving the region bounded by the graphs of
+```math
+f(x)=2-x^2
+```
+and ``g(x)=1``  about the line ``y=1``.
+"""
+
+# ╔═╡ d31b3e53-2c50-42ba-b60e-413468e022fe
+cm"""
+### The Washer Method
+
+<div class="img-container">
+
+$(Resource("https://www.dropbox.com/s/ajra8g5fr8ssewe/washer_volume.png?raw=1"))
+
+```math
+\textrm{Volume of washer} = \pi(R^2-r^2)w
+```
+</div>
+
+__Washer Method__
+
+
+<div class="img-container">
+
+$(Resource("https://www.dropbox.com/s/hvwa3707bftjir0/washer_method.png?raw=1"))
+
+```math
+V = \pi\int_a^b \bigl[\left(R[x]\right)^2-\left(r[x]\right)^2) dx
+```
+</div>
+"""
+
+# ╔═╡ d4963c8b-769c-47f4-8d23-00de15ca049a
+cm"""
+__Example 3__ Find the volume of the solid formed by revolving the region bounded by the graphs of
+```math
+y=\sqrt{x} \qquad \textrm{and}\qquad  y = x^2
+```
+about the ``x``-axis.
+
+"""
+
+# ╔═╡ 55be9c08-66aa-44bb-86c5-36e45450950b
+cm"""
+__Example 4__ Find the volume of the solid formed by revolving the region bounded by the graphs of
+```math
+y=x^2+1, \quad y=0, \quad x=0, \quad \textrm{and}\quad x=1
+```
+about the ``y``-axis
+"""
+
+# ╔═╡ 29f9cc1b-7a08-4219-a31c-91a62a5b85b4
+cm"""
+### Solids with Known Cross Sections
+
+[Example 1](https://www.geogebra.org/m/XFgMaKTy) | [Example 2](https://www.geogebra.org/m/XArpgR3A)
+
+1. For cross sections of area ``A(x)`` taken perpendicular to the ``x``-axis,
+```math
+V = \int_a^b A(x) dx
+```
+2. For cross sections of area ``A(y)`` taken perpendicular to the ``y``-axis,
+```math
+V = \int_c^d A(y) dy
+```
+
+__Example 6__ 
+The base of a solid is the region bounded by the lines
+```math
+f(x)=1-\frac{x}{2},\quad g(x)=-1+\frac{x}{2}\quad \textrm{and}\quad x=0.
+```
+The cross sections perpendicular to the ``x``-axis are equilateral triangles.
+"""
+
+# ╔═╡ 0c507932-5cf6-48f0-84c4-b6ed06a54252
+# md"""
+# * Let’s divide ``S`` into ``n`` “slabs” of equal width ``\Delta x`` by using the planes``P_{x_1},P_{x_2},\cdots`` to slice the solid. (*Think of slicing a loaf of bread.*) 
+# * If we choose sample points ``x_i^*`` in ``[x_{i-1},x_i]`` , we can approximate the ``i``th slab ``S_i`` by a cylinder with base area ``A(x_i^*)`` and height ``\Delta x``.
+
+# ```math
+# V(S_i) \approx A(x_i^*)\Delta x
+# ```
+
+# So, we have
+
+# ```math
+# V \approx \sum_{i=1}^{n} A(x_i^*)\Delta x
+# ```
+# #### Definition of Volume
+# Let ``S`` be a solid that lies between ``x=a`` and ``x=b``. If the cross-sectional area of ``S`` in the plane ``P_x`` , through ``x`` and perpendicular to the ``x``-axis, is ``A(x)`` , where ``A`` is a continuous function, then the **volume** of ``S``  is 
+# ```math
+# V = \lim_{n\to\infty} \sum_{i=1}^{n} A(x_i^*)\Delta x = \int_{a}^{b}A(x) dx
+# ```
+# """
+
+# ╔═╡ 8e780376-2df2-41df-8540-b37b64c93acc
+# md"""
+# ### Volumes of Solids of Revolution
+# If we revolve a region about a line, we obtain a **solid of revolution**. In the following examples we see that for such a solid, cross-sections perpendicular to the axis of rotation are **circular**.
+
+# **Example 1**
+# Find the volume of the solid obtained by rotating about the ``x``-axis the region under the curve ``y=\sqrt{x}`` from ``0`` to ``1`` . Illustrate the definition of volume by sketching a typical approximating cylinder.
+# """
+
+# ╔═╡ 1525ccb4-2f4c-48f0-8e6c-73cc117f92f0
+# begin
+# 	fun(x)=sqrt(x)
+# 	s6e1 = PlotData(0:0.01:1, fun)	
+# 	tt=range(0.1,stop=1,length=100) |> collect
+# 	ss=range(0.1,stop=1,length=100) |> collect
+# 	y_grid = [x for x=ss for y=tt]
+# 	z_grid = [y for x=ss for y=tt]
+# 	f(x, z) = begin
+#          x ^ 2 + z ^2
+#     end
+# 	p3 =plot(	
+# 				plot(s6e1; customcolor = :black )
+# 			,	plot_implicit((x,y,z)->y^2+z^2-x,xrng=(-2,2),yrng=(-1,1),zrng=(-1,2),
+#    nlevels=200, slices=Dict(:x=>:red),aspect_ratio=1,frame_style=:origin)
+# 			)
+# 	md"""
+# 	**Solution**
+
+# 	$p3
+
+# 	"""
+# end
+
+# ╔═╡ ebf77286-4f21-40a5-b13b-619ee9ed84a0
+md"""
+**Exercise**
+Find the volume of the solid obtained by rotating the region bounded by ``y=x^3``, ``y=8`` , and ``x=0`` about the ``y``-axis.
+"""
+
+# ╔═╡ 46fce2ef-9358-4276-b013-00701bf6a691
+md"""
+**Exercise** The region ``\mathcal{R}`` enclosed by the curves ``y=x`` and ``y=x^2`` is rotated about the ``x``-axis. Find the volume of the resulting solid.
+
+"""
+
+# ╔═╡ d25798db-b0f3-46f3-b695-59a82f3d9a2c
+md"""
+**Exercise** Find the volume of the solid obtained by rotating the region in the previous Example about the line ``y=2``.
+"""
+
+# ╔═╡ c1be4636-d96e-42b4-82f6-98db3f7be7f3
+md"""
+**Exercise** Find the volume of the solid obtained by rotating the region in the previous Example about the line ``x=-1``.
+"""
+
+# ╔═╡ e3700fb4-f895-4528-9ef5-0ba59c9703c7
+md"""
+## Section 7.3
+**Volume: The Shell Method**
+> __Objectives__
+> - Find the volume of a solid of revolution using the shell method.
+> - Compare the uses of the disk method and the shell method.
+
+**Problem**
+Find the volume of the solid generated by rotating the region bounded by ``y=2x^2-x^3`` and ``y=0`` about the ``y-``axis.
+"""
+
+# ╔═╡ 1ab4d457-1c4e-4c8b-bd4d-bdeb233a6580
+begin
+	show_graph_s = @bind show_graph CheckBox() 
+	show_rect_s = @bind show_rect CheckBox() 
+	show_labels_s = @bind show_labels CheckBox() 
+	md"""
+	Step 1: $show_graph_s
+	Step 2: $show_rect_s
+	Step 3: $show_labels_s
+	"""
+end
+
+# ╔═╡ e4699314-51be-4cda-b2d8-5005e72abc2a
+# begin
+	
+# 	f30(x)=2*x^2-x^3
+# 	s3e0= PlotData(0:0.01:2,f30)
+# 	s3e0p0 = plot(s3e0)
+# 	annotate!(s3e0p0,[(1,1.2,L"y=2x^2-x^3")])
+# 	recty=Shape([ (0.75,f30(0.75))
+# 			, (1.75,f30(0.75))
+# 			, (1.75,f30(0.75)+0.05)
+# 			, (0.75,f30(0.75)+0.05)])
+# 	ux, lx = Plots.unzip(Plots.partialcircle(0,π,100,-0.1))
+# 	plot!(ux,lx .+ 1.15,c=:red)
+# 	anns = [(0.65,f30(0.76),L"x_L=?",10),(1.88,f30(0.76),L"x_R=?",10)]
+# 	s3e0p =	if show_labels 
+# 		plot!(s3e0p0,recty,label=nothing)
+# 		annotate!(anns)
+# 	elseif show_rect
+# 		plot!(s3e0p0,recty,label=nothing)
+# 	elseif show_graph
+# 		s3e0p0
+		
+# 	else
+# 		""
+# 	end
+# end
+
+# ╔═╡ 6f8a882b-d41c-41e5-b156-9be4112194c2
+cm"""
+### The Shell Method
+"""
+
+# ╔═╡ dbe837f1-85da-4572-b8c3-738ba346d67f
+md"""
+```math
+V = 2 \pi r h \Delta r = \text{[circumference][height][thickness]}
+
+```
+"""
+
+# ╔═╡ a89799eb-01a8-4dd4-a2a3-3576c26f29ef
+html"""
+<div style="display: flex; justify-content:center; padding:20px; border: 2px solid rgba(125,125,125,0.2);">
+<div>
+<h5>Cylindrical Shells Illustration</h5>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/JrRniVSW9tg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+</div>
+"""
+
+# ╔═╡ 3b6613fa-523a-49ef-a68b-fab0763111e6
+cm"""
+<div style="display: flex;  justify-content: center;">
+<div style="margin-right:12px;padding:4px;border: 2px solid white; border-radius: 10px;background: #eee;">
+<span style="font-size:1.5M; font-weight: 800;">Horizontal Axis of Revolution</span>
+
+```math
+\text{Volume}=V = 2\pi \int_c^d p(y) h(y) dy
+```
+<div class="img-container">
+
+$(Resource("https://www.dropbox.com/s/6qmijrhprht4kqj/shell_y.png?raw=1"))
+
+</div>
+
+</div>
+
+<div style="margin-right:12px;padding:4px;border: 2px solid white; border-radius: 10px;background: #eee;"><span style="font-size:1.5M; font-weight: 800;">Vertical  Axis of Revolution</span>
+
+```math
+\text{Volume}=V = 2\pi \int_a^b p(x) h(x) dx
+```
+
+<div class="img-container">
+
+$(Resource("https://www.dropbox.com/s/ivbwuge5ti8vrff/shell_x.png?raw=1"))
+
+</div>
+
+</div>
+</div>
+
+"""
+
+# ╔═╡ 6b312eea-1ad6-414a-bfa1-2f8ba1498add
+# begin
+# 	s3e0p1 = plot(s3e0)
+# 	annotate!(s3e0p1,[(1,1.2,L"y=2x^2-x^3")])
+# 	plot!(s3e0p1, 
+# 			Shape( 
+# 				[ (1.2,0),(1.3,0),(1.3,f30(1.3)),(1.2,f30(1.3))
+# 				]
+# 				)
+# 		, label=nothing
+# 		)
+# 	md"""
+# **Example 1:**
+# Find the volume of the solid generated by rotating the region bounded by ``y=2x^2-x^3`` and ``y=0`` about the ``y-``axis.
+
+# Solution:
+	
+# $s3e0p1
+# """
+# end
+
+# ╔═╡ 4e79e466-384f-40cc-81bc-40d3d0dda3bd
+md"""
+**Example 2:**
+Find the volume of the solid obtained by rotating about the ``y-``axis the region between ``y=x`` and ``y=x^2``.
+
+"""
+
+# ╔═╡ 8bb93d52-7813-4ce1-a78c-7eccf4ff559f
+md"""
+**Example 4:**
+Find the volume of the solid obtained by rotating the region bounded by ``y=x-x^2`` and ``y=0`` about the line ``x=2``.
+
+"""
+
+# ╔═╡ a3c5f9a8-35b4-4daf-9314-5d4af3413770
+md"""
+## Section 7.4 
+**Arc Length and Surfaces of Revolution**
+> __Objectives__
+> - Find the arc length of a smooth curve.
+> - Find the area of a surface of revolution.
+
+"""
+
+# ╔═╡ 86e264bb-9ecc-40b8-8382-fe28892d9b41
+cm"""
+### Arc Length
+"""
+
+# ╔═╡ 85d4c1c6-8791-45b0-83a0-588fcb204233
+cm"""
+__Definition of Arc Length__
+
+Let the function ``y=f(x)`` represents a smooth curve on the interval ``[a,b]``. The __arc length__ of ``f`` between ``a`` and ``b`` is
+```math
+s = \int_a^b\sqrt{1+[f'(x)]^2} dx.
+```
+
+Similarly, for a smooth curve ``x=g(y)``, the arc length of ``g`` between ``c`` and  ``d`` is
+```math
+s = \int_c^d\sqrt{1+[g'(y)]^2} dy.
+```
+
+"""
+
+# ╔═╡ 142f33a6-1355-4095-80f2-6fa48572c64b
+cm"""
+__Example__ 
+Find the arc length of the graph of ``y=\displaystyle \frac{x^3}{6}+\frac{1}{2x}`` on the interval ``[\frac{1}{2},2]``. 
+"""
+
+# ╔═╡ 8f7889c4-b786-465e-ba90-e448029399c1
+cm"""
+__Example__ Find the arc length of the graph of ``y=\ln(\cos x)`` from ``x=0`` to ``x=\pi/4``.
+"""
+
+# ╔═╡ 6e673498-0b02-4a55-8a81-6b7358a3668e
+cm"""
+### Area of a Surface of Revolution
+__Definition of Surface of Revolution__ When the graph of a continuous function is revolved about a line, the resulting surface is a __surface of revolution__.
+
+<div class="img-container">
+
+$(Resource("https://www.dropbox.com/s/199tfveph8mi2kz/surface_rev.png?raw=1"))
+
+__Surface Area of *frustum*__
+```math
+S=2\pi r L, \quad \text{where}\quad r=\frac{r_1+r_2}{2}
+```
+</div>
+
+Consider a function ``f`` that has a continuous derivative on the interval ``[a,b]``. The graph of ``f`` is revolved about the ``x``-axis
+
+<div class="img-container">
+
+$(Resource("https://www.dropbox.com/s/f454ldbfk1z3o2z/surface_rev2.png?raw=1"))
+
+__Surface Area Formula__
+```math
+S=2\pi \int_a^b x \sqrt{1+[f'(x)]^2} dx.
+```
+</div>
+
+__Definition of the Area of a Surface of Revolution__
+
+Let ``y=f(x)`` have a continuous derivative on the interval ``[a,b]``. 
+
+<div class="img-container">
+
+$(Resource("https://www.dropbox.com/s/2fup4uwh5uclrmv/surface_rev3.png?raw=1"))
+</div>
+
+The area ``S`` of the surface of revolution formed by revolving the graph of ``f`` about a horizontal or vertical axis is
+
+```math
+S=2\pi \int_a^b r(x) \sqrt{1+[f'(x)]^2} dx, \quad {\color{red} y \text{ is a function of x }}.
+```
+where ``r(x)`` is the distance between the graph of ``f`` and the axis of revolution. 
+
+If ``x=g(y)`` on the interval ``[c,d]`` , then the surface area is
+
+```math
+S=2\pi \int_a^b r(y) \sqrt{1+[g'(y)]^2} dy, \quad {\color{red} x \text{ is a function of y }}.
+```
+where ``r(y)`` is the distance between the graph of ``g`` and the axis of revolution.
+
+"""
+
+# ╔═╡ e7cef759-ccba-437b-a418-247d80704808
+cm"""
+__Remark__ 
+
+The formulas can be written as
+
+```math
+S=2\pi \int_a^b r(x) ds, \quad {\color{red} y \text{ is a function of x }}.
+```
+and 
+```math
+S=2\pi \int_c^d r(y) ds, \quad {\color{red} x \text{ is a function of y }}.
+```
+where 
+```math
+ds = \sqrt{1+\big[f'(x)\big]^2}dx \quad \text{and}\quad ds = \sqrt{1+\big[g'(y)\big]^2}dy \quad \text{respectively}.
+"""
+
+# ╔═╡ 36f63f82-142f-4468-a6ed-7781472d94d7
+cm"""
+__Example__ Find the area of the surface formed by revolving the graph of ``f(x)=x^3`` on the interval ``[0,1]`` about the ``x``-axis.
+
+
+__Example__ Find the area of the surface formed by revolving the graph of ``f(x)=x^2`` on the interval ``[0,\sqrt{2}]`` about the ``y``-axis.
+"""
 
 # ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
 function rect(x, Δx, xs, f;direction=:x) 
@@ -2016,57 +2541,6 @@ $(ex()) Find
 
 """
 
-# ╔═╡ b4279679-50fb-4dfd-9c4e-0e14788e2edd
-
-begin
-    ex2fun1(x) = log(x) / x
-    ex2fun2(x) = x
-    ex2x1 = 1:0.1:exp(1)
-    ex2x12 = 0:0.1:1
-    ex2x2 = 0.6:0.1:4
-    ex2x22 = log(0.6):0.1:log(4)
-
-    ex2y1 = ex2fun1.(ex2x1)
-    ex2y12 = ex2fun2.(ex2x12)
-    ex2y2 = ex2fun1.(ex2x2)
-    ex2y22 = ex2fun2.(ex2x22)
-    theme(:wong)
-    ex2plt1 = plot(ex2x1, ex2y1, framestyle=:origin, xlims=(0, exp(1)), ylims=(-1, 1), fillrange=0, fillalpha=0.5, c=:red, label=nothing)
-    plot!(ex2plt1, ex2x2, ex2y2, c=:red, label=nothing)
-    xlims!(ex2plt1, -1, 4)
-    annotate!(ex2plt1, [(2, 0.5, L"y=\frac{\ln x}{x}"), (exp(1), -0.05, text(L"e", 12))])
-    plot!(ex2plt1, [exp(1), exp(1)], [0, ex2fun1(exp(1))], c=:red, linewidth=3, label=nothing)
-
-    ex2plt2 = plot(ex2x12, ex2y12, framestyle=:origin, xlims=(0, 1), ylims=(-1, 1), fillrange=0, fillalpha=0.5, c=:red, label=nothing)
-    plot!(ex2plt2, ex2x22, ex2y22, c=:red, label=nothing)
-    xlims!(ex2plt2, -1, 4)
-    annotate!(ex2plt2, [(2, 0.5, L"v=u")])
-    # ylims!()
-    # plot!(ex2plt2,ex2x,ex2y, framestyle=:origin, xlims=(1,exp(1)), fillrange =0,fillalpha=0.5,c=:red)
-    # xlims!(ex2plt1,-1,2)
-    # plot!(ex2plt1, fill=(0, 0.5, :red), xlims=(1,2))
-    cm""" 
-    $(ex())
-    	Evaluate
-
-    ```math
-    \begin{array}{ll}
-    (i) & \int_1^2 \frac{dx}{\left(3-5x\right)^2} \\ \\
-    (ii) & \int_1^e \frac{\ln x}{x} dx \\ \\ 
-    (iii) & \int_0^1 x(x^2+1)^3 \;dx \\ \\ 
-    (iv) & \int_1^5 \frac{x}{\sqrt{2x-1}}\;dx \\ \\ 
-    \end{array}
-    ```
-    $ex2plt1	
-
-    $ex2plt2
-
-    """
-end
-
-
-
-
 # ╔═╡ 655773ab-44a0-4f6e-95b9-353ea7f694ca
 cm"""
 $(bth("Integration of even and Odd Function"))
@@ -2272,6 +2746,138 @@ the ``x``-axis, and the lines ``x=\frac{3}{2}`` and ``x=\frac{9}{4}``.
 
 
 
+# ╔═╡ daf5a008-b102-4557-8a18-d83839316eba
+
+cm"""
+$(bbl("Hyperbolic Identities",""))
+```math
+\begin{array}{rllllll}
+\cosh^2 x - \sinh^2 x &=& 1, &\qquad& 
+\sinh (x+y)\;  &=& \sinh x\cosh y +\cosh x\sinh y\\ \\
+
+\tanh^2 x + \text{sech}^2 x &=& 1, &\qquad& 
+\sinh (x-y)\;  &=& \sinh x\cosh y -\cosh x\sinh y\\ \\
+
+
+\coth^2 x - \text{csch}^2 x &=& 1, &\qquad& 
+\cosh (x+y)\;  &=& \cosh x\cosh y +\sinh x\sinh y\\ \\
+
+ &&  &\qquad& 
+\cosh (x-y)\;  &=& \cosh x\cosh y -\sinh x\sinh y\\ \\
+
+\sinh^2 x &=& \displaystyle\frac{\cosh 2x -1}{2}, &\qquad& 
+\cosh^2 x\;  &=& \displaystyle\frac{\cosh 2x +1}{2}\\ \\
+
+
+\sin 2x &=& 2\sinh x\cosh x, &\qquad& 
+\cosh 2x\;  &=& \cosh^2 x +\sinh^2 x\\ \\
+
+
+\end{array}
+```
+"""
+
+
+
+# ╔═╡ 13f007b1-b509-40b2-8ad4-ab50588957b0
+
+cm"""
+$(bth("Differentiation and Integration of Hyperbolic Functions"))
+Let ``u`` be a differentiable function of ``x``.
+```math
+\begin{array}{rllllll}
+\displaystyle \frac{d}{dx}\left(\sinh u\right) &=& \left(\cosh u\right)u', &\qquad& 
+\displaystyle \int \cosh u du  &=& \sinh u \; +\; C\\ \\
+
+\displaystyle \frac{d}{dx}\left(\cosh u\right) &=& \left(\sinh u\right)u', &\qquad& 
+\displaystyle \int \sinh u du  &=& \cosh u \; +\; C\\ \\
+
+\displaystyle \frac{d}{dx}\left(\tanh u\right) &=& \left(\text{sech}^2 u\right)u', &\qquad& 
+\displaystyle \int \text{sech}^2 u du  &=& \tanh u \; +\; C\\ \\
+
+\displaystyle \frac{d}{dx}\left(\coth u\right) &=& -\left(\text{csch}^2 u\right)u', &\qquad& 
+\displaystyle \int \text{csch}^2 u du  &=& -\coth u \; +\; C\\ \\
+
+\displaystyle \frac{d}{dx}\left(\text{sech} u\right) &=& -\left(\text{sech }u \tanh u\right)u', &\qquad& 
+\displaystyle \int \text{sech } u\tanh u du  &=& -\text{sech } u \; +\; C\\ \\
+
+
+\displaystyle \frac{d}{dx}\left(\text{csch} u\right) &=& -\left(\text{csch }u \coth u\right)u', &\qquad& 
+\displaystyle \int \text{csch } u\coth u du  &=& -\text{csch } u \; +\; C\\ \\
+
+\end{array}
+```
+
+"""
+
+# ╔═╡ 9c8d6eeb-9d3c-4525-87e3-c540c3a5d38d
+cm"""
+$(ex(1,"Differentiation of Hyperbolic Functions"))
+- (a.) ``\frac{d}{d x}\left[\sinh \left(x^2-3\right)\right]=2 x \cosh \left(x^2-3\right)``
+- (b.) ``\frac{d}{d x}[\ln (\cosh x)]=\frac{\sinh x}{\cosh x}=\tanh x``
+- (c.) ``\frac{d}{d x}[x \sinh x-\cosh x]=x \cosh x+\sinh x-\sinh x=x \cosh x``
+- (d.) ``\frac{d}{d x}[(x-1) \cosh x-\sinh x]=(x-1) \sinh x+\cosh x-\cosh x=(x-1) \sinh x``
+
+$(ex(2,"Finding Relative Extrema"))
+Find the relative extrema of
+```math
+f(x) = (x-1)\cosh x \; -\; \sinh x.
+```
+
+$(ex(4,"Integrating a Hyperbolic Function"))
+Find
+```math
+\displaystyle \int_{5/3}^2 \text{csch}(3x-4)\coth(3x-4) dx
+```
+"""
+
+# ╔═╡ cf16ce47-f360-451b-afae-b1fe8b559fc3
+cm"""
+$(bth("Inverse Hyperbolic Functions"))
+```math
+\begin{array}{llllll}
+\textbf{Function} &  & &\qquad& \textbf{Domain}\\ \\
+
+\sinh^{-1}x & = & \ln\left(x+\sqrt{x^2+1}\right) &\qquad& \left(-\infty,\infty\right)\\ \\
+
+\cosh^{-1}x & = & \ln\left(x+\sqrt{x^2-1}\right) &\qquad& \left[1,\infty\right)\\ \\
+
+\tanh^{-1}x & = & \displaystyle\frac{1}{2}\ln\left(\frac{1+x}{1-x}\right) &\qquad& \left(-1,1\right)\\ \\
+
+
+\coth^{-1}x & = & \displaystyle\frac{1}{2}\ln\left(\frac{x+1}{x-1}\right) &\qquad& \left(-\infty,-1\right)\cup \left(1,\infty\right)\\ \\
+
+
+\text{sech}^{-1}x & = & \displaystyle\ln\left(\frac{1+\sqrt{1-x^2}}{x}\right) &\qquad& \left(0,1\right]\\ \\
+
+\text{csch}^{-1}x & = & \displaystyle\ln\left(\frac{1}{x}+\frac{\sqrt{1+x^2}}{|x|}\right) &\qquad& \left(-\infty,0\right)\cup \left(0,\infty\right)\\ \\
+
+\end{array}
+```
+
+<div class="img-container">
+
+$(Resource("https://www.dropbox.com/s/yc0305sd3i8yr44/inverse_hyper_graphs.jpg?raw=1"))
+
+</div>
+"""
+
+# ╔═╡ e18ee243-b49e-401f-bda2-2bb8b0ea3a66
+md"""
+**Example 6** Figure below shows a solid with a circular base of radius ``1``. Parallel cross-sections perpendicular to the base are equilateral triangles. Find the volume of the solid.
+$(post_img("https://www.dropbox.com/s/bbxedang718jvvp/img4.png?dl=1"))
+"""
+
+# ╔═╡ cf309f63-2534-45f6-98b4-7bc90100493c
+begin 
+	
+	md"""
+	A shell is a hallow circular cylinder
+	
+	$(post_img("https://www.dropbox.com/s/8a2njc50e2hptok/shell.png?dl=1"))
+	"""
+end
+
 # ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
 initialize_eqref()
 
@@ -2295,6 +2901,257 @@ ul li:before {
 
 </style>
 """)
+
+# ╔═╡ dda364fa-80e5-4d6c-8ed1-9b2bfccf4b18
+begin
+	f1(x) = sin(x)+3+cnstslider
+	f2(x) = cos(2x)+1+cnstslider
+	f3(x) = cos(2x)+4+cnstslider
+	poi1=solve(f1(x)-f3(x),x) .|> p -> p.n()
+	theme(:wong)
+	a1,b1 = 1, 5
+	Δx1 = (b1-a1)/n1slider
+	x1Rect =a1:Δx1:b1
+	x1 = a1:0.1:b1
+	y1 = f1.(x1)
+	y2 = f2.(x1)
+	y3 = f3.(x1)
+	
+	p1=plot(x1,y1, fill=(y2,0.25,:green), label=nothing,c=:red)
+	p2=plot(x1,y1, fill=(y3,0.25,:green), label=nothing,c=:red)
+	
+	plot!(p1,x1,y2,label=nothing)
+	plot!(p2,x1,y3,label=nothing)
+	annotate!(p1,[
+				(3.5,3.5+cnstslider,L"y=f(x)",:red),
+				(5.9,0,L"x"),
+				(0.2,6,L"y"),
+				(3.2,1+cnstslider,L"y=g(x)",:blue)
+				]
+			)
+	annotate!(p2,[
+				(1.2,4.5+cnstslider,L"y=f(x)",:red),
+				(5.9,0,L"x"),
+				(0.2,6,L"y"),
+				(4,5+cnstslider,L"y=g(x)",:blue)
+				]
+			)
+	
+	plot!(p1; p1Opt...,ylims=(-3,6),xlims=(-1,6))
+	recs =[
+			Shape([(xi,f2(xi)),(xi+Δx1,f2(xi)),(xi+Δx1,f1(xi+Δx1)),(xi,f1(xi+Δx1))]) 			 for xi in x1Rect[1:end-1]
+		  ]
+	n1slider>2 && plot!(p1,recs, label=nothing,c=:green)
+	plot!(p2; p1Opt...,ylims=(-3,6),xlims=(-1,6))
+	scatter!(p2,(poi1[1],f3(poi1[1])), label="Point of instersection",legend=:bottomright)
+	# save("./imgs/6.1/sec6.1p2.png",p2)
+	# annotate!(p2,[(4,0.51,(L"$\sum_{i=1}^{%$n2} f (x^*_{i})\Delta x=%$s2$",12))])
+	
+	md""" **How can we find the area between the two curves?**
+	
+$p1
+	
+```math
+Area = \int_a^b \left[{\color{red}f(x)} - {\color{blue}g(x)}\right] dx
+```
+"""
+
+end
+
+# ╔═╡ b4279679-50fb-4dfd-9c4e-0e14788e2edd
+
+begin
+    ex2fun1(x) = log(x) / x
+    ex2fun2(x) = x
+    ex2x1 = 1:0.1:exp(1)
+    ex2x12 = 0:0.1:1
+    ex2x2 = 0.6:0.1:4
+    ex2x22 = log(0.6):0.1:log(4)
+
+    ex2y1 = ex2fun1.(ex2x1)
+    ex2y12 = ex2fun2.(ex2x12)
+    ex2y2 = ex2fun1.(ex2x2)
+    ex2y22 = ex2fun2.(ex2x22)
+    theme(:wong)
+    ex2plt1 = plot(ex2x1, ex2y1, framestyle=:origin, xlims=(0, exp(1)), ylims=(-1, 1), fillrange=0, fillalpha=0.5, c=:red, label=nothing)
+    plot!(ex2plt1, ex2x2, ex2y2, c=:red, label=nothing)
+    xlims!(ex2plt1, -1, 4)
+    annotate!(ex2plt1, [(2, 0.5, L"y=\frac{\ln x}{x}"), (exp(1), -0.05, text(L"e", 12))])
+    plot!(ex2plt1, [exp(1), exp(1)], [0, ex2fun1(exp(1))], c=:red, linewidth=3, label=nothing)
+
+    ex2plt2 = plot(ex2x12, ex2y12, framestyle=:origin, xlims=(0, 1), ylims=(-1, 1), fillrange=0, fillalpha=0.5, c=:red, label=nothing)
+    plot!(ex2plt2, ex2x22, ex2y22, c=:red, label=nothing)
+    xlims!(ex2plt2, -1, 4)
+    annotate!(ex2plt2, [(2, 0.5, L"v=u")])
+    # ylims!()
+    # plot!(ex2plt2,ex2x,ex2y, framestyle=:origin, xlims=(1,exp(1)), fillrange =0,fillalpha=0.5,c=:red)
+    # xlims!(ex2plt1,-1,2)
+    # plot!(ex2plt1, fill=(0, 0.5, :red), xlims=(1,2))
+    cm""" 
+    $(ex())
+    	Evaluate
+
+    ```math
+    \begin{array}{ll}
+    (i) & \int_1^2 \frac{dx}{\left(3-5x\right)^2} \\ \\
+    (ii) & \int_1^e \frac{\ln x}{x} dx \\ \\ 
+    (iii) & \int_0^1 x(x^2+1)^3 \;dx \\ \\ 
+    (iv) & \int_1^5 \frac{x}{\sqrt{2x-1}}\;dx \\ \\ 
+    \end{array}
+    ```
+    $ex2plt1	
+
+    $ex2plt2
+
+    """
+end
+
+
+
+
+# ╔═╡ bcf04630-6907-4529-b6ee-e4be7a4d23bb
+begin 
+	struct PlotData
+		x::StepRangeLen
+		fun::Function
+		lb::Union{Integer,Vector{Float64}}
+	end
+	PlotData(x,f)=PlotData(x,f,0)	
+	@recipe function f(t::PlotData; customcolor = :green, fillit=true)
+		x, fun, lb = t.x, t.fun, t.lb
+		xrotation --> 45
+		zrotation --> 6, :quiet
+		aspect_ratio --> 1
+		framestyle --> :origin
+		label-->nothing
+		fill --> (fillit ? (lb,0.5,customcolor) : nothing)
+		x, fun.(x)
+	end
+	x, y = symbols("x,y", real=true)
+	p1Opt = (framestyle=:origin, aspectration=1)
+	function plot_implicit(F, c=0;
+			xrng=(-5,5), yrng=xrng, zrng=xrng,
+			nlevels=6,         # number of levels in a direction
+			slices=Dict(:x => :blue,
+				:y => :red,
+				:z => :green), # which directions and color
+			kwargs...          # passed to initial `plot` call
+		)
+
+		_linspace(rng, n=150) = range(rng[1], stop=rng[2], length=n)
+
+		X1, Y1, Z1 = _linspace(xrng), _linspace(yrng), _linspace(zrng)
+
+		p = Plots.plot(;legend=false,kwargs...)
+
+		if :x ∈ keys(slices)
+			for x in _linspace(xrng, nlevels)
+				local X1 = [F(x,y,z) for y in Y1, z in Z1]
+				cnt = contours(Y1,Z1,X1, [c])
+				for line in lines(levels(cnt)[1])
+					ys, zs = coordinates(line) # coordinates of this line segment
+					plot!(p, x .+ 0 * ys, ys, zs, color=slices[:x])
+				end
+			end
+		end
+
+		if :y ∈ keys(slices)
+			for y in _linspace(yrng, nlevels)
+				local Y1 = [F(x,y,z) for x in X1, z in Z1]
+				cnt = contours(Z1,X1,Y1, [c])
+				for line in lines(levels(cnt)[1])
+					xs, zs = coordinates(line) # coordinates of this line segment
+					plot!(p, xs, y .+ 0 * xs, zs, color=slices[:y])
+				end
+			end
+		end
+
+		if :z ∈ keys(slices)
+			for z in _linspace(zrng, nlevels)
+				local Z1 = [F(x, y, z) for x in X1, y in Y1]
+				cnt = contours(X1, Y1, Z1, [c])
+				for line in lines(levels(cnt)[1])
+					xs, ys = coordinates(line) # coordinates of this line segment
+					plot!(p, xs, ys, z .+ 0 * xs, color=slices[:z])
+				end
+			end
+		end
+
+
+		p
+	end
+	html"......"
+end
+
+# ╔═╡ d993fe50-4792-4f54-b4a6-23cb91718f00
+begin
+	ex2f1(x)=x^2
+	ex2f2(x)=2x-x^2
+	ex2poi=solve(ex2f1(x)-ex2f2(x)) .|> p->p.n()
+	ex2x=0:0.01:1
+	ex2widex=-1:0.01:2
+	ex2y1=ex2f1.(ex2x)
+	ex2y1wide=ex2f1.(ex2widex)
+	ex2y2=ex2f2.(ex2x)
+	ex2y2wide=ex2f2.(ex2widex)
+	ex2plt=plot(ex2x,ex2y2,label=nothing,fill=(0,0.5,:green))
+	plot!(ex2plt,ex2x,ex2y1,fill=(0,0,:white),label=nothing)
+	plot!(ex2widex,ex2y1wide, c=:red,label=nothing)
+	plot!(ex2widex,ex2y2wide, c=:blue,label=nothing)
+	plot!(;p1Opt...,xlims=(-0.4,1.5),ylims=(-0.4,2),label=nothing,xticks=[0,0,1])
+	ex2Rect = Shape([ (0.5,ex2f2(0.55))
+					, (0.55,ex2f2(0.55))
+					, (0.55,ex2f1(0.55))
+					, (0.5,ex2f1(0.55))
+					])
+	plot!(ex2Rect,label=nothing)
+	scatter!(ex2poi,ex2f1.(ex2poi),label=nothing)
+	annotate!([	(0.77,0.4,L"y=x^2")
+			  ,	(0.7,1.1,L"y=2x-x^2")
+			  , (0.54,0.24,text(L"\Delta x",10))
+			  ])
+	md"""
+	**Solution**
+	
+	$ex2plt
+	"""
+end
+
+# ╔═╡ 02d61e1f-b630-443c-b1dd-1fe5d2c81b2f
+begin
+    f1(x) = sqrt(9 - x^2)
+    f3(x) = abs(x)
+    theme(:wong)
+    pp = plot(f1, xlims=[-4, 4], ylims=[-4, 4], framestyle=:origin, xtick=-4:1:4, yticks=-4:1:4)
+    md"$pp"
+end
+
+
+
+
+
+# ╔═╡ 5156fbdc-002c-4222-aca0-b835061e3fb7
+
+begin
+    f2(x) = sin(x) + 2
+    theme(:wong)
+    x = 1:0.1:5
+    y = f2.(x)
+    p3 = plot(x, y, label=nothing)
+    plot!(p3, x, y / 2, ribbon=y / 2, linestyle=:dot, linealpha=0.1, framestyle=:origin, xticks=(1:5, [:a, "", "", "", :b]), label=nothing, ylims=(-1, 4))
+    annotate!(p3, [(3.5, 2.5, L"y=f(x)"), (5.2, 0, L"x"), (0.2, 4, L"y")])
+    # annotate!(p2,[(4,0.51,(L"$\sum_{i=1}^{%$n2} f (x^*_{i})\Delta x=%$s2$",12))])
+
+    md""" * If ``f(x)\ge 0``, the integral ``\int_a^b f(x) dx`` is the area under the curve ``y=f(x)`` from ``a`` to ``b``.	
+
+    $p3
+    """
+
+end
+
+
+
+
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -4116,19 +4973,72 @@ version = "1.4.1+1"
 # ╟─238beb06-9d2e-4d15-8eb4-3660aced7ef7
 # ╟─efb4d714-dea7-428a-858c-70c9193ce150
 # ╟─463027a3-7319-43ef-85be-cb8abe5a1d28
-# ╟─4a12a1b2-2f3b-4cfc-93f2-aea73d2d6e4b
 # ╟─b0716945-c4e6-4d3d-a29d-864ff023b0fc
 # ╟─49fe4d0b-124f-4dd8-a34d-9aaf80705175
-# ╠═fb1499e3-0a58-4b34-b452-3bdc31b82504
+# ╟─f608e3b8-4a16-40c9-8ffd-d02af53146e6
+# ╟─fb1499e3-0a58-4b34-b452-3bdc31b82504
 # ╟─c3de1903-845e-4779-b67b-817e703fd1ee
 # ╟─daf5a008-b102-4557-8a18-d83839316eba
 # ╟─13f007b1-b509-40b2-8ad4-ab50588957b0
 # ╟─9c8d6eeb-9d3c-4525-87e3-c540c3a5d38d
 # ╟─66a05cab-f595-43f8-843d-1f845c953868
+# ╟─db150ea2-4895-415e-97a9-f7eff4180d63
 # ╟─cf16ce47-f360-451b-afae-b1fe8b559fc3
 # ╠═cad95270-ba9f-4821-87da-e457a00b9617
 # ╟─9b02faca-b5cb-442d-8a63-82f584b054fd
 # ╠═663c5894-ba2d-4236-9728-6a3c8db5c8ed
+# ╠═1f1b3439-630e-4db6-9a01-321ed75bed84
+# ╠═bcf04630-6907-4529-b6ee-e4be7a4d23bb
+# ╠═3df06d3d-7bd1-45fe-bd46-c1429b11ee14
+# ╠═dda364fa-80e5-4d6c-8ed1-9b2bfccf4b18
+# ╠═004ab021-15d7-40d8-ace7-41dd5f8b2237
+# ╠═932e13f0-0949-4e77-b3a8-f344784b1f1d
+# ╠═693ca0c0-2f10-447b-88db-e9fb530b1336
+# ╠═bdccc1f5-2d8e-4ecd-a63e-7228566a20fb
+# ╠═ac6fde80-be6b-4292-911a-b51c43de3199
+# ╠═d993fe50-4792-4f54-b4a6-23cb91718f00
+# ╠═57d8a03b-71a0-46d9-b908-af7028195db2
+# ╠═a2a2d894-7588-48a8-84fd-65e5ead80072
+# ╠═f03e35fd-ba04-4692-8e4a-b0880c703e8e
+# ╠═0b5e8985-ecf6-4e84-860b-0891c9638aeb
+# ╠═64ee7ca1-4feb-470a-900c-fbb8a413b3f5
+# ╠═358c0e61-da8c-4eba-9765-58760940c7c3
+# ╠═e0d5df0d-03bb-45f7-9f36-909830e6203f
+# ╠═42053189-d0d4-4c70-9c4c-41fbacae9891
+# ╟─fd39a8f1-60f5-46e7-8595-0ab20a5e3b4d
+# ╟─3d609c61-d2a0-40ae-bbee-77e7b694d482
+# ╟─8889cb18-f44b-4dbd-9ff5-9535f250a8bf
+# ╟─d31b3e53-2c50-42ba-b60e-413468e022fe
+# ╟─d4963c8b-769c-47f4-8d23-00de15ca049a
+# ╟─55be9c08-66aa-44bb-86c5-36e45450950b
+# ╟─29f9cc1b-7a08-4219-a31c-91a62a5b85b4
+# ╟─0c507932-5cf6-48f0-84c4-b6ed06a54252
+# ╟─8e780376-2df2-41df-8540-b37b64c93acc
+# ╟─1525ccb4-2f4c-48f0-8e6c-73cc117f92f0
+# ╟─ebf77286-4f21-40a5-b13b-619ee9ed84a0
+# ╟─46fce2ef-9358-4276-b013-00701bf6a691
+# ╟─d25798db-b0f3-46f3-b695-59a82f3d9a2c
+# ╟─c1be4636-d96e-42b4-82f6-98db3f7be7f3
+# ╟─e18ee243-b49e-401f-bda2-2bb8b0ea3a66
+# ╟─e3700fb4-f895-4528-9ef5-0ba59c9703c7
+# ╟─1ab4d457-1c4e-4c8b-bd4d-bdeb233a6580
+# ╟─e4699314-51be-4cda-b2d8-5005e72abc2a
+# ╟─6f8a882b-d41c-41e5-b156-9be4112194c2
+# ╟─cf309f63-2534-45f6-98b4-7bc90100493c
+# ╟─dbe837f1-85da-4572-b8c3-738ba346d67f
+# ╟─a89799eb-01a8-4dd4-a2a3-3576c26f29ef
+# ╟─3b6613fa-523a-49ef-a68b-fab0763111e6
+# ╟─6b312eea-1ad6-414a-bfa1-2f8ba1498add
+# ╟─4e79e466-384f-40cc-81bc-40d3d0dda3bd
+# ╟─8bb93d52-7813-4ce1-a78c-7eccf4ff559f
+# ╟─a3c5f9a8-35b4-4daf-9314-5d4af3413770
+# ╟─86e264bb-9ecc-40b8-8382-fe28892d9b41
+# ╟─85d4c1c6-8791-45b0-83a0-588fcb204233
+# ╟─142f33a6-1355-4095-80f2-6fa48572c64b
+# ╟─8f7889c4-b786-465e-ba90-e448029399c1
+# ╟─6e673498-0b02-4a55-8a81-6b7358a3668e
+# ╟─e7cef759-ccba-437b-a418-247d80704808
+# ╟─36f63f82-142f-4468-a6ed-7781472d94d7
 # ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
 # ╟─b4599a16-e7f7-4a2a-b349-2648ee45208f
 # ╟─8315fb27-89e4-44a4-a51e-8e55fc3d58e5
