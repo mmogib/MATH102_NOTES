@@ -189,6 +189,29 @@ md"##  Riemann Sums"
 # ╔═╡ 04922857-61ca-45a7-a3b4-cf35138e4847
 md"## Definite Integral"
 
+# ╔═╡ 5156fbdc-002c-4222-aca0-b835061e3fb7
+
+let
+    f2(x) = sin(x) + 2
+    theme(:wong)
+    x = 1:0.1:5
+    y = f2.(x)
+    p3 = plot(x, y, label=nothing)
+    plot!(p3, x, y / 2, ribbon=y / 2, linestyle=:dot, linealpha=0.1, framestyle=:origin, xticks=(1:5, [:a, "", "", "", :b]), label=nothing, ylims=(-1, 4))
+    annotate!(p3, [(3.5, 2.5, L"y=f(x)"), (5.2, 0, L"x"), (0.2, 4, L"y")])
+    # annotate!(p2,[(4,0.51,(L"$\sum_{i=1}^{%$n2} f (x^*_{i})\Delta x=%$s2$",12))])
+
+    md""" * If ``f(x)\ge 0``, the integral ``\int_a^b f(x) dx`` is the area under the curve ``y=f(x)`` from ``a`` to ``b``.	
+
+    $p3
+    """
+
+end
+
+
+
+
+
 # ╔═╡ 5f37c3d1-449f-4a6d-9af5-55f9a4c8feec
 begin
 s52q1Check = @bind s52q1chk Radio(["show", "hide"],default="hide")
@@ -260,6 +283,19 @@ Evaluate the following integrals by interpreting each in terms of areas
 
 (iii) $\int_{-2}^1 xdx$
 """
+
+
+
+# ╔═╡ 02d61e1f-b630-443c-b1dd-1fe5d2c81b2f
+begin
+    f1(x) = sqrt(9 - x^2)
+    f3(x) = abs(x)
+    theme(:wong)
+    pp = plot(f1, xlims=[-4, 4], ylims=[-4, 4], framestyle=:origin, xtick=-4:1:4, yticks=-4:1:4)
+    md"$pp"
+end
+
+
 
 
 
@@ -760,18 +796,13 @@ $(Resource("https://www.dropbox.com/s/24biyozrcl7mk2q/wire.jpg?raw=1"))
 # ╔═╡ db150ea2-4895-415e-97a9-f7eff4180d63
 md"## Inverse Hyperbolic Functions"
 
-# ╔═╡ 663c5894-ba2d-4236-9728-6a3c8db5c8ed
-
-
-
 # ╔═╡ 1f1b3439-630e-4db6-9a01-321ed75bed84
-## Section 7.1
-### Area of a Region Between Two Curves
+md""" # 7.1 Area of a Region Between Two Curves
 
-> __Objectives__
-> - Find the area of a region between two curves using integration.
-> - Find the area of a region between intersecting curves using integration.
-> - Describe integration as an accumulation process.
+> 1. __Objectives__
+> 1. Find the area of a region between two curves using integration.
+> 1. Find the area of a region between intersecting curves using integration.
+> 1. Describe integration as an accumulation process.
 
 """
 
@@ -779,29 +810,86 @@ md"## Inverse Hyperbolic Functions"
 begin
 	cnstSlider = @bind cnstslider Slider(-2:1:2, default=0)
 	n1Slider = @bind n1slider Slider(1:200, default=1,show_value=true)
+	sec71Chbx = @bind sec71chbx CheckBox(default=true)
 	md"""
-	| | |
-	|---|---|
-	|move $cnstSlider| ``n`` = $n1Slider|
+	| | | |
+	|---|---|---|
+	|move $cnstSlider| ``n`` = $n1Slider| Cases $sec71Chbx
 	|||
 	"""
 end
 
-# ╔═╡ 004ab021-15d7-40d8-ace7-41dd5f8b2237
-md"""
+# ╔═╡ dda364fa-80e5-4d6c-8ed1-9b2bfccf4b18
+let
+	p1Opt = (framestyle=:origin, aspectration=1)
+	f1(x) = sin(x)+3+cnstslider
+	f2(x) = cos(2x)+1+cnstslider
+	f3(x) = cos(2x)+4+cnstslider
+	x = symbols("x",real=true)
+	poi1=solve(f1(x)-f3(x),x) .|> p -> p.n() .|> Float64 
+	theme(:wong)
+	a1,b1 = 1, 5
+	Δx1 = (b1-a1)/n1slider
+	x1Rect =a1:Δx1:b1
+	x1 = a1:0.1:b1
+	y1 = f1.(collect(x1))
+	y2 = f2.(x1)
+	y3 = f3.(x1)
+	
+	p1=plot(x1,y1, fill=(y2,0.25,:green), label=nothing,c=:red)
+	p2=plot(x1,y1, fill=(y3,0.25,:green), label=nothing,c=:red)
+	
+	plot!(p1,x1,y2,label=nothing)
+	plot!(p2,x1,y3,label=nothing)
+	annotate!(p1,[
+				(3.5,3.5+cnstslider,L"y=f(x)",:red),
+				(5.9,0,L"x"),
+				(0.2,6,L"y"),
+				(3.2,1+cnstslider,L"y=g(x)",:blue)
+				]
+			)
+	annotate!(p2,[
+				(1.2,4.5+cnstslider,L"y=f(x)",:red),
+				(5.9,0,L"x"),
+				(0.2,6,L"y"),
+				(4,5+cnstslider,L"y=g(x)",:blue)
+				]
+			)
+	
+	plot!(p1; p1Opt...,ylims=(-3,6),xlims=(-1,6))
+	recs =[
+			Shape([(xi,f2(xi)),(xi+Δx1,f2(xi)),(xi+Δx1,f1(xi+Δx1)),(xi,f1(xi+Δx1))]) 			 for xi in x1Rect[1:end-1]
+		  ]
+	n1slider>2 && plot!(p1,recs, label=nothing,c=:green)
+	plot!(p2; p1Opt...,ylims=(-3,6),xlims=(-1,6))
+	
+	scatter!(p2,(poi1[1],f3(poi1[1])), label="Point of instersection",legend=:bottomright)
+	# save("./imgs/6.1/sec6.1p2.png",p2)
+	# annotate!(p2,[(4,0.51,(L"$\sum_{i=1}^{%$n2} f (x^*_{i})\Delta x=%$s2$",12))])
+	formula=sec71chbx ? cm"""```math
+Area = \int_a^b \left[{\color{red}f(x)} - {\color{blue}g(x)}\right] dx
+```""" : cm"""```math
+Area = \int_a^b \left|f(x) - g(x)\right| dx
+```"""
+	
+cm""" **How can we find the area between the two curves?**
+	
+$(sec71chbx && p1)
 
-**Remark**
-- Area = ``y_{top}-y_{bottom}``.
+	
+$(!sec71chbx && p2)
 
-**Example 1**
-
-Find the area of the region bounded above by $y=e^x$, bounded below by $y=x$, bounded on the sides by $x=0$ and $x=1$.
-
----
+$(formula)
 """
+
+end
+
+# ╔═╡ db08f294-cfcf-462a-8fb5-8d8a63563e61
+p1Opt = (framestyle=:origin, aspectration=1)
 
 # ╔═╡ 932e13f0-0949-4e77-b3a8-f344784b1f1d
 begin
+	
 	ex1x=0:0.01:1
 	ex1y=exp.(ex1x)
 	ex1plt=plot(ex1x,ex1y,label=nothing,fill=(0,0.5,:red))
@@ -817,50 +905,45 @@ begin
 			  ])
 	md"""
 	**Solution**
+	
 	$ex1plt
 	"""
 end
 
-# ╔═╡ 693ca0c0-2f10-447b-88db-e9fb530b1336
-md"""
-### Area of a Region Between Intersecting Curves
-In geberal,
-
-$p2
+# ╔═╡ d993fe50-4792-4f54-b4a6-23cb91718f00
+let
+	ex2f1(x)=x^2
+	ex2f2(x)=2x-x^2
+	x = symbols("x",real=true)
+	ex2poi=solve(ex2f1(x)-ex2f2(x)) .|> p->p.n() .|> Float64
+	ex2x=0:0.01:1
+	ex2widex=-1:0.01:2
+	ex2y1=ex2f1.(ex2x)
+	ex2y1wide=ex2f1.(ex2widex)
+	ex2y2=ex2f2.(ex2x)
+	ex2y2wide=ex2f2.(ex2widex)
+	ex2plt=plot(ex2x,ex2y2,label=nothing,fill=(0,0.5,:green))
+	plot!(ex2plt,ex2x,ex2y1,fill=(0,0,:white),label=nothing)
+	plot!(ex2widex,ex2y1wide, c=:red,label=nothing)
+	plot!(ex2widex,ex2y2wide, c=:blue,label=nothing)
+	plot!(;p1Opt...,xlims=(-0.4,1.5),ylims=(-0.4,2),label=nothing,xticks=[0,0,1])
+	ex2Rect = Shape([ (0.5,ex2f2(0.55))
+					, (0.55,ex2f2(0.55))
+					, (0.55,ex2f1(0.55))
+					, (0.5,ex2f1(0.55))
+					])
+	plot!(ex2Rect,label=nothing)
+	scatter!(ex2poi,ex2f1.(ex2poi),label=nothing)
+	annotate!([	(0.77,0.4,L"y=x^2")
+			  ,	(0.7,1.1,L"y=2x-x^2")
+			  , (0.54,0.24,text(L"\Delta x",10))
+			  ])
+	md"""
+	**Solution**
 	
-```math
-Area = \int_a^b \left|f(x) - g(x)\right| dx
-```
-
-"""
-
-# ╔═╡ bdccc1f5-2d8e-4ecd-a63e-7228566a20fb
-html"<hr>"
-
-# ╔═╡ ac6fde80-be6b-4292-911a-b51c43de3199
-md"""
-**Example 2**
-
-Find the area of the region enclosed by the parabolas $y=x^2$ and $y=2x-x^2$.
-
-*Solution in class*
-
----
-"""
-
-# ╔═╡ 57d8a03b-71a0-46d9-b908-af7028195db2
-md"""
-**Example 3**
-
-Find the area of the region bounded by the curves 
-
-```math 
-y=\cos(x), \;\; y=\sin(2x), \;\; x=0, \;\; x=\frac{\pi}{2}
-```
-
-
----
-"""
+	$ex2plt
+	"""
+end
 
 # ╔═╡ a2a2d894-7588-48a8-84fd-65e5ead80072
 begin
@@ -883,40 +966,20 @@ begin
 	"""
 end
 
-# ╔═╡ f03e35fd-ba04-4692-8e4a-b0880c703e8e
-begin
-	img1 = load(download("https://www.dropbox.com/s/r39ny15umqafmls/wrty.png?raw=1"))
-	img1 = imresize(img1,ratio=1.5)
-	md"""
-	### Integrating with Respect to ``y``
-	
-	$img1
-	
-	"""
-	
-end
-
-# ╔═╡ 0b5e8985-ecf6-4e84-860b-0891c9638aeb
-md"""
-**Example 4**
-
-Find the area enclosed by the line ``y=x-1``  and the parabola ``y^2=2x+6``.
-
-"""
-
 # ╔═╡ 64ee7ca1-4feb-470a-900c-fbb8a413b3f5
-begin
-	ex4FRight(y)=-3+y^2/2
+let
+	ex4FRight(y)=3-y^2
 	ex4FLeft(y)=y+1
-	ex4p = plot(x->x^2/2 -3,x->x,-5,6,c=:blue,label=L"y^2=2x+6")
-	ex4Rect = Shape([ (ex4FRight(1.8),2)
-					, (ex4FLeft(2),2)
-					, (ex4FLeft(2),1.8)
-					, (ex4FRight(1.8),1.8)
+	y,x = symbols("y,x",real=true)
+	ex4p = plot(x->-x^2 +3,x->x,-3,6,c=:blue,label=L"y^2=3-x")
+	ex4Rect = Shape([ (ex4FRight(0.1),-0.2)
+					, (ex4FLeft(-0.2),-0.2)
+					, (ex4FLeft(-0.2),0.1)
+					, (ex4FRight(0.1),0.1)
 					])
 	plot!(ex4Rect,label=nothing)
 	plot!(ex4p,x->x,x->x-1,-5,6;p1Opt...,c=:red,label=L"y=x-1",xticks=-3:1:15)
-	(ex4poi1,ex4poi2)=solve([y^2-2*x-6,y-x+1],[x,y]) 
+	(ex4poi1,ex4poi2)=solve([x+y^2-3,x-y-1],[x,y]) .|> p -> map(q->Float64(q.n()),p)
 	scatter!([ex4poi1,ex4poi2],xlims=(-3.5,7),label=nothing,legend=:topleft)
 	md"""
 	**Solution:**
@@ -925,11 +988,14 @@ begin
 end
 
 # ╔═╡ 358c0e61-da8c-4eba-9765-58760940c7c3
-# integrate(y+1-(y^2/2-3),(y,-2,4))
+let
+	x,y = symbols("x,y", real=true)
+	integrate(y+1-(y^2/2-3),(y,-2,4))
+end
 
 # ╔═╡ e0d5df0d-03bb-45f7-9f36-909830e6203f
 md"""
-**Example 5**
+**Exercise**
 
 Find the area of the region enclosed by the curves ``y= {1\over x}``, ``y=x``, and ``y={1\over 4} x``, using
 * ``x`` as the variable of integration and
@@ -950,15 +1016,16 @@ begin
 	ylims!(-0.1,2)
 end
 
+# ╔═╡ 9050671d-cbb1-4d2c-9b7b-ba502655e238
+md"""# 7.2 Volume: The Disk Method
+> __Objectives__
+> 1. Find the volume of a solid of revolution using the disk method.
+> 2. Find the volume of a solid of revolution using the washer method.
+> 3.  Find the volume of a solid with known cross sections.
+"""
+
 # ╔═╡ fd39a8f1-60f5-46e7-8595-0ab20a5e3b4d
 cm"""
-## Section 7.2
-### Volume: The Disk Method
-> __Objectives__
-> - Find the volume of a solid of revolution using the disk method.
-> - Find the volume of a solid of revolution using the washer method.
-> - Find the volume of a solid with known cross sections.
-
 **Solids of Revolution**
 
 <div class="img-container">
@@ -2541,6 +2608,56 @@ $(ex()) Find
 
 """
 
+# ╔═╡ b4279679-50fb-4dfd-9c4e-0e14788e2edd
+let
+    ex2fun1(x) = log(x) / x
+    ex2fun2(x) = x
+    ex2x1 = 1:0.1:exp(1)
+    ex2x12 = 0:0.1:1
+    ex2x2 = 0.6:0.1:4
+    ex2x22 = log(0.6):0.1:log(4)
+
+    ex2y1 = ex2fun1.(ex2x1)
+    ex2y12 = ex2fun2.(ex2x12)
+    ex2y2 = ex2fun1.(ex2x2)
+    ex2y22 = ex2fun2.(ex2x22)
+    theme(:wong)
+    ex2plt1 = plot(ex2x1, ex2y1, framestyle=:origin, xlims=(0, exp(1)), ylims=(-1, 1), fillrange=0, fillalpha=0.5, c=:red, label=nothing)
+    plot!(ex2plt1, ex2x2, ex2y2, c=:red, label=nothing)
+    xlims!(ex2plt1, -1, 4)
+    annotate!(ex2plt1, [(2, 0.5, L"y=\frac{\ln x}{x}"), (exp(1), -0.05, text(L"e", 12))])
+    plot!(ex2plt1, [exp(1), exp(1)], [0, ex2fun1(exp(1))], c=:red, linewidth=3, label=nothing)
+
+    ex2plt2 = plot(ex2x12, ex2y12, framestyle=:origin, xlims=(0, 1), ylims=(-1, 1), fillrange=0, fillalpha=0.5, c=:red, label=nothing)
+    plot!(ex2plt2, ex2x22, ex2y22, c=:red, label=nothing)
+    xlims!(ex2plt2, -1, 4)
+    annotate!(ex2plt2, [(2, 0.5, L"v=u")])
+    # ylims!()
+    # plot!(ex2plt2,ex2x,ex2y, framestyle=:origin, xlims=(1,exp(1)), fillrange =0,fillalpha=0.5,c=:red)
+    # xlims!(ex2plt1,-1,2)
+    # plot!(ex2plt1, fill=(0, 0.5, :red), xlims=(1,2))
+    cm""" 
+    $(ex())
+    	Evaluate
+
+    ```math
+    \begin{array}{ll}
+    (i) & \int_1^2 \frac{dx}{\left(3-5x\right)^2} \\ \\
+    (ii) & \int_1^e \frac{\ln x}{x} dx \\ \\ 
+    (iii) & \int_0^1 x(x^2+1)^3 \;dx \\ \\ 
+    (iv) & \int_1^5 \frac{x}{\sqrt{2x-1}}\;dx \\ \\ 
+    \end{array}
+    ```
+    $ex2plt1	
+
+    $ex2plt2
+
+    """
+end
+
+
+
+
 # ╔═╡ 655773ab-44a0-4f6e-95b9-353ea7f694ca
 cm"""
 $(bth("Integration of even and Odd Function"))
@@ -2862,6 +2979,68 @@ $(Resource("https://www.dropbox.com/s/yc0305sd3i8yr44/inverse_hyper_graphs.jpg?r
 </div>
 """
 
+# ╔═╡ 004ab021-15d7-40d8-ace7-41dd5f8b2237
+cm"""
+
+$(bbl("Remark",""))
+- Area = ``y_{top}-y_{bottom}``.
+$(ebl())
+
+$(ex(1,"Finding the area of a region Between Two Curves"))
+
+Find the area of the region bounded above by ``y=e^x``, bounded below by ``y=x``, bounded on the sides by ``x=0`` and ``x=1``.
+
+"""
+
+# ╔═╡ ac6fde80-be6b-4292-911a-b51c43de3199
+cm"""
+$(ex(2,"a region Lying Between Two Intersecting Graphs"))
+Find the area of the region enclosed by the parabolas ``y=x^2`` and ``y=2x-x^2``.
+
+*Solution in class*
+
+---
+"""
+
+# ╔═╡ 57d8a03b-71a0-46d9-b908-af7028195db2
+cm"""
+$(ex(3,"A Region Lying Between Two Intersecting Graphs"))
+
+Find the area of the region bounded by the curves 
+
+```math 
+y=\cos(x), \;\; y=\sin(2x), \;\; x=0, \;\; x=\frac{\pi}{2}
+```
+
+
+---
+"""
+
+# ╔═╡ 6003b1ce-be7b-4ff1-ab92-fca307cb61a8
+cm"""
+$(ex(4,"Curves That Intersect at More than Two Points"))
+Find the area of the region between the graphs of
+```math
+f(x)=3 x^3-x^2-10 x \quad \text { and } \quad g(x)=-x^2+2 x
+```
+"""
+
+# ╔═╡ f03e35fd-ba04-4692-8e4a-b0880c703e8e
+cm"""
+### Integrating with Respect to ``y``
+
+$(post_img("https://www.dropbox.com/s/r39ny15umqafmls/wrty.png?raw=1",300))
+
+"""
+
+# ╔═╡ 0b5e8985-ecf6-4e84-860b-0891c9638aeb
+cm"""
+$(ex(5,"Horizontal representative rectangles"))
+
+ Find the area of the region bounded by the graphs of ``x=3−y^22`` and ``x=y+1``.
+
+"""
+
 # ╔═╡ e18ee243-b49e-401f-bda2-2bb8b0ea3a66
 md"""
 **Example 6** Figure below shows a solid with a circular base of radius ``1``. Parallel cross-sections perpendicular to the base are equilateral triangles. Find the volume of the solid.
@@ -2901,257 +3080,6 @@ ul li:before {
 
 </style>
 """)
-
-# ╔═╡ dda364fa-80e5-4d6c-8ed1-9b2bfccf4b18
-begin
-	f1(x) = sin(x)+3+cnstslider
-	f2(x) = cos(2x)+1+cnstslider
-	f3(x) = cos(2x)+4+cnstslider
-	poi1=solve(f1(x)-f3(x),x) .|> p -> p.n()
-	theme(:wong)
-	a1,b1 = 1, 5
-	Δx1 = (b1-a1)/n1slider
-	x1Rect =a1:Δx1:b1
-	x1 = a1:0.1:b1
-	y1 = f1.(x1)
-	y2 = f2.(x1)
-	y3 = f3.(x1)
-	
-	p1=plot(x1,y1, fill=(y2,0.25,:green), label=nothing,c=:red)
-	p2=plot(x1,y1, fill=(y3,0.25,:green), label=nothing,c=:red)
-	
-	plot!(p1,x1,y2,label=nothing)
-	plot!(p2,x1,y3,label=nothing)
-	annotate!(p1,[
-				(3.5,3.5+cnstslider,L"y=f(x)",:red),
-				(5.9,0,L"x"),
-				(0.2,6,L"y"),
-				(3.2,1+cnstslider,L"y=g(x)",:blue)
-				]
-			)
-	annotate!(p2,[
-				(1.2,4.5+cnstslider,L"y=f(x)",:red),
-				(5.9,0,L"x"),
-				(0.2,6,L"y"),
-				(4,5+cnstslider,L"y=g(x)",:blue)
-				]
-			)
-	
-	plot!(p1; p1Opt...,ylims=(-3,6),xlims=(-1,6))
-	recs =[
-			Shape([(xi,f2(xi)),(xi+Δx1,f2(xi)),(xi+Δx1,f1(xi+Δx1)),(xi,f1(xi+Δx1))]) 			 for xi in x1Rect[1:end-1]
-		  ]
-	n1slider>2 && plot!(p1,recs, label=nothing,c=:green)
-	plot!(p2; p1Opt...,ylims=(-3,6),xlims=(-1,6))
-	scatter!(p2,(poi1[1],f3(poi1[1])), label="Point of instersection",legend=:bottomright)
-	# save("./imgs/6.1/sec6.1p2.png",p2)
-	# annotate!(p2,[(4,0.51,(L"$\sum_{i=1}^{%$n2} f (x^*_{i})\Delta x=%$s2$",12))])
-	
-	md""" **How can we find the area between the two curves?**
-	
-$p1
-	
-```math
-Area = \int_a^b \left[{\color{red}f(x)} - {\color{blue}g(x)}\right] dx
-```
-"""
-
-end
-
-# ╔═╡ b4279679-50fb-4dfd-9c4e-0e14788e2edd
-
-begin
-    ex2fun1(x) = log(x) / x
-    ex2fun2(x) = x
-    ex2x1 = 1:0.1:exp(1)
-    ex2x12 = 0:0.1:1
-    ex2x2 = 0.6:0.1:4
-    ex2x22 = log(0.6):0.1:log(4)
-
-    ex2y1 = ex2fun1.(ex2x1)
-    ex2y12 = ex2fun2.(ex2x12)
-    ex2y2 = ex2fun1.(ex2x2)
-    ex2y22 = ex2fun2.(ex2x22)
-    theme(:wong)
-    ex2plt1 = plot(ex2x1, ex2y1, framestyle=:origin, xlims=(0, exp(1)), ylims=(-1, 1), fillrange=0, fillalpha=0.5, c=:red, label=nothing)
-    plot!(ex2plt1, ex2x2, ex2y2, c=:red, label=nothing)
-    xlims!(ex2plt1, -1, 4)
-    annotate!(ex2plt1, [(2, 0.5, L"y=\frac{\ln x}{x}"), (exp(1), -0.05, text(L"e", 12))])
-    plot!(ex2plt1, [exp(1), exp(1)], [0, ex2fun1(exp(1))], c=:red, linewidth=3, label=nothing)
-
-    ex2plt2 = plot(ex2x12, ex2y12, framestyle=:origin, xlims=(0, 1), ylims=(-1, 1), fillrange=0, fillalpha=0.5, c=:red, label=nothing)
-    plot!(ex2plt2, ex2x22, ex2y22, c=:red, label=nothing)
-    xlims!(ex2plt2, -1, 4)
-    annotate!(ex2plt2, [(2, 0.5, L"v=u")])
-    # ylims!()
-    # plot!(ex2plt2,ex2x,ex2y, framestyle=:origin, xlims=(1,exp(1)), fillrange =0,fillalpha=0.5,c=:red)
-    # xlims!(ex2plt1,-1,2)
-    # plot!(ex2plt1, fill=(0, 0.5, :red), xlims=(1,2))
-    cm""" 
-    $(ex())
-    	Evaluate
-
-    ```math
-    \begin{array}{ll}
-    (i) & \int_1^2 \frac{dx}{\left(3-5x\right)^2} \\ \\
-    (ii) & \int_1^e \frac{\ln x}{x} dx \\ \\ 
-    (iii) & \int_0^1 x(x^2+1)^3 \;dx \\ \\ 
-    (iv) & \int_1^5 \frac{x}{\sqrt{2x-1}}\;dx \\ \\ 
-    \end{array}
-    ```
-    $ex2plt1	
-
-    $ex2plt2
-
-    """
-end
-
-
-
-
-# ╔═╡ bcf04630-6907-4529-b6ee-e4be7a4d23bb
-begin 
-	struct PlotData
-		x::StepRangeLen
-		fun::Function
-		lb::Union{Integer,Vector{Float64}}
-	end
-	PlotData(x,f)=PlotData(x,f,0)	
-	@recipe function f(t::PlotData; customcolor = :green, fillit=true)
-		x, fun, lb = t.x, t.fun, t.lb
-		xrotation --> 45
-		zrotation --> 6, :quiet
-		aspect_ratio --> 1
-		framestyle --> :origin
-		label-->nothing
-		fill --> (fillit ? (lb,0.5,customcolor) : nothing)
-		x, fun.(x)
-	end
-	x, y = symbols("x,y", real=true)
-	p1Opt = (framestyle=:origin, aspectration=1)
-	function plot_implicit(F, c=0;
-			xrng=(-5,5), yrng=xrng, zrng=xrng,
-			nlevels=6,         # number of levels in a direction
-			slices=Dict(:x => :blue,
-				:y => :red,
-				:z => :green), # which directions and color
-			kwargs...          # passed to initial `plot` call
-		)
-
-		_linspace(rng, n=150) = range(rng[1], stop=rng[2], length=n)
-
-		X1, Y1, Z1 = _linspace(xrng), _linspace(yrng), _linspace(zrng)
-
-		p = Plots.plot(;legend=false,kwargs...)
-
-		if :x ∈ keys(slices)
-			for x in _linspace(xrng, nlevels)
-				local X1 = [F(x,y,z) for y in Y1, z in Z1]
-				cnt = contours(Y1,Z1,X1, [c])
-				for line in lines(levels(cnt)[1])
-					ys, zs = coordinates(line) # coordinates of this line segment
-					plot!(p, x .+ 0 * ys, ys, zs, color=slices[:x])
-				end
-			end
-		end
-
-		if :y ∈ keys(slices)
-			for y in _linspace(yrng, nlevels)
-				local Y1 = [F(x,y,z) for x in X1, z in Z1]
-				cnt = contours(Z1,X1,Y1, [c])
-				for line in lines(levels(cnt)[1])
-					xs, zs = coordinates(line) # coordinates of this line segment
-					plot!(p, xs, y .+ 0 * xs, zs, color=slices[:y])
-				end
-			end
-		end
-
-		if :z ∈ keys(slices)
-			for z in _linspace(zrng, nlevels)
-				local Z1 = [F(x, y, z) for x in X1, y in Y1]
-				cnt = contours(X1, Y1, Z1, [c])
-				for line in lines(levels(cnt)[1])
-					xs, ys = coordinates(line) # coordinates of this line segment
-					plot!(p, xs, ys, z .+ 0 * xs, color=slices[:z])
-				end
-			end
-		end
-
-
-		p
-	end
-	html"......"
-end
-
-# ╔═╡ d993fe50-4792-4f54-b4a6-23cb91718f00
-begin
-	ex2f1(x)=x^2
-	ex2f2(x)=2x-x^2
-	ex2poi=solve(ex2f1(x)-ex2f2(x)) .|> p->p.n()
-	ex2x=0:0.01:1
-	ex2widex=-1:0.01:2
-	ex2y1=ex2f1.(ex2x)
-	ex2y1wide=ex2f1.(ex2widex)
-	ex2y2=ex2f2.(ex2x)
-	ex2y2wide=ex2f2.(ex2widex)
-	ex2plt=plot(ex2x,ex2y2,label=nothing,fill=(0,0.5,:green))
-	plot!(ex2plt,ex2x,ex2y1,fill=(0,0,:white),label=nothing)
-	plot!(ex2widex,ex2y1wide, c=:red,label=nothing)
-	plot!(ex2widex,ex2y2wide, c=:blue,label=nothing)
-	plot!(;p1Opt...,xlims=(-0.4,1.5),ylims=(-0.4,2),label=nothing,xticks=[0,0,1])
-	ex2Rect = Shape([ (0.5,ex2f2(0.55))
-					, (0.55,ex2f2(0.55))
-					, (0.55,ex2f1(0.55))
-					, (0.5,ex2f1(0.55))
-					])
-	plot!(ex2Rect,label=nothing)
-	scatter!(ex2poi,ex2f1.(ex2poi),label=nothing)
-	annotate!([	(0.77,0.4,L"y=x^2")
-			  ,	(0.7,1.1,L"y=2x-x^2")
-			  , (0.54,0.24,text(L"\Delta x",10))
-			  ])
-	md"""
-	**Solution**
-	
-	$ex2plt
-	"""
-end
-
-# ╔═╡ 02d61e1f-b630-443c-b1dd-1fe5d2c81b2f
-begin
-    f1(x) = sqrt(9 - x^2)
-    f3(x) = abs(x)
-    theme(:wong)
-    pp = plot(f1, xlims=[-4, 4], ylims=[-4, 4], framestyle=:origin, xtick=-4:1:4, yticks=-4:1:4)
-    md"$pp"
-end
-
-
-
-
-
-# ╔═╡ 5156fbdc-002c-4222-aca0-b835061e3fb7
-
-begin
-    f2(x) = sin(x) + 2
-    theme(:wong)
-    x = 1:0.1:5
-    y = f2.(x)
-    p3 = plot(x, y, label=nothing)
-    plot!(p3, x, y / 2, ribbon=y / 2, linestyle=:dot, linealpha=0.1, framestyle=:origin, xticks=(1:5, [:a, "", "", "", :b]), label=nothing, ylims=(-1, 4))
-    annotate!(p3, [(3.5, 2.5, L"y=f(x)"), (5.2, 0, L"x"), (0.2, 4, L"y")])
-    # annotate!(p2,[(4,0.51,(L"$\sum_{i=1}^{%$n2} f (x^*_{i})\Delta x=%$s2$",12))])
-
-    md""" * If ``f(x)\ge 0``, the integral ``\int_a^b f(x) dx`` is the area under the curve ``y=f(x)`` from ``a`` to ``b``.	
-
-    $p3
-    """
-
-end
-
-
-
-
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -4984,28 +4912,27 @@ version = "1.4.1+1"
 # ╟─66a05cab-f595-43f8-843d-1f845c953868
 # ╟─db150ea2-4895-415e-97a9-f7eff4180d63
 # ╟─cf16ce47-f360-451b-afae-b1fe8b559fc3
-# ╠═cad95270-ba9f-4821-87da-e457a00b9617
+# ╟─cad95270-ba9f-4821-87da-e457a00b9617
 # ╟─9b02faca-b5cb-442d-8a63-82f584b054fd
-# ╠═663c5894-ba2d-4236-9728-6a3c8db5c8ed
-# ╠═1f1b3439-630e-4db6-9a01-321ed75bed84
-# ╠═bcf04630-6907-4529-b6ee-e4be7a4d23bb
-# ╠═3df06d3d-7bd1-45fe-bd46-c1429b11ee14
-# ╠═dda364fa-80e5-4d6c-8ed1-9b2bfccf4b18
-# ╠═004ab021-15d7-40d8-ace7-41dd5f8b2237
-# ╠═932e13f0-0949-4e77-b3a8-f344784b1f1d
-# ╠═693ca0c0-2f10-447b-88db-e9fb530b1336
-# ╠═bdccc1f5-2d8e-4ecd-a63e-7228566a20fb
-# ╠═ac6fde80-be6b-4292-911a-b51c43de3199
-# ╠═d993fe50-4792-4f54-b4a6-23cb91718f00
-# ╠═57d8a03b-71a0-46d9-b908-af7028195db2
-# ╠═a2a2d894-7588-48a8-84fd-65e5ead80072
-# ╠═f03e35fd-ba04-4692-8e4a-b0880c703e8e
-# ╠═0b5e8985-ecf6-4e84-860b-0891c9638aeb
-# ╠═64ee7ca1-4feb-470a-900c-fbb8a413b3f5
-# ╠═358c0e61-da8c-4eba-9765-58760940c7c3
-# ╠═e0d5df0d-03bb-45f7-9f36-909830e6203f
-# ╠═42053189-d0d4-4c70-9c4c-41fbacae9891
-# ╟─fd39a8f1-60f5-46e7-8595-0ab20a5e3b4d
+# ╟─1f1b3439-630e-4db6-9a01-321ed75bed84
+# ╟─3df06d3d-7bd1-45fe-bd46-c1429b11ee14
+# ╟─dda364fa-80e5-4d6c-8ed1-9b2bfccf4b18
+# ╟─004ab021-15d7-40d8-ace7-41dd5f8b2237
+# ╟─db08f294-cfcf-462a-8fb5-8d8a63563e61
+# ╟─932e13f0-0949-4e77-b3a8-f344784b1f1d
+# ╟─ac6fde80-be6b-4292-911a-b51c43de3199
+# ╟─d993fe50-4792-4f54-b4a6-23cb91718f00
+# ╟─57d8a03b-71a0-46d9-b908-af7028195db2
+# ╟─a2a2d894-7588-48a8-84fd-65e5ead80072
+# ╟─6003b1ce-be7b-4ff1-ab92-fca307cb61a8
+# ╟─f03e35fd-ba04-4692-8e4a-b0880c703e8e
+# ╟─0b5e8985-ecf6-4e84-860b-0891c9638aeb
+# ╟─64ee7ca1-4feb-470a-900c-fbb8a413b3f5
+# ╟─358c0e61-da8c-4eba-9765-58760940c7c3
+# ╟─e0d5df0d-03bb-45f7-9f36-909830e6203f
+# ╟─42053189-d0d4-4c70-9c4c-41fbacae9891
+# ╟─9050671d-cbb1-4d2c-9b7b-ba502655e238
+# ╠═fd39a8f1-60f5-46e7-8595-0ab20a5e3b4d
 # ╟─3d609c61-d2a0-40ae-bbee-77e7b694d482
 # ╟─8889cb18-f44b-4dbd-9ff5-9535f250a8bf
 # ╟─d31b3e53-2c50-42ba-b60e-413468e022fe
