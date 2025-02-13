@@ -826,7 +826,7 @@ let
 	f2(x) = cos(2x)+1+cnstslider
 	f3(x) = cos(2x)+4+cnstslider
 	x = symbols("x",real=true)
-	poi1=solve(f1(x)-f3(x),x) .|> p -> p.n() .|> Float64 
+	poi1=solve(f1(x)-f3(x),x) .|> p -> real(p.n()) .|> Float64 
 	theme(:wong)
 	a1,b1 = 1, 5
 	Δx1 = (b1-a1)/n1slider
@@ -1024,6 +1024,9 @@ md"""# 7.2 Volume: The Disk Method
 > 3.  Find the volume of a solid with known cross sections.
 """
 
+# ╔═╡ 9063db24-2541-4696-92b8-f9436b237b5c
+md"##  The Disk Method"
+
 # ╔═╡ fd39a8f1-60f5-46e7-8595-0ab20a5e3b4d
 cm"""
 **Solids of Revolution**
@@ -1089,29 +1092,11 @@ $(Resource("https://www.dropbox.com/s/9kpj2dcrwj5y5h8/disk_volume_v_h.png?raw=1"
 
 # $(Resource("https://www.dropbox.com/s/uvz7my3n08fgm6w/img3.png?raw=1"))
 
-# ╔═╡ 3d609c61-d2a0-40ae-bbee-77e7b694d482
-cm"""
-__Example 1:__
-Find the volume of the solid formed by revolving the region bounded by the graph of
-```math
-f(x) = \sqrt{\sin x}
-```
-and the ``x``-axis (``0\leq x\leq \pi``) about the ``x``-axis
-"""
-
-# ╔═╡ 8889cb18-f44b-4dbd-9ff5-9535f250a8bf
-cm"""
-__Example 2__:
-Find the volume of the solid formed by revolving the region bounded by the graphs of
-```math
-f(x)=2-x^2
-```
-and ``g(x)=1``  about the line ``y=1``.
-"""
+# ╔═╡ e86d6a94-a83c-4eaf-83b2-c86e065c6f6a
+md"## The Washer Method"
 
 # ╔═╡ d31b3e53-2c50-42ba-b60e-413468e022fe
 cm"""
-### The Washer Method
 
 <div class="img-container">
 
@@ -1135,47 +1120,8 @@ V = \pi\int_a^b \bigl[\left(R[x]\right)^2-\left(r[x]\right)^2) dx
 </div>
 """
 
-# ╔═╡ d4963c8b-769c-47f4-8d23-00de15ca049a
-cm"""
-__Example 3__ Find the volume of the solid formed by revolving the region bounded by the graphs of
-```math
-y=\sqrt{x} \qquad \textrm{and}\qquad  y = x^2
-```
-about the ``x``-axis.
-
-"""
-
-# ╔═╡ 55be9c08-66aa-44bb-86c5-36e45450950b
-cm"""
-__Example 4__ Find the volume of the solid formed by revolving the region bounded by the graphs of
-```math
-y=x^2+1, \quad y=0, \quad x=0, \quad \textrm{and}\quad x=1
-```
-about the ``y``-axis
-"""
-
-# ╔═╡ 29f9cc1b-7a08-4219-a31c-91a62a5b85b4
-cm"""
-### Solids with Known Cross Sections
-
-[Example 1](https://www.geogebra.org/m/XFgMaKTy) | [Example 2](https://www.geogebra.org/m/XArpgR3A)
-
-1. For cross sections of area ``A(x)`` taken perpendicular to the ``x``-axis,
-```math
-V = \int_a^b A(x) dx
-```
-2. For cross sections of area ``A(y)`` taken perpendicular to the ``y``-axis,
-```math
-V = \int_c^d A(y) dy
-```
-
-__Example 6__ 
-The base of a solid is the region bounded by the lines
-```math
-f(x)=1-\frac{x}{2},\quad g(x)=-1+\frac{x}{2}\quad \textrm{and}\quad x=0.
-```
-The cross sections perpendicular to the ``x``-axis are equilateral triangles.
-"""
+# ╔═╡ de12a145-2680-4322-8921-606bc6a7ca42
+md"## Solids with Known Cross Sections"
 
 # ╔═╡ 0c507932-5cf6-48f0-84c4-b6ed06a54252
 # md"""
@@ -3039,6 +2985,85 @@ $(ex(5,"Horizontal representative rectangles"))
 
  Find the area of the region bounded by the graphs of ``x=3−y^22`` and ``x=y+1``.
 
+"""
+
+# ╔═╡ 3d609c61-d2a0-40ae-bbee-77e7b694d482
+cm"""
+$(ex(1,"Using the Disk Method"))
+Find the volume of the solid formed by revolving the region bounded by the graph of
+```math
+f(x) = \sqrt{\sin x}
+```
+and the ``x``-axis (``0\leq x\leq \pi``) about the ``x``-axis
+
+See [Visualization](https://www.geogebra.org/m/u8KtPdqf)
+"""
+
+# ╔═╡ 8889cb18-f44b-4dbd-9ff5-9535f250a8bf
+cm"""
+$(ex(2,"Using a Line That Is Not a Coordinate Axis"))
+Find the volume of the solid formed by revolving the region bounded by the graphs of
+```math
+f(x)=2-x^2
+```
+and ``g(x)=1``  about the line ``y=1``.
+"""
+
+# ╔═╡ d4963c8b-769c-47f4-8d23-00de15ca049a
+cm"""
+$(ex(3,"Using the Washer Method")) 
+Find the volume of the solid formed by revolving the region bounded by the graphs of
+```math
+y=\sqrt{x} \qquad \textrm{and}\qquad  y = x^2
+```
+about the ``x``-axis.
+
+"""
+
+# ╔═╡ 55be9c08-66aa-44bb-86c5-36e45450950b
+cm"""
+$(ex(4,"Integrating with Respect to y: Two-Integral Case")) 
+Find the volume of the solid formed by revolving the region bounded by the graphs of
+```math
+y=x^2+1, \quad y=0, \quad x=0, \quad \textrm{and}\quad x=1
+```
+about the ``y``-axis
+"""
+
+# ╔═╡ 29f9cc1b-7a08-4219-a31c-91a62a5b85b4
+cm"""
+
+
+[Example 1](https://www.geogebra.org/m/XFgMaKTy) | [Example 2](https://www.geogebra.org/m/XArpgR3A)
+
+$(bth("VOLUMES OF SOLIDS WITH KNOWN CROSS SECTIONS"))
+1. For cross sections of area ``A(x)`` taken perpendicular to the ``x``-axis,
+```math
+V = \int_a^b A(x) dx
+```
+2. For cross sections of area ``A(y)`` taken perpendicular to the ``y``-axis,
+```math
+V = \int_c^d A(y) dy
+```
+$(ebl())
+
+$(ex(6,"Triangular Cross Sections"))
+The base of a solid is the region bounded by the lines
+```math
+f(x)=1-\frac{x}{2},\quad g(x)=-1+\frac{x}{2}\quad \textrm{and}\quad x=0.
+```
+The cross sections perpendicular to the ``x``-axis are equilateral triangles.
+"""
+
+# ╔═╡ cac5724d-f926-4bda-9dac-0534d550e6ad
+cm"""
+$(ex(7,"An Application to Geometry"))
+
+Prove that the volume of a pyramid with a square base is
+```math
+V=\frac{1}{3} h B
+```
+where ``h`` is the height of the pyramid and ``B`` is the area of the base.
 """
 
 # ╔═╡ e18ee243-b49e-401f-bda2-2bb8b0ea3a66
@@ -4932,13 +4957,17 @@ version = "1.4.1+1"
 # ╟─e0d5df0d-03bb-45f7-9f36-909830e6203f
 # ╟─42053189-d0d4-4c70-9c4c-41fbacae9891
 # ╟─9050671d-cbb1-4d2c-9b7b-ba502655e238
-# ╠═fd39a8f1-60f5-46e7-8595-0ab20a5e3b4d
+# ╟─9063db24-2541-4696-92b8-f9436b237b5c
+# ╟─fd39a8f1-60f5-46e7-8595-0ab20a5e3b4d
 # ╟─3d609c61-d2a0-40ae-bbee-77e7b694d482
 # ╟─8889cb18-f44b-4dbd-9ff5-9535f250a8bf
+# ╟─e86d6a94-a83c-4eaf-83b2-c86e065c6f6a
 # ╟─d31b3e53-2c50-42ba-b60e-413468e022fe
 # ╟─d4963c8b-769c-47f4-8d23-00de15ca049a
 # ╟─55be9c08-66aa-44bb-86c5-36e45450950b
+# ╟─de12a145-2680-4322-8921-606bc6a7ca42
 # ╟─29f9cc1b-7a08-4219-a31c-91a62a5b85b4
+# ╟─cac5724d-f926-4bda-9dac-0534d550e6ad
 # ╟─0c507932-5cf6-48f0-84c4-b6ed06a54252
 # ╟─8e780376-2df2-41df-8540-b37b64c93acc
 # ╟─1525ccb4-2f4c-48f0-8e6c-73cc117f92f0
