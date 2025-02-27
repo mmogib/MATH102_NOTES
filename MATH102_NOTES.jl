@@ -1327,6 +1327,14 @@ $(Resource("https://www.dropbox.com/s/ivbwuge5ti8vrff/shell_x.png?raw=1"))
 # """
 # end
 
+# ╔═╡ 3865e317-a19a-4a9a-a8c4-2813ec0a7f0a
+let
+	y= 00.0:0.1:1.0
+	x = exp.(-y.^2)
+	plot(x,y,aspect_ratio=:1,frame_style=:origin)
+	
+end
+
 # ╔═╡ a3c5f9a8-35b4-4daf-9314-5d4af3413770
 md"""
 # 7.4 Arc Length and Surfaces of Revolution
@@ -1337,88 +1345,12 @@ md"""
 """
 
 # ╔═╡ 86e264bb-9ecc-40b8-8382-fe28892d9b41
-cm"""
-### Arc Length
+md"""
+## Arc Length
 """
 
-# ╔═╡ 85d4c1c6-8791-45b0-83a0-588fcb204233
-cm"""
-__Definition of Arc Length__
-
-Let the function ``y=f(x)`` represents a smooth curve on the interval ``[a,b]``. The __arc length__ of ``f`` between ``a`` and ``b`` is
-```math
-s = \int_a^b\sqrt{1+[f'(x)]^2} dx.
-```
-
-Similarly, for a smooth curve ``x=g(y)``, the arc length of ``g`` between ``c`` and  ``d`` is
-```math
-s = \int_c^d\sqrt{1+[g'(y)]^2} dy.
-```
-
-"""
-
-# ╔═╡ 142f33a6-1355-4095-80f2-6fa48572c64b
-cm"""
-__Example__ 
-Find the arc length of the graph of ``y=\displaystyle \frac{x^3}{6}+\frac{1}{2x}`` on the interval ``[\frac{1}{2},2]``. 
-"""
-
-# ╔═╡ 8f7889c4-b786-465e-ba90-e448029399c1
-cm"""
-__Example__ Find the arc length of the graph of ``y=\ln(\cos x)`` from ``x=0`` to ``x=\pi/4``.
-"""
-
-# ╔═╡ 6e673498-0b02-4a55-8a81-6b7358a3668e
-cm"""
-### Area of a Surface of Revolution
-__Definition of Surface of Revolution__ When the graph of a continuous function is revolved about a line, the resulting surface is a __surface of revolution__.
-
-<div class="img-container">
-
-$(Resource("https://www.dropbox.com/s/199tfveph8mi2kz/surface_rev.png?raw=1"))
-
-__Surface Area of *frustum*__
-```math
-S=2\pi r L, \quad \text{where}\quad r=\frac{r_1+r_2}{2}
-```
-</div>
-
-Consider a function ``f`` that has a continuous derivative on the interval ``[a,b]``. The graph of ``f`` is revolved about the ``x``-axis
-
-<div class="img-container">
-
-$(Resource("https://www.dropbox.com/s/f454ldbfk1z3o2z/surface_rev2.png?raw=1"))
-
-__Surface Area Formula__
-```math
-S=2\pi \int_a^b x \sqrt{1+[f'(x)]^2} dx.
-```
-</div>
-
-__Definition of the Area of a Surface of Revolution__
-
-Let ``y=f(x)`` have a continuous derivative on the interval ``[a,b]``. 
-
-<div class="img-container">
-
-$(Resource("https://www.dropbox.com/s/2fup4uwh5uclrmv/surface_rev3.png?raw=1"))
-</div>
-
-The area ``S`` of the surface of revolution formed by revolving the graph of ``f`` about a horizontal or vertical axis is
-
-```math
-S=2\pi \int_a^b r(x) \sqrt{1+[f'(x)]^2} dx, \quad {\color{red} y \text{ is a function of x }}.
-```
-where ``r(x)`` is the distance between the graph of ``f`` and the axis of revolution. 
-
-If ``x=g(y)`` on the interval ``[c,d]`` , then the surface area is
-
-```math
-S=2\pi \int_a^b r(y) \sqrt{1+[g'(y)]^2} dy, \quad {\color{red} x \text{ is a function of y }}.
-```
-where ``r(y)`` is the distance between the graph of ``g`` and the axis of revolution.
-
-"""
+# ╔═╡ eb27f45f-6be2-43df-bf62-1842bae6281b
+md"## Area of a Surface of Revolution"
 
 # ╔═╡ e7cef759-ccba-437b-a418-247d80704808
 cm"""
@@ -1436,14 +1368,6 @@ S=2\pi \int_c^d r(y) ds, \quad {\color{red} x \text{ is a function of y }}.
 where 
 ```math
 ds = \sqrt{1+\big[f'(x)\big]^2}dx \quad \text{and}\quad ds = \sqrt{1+\big[g'(y)\big]^2}dy \quad \text{respectively}.
-"""
-
-# ╔═╡ 36f63f82-142f-4468-a6ed-7781472d94d7
-cm"""
-__Example__ Find the area of the surface formed by revolving the graph of ``f(x)=x^3`` on the interval ``[0,1]`` about the ``x``-axis.
-
-
-__Example__ Find the area of the surface formed by revolving the graph of ``f(x)=x^2`` on the interval ``[0,\sqrt{2}]`` about the ``y``-axis.
 """
 
 # ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
@@ -3117,6 +3041,118 @@ cm"""
 $(ex(5,"Shell Method Necessary"))
 Find the volume of the solid formed by revolving the region bounded by the graphs 
 of ``y=x^3+x+1``, ``y=1``, and ``x=1`` about the line ``x=2``.
+"""
+
+# ╔═╡ 85d4c1c6-8791-45b0-83a0-588fcb204233
+cm"""
+$(define("Arc Length"))
+
+Let the function ``y=f(x)`` represents a smooth curve on the interval ``[a,b]``. The __arc length__ of ``f`` between ``a`` and ``b`` is
+```math
+s = \int_a^b\sqrt{1+[f'(x)]^2} dx.
+```
+
+Similarly, for a smooth curve ``x=g(y)``, the arc length of ``g`` between ``c`` and  ``d`` is
+```math
+s = \int_c^d\sqrt{1+[g'(y)]^2} dy.
+```
+
+"""
+
+# ╔═╡ 41ec2ea8-904a-4181-a103-1d140d98d4ab
+cm"""
+$(ex(1,"The Length of a Line Segment"))
+Find the arc length from ``\left(x_1, y_1\right)`` to ``\left(x_2, y_2\right)`` on the graph of
+```math
+f(x)=m x+b
+```
+"""
+
+# ╔═╡ 142f33a6-1355-4095-80f2-6fa48572c64b
+cm"""
+$(ex(2,"Finding Arc Length"))
+Find the arc length of the graph of ``y=\displaystyle \frac{x^3}{6}+\frac{1}{2x}`` on the interval ``[\frac{1}{2},2]``. 
+"""
+
+# ╔═╡ 8f7889c4-b786-465e-ba90-e448029399c1
+cm"""
+$(ex(3,"Finding Arc Length")) 
+Find the arc length of the graph of ``(y−1)^3=x^2`` on the interval ``[0, 8]``.
+
+"""
+
+# ╔═╡ 786e488c-5c3b-449b-9e44-f7f1e8fcda67
+cm"""
+$(ex(4,"Finding Arc Length"))
+Find the arc length of the graph of ``y=\ln(\cos x)`` from ``x=0`` to ``x=\pi/4``.
+"""
+
+# ╔═╡ 6e673498-0b02-4a55-8a81-6b7358a3668e
+cm"""
+
+$(define("Surface of Revolution"))
+When the graph of a continuous function is revolved about a line, the resulting surface is a __surface of revolution__.
+
+"""
+
+# ╔═╡ 5d946e8c-9256-473a-adac-7be3741aa2c0
+cm"""
+
+
+<div class="img-container">
+
+$(Resource("https://www.dropbox.com/s/199tfveph8mi2kz/surface_rev.png?raw=1"))
+
+__Surface Area of *frustum*__
+```math
+S=2\pi r L, \quad \text{where}\quad r=\frac{r_1+r_2}{2}
+```
+</div>
+
+Consider a function ``f`` that has a continuous derivative on the interval ``[a,b]``. The graph of ``f`` is revolved about the ``x``-axis
+
+<div class="img-container">
+
+$(Resource("https://www.dropbox.com/s/f454ldbfk1z3o2z/surface_rev2.png?raw=1"))
+
+__Surface Area Formula__
+```math
+S=2\pi \int_a^b x \sqrt{1+[f'(x)]^2} dx.
+```
+</div>
+
+$(define("Area of a Surface of Revolution"))
+
+Let ``y=f(x)`` have a continuous derivative on the interval ``[a,b]``. 
+
+<div class="img-container">
+
+$(Resource("https://www.dropbox.com/s/2fup4uwh5uclrmv/surface_rev3.png?raw=1"))
+</div>
+
+The area ``S`` of the surface of revolution formed by revolving the graph of ``f`` about a horizontal or vertical axis is
+
+```math
+S=2\pi \int_a^b r(x) \sqrt{1+[f'(x)]^2} dx, \quad {\color{red} y \text{ is a function of x }}.
+```
+where ``r(x)`` is the distance between the graph of ``f`` and the axis of revolution. 
+
+If ``x=g(y)`` on the interval ``[c,d]`` , then the surface area is
+
+```math
+S=2\pi \int_a^b r(y) \sqrt{1+[g'(y)]^2} dy, \quad {\color{red} x \text{ is a function of y }}.
+```
+where ``r(y)`` is the distance between the graph of ``g`` and the axis of revolution.
+
+"""
+
+# ╔═╡ 36f63f82-142f-4468-a6ed-7781472d94d7
+cm"""
+$(ex(6,"The Area of a Surface of Revolution")) Find the area of the surface formed by revolving the graph of ``f(x)=x^3`` on the interval ``[0,1]`` about the ``x``-axis.
+
+
+$(ex(7,"The Area of a Surface of Revolution"))
+Find the area of the surface formed by revolving the graph of ``f(x)=x^2`` on the interval ``[0,\sqrt{2}]`` about the ``y``-axis.
 """
 
 # ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
@@ -5026,15 +5062,20 @@ version = "1.4.1+1"
 # ╟─6b312eea-1ad6-414a-bfa1-2f8ba1498add
 # ╟─eb56826a-2315-421a-aec8-1c0e17539b0d
 # ╟─4e79e466-384f-40cc-81bc-40d3d0dda3bd
+# ╠═3865e317-a19a-4a9a-a8c4-2813ec0a7f0a
 # ╟─6a3c2cd4-6c1f-4038-b0ac-d7992aee8d63
 # ╟─8bb93d52-7813-4ce1-a78c-7eccf4ff559f
 # ╟─7d2e7631-5d0f-45cd-baa5-c280963b7973
 # ╟─a3c5f9a8-35b4-4daf-9314-5d4af3413770
 # ╟─86e264bb-9ecc-40b8-8382-fe28892d9b41
 # ╟─85d4c1c6-8791-45b0-83a0-588fcb204233
+# ╟─41ec2ea8-904a-4181-a103-1d140d98d4ab
 # ╟─142f33a6-1355-4095-80f2-6fa48572c64b
 # ╟─8f7889c4-b786-465e-ba90-e448029399c1
+# ╟─786e488c-5c3b-449b-9e44-f7f1e8fcda67
+# ╟─eb27f45f-6be2-43df-bf62-1842bae6281b
 # ╟─6e673498-0b02-4a55-8a81-6b7358a3668e
+# ╟─5d946e8c-9256-473a-adac-7be3741aa2c0
 # ╟─e7cef759-ccba-437b-a418-247d80704808
 # ╟─36f63f82-142f-4468-a6ed-7781472d94d7
 # ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
