@@ -1234,7 +1234,7 @@ let
 			, (1.75,f30(0.75)+0.05)
 			, (0.75,f30(0.75)+0.05)])
 	ux, lx = Plots.unzip(Plots.partialcircle(0,π,100,-0.1))
-	plot!(ux,lx .+ 1.15,c=:red)
+	plot!(ux,lx .+ 1.15,c=:red,frame_style=:origin)
 	anns = [(0.65,f30(0.76),L"x_L=?",10),(1.88,f30(0.76),L"x_R=?",10)]
 	s3e0p =	if show_labels 
 		plot!(s3e0p0,recty,label=nothing)
@@ -1368,6 +1368,119 @@ S=2\pi \int_c^d r(y) ds, \quad {\color{red} x \text{ is a function of y }}.
 where 
 ```math
 ds = \sqrt{1+\big[f'(x)\big]^2}dx \quad \text{and}\quad ds = \sqrt{1+\big[g'(y)\big]^2}dy \quad \text{respectively}.
+"""
+
+# ╔═╡ 8f8766fa-c168-4f09-8703-347a139b7069
+md"""
+# 8.1 Basic Integration Rules
+
+> __Objectives__
+> 1. Review procedures for fitting an integrand to one of the basic integration rules.
+"""
+
+# ╔═╡ 598055ab-2b36-481e-bb7d-65edfcfe183b
+cm"""
+<div style="background-color:#FF9733;color:white;font-weight:800;padding:2px 10px;width:350px;">
+
+Review of Basic Integration Rules (``a>0``) 
+</div>
+<div class="img-container">
+
+$(Resource("https://www.dropbox.com/s/56svdxjfgowjojk/int_table.png?raw=1"))
+
+
+
+"""
+
+# ╔═╡ 6cc99632-805b-4fcd-98f0-96da071afdb9
+md"""
+# 8.2 Integration by Parts
+> __Objectives__
+> Find an antiderivative using integration by parts.
+"""
+
+# ╔═╡ e938f5a1-7037-47c7-9e96-ed0c7341c4f2
+md"""
+*The integration rule that corresponds to the Product Rule for differentiation is called __integration by parts__*
+
+"""
+
+# ╔═╡ 57037db4-318e-40df-af33-f2be564acf56
+md"## Integration by Parts"
+
+# ╔═╡ 9280e821-4518-4697-b55e-a3b806d748e1
+md"""
+__Indefinite Integrals__
+```math
+\int f(x)g'\,(x) dx = f(x) g(x) - \int g(x) f'\,(x) dx
+```
+"""
+
+# ╔═╡ 7a19b897-5d02-4577-81a1-2a33ed5f8bb9
+md"""
+**Example**
+
+```math 
+\int x \cos(x) dx 
+```
+
+
+"""
+
+# ╔═╡ d41e0530-1b75-412c-828c-d53a58523293
+begin
+	
+	md"""
+	**Solution:**
+	
+	```math
+	\int x \cos(x) dx = \int \underbrace{x}_{f(x)} \overbrace{\cos(x)}^{g'(x)} dx = x \sin(x) - \int \sin(x) \overbrace{ \;\;\;\;dx}^{f'\,(x) dx} = x\sin(x) + \cos(x) +C  
+	
+	```
+	"""
+end
+
+# ╔═╡ 507bc0c8-ef40-4ef4-ac3f-b66ae162362f
+md"""
+# 8.3 Trigonometric Integrals
+> __Objectives__
+> - Solve trigonometric integrals involving powers of sine and cosine.
+> * Solve trigonometric integrals involving powers of secant and tangent.
+> * Solve trigonometric integrals involving sine-cosine products.
+
+**RECALL**
+
+```math
+
+
+
+\displaystyle
+\sin^2 x + \cos^2 x =1, \quad  \tan^2 x + 1 =\sec^2 x,  \quad  1+\cot^2 x  =\csc^2 x,
+
+```
+
+```math
+\displaystyle
+\cos^2 x = \frac{1 +\cos 2x }{2}, \quad \sin^2 x = \frac{1 -\cos 2x }{2}
+```
+
+```math
+\displaystyle
+\begin{array}{ccc}
+\sin A\cos B & = & \frac{1}{2}\left[\sin(A-B)+\sin(A+B)\right], \\[0.2cm]
+\sin A\sin B & = & \frac{1}{2}\left[\cos(A-B)-\cos(A+B)\right], \\[0.2cm]
+\cos A\cos B & = & \frac{1}{2}\left[\cos(A-B)+\cos(A+B)\right], \\
+\end{array}
+```
+
+```math
+\int \tan x dx = \ln|\sec x| +C, \quad \int \sec x dx = \ln|\sec x+\tan x| +C
+```
+
+
+```math
+\int \cot x dx = -\ln|\csc x| +C, \quad \int \csc x dx = \ln|\csc x-\cot x| +C
+```
 """
 
 # ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
@@ -3153,6 +3266,60 @@ $(ex(6,"The Area of a Surface of Revolution")) Find the area of the surface form
 
 $(ex(7,"The Area of a Surface of Revolution"))
 Find the area of the surface formed by revolving the graph of ``f(x)=x^2`` on the interval ``[0,\sqrt{2}]`` about the ``y``-axis.
+"""
+
+# ╔═╡ 200f43c8-fd32-438e-9582-a995a4026086
+cm"""
+$(ex())
+Find 
+```math
+\int \frac{1}{1+e^x} dx.
+```
+"""
+
+# ╔═╡ 7588b15a-3b1e-4232-96e6-45e254c10362
+cm"""
+$(bth("Integration by Parts"))
+If ``u`` and ``v`` are functions of ``x`` and have continuous derivatives, then
+```math
+\int u d v=u v-\int v d u
+```
+"""
+
+# ╔═╡ 3888f083-86e2-4edb-a700-62028ad295b4
+cm"""
+$(ex(1,"Integration by Parts"))
+Find ``\int x e^x d x``.
+"""
+
+# ╔═╡ 7d50c4c7-e6f0-43b7-8583-7b47cbcc2156
+cm"""
+$(ex(2,"Integration by Parts"))
+Find ``\displaystyle\int x^2 \ln x d x``.
+"""
+
+# ╔═╡ 9a0bbdd2-c9fe-4932-94f3-3727baa6b9a6
+cm"""
+$(ex(3,"An Integrand with a Single Term"))
+Find ``\displaystyle\int \sin^{-1}x d x``.
+"""
+
+# ╔═╡ 5c4497e8-e02d-4265-ba7c-aa607231ee6d
+cm"""
+$(ex(4,"Repeated Use of Integration by Parts"))
+Find ``\displaystyle\int x^2\sin x d x``.
+"""
+
+# ╔═╡ fa99131e-13b2-4f4a-a752-4afd26b6596c
+cm"""
+$(ex(5,"Integration by Parts"))
+Find ``\displaystyle\int \sec^3 x d x``.
+"""
+
+# ╔═╡ a856ee7d-a0d9-4d4b-aa13-449a827a954d
+cm"""
+$(ex(7,"Using the tabular method"))
+Find ``\displaystyle\int x^2\sin4 x d x``.
 """
 
 # ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
@@ -5078,6 +5245,23 @@ version = "1.4.1+1"
 # ╟─5d946e8c-9256-473a-adac-7be3741aa2c0
 # ╟─e7cef759-ccba-437b-a418-247d80704808
 # ╟─36f63f82-142f-4468-a6ed-7781472d94d7
+# ╟─8f8766fa-c168-4f09-8703-347a139b7069
+# ╟─598055ab-2b36-481e-bb7d-65edfcfe183b
+# ╟─200f43c8-fd32-438e-9582-a995a4026086
+# ╟─6cc99632-805b-4fcd-98f0-96da071afdb9
+# ╟─e938f5a1-7037-47c7-9e96-ed0c7341c4f2
+# ╟─57037db4-318e-40df-af33-f2be564acf56
+# ╟─7588b15a-3b1e-4232-96e6-45e254c10362
+# ╟─9280e821-4518-4697-b55e-a3b806d748e1
+# ╟─7a19b897-5d02-4577-81a1-2a33ed5f8bb9
+# ╟─d41e0530-1b75-412c-828c-d53a58523293
+# ╟─3888f083-86e2-4edb-a700-62028ad295b4
+# ╟─7d50c4c7-e6f0-43b7-8583-7b47cbcc2156
+# ╟─9a0bbdd2-c9fe-4932-94f3-3727baa6b9a6
+# ╟─5c4497e8-e02d-4265-ba7c-aa607231ee6d
+# ╟─fa99131e-13b2-4f4a-a752-4afd26b6596c
+# ╟─a856ee7d-a0d9-4d4b-aa13-449a827a954d
+# ╟─507bc0c8-ef40-4ef4-ac3f-b66ae162362f
 # ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
 # ╟─b4599a16-e7f7-4a2a-b349-2648ee45208f
 # ╟─8315fb27-89e4-44a4-a51e-8e55fc3d58e5
