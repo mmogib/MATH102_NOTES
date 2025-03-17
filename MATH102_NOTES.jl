@@ -1492,6 +1492,9 @@ md"""
 # ╔═╡ 42dee241-13c6-4d89-bce0-bac4e846cf7d
 md"## Integrals of Powers of Sine and Cosine"
 
+# ╔═╡ 4ec721e0-f0e4-492b-8791-87b876c57e6b
+
+
 # ╔═╡ 6158d974-6a19-4a84-bb10-a9488fca001b
 md"## Integrals of Powers of Secant and Tangent"
 
@@ -1517,6 +1520,9 @@ $(bbl("GUIDELINES FOR EVALUATING INTEGRALS INVOLVING POWERS OF SECANT AND TANGEN
 where ``m`` is odd and positive, use integration by parts, as illustrated in Example 5 in Section 8.2.
 5. When the first four guidelines do not apply, try converting to sines and cosines.
 """
+
+# ╔═╡ b0938d8a-a9b4-4551-9731-7bc738b88e85
+
 
 # ╔═╡ 76e4c36b-0cc8-4042-9c63-0610cb669ec9
 md"## Integrals Involving Sine-Cosine Products"
@@ -1558,15 +1564,15 @@ md"""
 """
 
 # ╔═╡ 14ea163c-854d-453d-8e00-67571751653d
-
+md"## Trigonometric Substitution"
 
 # ╔═╡ c2d68428-99c5-45fb-b056-a1c0ae5f06ad
 md"""
-## 8.5 Partial Fractions
+# 8.5 Partial Fractions
 > __Objectives__
-> -Understand the concept of partial fraction decomposition.
-> - Use partial fraction decomposition with linear factors to integrate rational functions.
-> - Use partial fraction decomposition with quadratic factors to integrate rational functions.
+> 1. Understand the concept of partial fraction decomposition.
+> 2. Use partial fraction decomposition with linear factors to integrate rational functions.
+> 3. Use partial fraction decomposition with quadratic factors to integrate rational functions.
 
 **Integration of Rational Functions By Partial Fractions**
 
@@ -1591,6 +1597,9 @@ and apply __STEP 2__ on  ``\frac{R(x)}{Q(x)}``.
 ◾ __STEP 3__ : Integrate
  
 """
+
+# ╔═╡ 5ad8d84d-9f32-4378-bd22-f6004023076c
+
 
 # ╔═╡ 077175a1-b3e0-467b-b5bd-b52616e3936f
 md"""
@@ -1651,6 +1660,12 @@ md"""
 
 """
 
+# ╔═╡ 4eee2e8b-85b3-4986-9e5d-bfea119302dc
+md"## Linear Factors"
+
+# ╔═╡ bc944bad-3868-4fca-af1d-0a6e6ffffbb7
+md"## Quadratic Factors"
+
 # ╔═╡ f8dc9ccf-df39-47a4-b80a-78cc262cfdeb
 md"""
 **More Examples**
@@ -1658,10 +1673,6 @@ md"""
 Find
 ```math
 \begin{array}{lll}
-\text{(1)} & \displaystyle \int \frac{1}{x^2-5x+6}dx. \\
-\text{(2)} &\displaystyle \int  \frac{5x^2+20x+6}{x^3+2x^2+x}dx. \\
-\text{(3)} &\displaystyle \int  \frac{2x^3-4x-8}{(x^2-x)(x^2+4)}dx. \\
-\text{(4)} &\displaystyle \int  \frac{8x^3+13x}{(x^2+2)^2}dx. \\
 \text{(5)} &\displaystyle \int  \frac{x^3+x}{x-1}dx. \\
 \text{(6)} &\displaystyle \int  \frac{x^2+2x-1}{2x^3+3x^2-2x}dx. \\
 \text{(7)} &\displaystyle \int  \frac{dx}{x^2-a^2}, \text{  where } a\not = 0 \\
@@ -1672,6 +1683,25 @@ Find
 \end{array}
 ```
 
+"""
+
+# ╔═╡ 72974703-d483-4d3c-be80-b89c7d7c503f
+# let
+# 	@syms x::Real
+# 	f(x) = (x^4-2x^2+4x+1)/(x^3-x^2-x+1)
+# 	integrate(f(x),x)
+# end
+
+# ╔═╡ ff9221cc-70e3-4f14-9bf8-8340874c17c3
+md"""
+__Rationalizing Substitutions__
+Find
+```math
+\begin{array}{lll}
+\text{(1)} & \int \frac{\sqrt{x+4}}{x}dx. \\
+\text{(2)} & \int \frac{dx}{2\sqrt{x+3}+\;x}. \\
+\end{array}
+```
 """
 
 # ╔═╡ 318706d0-ad9a-4a1e-b3de-f02020b6ab52
@@ -1686,46 +1716,20 @@ md"""
 ```
 """
 
-# ╔═╡ ff9221cc-70e3-4f14-9bf8-8340874c17c3
-md"""
-__Rationalizing Substitutions__
-Find
-```math
-\begin{array}{lll}
-\text{(1)} & \int \frac{\sqrt{x+4}}{x}dx. \\
-\text{(2)} & \int \frac{dx}{2\sqrt{x+3}+\;x}. \\
-\end{array}
-```
-"""
-
 # ╔═╡ dbd5a0da-cafb-4537-9410-215d87bdc60e
 md"""
-## 8.7 Rational Functions of Sine & Cosine 
-
-
-
-Special Substitution (``u = \tan \left(\frac{x}{2}\right), \quad -\pi < x < \pi``)
-**(for rational functions of ``\sin x`` and ``\cos x``)**
-```math
-\begin{array}{lll}
-dx=\frac{2}{1+u^2}du, & \cos{x}=\frac{1-u^2}{1+t^2}, &  \sin{x}=\frac{2u}{1+u^2} \\
-\end{array}
-```
-```math
-\begin{array}{lll}
-\text{(1)} & \displaystyle\int \frac{dx}{3\sin x - 4 \cos x}. \\
-\text{(2)} & \displaystyle\int_0^{\pi\over 2} \frac{\sin 2x \;dx}{2+\cos x}. \\
-\end{array}
-```
+# 8.7 Rational Functions of Sine & Cosine 
+> __Objectives__
+> 1. Find an indefinite integral involving rational functions of sine and cosine
 
 """
 
 # ╔═╡ 0a6c72ed-f6f0-4534-ba96-581e685a3d94
 md"""
-## 8.8 Improper Integrals
+# 8.8 Improper Integrals
 > __Objectives__
-> - Evaluate an improper integral that has an infinite limit of integration.
-> - Evaluate an improper integral that has an infinite discontinuity.
+> 1. Evaluate an improper integral that has an infinite limit of integration.
+> 2. Evaluate an improper integral that has an infinite discontinuity.
 *__Do you know how to evaluate the following?__*
 ```math
 
@@ -2136,30 +2140,37 @@ begin
         endBlock()
     end
     ex() = example("Example", "")
-    function example(lable, desc)
-        """<div style="display:flex;">
-       <div style="
-       font-size: 112%;
-           line-height: 1.3;
-           font-weight: 600;
-           color: #f9ce4e;
-           float: left;
-           background-color: #5c5c5c;
-           border-left: 10px solid #474546;
-           padding: 5px 10px;
-           margin: 0 12px 20px 0;
-           border-radius: 0;
-       ">$lable:</div>
-       <div style="flex-grow:3;
-       line-height: 1.3;
-           font-weight: 600;
-           float: left;
-           padding: 5px 10px;
-           margin: 0 12px 20px 0;
-           border-radius: 0;
-       ">$desc</div>
-       </div>"""
+    # function example(lable, desc)
+    #     """<div style="display:flex;">
+    #    <div style="
+    #    font-size: 112%;
+    #        line-height: 1.3;
+    #        font-weight: 600;
+    #        color: #f9ce4e;
+    #        float: left;
+    #        background-color: #5c5c5c;
+    #        border-left: 10px solid #474546;
+    #        padding: 5px 10px;
+    #        margin: 0 12px 20px 0;
+    #        border-radius: 0;
+    #    ">$lable:</div>
+    #    <div style="flex-grow:3;
+    #    line-height: 1.3;
+    #        font-weight: 600;
+    #        float: left;
+    #        padding: 5px 10px;
+    #        margin: 0 12px 20px 0;
+    #        border-radius: 0;
+    #    ">$desc</div>
+    #    </div>"""
+    # end
+	function example(lable, desc)
+        """<div class="example-snippet">
+    		<div class="example-label">$lable</div>
+    		<div class="example-title">$desc</div>
+  	</div>"""
     end
+	 
     @htl("")
 end
 
@@ -3764,6 +3775,168 @@ Find
 ```
 """
 
+# ╔═╡ a533908e-9bb0-4cf5-984f-51a5f099db8f
+cm"""
+$(bbl("Trigonometric Substitution"," (``a>0``) "))
+1. For integrals involving ``\sqrt{a^2-u^2}``, let
+```math
+u=a \sin \theta
+```
+
+Then ``\sqrt{a^2-u^2}=a \cos \theta``, where
+```math
+-\pi / 2 \leq \theta \leq \pi / 2
+```
+2. For integrals involving ``\sqrt{a^2+u^2}``, let
+```math
+u=a \tan \theta
+```
+
+Then ``\sqrt{a^2+u^2}=a \sec \theta``, where
+```math
+-\pi / 2<\theta<\pi / 2
+```
+3. For integrals involving ``\sqrt{u^2-a^2}``, let ``u=a \sec \theta``.
+```math
+\sqrt{u^2-a^2}=\left\{\begin{array}{l}
+a \tan \theta \text { for } u>a, \text { where } 0 \leq \theta<\pi / 2 \\
+-a \tan \theta \text { for } u<-a, \text { where } \pi / 2<\theta \leq \pi .
+\end{array}\right.
+```
+"""
+
+# ╔═╡ 22e8b5e8-8343-4e74-9f28-4b268e3157af
+cm"""
+$(ex(1,"Trigonometric Substitution: u=a sinθ "))
+Find 
+```math
+\int \frac{d x}{x^2 \sqrt{9-x^2}}.
+```
+"""
+
+# ╔═╡ 11ebe671-ede6-438d-a896-45eca3beb94c
+cm"""
+$(ex(2,"Trigonometric Substitution: u=a tanθ "))
+Find 
+```math
+\int \frac{d x}{\sqrt{4x^2+1}}.
+```
+"""
+
+# ╔═╡ c08feccc-e1aa-4a23-a42e-798dfe4278eb
+cm"""
+$(ex(3,"Trigonometric Substitution: Rational Powers"))
+Find 
+```math
+\int \frac{d x}{\left(x^2+1\right)^{3 / 2}}.
+```
+"""
+
+# ╔═╡ f943eff3-357b-4a33-a272-fdf3a7d80a5f
+cm"""
+$(ex(4,"Converting the Limits of Integration"))
+Evaluate 
+```math
+\int_{\sqrt{3}}^2 \frac{\sqrt{x^2-3}}{x} d x
+```
+"""
+
+# ╔═╡ da070497-1db3-4250-8d45-128daf2ff54f
+cm"""
+$(ex(5,"Finding Arc Length"))
+Find the arc length of the graph of ``f(x)=\frac{1}{2} x^2`` from ``x=0`` to ``x=1`` 
+"""
+
+# ╔═╡ 4ebfeece-3528-43e0-a70f-9e901b28b930
+cm"""
+
+$(bbl("Decomposition of 𝐍(x)/ 𝐃(x) into Partial Fractions"))
+1. Divide when improper: When ``N(x) / D(x)`` is an improper fraction (that is, when the degree of the numerator is greater than or equal to the degree of the denominator), divide the denominator into the numerator to obtain
+```math
+\frac{N(x)}{D(x)}=(\text { a polynomial })+\frac{N_1(x)}{D(x)}
+```
+where the degree of ``N_1(x)`` is less than the degree of ``D(x)``. Then apply Steps 2, 3, and 4 to the proper rational expression ``N_1(x) / D(x)``.
+2. Factor denominator: Completely factor the denominator into factors of the form
+```math
+(p x+q)^m \text { and }\left(a x^2+b x+c\right)^n
+```
+where ``a x^2+b x+c`` is irreducible.
+3. Linear factors: For each factor of the form ``(p x+q)^m``, the partial fraction decomposition must include the following sum of ``m`` fractions.
+```math
+\frac{A_1}{(p x+q)}+\frac{A_2}{(p x+q)^2}+\cdots+\frac{A_m}{(p x+q)^m}
+```
+4. Quadratic factors: For each factor of the form ``\left(a x^2+b x+c\right)^n``, the partial fraction decomposition must include the following sum of ``n`` fractions.
+```math
+\frac{B_1 x+C_1}{a x^2+b x+c}+\frac{B_2 x+C_2}{\left(a x^2+b x+c\right)^2}+\cdots+\frac{B_n x+C_n}{\left(a x^2+b x+c\right)^n}
+```
+"""
+
+# ╔═╡ 3de417dd-e670-4e28-bb27-88abe5476f84
+cm"""
+$(ex(1,"Distinct Linear Factors"))
+Write the partial fraction decomposition for 
+```math
+ \frac{1}{x^2-5x+6}
+```
+"""
+
+# ╔═╡ 7daad386-47a2-44d7-9af8-743d5712cec0
+cm"""
+$(ex(3,"Distinct Linear and Quadratic Factors"))
+
+Find
+```math
+\int  \frac{2x^3-4x-8}{(x^2-x)(x^2+4)}dx.
+
+```
+"""
+
+# ╔═╡ 98e43437-09c0-4b5d-b5b2-cb38d3d1ca20
+cm"""
+$(ex(4," Repeated Quadratic Factors"))
+```math
+\int  \frac{8x^3+13x}{(x^2+2)^2}dx. 
+```
+
+"""
+
+# ╔═╡ 16f26878-cbe0-4ac1-a593-691a2fe55aca
+cm"""
+$(ex(2,"Repeated Linear Factors"))
+Find
+```math
+\int  \frac{5x^2+20x+6}{x^3+2x^2+x}dx.
+```
+"""
+
+# ╔═╡ 0cef9fcd-3734-4694-ad23-ca1465d1f96e
+cm"""
+$(bbl("Substitution for Rational Functions of Sine and Cosine",""))
+
+For integrals involving rational functions of sine and cosine, the substitution
+```math
+u=\frac{\sin x}{1+\cos x}=\tan \frac{x}{2}
+```
+yields
+```math
+\cos x=\frac{1-u^2}{1+u^2}, \quad \sin x=\frac{2 u}{1+u^2}, \quad \text { and } \quad d x=\frac{2 d u}{1+u^2}
+```
+
+"""
+
+# ╔═╡ 98f709cb-cccf-42a7-af35-e026f7369bb8
+cm"""
+$(ex())
+Find
+```math
+\begin{array}{lll}
+\text{(1)} & \displaystyle\int \frac{dx}{3\sin x - 4 \cos x}. \\
+\text{(2)} & \displaystyle\int_0^{\pi\over 2} \frac{\sin 2x \;dx}{2+\cos x}. \\
+\end{array}
+```
+
+"""
+
 # ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
 initialize_eqref()
 
@@ -3783,8 +3956,39 @@ ul li:before {
 .p40 {
 	padding-left: 40px;
 }
-</style>
+    /* Container holding both the red label and the title text */
+    .example-snippet {
+      font-family: Arial, sans-serif;
+      display: inline-flex;       /* Keep label and title on the same line */
+      align-items: center;        /* Vertically center them */
+      margin: 0rem;              /* Some spacing around the snippet */
+    }
 
+    /* Red label box (e.g., "EXAMPLE 1") */
+    .example-label {
+      background: #cc0000; /* Fallback solid color */
+      background: linear-gradient(to bottom, #ff3b3b 0%, #cc0000 100%);
+      color: #ffffff;
+      font-weight: bold;
+      padding: 0.4rem 0.8rem;
+      border: 1px solid #990000;  /* Darker border for slight contrast */
+      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3); /* Subtle text shading */
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3); /* Highlight across the top */
+      margin-right: 0.8rem; /* Space between red box and title */
+    }
+
+    /* Title text (e.g., "Integration by Tables") */
+    .example-title {
+      font-size: 1rem;
+      color: #000000;
+      font-weight: normal;
+      white-space: nowrap; /* Prevents title from breaking onto a new line */
+    }
+	.example-snippet::after {
+	      content: "";
+	      display: block;
+	      height: 1.5rem; 
+	}
 </style>
 """)
 
@@ -3829,7 +4033,7 @@ SymPy = "~2.2.0"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.11.3"
+julia_version = "1.11.4"
 manifest_format = "2.0"
 project_hash = "81a86a43942ca0d9cd7492fade0513388f9b8155"
 
@@ -4658,7 +4862,7 @@ version = "2.5.2+0"
 [[deps.OpenLibm_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "05823500-19ac-5b8b-9628-191a04bc5112"
-version = "0.8.1+2"
+version = "0.8.1+4"
 
 [[deps.OpenSSL]]
 deps = ["BitFlags", "Dates", "MozillaCACerts_jll", "OpenSSL_jll", "Sockets"]
@@ -5710,6 +5914,7 @@ version = "1.4.1+1"
 # ╟─2ada5eca-3ab9-444b-8350-153cf62abd3b
 # ╟─c2941250-feac-4855-97d5-f88c35ed689a
 # ╟─e40ba504-6b6c-4abc-81c8-67db621b90de
+# ╠═4ec721e0-f0e4-492b-8791-87b876c57e6b
 # ╟─cdd3a632-1020-4df5-b4cf-00a10b6fd255
 # ╟─e5c79a58-bd0e-4490-bfee-9cf7938472ff
 # ╟─6158d974-6a19-4a84-bb10-a9488fca001b
@@ -5717,19 +5922,37 @@ version = "1.4.1+1"
 # ╟─b7c18135-6b5a-4ca6-8169-9643f0815b3b
 # ╟─b27f07f2-881c-42f0-8d9d-c49c4c54b780
 # ╟─95099f5d-61ee-44ca-8d51-b01446f29649
+# ╠═b0938d8a-a9b4-4551-9731-7bc738b88e85
 # ╟─db377636-d9b6-4742-bf42-050a31860ad2
 # ╟─76e4c36b-0cc8-4042-9c63-0610cb669ec9
 # ╟─dd402f3e-4580-41e6-89c5-d6e1eba01b63
 # ╟─d808a001-48ea-4eaa-9501-27d486133480
 # ╟─d1ea53cf-eb1e-4f7a-ad9d-f6f58f48d0b1
-# ╠═14ea163c-854d-453d-8e00-67571751653d
+# ╟─14ea163c-854d-453d-8e00-67571751653d
+# ╟─a533908e-9bb0-4cf5-984f-51a5f099db8f
+# ╟─22e8b5e8-8343-4e74-9f28-4b268e3157af
+# ╟─11ebe671-ede6-438d-a896-45eca3beb94c
+# ╟─c08feccc-e1aa-4a23-a42e-798dfe4278eb
+# ╟─f943eff3-357b-4a33-a272-fdf3a7d80a5f
+# ╟─da070497-1db3-4250-8d45-128daf2ff54f
 # ╟─c2d68428-99c5-45fb-b056-a1c0ae5f06ad
+# ╠═5ad8d84d-9f32-4378-bd22-f6004023076c
 # ╟─077175a1-b3e0-467b-b5bd-b52616e3936f
+# ╟─4ebfeece-3528-43e0-a70f-9e901b28b930
 # ╟─f65d043c-24ab-4c73-8da9-653ec0f57298
+# ╟─4eee2e8b-85b3-4986-9e5d-bfea119302dc
+# ╟─3de417dd-e670-4e28-bb27-88abe5476f84
+# ╟─bc944bad-3868-4fca-af1d-0a6e6ffffbb7
+# ╠═7daad386-47a2-44d7-9af8-743d5712cec0
+# ╟─98e43437-09c0-4b5d-b5b2-cb38d3d1ca20
+# ╟─16f26878-cbe0-4ac1-a593-691a2fe55aca
 # ╟─f8dc9ccf-df39-47a4-b80a-78cc262cfdeb
-# ╟─318706d0-ad9a-4a1e-b3de-f02020b6ab52
+# ╠═72974703-d483-4d3c-be80-b89c7d7c503f
 # ╟─ff9221cc-70e3-4f14-9bf8-8340874c17c3
+# ╟─318706d0-ad9a-4a1e-b3de-f02020b6ab52
 # ╟─dbd5a0da-cafb-4537-9410-215d87bdc60e
+# ╟─0cef9fcd-3734-4694-ad23-ca1465d1f96e
+# ╟─98f709cb-cccf-42a7-af35-e026f7369bb8
 # ╟─0a6c72ed-f6f0-4534-ba96-581e685a3d94
 # ╟─c2ded1c8-a0a7-48cb-bf1d-7616796a5062
 # ╟─963f8130-c7f7-4b57-8bac-64c92b46c53a
