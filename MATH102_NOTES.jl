@@ -1741,98 +1741,143 @@ md"""
 
 """
 
-# ╔═╡ c2ded1c8-a0a7-48cb-bf1d-7616796a5062
+# ╔═╡ dbd92a84-14c0-4510-9f9f-39e90f50c30e
+md"## Improper Integrals with Infinite Limits of Integration"
+
+# ╔═╡ 3f727233-8150-4008-8fb5-2a83ba616e1e
+md"## Improper Integrals with Infinite Discontinuities"
+
+# ╔═╡ 1e507853-e2e6-493d-9d62-f33da7a7caa8
 md"""
-*__Definition of an Improper Integral of Type 1__*
-
-**(a)** If ``\int_a^t f(x) dx`` exists for every number ``t\ge a``, then
-```math
-\int_a^{\infty} f(x) dx = \lim_{t\to \infty} \int_a^t f(x) dx
-```
-provided this limit exists (as a finite number).
-
-
-**(b)** If ``\int_t^b f(x) dx`` exists for every number ``t\le b``, then
-```math
-\int_{-\infty}^b f(x) dx = \lim_{t\to -\infty} \int_t^b f(x) dx
-```
-provided this limit exists (as a finite number).
-
-The improper integrals ``\int_a^{\infty} f(x) dx`` and ``\int_{-\infty}^b f(x) dx`` are called *__convergent__* if the corresponding limit exists and *__divergent__* if the limit does not exist.
-
-**(c)** If both ``\int_a^{\infty} f(x) dx`` and ``\int_{-\infty}^b f(x) dx`` are convergent, then we define
-```math
-\int_{-\infty}^{\infty} f(x) dx =  \int_{-\infty}^a f(x) dx +\int_a^{\infty} f(x) dx
-```
-
-In part (c) any real number  can be used
+# 9.1 Sequences
+__Objectives__
+> 1. Write the terms of a sequence.
+> 1. Determine whether a sequence converges or diverges.
+> 1. Write a formula for the nth term of a sequence.
+> 1. Use properties of monotonic sequences and bounded sequences.
 """
 
-# ╔═╡ 963f8130-c7f7-4b57-8bac-64c92b46c53a
-md"""
-**Example:** Determine whether the following integrals  are convergent or divergent.
+# ╔═╡ 2eb6bb15-066f-4601-8a94-eb1ce880e7ac
+md"## Sequences"
 
+# ╔═╡ 8c345896-0123-40a5-8f00-c6ebefcee822
+cm"""
+__Sequence__: A sequence can be thought of as a list of numbers written in a definite order:
 ```math
-\begin{array}{ll}
-\text{(1)} & \displaystyle \int_1^{\infty} \frac{1}{x^2} dx \\ \\
-\text{(2)} & \displaystyle\int_1^{\infty} \frac{1}{x} dx \\ \\
-\text{(3)} & \displaystyle\int_{0}^{\infty} e^{-x} dx\\ \\
-\text{(4)} & \displaystyle\int_{-\infty}^{\infty} \frac{1}{1+x^2} dx\\ \\
-\end{array}
+a_1, a_2, a_3, \cdots, a_n, \cdots 
 ```
 
+- ``a_1``: first term,
+- ``a_2``: second term,
+- ``a_3``: third term,
+- ``\vdots``
+- ``a_n``: ``\text{n}^\text{th}`` term,
 
 """
 
-# ╔═╡ d656cb73-ab16-4d06-80c3-2432fe752c59
-md"""
-**Remark**
+# ╔═╡ 07d91fbf-0d89-47cc-b84a-12ce0c8f8a71
+let
+	@syms n::Unsigned
+	a(n) = 3+(-1)^n
+	b(n) = n/(1-2n)
+	c(n) = n^2/(2^n-1)
+	d(n) = n==1 ? 25 : d(n-1) - 5 
+	k=Unsigned(5)
+	seq(an,lastn,lst=false,final_term=false) = begin
+		st = join(map(i-> "$(String(Symbol(an)))_{$i}=$(an(i))",1:lastn)," ,")
+		stl = join(map(i-> "$(an(i))",1:lastn)," ,")
+		final_str = if final_term
+			"$(String(Symbol(an)))_{$lastn}=$(an(lastn))"
+		elseif lst==false 
+			st 
+		else 
+			"\\{$stl, \\cdots\\}"
+		end
+		L"%$(final_str)"
+	
+	end
+	seq(a,5,false,true)
+	
+	cm""
+	
+end
 
-```math
-\int_1^{\infty} \frac{1}{x^p}dx \quad \text{ is convergent if } p > 1 \text{ and divergent if } p\leq 1.
-```
+# ╔═╡ 355007a5-91c8-454e-8463-31c6abc9f87f
+md"## Limit of a Sequence"
 
-"""
+# ╔═╡ eae5658b-a235-40de-84a3-00152a109e93
+n91Slider = @bind n91slider  NumberField(1:1000,default=1);md"n = $n91Slider"
 
-# ╔═╡ 0d3ae5ad-a04a-4417-a4ca-80056656d5d3
-md"""
-*__Definition of an Improper Integral of Type 2__*
+# ╔═╡ af5c9045-66ec-483a-a197-db544f30b1b6
+let
+	seqns = [
+		(n ->  n/(n+1), L"a_n=\frac{n}{n+1}",-0.1,1.1),
+		(n ->  (1+1/n)^n, L"a_n=\left(1+\frac{1}{n}\right)^n",-0.1,3.2),
+	]
+	a1,label,ymin,ymax =seqns[2]
+	d1=1:n91slider
+	plt1 = scatter(a1.(d1), zeros(10),
+		frame_style=:origin, 
+		ylimits=(ymin,ymax),
+		xlimits=(-0.2,ymax+0.5),
+		yaxis=nothing,
+		label=label,
+		showaxis=:x,
+		legend=:outertopright,
+		title_location=:left,
+		grid=:none,
+		title="Example 1"
+	)
+	annotate!(plt1,[(0.4,0.5,L"a_{%$n91slider}=\frac{%$n91slider}{%$(1+n91slider)}=%$(round(a1(n91slider),digits=6))")])
+	
+	d2=1:n91slider
+	plt2 = scatter(d2, a1.(d2),
+		frame_style=:origin, 
+		ylimits=(ymin,ymax),
+		xlimits=(-2,200),
+		label=label,
+		legend=:outerbottom,
+		title_location=:left,
+		title="Visualization (Graph)",
+		marker=(1,2,:green,stroke(0.0, 0.0, :green, :dot))
+	)
+	annotate!(plt2,[(100,ymax/2,L"a_{%$n91slider}=\frac{%$n91slider}{%$(1+n91slider)}=%$(round(a1(n91slider),digits=6))")])
+# 	if (n91slider>=10)
+		
+# 		lens!(plt2,[n91slider-20.1, n91slider+20.1], [0.9,1.01], 
+# 			inset = (1, bbox(0.6, -0.1, 0.4, 0.4)),
+# 			grid=:none,
+			
+# 		)
+	# end
+	# if (n91slider>=99)
+		
+	# 	lens!(plt1,[ymax-0.11, ymax], [ymin,ymax], inset = (1, bbox(0.6, 0.0, 0.4, 0.5)),
+	# 			yaxis=nothing,
+	# 			frame_style=:origin, 
+	# 			showaxis=:x,
+	# 		grid=:none,
+	# 		annotations=[(ymax-0.11,0.3,"Zoom",7)]
+	# 	)
+	# 	lens!(plt2,[ymax-0.11, ymax], [ymin,ymax], inset = (1, bbox(0.6, 0.0, 0.4, 0.5)),
+	# 			yaxis=nothing,
+	# 			frame_style=:origin, 
+	# 			showaxis=:x,
+	# 		grid=:none,
+	# 		annotations=[(ymax-0.11,0.3,"Zoom",7)]
+	# 	)
+	# end
+	md"""
+	$plt2
+	"""
+		
+end
 
-**(a)** If ``f`` is continuous on ``[a,b)`` and is discontinuous at ``b``, then
-```math
-\int_a^b f(x) dx = \lim_{t\to b^-} \int_a^t f(x) dx
-```
-provided this limit exists (as a finite number).
+# ╔═╡ 4507039d-b5e0-4c22-a698-ccbfc7eeb6ed
+md"## Pattern Recognition for Sequences"
 
-
-**(b)** If ``f`` is continuous on ``(a,b]`` and is discontinuous at ``a``, then
-```math
-\int_a^b f(x) dx = \lim_{t\to a^{+}} \int_t^b f(x) dx
-```
-provided this limit exists (as a finite number).
-
-The improper integral ``\int_a^b f(x) dx`` is called **convergent** if the corresponding limit exists and **divergent** if the limit does not exist.
-
-**(c)** If ``f`` has a discontinuity at ``c``, where ``a<c<b``, and both ``\int_a^c f(x) dx`` and ``\int_c^b f(x) dx`` are convergent, then we define
-```math
-\int_{a}^{b} f(x) dx =  \int_{a}^c f(x) dx +\int_c^b f(x) dx
-```
-
-"""
-
-# ╔═╡ 1cdde0bd-2aa3-48a6-86c1-fc4add4238ac
-md"""
-**Example:** 
-```math
-\begin{array}{ll}
-\text{(1)} & \int_2^5 \frac{1}{\sqrt{x-2}} dx \\ \\
-\text{(2)} & \int_0^{3} \frac{1}{1-x} dx \\ \\
-\text{(3)} & \int_{0}^{1} \ln x dx\\ \\
-\end{array}
-```
-
-
-"""
+# ╔═╡ b568193c-ba85-4f59-89e9-6d5b824d08cd
+md"## Monotonic Sequences and Bounded Sequences"
 
 # ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
 function rect(x, Δx, xs, f;direction=:x) 
@@ -2165,10 +2210,17 @@ begin
     #    </div>"""
     # end
 	function example(lable, desc)
-        """<div class="example-snippet">
-    		<div class="example-label">$lable</div>
-    		<div class="example-title">$desc</div>
-  	</div>"""
+        """<div class="example-box">
+    <div class="example-header">
+      $lable
+    </div>
+    <div class="example-title">
+      $desc
+    </div>
+    <div class="example-content">
+      
+  </div>
+		"""
     end
 	 
     @htl("")
@@ -3937,6 +3989,296 @@ Find
 
 """
 
+# ╔═╡ c2ded1c8-a0a7-48cb-bf1d-7616796a5062
+cm"""
+$(define("Improper Integrals with Infinite Integration Limits"))
+
+**(a)** If ``\int_a^t f(x) dx`` exists for every number ``t\ge a``, then
+```math
+\int_a^{\infty} f(x) dx = \lim_{t\to \infty} \int_a^t f(x) dx
+```
+provided this limit exists (as a finite number).
+
+
+**(b)** If ``\int_t^b f(x) dx`` exists for every number ``t\le b``, then
+```math
+\int_{-\infty}^b f(x) dx = \lim_{t\to -\infty} \int_t^b f(x) dx
+```
+provided this limit exists (as a finite number).
+
+The improper integrals ``\int_a^{\infty} f(x) dx`` and ``\int_{-\infty}^b f(x) dx`` are called *__convergent__* if the corresponding limit exists and *__divergent__* if the limit does not exist.
+
+**(c)** If both ``\int_a^{\infty} f(x) dx`` and ``\int_{-\infty}^b f(x) dx`` are convergent, then we define
+```math
+\int_{-\infty}^{\infty} f(x) dx =  \int_{-\infty}^a f(x) dx +\int_a^{\infty} f(x) dx
+```
+
+In part (c) any real number  can be used
+"""
+
+# ╔═╡ 963f8130-c7f7-4b57-8bac-64c92b46c53a
+cm"""
+$(ex(1,"An Improper Integral That Diverge"))
+
+Evaluate ``\displaystyle \int_1^{\infty} \frac{1}{x} dx``.
+
+$(ex(2,"An Improper Integrals That Converge"))
+
+Evaluate each improper integral
+- (a) ``\displaystyle\int_{0}^{\infty} e^{-x} dx.``
+- (b) ``\displaystyle\int_{0}^{\infty} \frac{1}{1+x^2} dx``.
+
+
+"""
+
+# ╔═╡ 4098c133-f9d4-4198-a39b-f8fa93bf0774
+cm"""
+$(ex(3,"Using L’Hôpital’s Rule with an Improper Integra"))
+
+Evaluate
+```math
+\int_1^{\infty} (1 − x)e^{−x} dx.
+"""
+
+# ╔═╡ 71c6a056-c512-4f00-8195-a6de36bc98c8
+cm"""
+$(ex(4,"Infinite Upper and Lower Limits of Integration"))
+
+Evaluate
+```math
+\int_{-\infty}^{\infty} \frac{e^x}{1+e^{2x}} dx
+```
+"""
+
+# ╔═╡ f7b555c6-5844-4971-8693-a8ada5074b20
+cm"""
+$(define("Improper Integrals with Infinite Discontinuities"))
+1. If ``f`` is continuous on the interval ``[a, b)`` and has an infinite discontinuity at ``b``, then
+```math
+\int_a^b f(x) d x=\lim _{c \rightarrow b^{-}} \int_a^c f(x) d x
+```
+2. If ``f`` is continuous on the interval ``(a, b]`` and has an infinite discontinuity at ``a``, then
+```math
+\int_a^b f(x) d x=\lim _{c \rightarrow a^{+}} \int_c^b f(x) d x
+```
+3. If ``f`` is continuous on the interval ``[a, b]``, except for some ``c`` in ``(a, b)`` at which ``f`` has an infinite discontinuity, then
+```math
+\int_a^b f(x) d x=\int_a^c f(x) d x+\int_c^b f(x) d x
+```
+
+In the first two cases, the improper integral __converges__ when the limit existsotherwise, the improper integral __diverges__. In the third case, the improper integral on the left diverges when either of the improper integrals on the right diverges.
+"""
+
+# ╔═╡ dd990994-e154-4d4e-bca7-7fce46fb193b
+cm"""
+$(ex(6,"An Improper Integral with an Infinite Discontinuity"))
+
+Evaluate 
+```math
+\int_0^1 \frac{d x}{\sqrt[3]{x}}
+```
+"""
+
+# ╔═╡ b7b3ab16-92e7-4e52-ae8f-42675eb8ade1
+cm"""
+$(ex(7,"An Improper Integral That Diverges"))
+
+Evaluate 
+```math
+\int_0^2 \frac{d x}{x^3}
+```
+"""
+
+# ╔═╡ aa08f4c7-f3f3-4dc1-874f-e59e50d62e89
+cm"""
+$(ex(8,"An Improper Integral with an Interior Discontinuity"))
+
+Evaluate 
+```math
+\int_{-1}^2 \frac{d x}{x^3}
+```
+"""
+
+# ╔═╡ 724736c2-d020-444c-ac64-8c35fb5aed5a
+cm"""
+$(ex(9,"A Doubly Improper Integral"))
+
+Evaluate 
+```math
+\int_0^{\infty} \frac{d x}{\sqrt{x}(x+1)}
+```
+"""
+
+# ╔═╡ c5e81c70-28ae-409b-bb4b-41418fc62fab
+cm"""
+$(ex(10,"An Application Involving Arc Length"))
+
+Use the formula for arc length to show that the circumference of the circle ``x^2+y^2=1`` is ``2 \pi``.
+"""
+
+# ╔═╡ d656cb73-ab16-4d06-80c3-2432fe752c59
+cm"""
+$(bth("A Special Type of Improper Integral"))
+```math
+\int_1^{\infty} \frac{1}{x^p}dx \quad =\begin{cases}\frac{1}{p-1},&\quad & p>1\\
+\text{diverses,}&\quad&p<=1\end{cases}.
+```
+
+"""
+
+# ╔═╡ 0183ce38-0911-49ff-a120-ed8ba21fdda3
+cm"""
+$(ex(11,"An Application Involving a Solid of Revolution"))
+The solid formed by revolving (about the ``x``-axis) the unbounded region lying between the graph of ``f(x)=1 / x`` and the ``x``-axis ``(x \geq 1)`` is called Gabriel's Horn. Show that this solid has a finite volume and an infinite surface area.
+"""
+
+# ╔═╡ 25157d2c-d719-438e-b4c4-6fa7d9787820
+cm"""
+$(ex(1,"Writing the Terms of a Sequence"))
+1.  ``\{a_n\}=\{3+(−1)^n\}`` 
+2.  ``\{b_n\}=\displaystyle\left\{\frac{n}{1-2n}\right\}`` 
+3.  ``\{c_n\}=\displaystyle\left\{\frac{n^2}{2^n-1}\right\}`` 
+4.  The terms of the __recursively defined__ sequence ``\{d_n\}``, where ``d_1=25`` and ``d_{n+1}=d_n−5``.
+
+"""
+
+# ╔═╡ 5c65c8e6-f08f-42ce-81dd-f80638cbf7b4
+cm"""
+$(define("the Limit of a Sequence"))
+Let ``L`` be a real number. The limit of a sequence ``\left\{a_n\right\}`` is ``L``, written as
+```math
+\lim _{n \rightarrow \infty} a_n=L
+```
+if for each ``\varepsilon>0``, there exists ``M>0`` such that ``\left|a_n-L\right|<\varepsilon`` whenever ``n>M``. If the limit ``L`` of a sequence exists, then the sequence converges to ``L``. If the limit of a sequence does not exist, then the sequence diverges.
+$(ebl())
+
+$(post_img("https://www.dropbox.com/scl/fi/c536ibwk7eycy0v2lb0rj/fig_9_1.png?rlkey=22y9oi2iy52z82iehh59pf0gs&dl=1",500))
+"""
+
+# ╔═╡ 9b9a82cc-a3c1-448f-9cb8-375e8dbd59ea
+cm"""
+$(bth("Limit of a Sequence"))
+Let ``L`` be a real number. Let ``f`` be a function of a real variable such that
+```math
+\lim _{x \rightarrow \infty} f(x)=L
+```
+
+If ``\left\{a_n\right\}`` is a sequence such that ``f(n)=a_n`` for every positive integer ``n``, then
+```math
+\lim _{n \rightarrow \infty} a_n=L
+```
+"""
+
+# ╔═╡ 3c9ab8ae-dda1-45eb-a635-92acf6e2f10b
+cm"""
+$(ex(2,"Finding the Limit of a Sequence"))
+Find the limit of the sequence whose ``n``th term is ``a_n=\left(1+\frac{1}{n}\right)^n``.
+"""
+
+# ╔═╡ ff84cfbf-d387-4bde-b9d3-407b88e1bf30
+cm"""
+$(bth("Properties of Limits of Sequences"))
+Let ``\lim _{n \rightarrow \infty} a_n=L`` and ``\lim _{n \rightarrow \infty} b_n=K``.
+1. Scalar multiple: ``\lim _{n \rightarrow \infty}\left(c a_n\right)=c L, c`` is any real number.
+2. Sum or difference: ``\lim _{n \rightarrow \infty}\left(a_n \pm b_n\right)=L \pm K``
+3. Product: ``\lim _{n \rightarrow \infty}\left(a_n b_n\right)=L K``
+4. Quotient: ``\lim _{n \rightarrow \infty} \frac{a_n}{b_n}=\frac{L}{K}, b_n \neq 0`` and ``K \neq 0``
+
+"""
+
+# ╔═╡ 9a594bd8-68f7-4f6a-8dd6-3c70780f098d
+cm"""
+$(ex(3,"Determining Convergence or Divergence"))
+1.  ``\{a_n\}=\{3+(−1)^n\}`` 
+2.  ``\{b_n\}=\displaystyle\left\{\frac{n}{1-2n}\right\}``
+"""
+
+# ╔═╡ ef95cecf-00fe-429b-b94e-50f2de8a16bb
+cm"""
+$(ex(4,"Using L'Hôpital's Rule to Determine Convergence"))
+Show that the sequence whose ``n``th term is ``a_n=\frac{n^2}{2^n-1}`` converges.
+"""
+
+# ╔═╡ e62d5f92-8ad6-4317-ab62-771b96f0c3f9
+cm"""
+$(bth("Squeeze Theorem for Sequences"))
+If ``\lim _{n \rightarrow \infty} a_n=L=\lim _{n \rightarrow \infty} b_n`` and there exists an integer ``N`` such that ``a_n \leq c_n \leq b_n`` for all ``n>N``, then ``\lim _{n \rightarrow \infty} c_n=L``.
+
+"""
+
+# ╔═╡ 63dbebd7-85d2-42fd-b09a-f0d9c1ce640f
+cm"""
+$(ex(5,"Using the Squeeze Theorem"))
+Show that the sequence ``\left\{c_n\right\}=\left\{(-1)^n \frac{1}{n!}\right\}`` converges, and find its limit.
+"""
+
+# ╔═╡ aa6664e3-5081-4c48-8754-e65ba7263f46
+cm"""
+$(bth("Absolute Value Theorem"))
+For the sequence ``\left\{a_n\right\}``, if
+```math
+\lim _{n \rightarrow \infty}\left|a_n\right|=0 \text { then } \lim _{n \rightarrow \infty} a_n=0
+```
+"""
+
+# ╔═╡ 7bafde52-30ed-41f9-9522-02b3c9b7316a
+cm"""
+$(ex(6,"Finding the <i>nth</i> Term of a Sequence"))
+Find a sequence ``\left\{a_n\right\}`` whose first five terms are
+```math
+\frac{2}{1}, \frac{4}{3}, \frac{8}{5}, \frac{16}{7}, \frac{32}{9}, \ldots
+```
+and then determine whether the sequence you have chosen converges or diverges.
+"""
+
+# ╔═╡ 471eba70-40bf-42f9-a476-b13f37ccf823
+cm"""
+$(define("Monotonic Sequence"))
+A sequence ``\left\{a_n\right\}`` is monotonic when its terms are nondecreasing
+```math
+a_1 \leq a_2 \leq a_3 \leq \cdots \leq a_n \leq \cdots
+```
+or when its terms are nonincreasing
+```math
+a_1 \geq a_2 \geq a_3 \geq \cdots \geq a_n \geq \cdots
+```
+
+"""
+
+# ╔═╡ 6c261c5d-d478-4750-ac04-bb36734a6fe1
+cm"""
+$(ex(8,"
+Determining Whether a Sequence Is Monotonic"))
+Determine whether each sequence having the given ``n``th term is monotonic.
+- a. ``a_n=3+(-1)^n``
+- b. ``b_n=\frac{2 n}{1+n}``
+- c. ``c_n=\frac{n^2}{2^n-1}``
+"""
+
+# ╔═╡ 18d5f404-685e-4781-8edf-ac7374c55526
+cm"""
+$(define("Bounded Sequence"))
+1. A sequence ``\left\{a_n\right\}`` is bounded above when there is a real number ``M`` such that ``a_n \leq M`` for all ``n``. The number ``M`` is called an upper bound of the sequence.
+2. A sequence ``\left\{a_n\right\}`` is bounded below when there is a real number ``N`` such that ``N \leq a_n`` for all ``n``. The number ``N`` is called a lower bound of the sequence.
+3. A sequence ``\left\{a_n\right\}`` is bounded when it is bounded above and bounded below.
+"""
+
+# ╔═╡ 7c50563b-0f12-4974-9acf-598247793200
+cm"""
+$(bth("Bounded Monotonic Sequences"))
+If a sequence ``\left\{a_n\right\}`` is bounded and monotonic, then it converges.
+"""
+
+
+# ╔═╡ dbc02f9a-5bc9-478e-8de1-767fd64faaec
+cm"""
+$(ex(9,"
+Bounded and Monotonic Sequences"))
+- a. The sequence ``\left\{a_n\right\}=\{1 / n\}`` is both bounded and monotonic. So, by Theorem above , it must converge.
+- b. The divergent sequence ``\left\{b_n\right\}=\left\{n^2 /(n+1)\right\}`` is monotonic but not bounded. (It is bounded below.)
+- c. The divergent sequence ``\left\{c_n\right\}=\left\{(-1)^n\right\}`` is bounded but not monotonic.
+"""
+
 # ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
 initialize_eqref()
 
@@ -3956,39 +4298,47 @@ ul li:before {
 .p40 {
 	padding-left: 40px;
 }
-    /* Container holding both the red label and the title text */
-    .example-snippet {
+    example-box {
+      max-width: 600px;           /* Limits the box width */
+      margin: 2rem auto;          /* Centers the box and adds vertical spacing */
+      border: 1px solid #ccc;     /* Light border */
+      border-radius: 4px;         /* Slightly rounded corners */
+      overflow: hidden;           /* Ensures the box boundary clips its children */
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
       font-family: Arial, sans-serif;
-      display: inline-flex;       /* Keep label and title on the same line */
-      align-items: center;        /* Vertically center them */
-      margin: 0rem;              /* Some spacing around the snippet */
     }
 
-    /* Red label box (e.g., "EXAMPLE 1") */
-    .example-label {
-      background: #cc0000; /* Fallback solid color */
-      background: linear-gradient(to bottom, #ff3b3b 0%, #cc0000 100%);
-      color: #ffffff;
+    /* Header area for "EXAMPLE 1" */
+    .example-header {
+      background: linear-gradient(90deg, #cc0000, #990000);
+      color: #fff;
       font-weight: bold;
-      padding: 0.4rem 0.8rem;
-      border: 1px solid #990000;  /* Darker border for slight contrast */
-      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3); /* Subtle text shading */
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3); /* Highlight across the top */
-      margin-right: 0.8rem; /* Space between red box and title */
+      font-size: 1.1rem;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #990000;
     }
 
-    /* Title text (e.g., "Integration by Tables") */
+    /* Sub-header area for the title or subtitle */
     .example-title {
+      background-color: #f9f9f9;
+      font-weight: 600;
       font-size: 1rem;
-      color: #000000;
-      font-weight: normal;
-      white-space: nowrap; /* Prevents title from breaking onto a new line */
+      padding: 0.75rem 1rem;
+      margin: 0;                  /* Remove default heading margins */
+      border-bottom: 1px solid #eee;
     }
-	.example-snippet::after {
-	      content: "";
-	      display: block;
-	      height: 1.5rem; 
-	}
+
+    /* Main content area for the mathematical statement or instructions */
+    .example-content {
+      padding: 1rem;
+      line-height: 1.5;
+    }
+
+    /* Optional styling for inline math or emphasis */
+    em {
+      font-style: italic;
+      color: #333;
+    }
 </style>
 """)
 
@@ -5943,7 +6293,7 @@ version = "1.4.1+1"
 # ╟─4eee2e8b-85b3-4986-9e5d-bfea119302dc
 # ╟─3de417dd-e670-4e28-bb27-88abe5476f84
 # ╟─bc944bad-3868-4fca-af1d-0a6e6ffffbb7
-# ╠═7daad386-47a2-44d7-9af8-743d5712cec0
+# ╟─7daad386-47a2-44d7-9af8-743d5712cec0
 # ╟─98e43437-09c0-4b5d-b5b2-cb38d3d1ca20
 # ╟─16f26878-cbe0-4ac1-a593-691a2fe55aca
 # ╟─f8dc9ccf-df39-47a4-b80a-78cc262cfdeb
@@ -5954,11 +6304,45 @@ version = "1.4.1+1"
 # ╟─0cef9fcd-3734-4694-ad23-ca1465d1f96e
 # ╟─98f709cb-cccf-42a7-af35-e026f7369bb8
 # ╟─0a6c72ed-f6f0-4534-ba96-581e685a3d94
+# ╟─dbd92a84-14c0-4510-9f9f-39e90f50c30e
 # ╟─c2ded1c8-a0a7-48cb-bf1d-7616796a5062
 # ╟─963f8130-c7f7-4b57-8bac-64c92b46c53a
+# ╟─4098c133-f9d4-4198-a39b-f8fa93bf0774
+# ╟─71c6a056-c512-4f00-8195-a6de36bc98c8
+# ╟─3f727233-8150-4008-8fb5-2a83ba616e1e
+# ╟─f7b555c6-5844-4971-8693-a8ada5074b20
+# ╟─dd990994-e154-4d4e-bca7-7fce46fb193b
+# ╟─b7b3ab16-92e7-4e52-ae8f-42675eb8ade1
+# ╟─aa08f4c7-f3f3-4dc1-874f-e59e50d62e89
+# ╟─724736c2-d020-444c-ac64-8c35fb5aed5a
+# ╟─c5e81c70-28ae-409b-bb4b-41418fc62fab
 # ╟─d656cb73-ab16-4d06-80c3-2432fe752c59
-# ╟─0d3ae5ad-a04a-4417-a4ca-80056656d5d3
-# ╟─1cdde0bd-2aa3-48a6-86c1-fc4add4238ac
+# ╟─0183ce38-0911-49ff-a120-ed8ba21fdda3
+# ╟─1e507853-e2e6-493d-9d62-f33da7a7caa8
+# ╟─2eb6bb15-066f-4601-8a94-eb1ce880e7ac
+# ╟─8c345896-0123-40a5-8f00-c6ebefcee822
+# ╟─25157d2c-d719-438e-b4c4-6fa7d9787820
+# ╠═07d91fbf-0d89-47cc-b84a-12ce0c8f8a71
+# ╟─355007a5-91c8-454e-8463-31c6abc9f87f
+# ╟─5c65c8e6-f08f-42ce-81dd-f80638cbf7b4
+# ╟─eae5658b-a235-40de-84a3-00152a109e93
+# ╟─af5c9045-66ec-483a-a197-db544f30b1b6
+# ╟─9b9a82cc-a3c1-448f-9cb8-375e8dbd59ea
+# ╟─3c9ab8ae-dda1-45eb-a635-92acf6e2f10b
+# ╟─ff84cfbf-d387-4bde-b9d3-407b88e1bf30
+# ╟─9a594bd8-68f7-4f6a-8dd6-3c70780f098d
+# ╟─ef95cecf-00fe-429b-b94e-50f2de8a16bb
+# ╟─e62d5f92-8ad6-4317-ab62-771b96f0c3f9
+# ╟─63dbebd7-85d2-42fd-b09a-f0d9c1ce640f
+# ╟─aa6664e3-5081-4c48-8754-e65ba7263f46
+# ╟─4507039d-b5e0-4c22-a698-ccbfc7eeb6ed
+# ╟─7bafde52-30ed-41f9-9522-02b3c9b7316a
+# ╟─b568193c-ba85-4f59-89e9-6d5b824d08cd
+# ╟─471eba70-40bf-42f9-a476-b13f37ccf823
+# ╟─6c261c5d-d478-4750-ac04-bb36734a6fe1
+# ╟─18d5f404-685e-4781-8edf-ac7374c55526
+# ╟─7c50563b-0f12-4974-9acf-598247793200
+# ╟─dbc02f9a-5bc9-478e-8de1-767fd64faaec
 # ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
 # ╟─b4599a16-e7f7-4a2a-b349-2648ee45208f
 # ╟─8315fb27-89e4-44a4-a51e-8e55fc3d58e5
