@@ -1775,7 +1775,7 @@ a_1, a_2, a_3, \cdots, a_n, \cdots
 
 """
 
-# ╔═╡ 07d91fbf-0d89-47cc-b84a-12ce0c8f8a71
+# ╔═╡ 1cc30502-ec6c-4aa9-b178-58b3e425dac9
 let
 	@syms n::Unsigned
 	a(n) = 3+(-1)^n
@@ -1783,12 +1783,11 @@ let
 	c(n) = n^2/(2^n-1)
 	d(n) = n==1 ? 25 : d(n-1) - 5 
 	k=Unsigned(5)
-	seq(an,lastn,lst=false,final_term=false) = begin
-		st = join(map(i-> "$(String(Symbol(an)))_{$i}=$(an(i))",1:lastn)," ,")
-		stl = join(map(i-> "$(an(i))",1:lastn)," ,")
-		final_str = if final_term
-			"$(String(Symbol(an)))_{$lastn}=$(an(lastn))"
-		elseif lst==false 
+	seq(an::Function,lastn::Int;kwargs...)=seq(an,lastn:lastn;kwargs...)
+	seq(an::Function,lastn::AbstractUnitRange;as_list::Bool=true) = begin
+		st = join(map(i-> "$(String(Symbol(an)))_{$i}=$(an(i))",lastn)," ,")
+		stl = join(map(i-> "$(an(i))",lastn)," ,")
+		final_str = if as_list==false 
 			st 
 		else 
 			"\\{$stl, \\cdots\\}"
@@ -1796,9 +1795,12 @@ let
 		L"%$(final_str)"
 	
 	end
-	seq(a,5,false,true)
+	seq(a,1:5)
+	seq(b,1:5)
+	seq(c,1:5)
+	seq(d,1:5)
 	
-	cm""
+	# cm""
 	
 end
 
@@ -4079,16 +4081,6 @@ Evaluate
 ```
 """
 
-# ╔═╡ b7b3ab16-92e7-4e52-ae8f-42675eb8ade1
-cm"""
-$(ex(7,"An Improper Integral That Diverges"))
-
-Evaluate 
-```math
-\int_0^2 \frac{d x}{x^3}
-```
-"""
-
 # ╔═╡ aa08f4c7-f3f3-4dc1-874f-e59e50d62e89
 cm"""
 $(ex(8,"An Improper Integral with an Interior Discontinuity"))
@@ -4106,6 +4098,16 @@ $(ex(9,"A Doubly Improper Integral"))
 Evaluate 
 ```math
 \int_0^{\infty} \frac{d x}{\sqrt{x}(x+1)}
+```
+"""
+
+# ╔═╡ b7b3ab16-92e7-4e52-ae8f-42675eb8ade1
+cm"""
+$(ex(7,"An Improper Integral That Diverges"))
+
+Evaluate 
+```math
+\int_0^2 \frac{d x}{x^3}
 ```
 """
 
@@ -4212,6 +4214,16 @@ $(ex(5,"Using the Squeeze Theorem"))
 Show that the sequence ``\left\{c_n\right\}=\left\{(-1)^n \frac{1}{n!}\right\}`` converges, and find its limit.
 """
 
+# ╔═╡ 664c41b1-6459-4dfc-9999-5b2acad3301c
+cm"""
+$(bbl("Remark",""))
+In fact, it can be shown that for any fixed number ``k``, 
+```math
+\lim _{n \rightarrow \infty}\left(k^n / n!\right)=0.
+```
+- This means that the factorial function grows faster than any exponential function.
+"""
+
 # ╔═╡ aa6664e3-5081-4c48-8754-e65ba7263f46
 cm"""
 $(bth("Absolute Value Theorem"))
@@ -4229,6 +4241,16 @@ Find a sequence ``\left\{a_n\right\}`` whose first five terms are
 \frac{2}{1}, \frac{4}{3}, \frac{8}{5}, \frac{16}{7}, \frac{32}{9}, \ldots
 ```
 and then determine whether the sequence you have chosen converges or diverges.
+"""
+
+# ╔═╡ d3729415-161a-41f0-ad07-120944323d9f
+cm"""
+$(ex(7,"Finding the nth Term of a Sequence"))
+Determine the ``n``th term for a sequence whose first five terms are
+```math
+-\frac{2}{1}, \frac{8}{2},-\frac{26}{6}, \frac{80}{24},-\frac{242}{120}, \ldots
+```
+and then decide whether the sequence converges or diverges.
 """
 
 # ╔═╡ 471eba70-40bf-42f9-a476-b13f37ccf823
@@ -6312,9 +6334,9 @@ version = "1.4.1+1"
 # ╟─3f727233-8150-4008-8fb5-2a83ba616e1e
 # ╟─f7b555c6-5844-4971-8693-a8ada5074b20
 # ╟─dd990994-e154-4d4e-bca7-7fce46fb193b
-# ╟─b7b3ab16-92e7-4e52-ae8f-42675eb8ade1
 # ╟─aa08f4c7-f3f3-4dc1-874f-e59e50d62e89
 # ╟─724736c2-d020-444c-ac64-8c35fb5aed5a
+# ╟─b7b3ab16-92e7-4e52-ae8f-42675eb8ade1
 # ╟─c5e81c70-28ae-409b-bb4b-41418fc62fab
 # ╟─d656cb73-ab16-4d06-80c3-2432fe752c59
 # ╟─0183ce38-0911-49ff-a120-ed8ba21fdda3
@@ -6322,7 +6344,7 @@ version = "1.4.1+1"
 # ╟─2eb6bb15-066f-4601-8a94-eb1ce880e7ac
 # ╟─8c345896-0123-40a5-8f00-c6ebefcee822
 # ╟─25157d2c-d719-438e-b4c4-6fa7d9787820
-# ╠═07d91fbf-0d89-47cc-b84a-12ce0c8f8a71
+# ╟─1cc30502-ec6c-4aa9-b178-58b3e425dac9
 # ╟─355007a5-91c8-454e-8463-31c6abc9f87f
 # ╟─5c65c8e6-f08f-42ce-81dd-f80638cbf7b4
 # ╟─eae5658b-a235-40de-84a3-00152a109e93
@@ -6334,9 +6356,11 @@ version = "1.4.1+1"
 # ╟─ef95cecf-00fe-429b-b94e-50f2de8a16bb
 # ╟─e62d5f92-8ad6-4317-ab62-771b96f0c3f9
 # ╟─63dbebd7-85d2-42fd-b09a-f0d9c1ce640f
+# ╟─664c41b1-6459-4dfc-9999-5b2acad3301c
 # ╟─aa6664e3-5081-4c48-8754-e65ba7263f46
 # ╟─4507039d-b5e0-4c22-a698-ccbfc7eeb6ed
 # ╟─7bafde52-30ed-41f9-9522-02b3c9b7316a
+# ╟─d3729415-161a-41f0-ad07-120944323d9f
 # ╟─b568193c-ba85-4f59-89e9-6d5b824d08cd
 # ╟─471eba70-40bf-42f9-a476-b13f37ccf823
 # ╟─6c261c5d-d478-4750-ac04-bb36734a6fe1
