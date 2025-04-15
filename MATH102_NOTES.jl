@@ -1796,9 +1796,9 @@ let
 	
 	end
 	seq(a,1:5)
-	seq(b,1:5)
-	seq(c,1:5)
-	seq(d,1:5)
+	seq(b,10000)
+	# seq(c,1:5)
+	# seq(d,1:5)
 	
 	# cm""
 	
@@ -1880,6 +1880,98 @@ md"## Pattern Recognition for Sequences"
 
 # ╔═╡ b568193c-ba85-4f59-89e9-6d5b824d08cd
 md"## Monotonic Sequences and Bounded Sequences"
+
+# ╔═╡ 7d460b80-8319-4129-862e-695ebb8cff28
+md"""
+# 9.2 Series and Convergence
+> __Objectives__
+> 1. Understand the definition of a convergent infinite series.
+> 2. Use properties of infinite geometric series.
+> 3. Use the nth-Term Test for Divergence of an infinite series.
+"""
+
+# ╔═╡ d8322419-3ebe-4718-ba84-9c435615d1ba
+md"## Infinite Series"
+
+# ╔═╡ 02def290-7dcd-4c8f-9c41-228033cc3e7c
+cm"""
+Consider the sequence ``\left\{a_n\right\}_{n=1}^{\infty}``. The expression 
+```math
+a_1 + a_2 + a_3 +\cdots 
+```
+is called an __infinite series__ (or simply __series__) and we use the notation
+
+```math
+\sum_{n=1}^{\infty}a_n \qquad \text{or} \qquad \sum a_n
+```
+
+To make sense of this sum, we define a related __sequence__ called the sequence of __partial sums__ ``\left\{s_n\right\}_{n=1}^{\infty}`` as
+```math
+\begin{array}{lll}
+s_1 & = & a_1 \\
+s_2 & = & a_1 + a_2 \\
+s_3 & = & a_1 + a_2 + a_3\\
+\vdots \\
+s_n & = & a_1 + a_2 + \cdots + a_n =\sum_{i=1}^n a_i \\
+\vdots
+\end{array}
+```
+and give the following definition
+"""
+
+# ╔═╡ 84942358-6f19-4d7f-b367-4dc5e81009f5
+cm"""
+__Questions we want to answer about `Series`__
+
+```math
+\sum_{n=1}^{\infty}a_n
+```
+1. does this converge?
+2. if it does, what is its sum?
+
+"""
+
+# ╔═╡ 9fe2db35-a1d7-4af7-be2c-e34c1ce66929
+begin
+	n8Slider = @bind n8slider  Slider(1:1000,show_value=true)
+	md"""
+	
+	----
+	
+	||
+	|---|
+	|n = $n8Slider |
+	
+	----
+	"""
+end
+
+# ╔═╡ b73b6b29-6d18-4308-80dd-e0cc2aedd038
+let
+	@syms n
+	s1(n) = 1/(2^n)
+	s1exact = summation(s1(n),(n,1,n8slider))
+	s2exact = summation(n,(n,1,n8slider))
+	s1exactn=round(Float64(s1exact.n()),digits=8)
+	s1exactsol= (n8slider<20) ? s1exact : s1exactn
+	s2exactn=round(Float64(s2exact.n()),digits=8)
+	# # gr(size = (500, 165))
+	plot(;		yaxis=nothing,
+				frame_style=:origin, 
+				showaxis=false,
+				ticks=[],
+				ylims=(0,1),
+		annotations=[
+			(0.6,0.75,
+				L"\sum_{i=1}^na_i=\sum_{n=1}^{%$n8slider}\frac{1}{2^n}=%$s1exactsol",10
+			),
+			(0.58,0.5,
+				L"\sum_{i=1}^na_i=\sum_{n=1}^{%$n8slider}n=%$s2exact",10
+			)
+		],
+			grid=:none,)
+	
+end
 
 # ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
 function rect(x, Δx, xs, f;direction=:x) 
@@ -4137,7 +4229,7 @@ The solid formed by revolving (about the ``x``-axis) the unbounded region lying 
 # ╔═╡ 25157d2c-d719-438e-b4c4-6fa7d9787820
 cm"""
 $(ex(1,"Writing the Terms of a Sequence"))
-1.  ``\{a_n\}=\{3+(−1)^n\}`` 
+1.  ``\{a_n\}=\{3+(−1)^n\}_{n\geq 1}`` 
 2.  ``\{b_n\}=\displaystyle\left\{\frac{n}{1-2n}\right\}`` 
 3.  ``\{c_n\}=\displaystyle\left\{\frac{n^2}{2^n-1}\right\}`` 
 4.  The terms of the __recursively defined__ sequence ``\{d_n\}``, where ``d_1=25`` and ``d_{n+1}=d_n−5``.
@@ -4299,6 +4391,103 @@ Bounded and Monotonic Sequences"))
 - a. The sequence ``\left\{a_n\right\}=\{1 / n\}`` is both bounded and monotonic. So, by Theorem above , it must converge.
 - b. The divergent sequence ``\left\{b_n\right\}=\left\{n^2 /(n+1)\right\}`` is monotonic but not bounded. (It is bounded below.)
 - c. The divergent sequence ``\left\{c_n\right\}=\left\{(-1)^n\right\}`` is bounded but not monotonic.
+"""
+
+# ╔═╡ 137be6c2-5b86-4e1d-b457-b4f71646e633
+cm"""
+$(define("Convergent and Divergent Series"))
+For the infinite series ``\sum_{n=1}^{\infty} a_n``, the ``\boldsymbol{n}`` th partial sum is
+```math
+S_n=a_1+a_2+\cdots+a_n .
+```
+
+If the sequence of partial sums ``\left\{S_n\right\}`` converges to ``S``, then the series ``\sum_{n=1}^{\infty} a_n`` converges. The limit ``S`` is called the sum of the series.
+```math
+S=a_1+a_2+\cdots+a_n+\cdots \quad \color{red}{S=\sum_{n=1}^{\infty} a_n}
+```
+
+If ``\left\{S_n\right\}`` diverges, then the series diverges.
+"""
+
+# ╔═╡ 7eeff659-9f83-47eb-8f96-6fac093f0e64
+cm"""
+$(ex(1,"Convergent and Divergent Series"))
+1. ``\displaystyle \sum_{n=1}^{\infty}\frac{1}{2^n}``
+1. ``\displaystyle \sum_{n=1}^{\infty}\left(\frac{1}{n}-\frac{1}{n+1}\right)`` ``\qquad \quad \color{red}{\text{telescoping series}}``
+1. ``\displaystyle \sum_{n=1}^{\infty} 1``
+
+"""
+
+# ╔═╡ 71e4523b-b68c-49cb-8877-ff819c4a13e9
+cm"""
+$(ex(2,"Writing a Series in telescoping Form"))
+ Find the sum of the series  ``\displaystyle \sum_{n=1}^{\infty} \frac{2}{4n^2-1}``
+"""
+
+# ╔═╡ 125169d6-bfd0-443f-87aa-a7117f481088
+cm"""
+Geometric Series
+The series in Example 1(a) is a __geometric series__. In general, the series
+```math
+\sum_{n=0}^{\infty} a r^n=a+a r+a r^2+\cdots+a r^n+\cdots, a \neq 0
+```
+
+is a __geometric series__ with ratio ``r, r \neq 0``.
+
+$(bth("Convergence of a Geometric Series"))
+A geometric series with ratio ``r`` diverges when ``|r| \geq 1``. If ``|r|<1``, then the series converges to the sum
+```math
+\sum_{n=0}^{\infty} a r^n=\frac{a}{1-r}, \quad|r|<1
+```
+"""
+
+# ╔═╡ 4202e249-ca1c-4b00-a482-8fe15a6064ed
+cm"""
+$(ex(3,"Convergent and Divergent Geometric Series"))
+- (a) ``\displaystyle \sum_{n=0}^{\infty}\frac{3}{2^n}``
+- (b) ``\displaystyle \sum_{n=0}^{\infty}\left(\frac{3}{2}\right)^n``
+"""
+
+# ╔═╡ d5965014-2e70-4023-80ef-526f28a0334f
+cm"""
+$(ex(4,"A Geometric Series for a Repeating Decimal"))
+Use a geometric series to write ``0.08`` as the ratio of two integers.
+"""
+
+# ╔═╡ 27a7a6b4-6462-410d-a26a-ffd384efe461
+cm"""
+$(bth("Properties of Infinite Series"))
+Let ``\sum a_n`` and ``\sum b_n`` be convergent series, and let ``A, B``, and ``c`` be real numbers. If ``\sum a_n=A`` and ``\sum b_n=B``, then the following series converge to the indicated sums.
+1. ``\displaystyle\sum_{n=1}^{\infty} c a_n=c A``
+2. ``\displaystyle\sum_{n=1}^{\infty}\left(a_n+b_n\right)=A+B``
+3. ``\displaystyle\sum_{n=1}^{\infty}\left(a_n-b_n\right)=A-B``
+$(ebl())
+## nth-Term Test for Divergence
+
+$(bth("Limit of the nth Term of a Convergent Series"))
+If ``\sum_{n=1}^{\infty} a_n`` converges, then ``\lim _{n \rightarrow \infty} a_n=0``.
+"""
+
+# ╔═╡ 7b3cf490-87d4-4294-95af-f6e6deee043d
+cm"""
+$(bth("nth-Term Test for Divergence"))
+If ``\lim _{n \rightarrow \infty} a_n \neq 0`` then ``\sum_{n=1}^{\infty} a_n`` diverges.
+"""
+
+# ╔═╡ c69ecdb4-a312-45bc-874d-85d4d3747f77
+cm"""
+$(ex(5,"Using the nth-term test for Divergence"))
+1. ``\displaystyle\sum_{n=0}^{\infty} 2^n``
+1. ``\displaystyle\sum_{n=0}^{\infty} \frac{n!}{2n!+1}``
+1. ``\displaystyle\sum_{n=0}^{\infty} \frac{1}{n}``
+
+"""
+
+# ╔═╡ 8c2447b3-c26e-47e1-8701-7e4a18ae92a8
+cm"""
+$(ex(6," Bouncing Ball Problem"))
+A ball is dropped from a height of 6 feet and begins bouncing
+The height of each bounce is three-fourths the height of the previous bounce. Find the  total vertical distance traveled by the ball.
 """
 
 # ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
@@ -6367,6 +6556,22 @@ version = "1.4.1+1"
 # ╟─18d5f404-685e-4781-8edf-ac7374c55526
 # ╟─7c50563b-0f12-4974-9acf-598247793200
 # ╟─dbc02f9a-5bc9-478e-8de1-767fd64faaec
+# ╟─7d460b80-8319-4129-862e-695ebb8cff28
+# ╟─d8322419-3ebe-4718-ba84-9c435615d1ba
+# ╟─02def290-7dcd-4c8f-9c41-228033cc3e7c
+# ╟─137be6c2-5b86-4e1d-b457-b4f71646e633
+# ╟─84942358-6f19-4d7f-b367-4dc5e81009f5
+# ╟─9fe2db35-a1d7-4af7-be2c-e34c1ce66929
+# ╟─b73b6b29-6d18-4308-80dd-e0cc2aedd038
+# ╟─7eeff659-9f83-47eb-8f96-6fac093f0e64
+# ╟─71e4523b-b68c-49cb-8877-ff819c4a13e9
+# ╟─125169d6-bfd0-443f-87aa-a7117f481088
+# ╟─4202e249-ca1c-4b00-a482-8fe15a6064ed
+# ╟─d5965014-2e70-4023-80ef-526f28a0334f
+# ╟─27a7a6b4-6462-410d-a26a-ffd384efe461
+# ╟─7b3cf490-87d4-4294-95af-f6e6deee043d
+# ╟─c69ecdb4-a312-45bc-874d-85d4d3747f77
+# ╟─8c2447b3-c26e-47e1-8701-7e4a18ae92a8
 # ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
 # ╟─b4599a16-e7f7-4a2a-b349-2648ee45208f
 # ╟─8315fb27-89e4-44a4-a51e-8e55fc3d58e5
