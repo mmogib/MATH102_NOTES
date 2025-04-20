@@ -1881,6 +1881,9 @@ md"## Pattern Recognition for Sequences"
 # ╔═╡ b568193c-ba85-4f59-89e9-6d5b824d08cd
 md"## Monotonic Sequences and Bounded Sequences"
 
+# ╔═╡ f27fe033-30da-4174-9f1c-23910a036481
+
+
 # ╔═╡ 7d460b80-8319-4129-862e-695ebb8cff28
 md"""
 # 9.2 Series and Convergence
@@ -1892,6 +1895,13 @@ md"""
 
 # ╔═╡ d8322419-3ebe-4718-ba84-9c435615d1ba
 md"## Infinite Series"
+
+# ╔═╡ 12ae12a8-c47b-4d15-af4d-d6bb92c8a026
+let
+	1/2 + 1/4 + 1/8 + 1/16 # 1/2^n
+	sum([1/2^n for n in 1:30])
+end
+
 
 # ╔═╡ 02def290-7dcd-4c8f-9c41-228033cc3e7c
 cm"""
@@ -1972,6 +1982,22 @@ let
 			grid=:none,)
 	
 end
+
+# ╔═╡ 2abfc0da-1d95-49dd-837d-6718ce473c5d
+md"""
+# 9.3 The Integral Test and p-Series
+> 1. Use the Integral Test to determine whether an infinite series converges or diverges.
+> 2. Use properties of p-series and harmonic series.
+"""
+
+# ╔═╡ f08b1731-59dd-4d82-8b42-6824bc216d5a
+md"## The Integral Test"
+
+# ╔═╡ f8f72024-5ea6-474d-8123-dd9b19a03fa7
+md"## p-Series and Harmonic Series"
+
+# ╔═╡ 986e1b28-ad65-4d2e-ad70-9dc515c8a08c
+
 
 # ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
 function rect(x, Δx, xs, f;direction=:x) 
@@ -4490,6 +4516,55 @@ A ball is dropped from a height of 6 feet and begins bouncing
 The height of each bounce is three-fourths the height of the previous bounce. Find the  total vertical distance traveled by the ball.
 """
 
+# ╔═╡ 3a4b2178-47ee-474e-bbaf-72c00b3d3c2d
+cm"""
+$(bth("The Integral Test"))
+If ``f`` is positive, continuous, and decreasing for ``x \geq 1`` and ``a_n=f(n)``, then
+```math
+\sum_{n=1}^{\infty} a_n \text { and } \int_1^{\infty} f(x) d x
+```
+either both converge or both diverge.
+"""
+
+# ╔═╡ 69abc9da-4596-4268-9dea-95baaf687f67
+cm"""
+$(ex(1,"Using the Integral Test"))
+Apply the Integral Test to the series ``\sum_{n=1}^{\infty} \frac{n}{n^2+1}``.
+"""
+
+# ╔═╡ ced2268b-d0c8-4cb0-9e0d-083d6db388c8
+cm"""
+$(ex(2,"Using the Integral Test"))
+Apply the Integral Test to the series ``\sum_{n=1}^{\infty} \frac{1}{n^2+1}``.
+"""
+
+# ╔═╡ 7df6433b-0c5b-4bd8-a96a-eb70d0efa0e3
+cm"""
+$(bth("Convergence of p-Series"))
+The ``p``-series
+```math
+\sum_{n=1}^{\infty} \frac{1}{n^p}=\frac{1}{1^p}+\frac{1}{2^p}+\frac{1}{3^p}+\frac{1}{4^p}+\cdots
+```
+converges for ``p >1`` and diverges for ``0 < p \leq 1``.
+"""
+
+# ╔═╡ 976a8ef5-fd7f-45a4-8f1d-2a99318ad33a
+cm"""
+$(ex(3,"Convergent and Divergent p-Series"))
+
+Discuss the convergence or divergence of (a) the harmonic series and (b) the ``p``-series with ``p=2``.
+"""
+
+# ╔═╡ db5771f6-1bf6-4996-a515-5e7ad37d1404
+cm"""
+$(ex(4,"Testing a Series for Convergence"))
+Determine whether the series
+```math
+\sum_{n=2}^{\infty} \frac{1}{n \ln n}
+```
+converges or diverges.
+"""
+
 # ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
 initialize_eqref()
 
@@ -6553,11 +6628,13 @@ version = "1.4.1+1"
 # ╟─b568193c-ba85-4f59-89e9-6d5b824d08cd
 # ╟─471eba70-40bf-42f9-a476-b13f37ccf823
 # ╟─6c261c5d-d478-4750-ac04-bb36734a6fe1
+# ╠═f27fe033-30da-4174-9f1c-23910a036481
 # ╟─18d5f404-685e-4781-8edf-ac7374c55526
 # ╟─7c50563b-0f12-4974-9acf-598247793200
 # ╟─dbc02f9a-5bc9-478e-8de1-767fd64faaec
 # ╟─7d460b80-8319-4129-862e-695ebb8cff28
 # ╟─d8322419-3ebe-4718-ba84-9c435615d1ba
+# ╠═12ae12a8-c47b-4d15-af4d-d6bb92c8a026
 # ╟─02def290-7dcd-4c8f-9c41-228033cc3e7c
 # ╟─137be6c2-5b86-4e1d-b457-b4f71646e633
 # ╟─84942358-6f19-4d7f-b367-4dc5e81009f5
@@ -6572,6 +6649,16 @@ version = "1.4.1+1"
 # ╟─7b3cf490-87d4-4294-95af-f6e6deee043d
 # ╟─c69ecdb4-a312-45bc-874d-85d4d3747f77
 # ╟─8c2447b3-c26e-47e1-8701-7e4a18ae92a8
+# ╟─2abfc0da-1d95-49dd-837d-6718ce473c5d
+# ╟─f08b1731-59dd-4d82-8b42-6824bc216d5a
+# ╟─3a4b2178-47ee-474e-bbaf-72c00b3d3c2d
+# ╟─69abc9da-4596-4268-9dea-95baaf687f67
+# ╟─ced2268b-d0c8-4cb0-9e0d-083d6db388c8
+# ╟─f8f72024-5ea6-474d-8123-dd9b19a03fa7
+# ╟─7df6433b-0c5b-4bd8-a96a-eb70d0efa0e3
+# ╟─976a8ef5-fd7f-45a4-8f1d-2a99318ad33a
+# ╟─db5771f6-1bf6-4996-a515-5e7ad37d1404
+# ╠═986e1b28-ad65-4d2e-ad70-9dc515c8a08c
 # ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
 # ╟─b4599a16-e7f7-4a2a-b349-2648ee45208f
 # ╟─8315fb27-89e4-44a4-a51e-8e55fc3d58e5
