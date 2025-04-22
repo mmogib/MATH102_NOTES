@@ -1983,6 +1983,9 @@ let
 	
 end
 
+# ╔═╡ a1b22caf-ec34-4abd-9460-bce43203b742
+
+
 # ╔═╡ 2abfc0da-1d95-49dd-837d-6718ce473c5d
 md"""
 # 9.3 The Integral Test and p-Series
@@ -1997,7 +2000,18 @@ md"## The Integral Test"
 md"## p-Series and Harmonic Series"
 
 # ╔═╡ 986e1b28-ad65-4d2e-ad70-9dc515c8a08c
+md"""
+# 9.4 Comparisons of Series
+> 1. Use the Direct Comparison Test to determine whether a series converges or diverges.
+> 2. Use the Limit Comparison Test to determine whether a series converges or diverges
+"""
 
+# ╔═╡ a749dce9-5f63-43f0-95e5-d36558cc6533
+md"## Direct Comparison Test"
+
+
+# ╔═╡ f65563e8-6eef-4526-be12-7051d3e8d437
+md"## Limit Comparison Test"
 
 # ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
 function rect(x, Δx, xs, f;direction=:x) 
@@ -4565,6 +4579,74 @@ Determine whether the series
 converges or diverges.
 """
 
+# ╔═╡ 22fd0b92-cfad-450e-b855-1ce7648fb93b
+cm"""
+$(bth("Direct Comparison Test"))
+Let ``0<a_n \leq b_n`` for all ``n``.
+1. If ``\displaystyle\sum_{n=1}^{\infty} b_n`` converges, then ``\displaystyle\sum_{n=1}^{\infty} a_n`` converges.
+2. If ``\displaystyle\sum_{n=1}^{\infty} a_n`` diverges, then ``\displaystyle\sum_{n=1}^{\infty} b_n`` diverges.
+"""
+
+# ╔═╡ be156c4f-af26-4e6e-907d-99e73b68c4aa
+cm"""
+$(ex(1,"Using the Direct Comparison Test"))
+Determine the convergence or divergence of
+```math
+\sum_{n=1}^{\infty} \frac{1}{2+3^n}
+```
+"""
+
+# ╔═╡ 07aa2d3e-0387-4e41-bcbc-d24d5f572497
+cm"""
+$(ex(2,"Using the Direct Comparison Test"))
+Determine the convergence or divergence of
+```math
+\sum_{n=1}^{\infty} \frac{1}{2+\sqrt{n}}
+```
+"""
+
+# ╔═╡ 080f38b7-8cc3-497a-badf-5748c617f56b
+cm"""
+$(bth("Limit Comparison Test"))
+If ``a_n>0, b_n>0``, and
+```math
+\lim _{n \rightarrow \infty} \frac{a_n}{b_n}=L
+```
+where ``L`` is finite and positive, then
+```math
+\sum_{n=1}^{\infty} a_n \text { and } \sum_{n=1}^{\infty} b_n
+```
+either both converge or both diverge.
+"""
+
+# ╔═╡ 8c6ba535-e37f-4210-8d59-5a28afcff45f
+cm"""
+$(ex(3,"Using the Limit Comparison Test"))
+
+Show that the general harmonic series below diverges.
+```math
+\sum_{n=1}^{\infty} \frac{1}{a n+b}, \quad a>0, \quad b>0
+```
+"""
+
+# ╔═╡ d8b8ec7c-fee3-4475-8552-6b33b091a728
+cm"""
+$(ex(4,"Using the Limit Comparison Test"))
+Determine the convergence or divergence of
+```math
+\sum_{n=1}^{\infty} \frac{\sqrt{n}}{n^2+1}
+```
+"""
+
+# ╔═╡ 61ebbc9f-8bc3-4712-9bd5-d1bad2bc6640
+cm"""
+$(ex(5,"Using the Limit Comparison Test"))
+Determine the convergence or divergence of
+```math
+\sum_{n=1}^{\infty} \frac{n 2^n}{4 n^3+1}
+```
+"""
+
 # ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
 initialize_eqref()
 
@@ -6648,6 +6730,7 @@ version = "1.4.1+1"
 # ╟─27a7a6b4-6462-410d-a26a-ffd384efe461
 # ╟─7b3cf490-87d4-4294-95af-f6e6deee043d
 # ╟─c69ecdb4-a312-45bc-874d-85d4d3747f77
+# ╠═a1b22caf-ec34-4abd-9460-bce43203b742
 # ╟─8c2447b3-c26e-47e1-8701-7e4a18ae92a8
 # ╟─2abfc0da-1d95-49dd-837d-6718ce473c5d
 # ╟─f08b1731-59dd-4d82-8b42-6824bc216d5a
@@ -6658,7 +6741,16 @@ version = "1.4.1+1"
 # ╟─7df6433b-0c5b-4bd8-a96a-eb70d0efa0e3
 # ╟─976a8ef5-fd7f-45a4-8f1d-2a99318ad33a
 # ╟─db5771f6-1bf6-4996-a515-5e7ad37d1404
-# ╠═986e1b28-ad65-4d2e-ad70-9dc515c8a08c
+# ╟─986e1b28-ad65-4d2e-ad70-9dc515c8a08c
+# ╟─a749dce9-5f63-43f0-95e5-d36558cc6533
+# ╟─22fd0b92-cfad-450e-b855-1ce7648fb93b
+# ╟─be156c4f-af26-4e6e-907d-99e73b68c4aa
+# ╟─07aa2d3e-0387-4e41-bcbc-d24d5f572497
+# ╟─f65563e8-6eef-4526-be12-7051d3e8d437
+# ╟─080f38b7-8cc3-497a-badf-5748c617f56b
+# ╟─8c6ba535-e37f-4210-8d59-5a28afcff45f
+# ╟─d8b8ec7c-fee3-4475-8552-6b33b091a728
+# ╟─61ebbc9f-8bc3-4712-9bd5-d1bad2bc6640
 # ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
 # ╟─b4599a16-e7f7-4a2a-b349-2648ee45208f
 # ╟─8315fb27-89e4-44a4-a51e-8e55fc3d58e5
