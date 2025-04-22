@@ -48,9 +48,12 @@ jobs:
                 julia -e 'using Pkg
                   Pkg.activate(mktempdir())
                   Pkg.add([
-                    Pkg.PackageSpec(name="PlutoSliderServer"), Pkg.PackageSpec(name="PyCall")
+                    Pkg.PackageSpec(name="PlutoSliderServer")
                   ])
+                  Pkg.add("PyCall")
 
+                  # Run its build step
+                  Pkg.build("PyCall") 
                   import PlutoSliderServer
 
                   PlutoSliderServer.github_action(".";
