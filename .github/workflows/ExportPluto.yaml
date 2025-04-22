@@ -50,10 +50,10 @@ jobs:
                   Pkg.add([
                     Pkg.PackageSpec(name="PlutoSliderServer")
                   ])
-                  Pkg.add("PyCall")
+                  # Pkg.add("PyCall")
 
                   # Run its build step
-                  Pkg.build("PyCall") 
+                  # Pkg.build("PyCall") 
                   import PlutoSliderServer
 
                   PlutoSliderServer.github_action(".";
