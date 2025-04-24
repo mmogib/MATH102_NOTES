@@ -2013,6 +2013,52 @@ md"## Direct Comparison Test"
 # ╔═╡ f65563e8-6eef-4526-be12-7051d3e8d437
 md"## Limit Comparison Test"
 
+# ╔═╡ 1a9ea230-6841-429e-bcca-f013d39514a9
+md"""
+# 9.5 Alternating Series
+> 1. Use the Alternating Series Test to determine whether an infinite series converges.
+> 2. Use the Alternating Series Remainder to approximate the sum of an alternating series.
+> 3. Classify a convergent series as absolutely or conditionally convergent.
+> 4. Rearrange an infinite series to obtain a different sum.
+"""
+
+# ╔═╡ 15f491d1-9436-44b1-a307-0ebd98cdf722
+md"## Alternating Series"
+
+# ╔═╡ 376852e6-9a1b-4f86-8681-d307c7fd610a
+md"##  Alternating Series Remainder"
+
+# ╔═╡ 4f407428-dd3b-4df4-9fdc-9cff3aaafb56
+let
+	# a(n) =(1/factorial(n))
+	# b(n) = ((-1)^(n+1))*(a(n))
+	# s(n) = sum(b(i) for i in 1:n)
+	# s6=s(6)
+	# s6-a(7), s6+a(7)
+end
+
+# ╔═╡ 10b81e79-03ff-46fb-8557-172b3f51dce3
+let
+	# a(n) =(1/n^4)
+	# b(n) = ((-1)^(n+1))*(a(n))
+	# s(n) = sum(b(i) for i in 1:n)
+	# N = (1000)^(1/4)-1
+	# N = 5
+	# s(5)
+end
+
+# ╔═╡ 47754429-df92-4523-b459-5fb6d76bd67a
+md"## Absolute and Conditional Convergence"
+
+# ╔═╡ 0cfd9bcf-2545-4df2-a70f-3334b8454e31
+md"## Rearrangement of Series"
+
+# ╔═╡ c7201240-7f39-4904-8fd1-5cbbd87800ca
+cm"""
+1. If a series is __absolutely convergent__, then its terms can be rearranged in any order without changing the sum of the series.
+2. If a series is __conditionally convergent__, then its terms can be rearranged to give a different sum.
+"""
+
 # ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
 function rect(x, Δx, xs, f;direction=:x) 
 	if direction==:y
@@ -4582,7 +4628,7 @@ converges or diverges.
 # ╔═╡ 22fd0b92-cfad-450e-b855-1ce7648fb93b
 cm"""
 $(bth("Direct Comparison Test"))
-Let ``0<a_n \leq b_n`` for all ``n``.
+Let ``0 < a_n \leq b_n`` for all ``n``.
 1. If ``\displaystyle\sum_{n=1}^{\infty} b_n`` converges, then ``\displaystyle\sum_{n=1}^{\infty} a_n`` converges.
 2. If ``\displaystyle\sum_{n=1}^{\infty} a_n`` diverges, then ``\displaystyle\sum_{n=1}^{\infty} b_n`` diverges.
 """
@@ -4645,6 +4691,125 @@ Determine the convergence or divergence of
 ```math
 \sum_{n=1}^{\infty} \frac{n 2^n}{4 n^3+1}
 ```
+"""
+
+# ╔═╡ 222d45a6-60f2-49c1-a10e-ae2688bd6734
+cm"""
+$(bth("Alternating Series Test"))
+Let ``a_n>0``. The alternating series
+```math
+\sum_{n=1}^{\infty}(-1)^n a_n \text { and } \sum_{n=1}^{\infty}(-1)^{n+1} a_n
+```
+converge when these two conditions are met.
+1. ``\lim _{n \rightarrow \infty} a_n=0``
+2. ``a_{n+1} \leq a_n``, for all ``n``
+"""
+
+# ╔═╡ 3cdf3d2b-81e7-4b91-ae61-f7cc214d5154
+cm"""
+$(ex(1,"Using the Alternating Series Test"))
+
+Determine the convergence or divergence of
+```math
+\sum_{n=1}^{\infty}(-1)^{n+1} \frac{1}{n} .
+```
+"""
+
+# ╔═╡ c4a55daf-8b5f-48e2-90e8-1c215deeb804
+cm"""
+$(ex(2,"Using the Alternating Series Test"))
+
+Determine the convergence or divergence of
+```math
+\sum_{n=1}^{\infty} \frac{n}{(-2)^{n-1}} .
+```
+"""
+
+# ╔═╡ a946547f-8507-49ec-b5fc-007dc89d0e92
+cm"""
+$(ex(3,"When the Alternating Series Test Does Not Apply"))
+a. 
+```math
+\sum_{n=1}^{\infty} \frac{(-1)^{n+1}(n+1)}{n}=\frac{2}{1}-\frac{3}{2}+\frac{4}{3}-\frac{5}{4}+\frac{6}{5}-\cdots
+```
+b.
+```math
+\frac{2}{1}-\frac{1}{1}+\frac{2}{2}-\frac{1}{2}+\frac{2}{3}-\frac{1}{3}+\frac{2}{4}-\frac{1}{4}+\cdots
+```
+"""
+
+# ╔═╡ 218c723f-8921-475b-b9be-9e88a3522829
+cm"""
+$(bth("Alternating Series Remainder"))
+If a convergent alternating series satisfies the condition ``a_{n+1} \leq a_n``, then the absolute value of the remainder ``R_N`` involved in approximating the sum ``S`` by ``S_N`` is less than (or equal to) the first neglected term. That is,
+```math
+\left|S-S_N\right|=\left|R_N\right| \leq a_{N+1} .
+```
+
+"""
+
+# ╔═╡ b4e85b19-989f-4caf-85f7-519d95178a4d
+cm"""
+$(ex(4,"Approximating the Sum of an Alternating Series"))
+Approximate the sum of the series by its first six terms.
+```math
+\sum_{n=1}^{\infty}(-1)^{n+1}\left(\frac{1}{n!}\right)=\frac{1}{1!}-\frac{1}{2!}+\frac{1}{3!}-\frac{1}{4!}+\frac{1}{5!}-\frac{1}{6!}+\cdots
+```
+"""
+
+# ╔═╡ f6330660-6de9-454a-b23a-3b64e763b17a
+cm"""
+$(ex(5,"Finding the Number of Terms"))
+Determine the number of terms required to approximate the sum of the series with an error of less than 0.001 .
+```math
+\sum_{n=1}^{\infty} \frac{(-1)^{n+1}}{n^4}
+```
+"""
+
+# ╔═╡ bc81fb58-4060-41d3-bc7c-fc96e2627c77
+cm"""
+$(bth("Absolute Convergence"))
+If the series ``\Sigma\left|a_n\right|`` converges, then the series ``\Sigma a_n`` also converges.
+"""
+
+# ╔═╡ 93e8dfc5-8bbe-4642-bef0-e5fcd0c9b781
+cm"""
+$(define("Absolute and Conditional Convergence"))
+1. The series ``\sum a_n`` is __absolutely convergent__ when ``\Sigma\left|a_n\right|`` converges.
+2. The series ``\sum a_n`` is __conditionally convergent__ when ``\sum a_n`` converges but ``\Sigma\left|a_n\right|`` diverges.
+"""
+
+# ╔═╡ 22b0134b-6a5c-4a5c-8daa-966c8c636eeb
+cm"""
+$(ex(6,"Absolute and Conditional Convergence"))
+Determine whether each of the series is convergent or divergent. Classify any convergent series as absolutely or conditionally convergent.
+
+a. ``\sum_{n=0}^{\infty} \frac{(-1)^n n!}{2^n}=\frac{0!}{2^0}-\frac{1!}{2^1}+\frac{2!}{2^2}-\frac{3!}{2^3}+\cdots``
+
+b. ``\sum_{n=1}^{\infty} \frac{(-1)^n}{\sqrt{n}}=-\frac{1}{\sqrt{1}}+\frac{1}{\sqrt{2}}-\frac{1}{\sqrt{3}}+\frac{1}{\sqrt{4}}-\cdots``
+
+"""
+
+# ╔═╡ 485e0d4f-ba2d-4493-bf66-5b4c39eee8c8
+cm"""
+$(ex(7,"Absolute and Conditional Convergence"))
+Determine whether each of the series is convergent or divergent. Classify any convergent series as absolutely or conditionally convergent.
+
+a. ``\sum_{n=1}^{\infty} \frac{(-1)^{n(n+1) / 2}}{3^n}=-\frac{1}{3}-\frac{1}{9}+\frac{1}{27}+\frac{1}{81}-\cdots``
+
+b. ``\sum_{n=1}^{\infty} \frac{(-1)^n}{\ln (n+1)}=-\frac{1}{\ln 2}+\frac{1}{\ln 3}-\frac{1}{\ln 4}+\frac{1}{\ln 5}-\cdots``
+"""
+
+# ╔═╡ 54f2a8e1-03c2-4cd9-8159-9b8fbdda29bb
+cm"""
+$(ex(8,"Rearrangement of a Series"))
+
+The alternating harmonic series converges to ``\ln 2``. That is,
+```math
+\sum_{n=1}^{\infty}(-1)^{n+1} \frac{1}{n}=\frac{1}{1}-\frac{1}{2}+\frac{1}{3}-\frac{1}{4}+\cdots=\ln 2 .
+```
+
+Rearrange the terms of the series to produce a different sum.
 """
 
 # ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
@@ -6751,6 +6916,26 @@ version = "1.4.1+1"
 # ╟─8c6ba535-e37f-4210-8d59-5a28afcff45f
 # ╟─d8b8ec7c-fee3-4475-8552-6b33b091a728
 # ╟─61ebbc9f-8bc3-4712-9bd5-d1bad2bc6640
+# ╟─1a9ea230-6841-429e-bcca-f013d39514a9
+# ╟─15f491d1-9436-44b1-a307-0ebd98cdf722
+# ╟─222d45a6-60f2-49c1-a10e-ae2688bd6734
+# ╟─3cdf3d2b-81e7-4b91-ae61-f7cc214d5154
+# ╟─c4a55daf-8b5f-48e2-90e8-1c215deeb804
+# ╟─a946547f-8507-49ec-b5fc-007dc89d0e92
+# ╟─376852e6-9a1b-4f86-8681-d307c7fd610a
+# ╟─218c723f-8921-475b-b9be-9e88a3522829
+# ╟─b4e85b19-989f-4caf-85f7-519d95178a4d
+# ╠═4f407428-dd3b-4df4-9fdc-9cff3aaafb56
+# ╟─f6330660-6de9-454a-b23a-3b64e763b17a
+# ╠═10b81e79-03ff-46fb-8557-172b3f51dce3
+# ╟─47754429-df92-4523-b459-5fb6d76bd67a
+# ╟─bc81fb58-4060-41d3-bc7c-fc96e2627c77
+# ╟─93e8dfc5-8bbe-4642-bef0-e5fcd0c9b781
+# ╟─22b0134b-6a5c-4a5c-8daa-966c8c636eeb
+# ╟─485e0d4f-ba2d-4493-bf66-5b4c39eee8c8
+# ╟─0cfd9bcf-2545-4df2-a70f-3334b8454e31
+# ╟─c7201240-7f39-4904-8fd1-5cbbd87800ca
+# ╟─54f2a8e1-03c2-4cd9-8159-9b8fbdda29bb
 # ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
 # ╟─b4599a16-e7f7-4a2a-b349-2648ee45208f
 # ╟─8315fb27-89e4-44a4-a51e-8e55fc3d58e5
