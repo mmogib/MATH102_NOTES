@@ -2013,6 +2013,14 @@ md"## Direct Comparison Test"
 # ╔═╡ f65563e8-6eef-4526-be12-7051d3e8d437
 md"## Limit Comparison Test"
 
+# ╔═╡ caa1abe9-b736-4cc1-a8c6-ecada36e449a
+cm"""
+### Tests
+1. Divergence Test
+2. Integral Test
+3. Comparizon Test (Limit Comparizon Test)
+"""
+
 # ╔═╡ 1a9ea230-6841-429e-bcca-f013d39514a9
 md"""
 # 9.5 Alternating Series
@@ -2025,30 +2033,51 @@ md"""
 # ╔═╡ 15f491d1-9436-44b1-a307-0ebd98cdf722
 md"## Alternating Series"
 
+# ╔═╡ f94aa75a-2712-4936-9c4a-06b2a623b904
+let
+	a(n)=n/2^(n-1)
+	b(n)=((-1)^(n-1))*a(n)
+	s(n)=sum(b(i) for i in 1:n)
+	s(10),	a(11)
+end
+
 # ╔═╡ 376852e6-9a1b-4f86-8681-d307c7fd610a
 md"##  Alternating Series Remainder"
 
 # ╔═╡ 4f407428-dd3b-4df4-9fdc-9cff3aaafb56
 let
-	# a(n) =(1/factorial(n))
-	# b(n) = ((-1)^(n+1))*(a(n))
-	# s(n) = sum(b(i) for i in 1:n)
-	# s6=s(6)
-	# s6-a(7), s6+a(7)
+	a(n) =(1/factorial(n))
+	b(n) = ((-1)^(n+1))*(a(n))
+	s(n) = sum(b(i) for i in 1:n)
+	s6=s(6)
+	s6,a(7)
+	s6-a(7), s6+a(7)
 end
 
 # ╔═╡ 10b81e79-03ff-46fb-8557-172b3f51dce3
 let
-	# a(n) =(1/n^4)
-	# b(n) = ((-1)^(n+1))*(a(n))
-	# s(n) = sum(b(i) for i in 1:n)
-	# N = (1000)^(1/4)-1
-	# N = 5
-	# s(5)
+	a(n) =(1/n^4)
+	b(n) = ((-1)^(n+1))*(a(n))
+	s(n) = sum(b(i) for i in 1:n)
+	N = (1000)^(1/4)-1
+	N = 5
+	s(5)-a(6),s(5)+a(6) 
 end
 
 # ╔═╡ 47754429-df92-4523-b459-5fb6d76bd67a
 md"## Absolute and Conditional Convergence"
+
+# ╔═╡ ad68d8e3-815a-4498-9132-d144f4f3f958
+cm"""
+- __Abs. Convergence__
+```math
+\sum_{n=1}^{\infty}\frac{(-1)^{n+1}}{n^2}
+```
+- __Conditional Convergence__
+```math
+\sum_{n=1}^{\infty}\frac{(-1)^{n+1}}{n}
+```
+"""
 
 # ╔═╡ 0cfd9bcf-2545-4df2-a70f-3334b8454e31
 md"## Rearrangement of Series"
@@ -2058,6 +2087,148 @@ cm"""
 1. If a series is __absolutely convergent__, then its terms can be rearranged in any order without changing the sum of the series.
 2. If a series is __conditionally convergent__, then its terms can be rearranged to give a different sum.
 """
+
+# ╔═╡ e8c01c5f-4d8b-4fdc-8e37-90fdd449492a
+md"""
+# 9.6 The Ratio and Root Tests
+> 1. Use the Ratio Test to determine whether a series converges or diverges.
+> 2. Use the Root Test to determine whether a series converges or diverges.
+> 3. Review the tests for convergence and divergence of an infinite series.
+"""
+
+# ╔═╡ f4f976af-baaf-495a-bf31-c7226040fe35
+md"## The Ratio Test"
+
+# ╔═╡ f1b64d24-e2d4-4f20-83d5-095333a5264c
+md"## The Root Test"
+
+# ╔═╡ a98edbef-50c2-44fa-ae24-241c9bff99f7
+md"## Strategies for Testing Series"
+
+# ╔═╡ 35b4d21b-c240-4a9c-867f-7a929e933e4e
+md"""
+# 9.7 Taylor Polynomials and Approximations
+> 1. Find polynomial approximations of elementary functions and compare them with the elementary functions.
+> 2. Find Taylor and Maclaurin polynomial approximations of elementary functions.
+> 3. Use the remainder of a Taylor polynomial.
+"""
+
+# ╔═╡ 4daf8c01-54e8-48b4-a991-f784fdc9f14f
+md"## Polynomial Approximations of Elementary Functions"
+
+# ╔═╡ 5d2d71fe-1aff-4d28-b1d2-47dc3dd7485a
+sec_97_n_str = @bind  sec_97_n NumberField(0:10,default=0);md""
+
+# ╔═╡ 32c8cac4-b560-45bf-9c53-6a971b11e731
+cm"""
+``n =`` $sec_97_n_str
+"""
+
+# ╔═╡ 01ad1443-6736-41e3-ab73-c5ccdf373ab9
+let
+	n = sec_97_n
+	f(x)=exp(x)
+	xs = range(-2,10,length=200)
+	P(x,n) = sum((1/factorial(i))*x^i for i in 0:n)
+	P(n) = begin
+		
+		str = map(0:n) do i
+		fc = factorial(i)
+		xpower, frac = i == 0 ? ("","1") : i == 1 ? ("x","") : ("x^{$i}","\\frac{1}{$fc}")
+		L"%$frac %$xpower"
+		end |> s -> join(s,"+") 
+		L"P_{%$n}(x)=" * str
+	end
+	p = plot(xs,f.(xs),
+		label 			= L"f(x)=e^x",
+		color 			= :red,
+		frame_style 	= :origin,
+		xlims 			= (minimum(xs), maximum(xs)),
+		ylims 			= (minimum(xs), maximum(xs)),
+	)
+	p = plot(p, xs, x->P(x,n),
+		label 			= P(n),
+	)
+end
+
+# ╔═╡ f4dd80e2-3df2-4c9f-bd29-5a8a92d0639a
+let
+	xs =[-1.0;-0.2;-0.1;0;0.1;0.2;1]
+	P(x,n) = sum((1/factorial(i))*x^i for i in 0:n)
+	Pxs = map(x->P(x,sec_97_n), xs)
+	head = HTML("<td>", "x", "</td>  <td>e^x</td> <td> P$sec_97_n(x)</td>")
+	rows = map(xs) do x 
+		return "
+	<tr>
+		<td> $x </td>
+		<td> $(exp(x)) </td>
+		<td> $(P(x,sec_97_n)) </td>
+	</tr>
+	"
+	end |> s->join(s,"")
+cm"""
+<table>
+<thead>
+<tr> 
+
+$(head)
+
+</tr>
+</thead>
+
+<tbody>
+
+$(rows)
+
+</tbody>
+
+
+</table>
+"""
+end
+
+# ╔═╡ e08ab6af-108d-4e87-91fb-051c5fd19fcd
+md"## Taylor and Maclaurin Polynomials"
+
+# ╔═╡ e158bb3c-c351-41b1-ae8d-8f60297d6814
+let
+	n = 3
+	c = 1
+	f(x)=log(x)
+	xs = range(0.001,4,length=200)
+	P(x,n) = sum(((-1)^(i+1)/i)*(x-c)^i for i in 1:n)
+	P(n) = begin
+		
+		str = map(1:n) do i
+			pn = iseven(i) ? "-" : "+"
+		xpower, frac = i == 1 ? ("(x-$c)","") : ("(x-$c)^{$i}","$(pn)\\frac{1}{$i}")
+		L"%$frac %$xpower"
+		end |> s -> join(s,"") 
+		L"P_{%$n}(x)=" * str
+	end
+	p = plot(xs,f.(xs),
+		label 			= L"f(x)=\ln{x}",
+		color 			= :red,
+		frame_style 	= :origin,
+		xlims 			= (minimum(xs), maximum(xs)),
+		ylims 			= (-2, maximum(xs)),
+	)
+	p = plot(p, xs, x->P(x,n),
+		label 			= P(n),
+	)
+end
+
+# ╔═╡ b22a52b9-1ffa-49d3-9945-74fb590af5e4
+md"""
+ # 9.8 Power Series
+ > 1. Understand the definition of a power series.
+ > 1. Find the radius and interval of convergence of a power series.
+ > 1. Determine the endpoint convergence of a power series.
+ > 1. Differentiate and integrate a power series.
+"""
+
+# ╔═╡ 24bb5b72-935e-40a9-b5c1-1d341b1c4392
+md"##  Power Series"
 
 # ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
 function rect(x, Δx, xs, f;direction=:x) 
@@ -4795,9 +4966,9 @@ cm"""
 $(ex(7,"Absolute and Conditional Convergence"))
 Determine whether each of the series is convergent or divergent. Classify any convergent series as absolutely or conditionally convergent.
 
-a. ``\sum_{n=1}^{\infty} \frac{(-1)^{n(n+1) / 2}}{3^n}=-\frac{1}{3}-\frac{1}{9}+\frac{1}{27}+\frac{1}{81}-\cdots``
+a. ``\displaystyle\sum_{n=1}^{\infty} \frac{(-1)^{n(n+1) / 2}}{3^n}=-\frac{1}{3}-\frac{1}{9}+\frac{1}{27}+\frac{1}{81}-\cdots``
 
-b. ``\sum_{n=1}^{\infty} \frac{(-1)^n}{\ln (n+1)}=-\frac{1}{\ln 2}+\frac{1}{\ln 3}-\frac{1}{\ln 4}+\frac{1}{\ln 5}-\cdots``
+b. ``\displaystyle\sum_{n=1}^{\infty} \frac{(-1)^n}{\ln (n+1)}=-\frac{1}{\ln 2}+\frac{1}{\ln 3}-\frac{1}{\ln 4}+\frac{1}{\ln 5}-\cdots``
 """
 
 # ╔═╡ 54f2a8e1-03c2-4cd9-8159-9b8fbdda29bb
@@ -4810,6 +4981,162 @@ The alternating harmonic series converges to ``\ln 2``. That is,
 ```
 
 Rearrange the terms of the series to produce a different sum.
+"""
+
+# ╔═╡ a3c046e9-7c15-46e6-8288-0ec16000fe80
+cm"""
+$(bth("Ratio Test"))
+Let ``\sum a_n`` be a series with nonzero terms.
+1. The series ``\sum a_n`` converges absolutely when ``\displaystyle\lim _{n \rightarrow \infty}\left|\frac{a_{n+1}}{a_n}\right|<1``.
+2. The series ``\sum a_n`` diverges when ``\displaystyle\lim _{n \rightarrow \infty}\left|\frac{a_{n+1}}{a_n}\right|>1`` or ``\displaystyle\lim _{n \rightarrow \infty}\left|\frac{a_{n+1}}{a_n}\right|=\infty``.
+3. The Ratio Test is inconclusive when ``\displaystyle\lim _{n \rightarrow \infty}\left|\frac{a_{n+1}}{a_n}\right|=1``.
+"""
+
+# ╔═╡ 775ee452-d3c0-46e4-a1bb-07939b37d050
+cm"""
+$(ex(1,"Using the Ratio Test"))
+Determine the convergence or divergence of
+```math
+\sum_{n=0}^{\infty} \frac{2^n}{n!} .
+```
+"""
+
+# ╔═╡ af54ce43-acb4-4b14-8f6d-2fffb4a55c69
+cm"""
+$(ex(2,"Using the Ratio Test"))
+Determine whether each series converges or diverges.
+
+a. ``\displaystyle\sum_{n=0}^{\infty} \frac{n^2 2^{n+1}}{3^n}``
+
+b. ``\displaystyle\sum_{n=1}^{\infty} \frac{n^n}{n!}``
+"""
+
+# ╔═╡ d9a49705-1e01-4e98-9915-f285cb16df28
+cm"""
+$(ex(3,"A Failure of the Ratio Test"))
+Determine the convergence or divergence of
+```math
+\sum_{n=1}^{\infty}(-1)^n \frac{\sqrt{n}}{n+1}
+```
+
+"""
+
+# ╔═╡ cf6f8342-703a-49e7-ab9b-35cce160b9f3
+cm"""
+$(bth("Root Test"))
+1. The series ``\sum a_n`` converges absolutely when ``\displaystyle\lim _{n \rightarrow \infty} \sqrt[n]{\left|a_n\right|}<1``.
+2. The series ``\sum a_n`` diverges when ``\displaystyle\lim _{n \rightarrow \infty} \sqrt[n]{\left|a_n\right|}>1`` or ``\displaystyle\lim _{n \rightarrow \infty} \sqrt[n]{\left|a_n\right|}=\infty``.
+3. The Root Test is inconclusive when ``\displaystyle\lim _{n \rightarrow \infty} \sqrt[n]{\left|a_n\right|}=1``.
+$(ebl())
+
+$(ex(4,"Using the Root Test"))
+Determine the convergence or divergence of
+```math
+\sum_{n=1}^{\infty} \frac{e^{2 n}}{n^n} .
+```
+"""
+
+# ╔═╡ 8e645546-7f33-42a5-b6b6-4f100f93918f
+cm"""
+$(bbl("GUIDELINES FOR TESTING A SERIES FOR CONVERGENCE OR DIVERGENCE",""))
+1. Does the ``n``th term approach 0 ? If not, the series diverges.
+2. Is the series one of the special types-geometric, ``p``-series, telescoping, or alternating?
+3. Can the Integral Test, the Root Test, or the Ratio Test be applied?
+4. Can the series be compared favorably to one of the special types?
+$(ebl())
+
+$(ex(5,"Applying the Strategies for Testing Series"))
+Determine the convergence or divergence of each series.
+
+a. ``\displaystyle \sum_{n=1}^{\infty} \frac{n+1}{3 n+1}``
+
+b. ``\displaystyle \sum_{n=1}^{\infty}\left(\frac{\pi}{6}\right)^n``
+
+c. ``\displaystyle \sum_{n=1}^{\infty} n e^{-n^2}``
+
+d. ``\displaystyle \sum_{n=1}^{\infty} \frac{1}{3 n+1}``
+
+e. ``\displaystyle \sum_{n=1}^{\infty}(-1)^n \frac{3}{4 n+1}``
+
+f. ``\displaystyle \sum_{n=1}^{\infty} \frac{n!}{10^n}``
+
+g. ``\displaystyle \sum_{n=1}^{\infty}\left(\frac{n+1}{2 n+1}\right)^n``
+
+"""
+
+# ╔═╡ a12f4fa0-0597-4447-a731-603849fbdcba
+cm"""
+$(post_img("https://www.dropbox.com/scl/fi/0t0hwwc5omsvbcmahvbxp/SUMMARY_OF_TESTS_FOR_SERIES.png?rlkey=8e9l8eri9mezitxlfoc3r40nq&dl=1",700))
+"""
+
+# ╔═╡ 2e6b9a41-d56e-4e95-ba78-f360e008335d
+cm"""
+$(ex("Ex",""))
+Find polynomial approximations ``P_n(x)`` of ``\displaystyle f(x)=e^x`` such that 
+```math
+P(0)=f(0), P'(0)=f'(0), P''(0)=f''(0), \cdots, P^{(n)}(0)=f^{(n)}(0).
+```
+
+"""
+
+# ╔═╡ 36431e5d-97bd-4843-9775-6211c4a2d8b3
+cm"""
+$(define("nth Taylor Polynomial and nth Maclaurin Polynomial"))
+If ``f`` has ``n`` derivatives at ``c``, then the polynomial
+```math
+P_n(x)=f(c)+f^{\prime}(c)(x-c)+\frac{f^{\prime \prime}(c)}{2!}(x-c)^2+\cdots+\frac{f^{(n)}(c)}{n!}(x-c)^n
+```
+is called the __``\boldsymbol{n}`` th Taylor polynomial for ``\boldsymbol{f}`` at ``\boldsymbol{c}``__. If ``c=0``, then
+```math
+P_n(x)=f(0)+f^{\prime}(0) x+\frac{f^{\prime \prime}(0)}{2!} x^2+\frac{f^{\prime \prime \prime}(0)}{3!} x^3+\cdots+\frac{f^{(n)}(0)}{n!} x^n
+```
+is also called the __``\boldsymbol{n}`` th Maclaurin polynomial for ``\boldsymbol{f}``__.
+"""
+
+# ╔═╡ 6abdb5a7-5b5b-44ed-9ba8-ac20c59c6dc7
+cm"""
+$(ex(4,"Finding Taylor Polynomials for ln x"))
+
+Find the Taylor polynomials ``P_0, P_1, P_2, P_3``, and ``P_4`` for
+```math
+f(x)=\ln x
+```
+centered at ``c=1``.
+"""
+
+# ╔═╡ 900ab898-f39e-4246-9d50-6430a2d6f645
+cm"""
+$(ex(5,"Finding Maclaurin Polynomials for `cos x`"))
+Find the Maclaurin polynomials ``P_0, P_2, P_4``, and ``P_6`` for ``f(x)=\cos x``. 
+
+Use ``P_6(x)`` to approximate the value of ``\cos (0.1)``.
+"""
+
+# ╔═╡ 4bfbb486-642d-4419-9039-eabe2569336a
+cm"""
+$(ex(6,"Finding a Taylor Polynomial for `sin x`"))
+Find the third Taylor polynomial for ``f(x)=\sin x``, expanded about ``c=\pi / 6``.
+"""
+
+# ╔═╡ f1f560ef-630c-4161-98a7-b56ad41ad154
+cm"""
+$(ex(7,"Approximation Using Maclaurin Polynomials"))
+
+Use a fourth Maclaurin polynomial to approximate the value of ``\ln (1.1)``.
+"""
+
+# ╔═╡ fc6da046-815f-4d1b-8a47-e886907f0c3c
+cm"""
+$(define("Power Series"))
+If ``x`` is a variable, then an infinite series of the form
+```math
+\sum_{n=0}^{\infty} a_n x^n=a_0+a_1 x+a_2 x^2+a_3 x^3+\cdots+a_n x^n+\cdots
+```
+is called a __power series__. More generally, an infinite series of the form
+```math
+\sum_{n=0}^{\infty} a_n(x-c)^n=a_0+a_1(x-c)+a_2(x-c)^2+\cdots+a_n(x-c)^n+\cdots
+```
+is called a __power series centered at ``\boldsymbol{c}``__, where ``c`` is a constant.
 """
 
 # ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
@@ -6916,11 +7243,13 @@ version = "1.4.1+1"
 # ╟─8c6ba535-e37f-4210-8d59-5a28afcff45f
 # ╟─d8b8ec7c-fee3-4475-8552-6b33b091a728
 # ╟─61ebbc9f-8bc3-4712-9bd5-d1bad2bc6640
+# ╟─caa1abe9-b736-4cc1-a8c6-ecada36e449a
 # ╟─1a9ea230-6841-429e-bcca-f013d39514a9
 # ╟─15f491d1-9436-44b1-a307-0ebd98cdf722
 # ╟─222d45a6-60f2-49c1-a10e-ae2688bd6734
 # ╟─3cdf3d2b-81e7-4b91-ae61-f7cc214d5154
 # ╟─c4a55daf-8b5f-48e2-90e8-1c215deeb804
+# ╠═f94aa75a-2712-4936-9c4a-06b2a623b904
 # ╟─a946547f-8507-49ec-b5fc-007dc89d0e92
 # ╟─376852e6-9a1b-4f86-8681-d307c7fd610a
 # ╟─218c723f-8921-475b-b9be-9e88a3522829
@@ -6931,11 +7260,40 @@ version = "1.4.1+1"
 # ╟─47754429-df92-4523-b459-5fb6d76bd67a
 # ╟─bc81fb58-4060-41d3-bc7c-fc96e2627c77
 # ╟─93e8dfc5-8bbe-4642-bef0-e5fcd0c9b781
+# ╟─ad68d8e3-815a-4498-9132-d144f4f3f958
 # ╟─22b0134b-6a5c-4a5c-8daa-966c8c636eeb
 # ╟─485e0d4f-ba2d-4493-bf66-5b4c39eee8c8
 # ╟─0cfd9bcf-2545-4df2-a70f-3334b8454e31
 # ╟─c7201240-7f39-4904-8fd1-5cbbd87800ca
 # ╟─54f2a8e1-03c2-4cd9-8159-9b8fbdda29bb
+# ╟─e8c01c5f-4d8b-4fdc-8e37-90fdd449492a
+# ╟─f4f976af-baaf-495a-bf31-c7226040fe35
+# ╟─a3c046e9-7c15-46e6-8288-0ec16000fe80
+# ╟─775ee452-d3c0-46e4-a1bb-07939b37d050
+# ╟─af54ce43-acb4-4b14-8f6d-2fffb4a55c69
+# ╟─d9a49705-1e01-4e98-9915-f285cb16df28
+# ╟─f1b64d24-e2d4-4f20-83d5-095333a5264c
+# ╟─cf6f8342-703a-49e7-ab9b-35cce160b9f3
+# ╟─a98edbef-50c2-44fa-ae24-241c9bff99f7
+# ╟─8e645546-7f33-42a5-b6b6-4f100f93918f
+# ╟─a12f4fa0-0597-4447-a731-603849fbdcba
+# ╟─35b4d21b-c240-4a9c-867f-7a929e933e4e
+# ╟─4daf8c01-54e8-48b4-a991-f784fdc9f14f
+# ╠═2e6b9a41-d56e-4e95-ba78-f360e008335d
+# ╟─5d2d71fe-1aff-4d28-b1d2-47dc3dd7485a
+# ╟─32c8cac4-b560-45bf-9c53-6a971b11e731
+# ╟─01ad1443-6736-41e3-ab73-c5ccdf373ab9
+# ╟─f4dd80e2-3df2-4c9f-bd29-5a8a92d0639a
+# ╟─e08ab6af-108d-4e87-91fb-051c5fd19fcd
+# ╟─36431e5d-97bd-4843-9775-6211c4a2d8b3
+# ╟─6abdb5a7-5b5b-44ed-9ba8-ac20c59c6dc7
+# ╟─e158bb3c-c351-41b1-ae8d-8f60297d6814
+# ╟─900ab898-f39e-4246-9d50-6430a2d6f645
+# ╟─4bfbb486-642d-4419-9039-eabe2569336a
+# ╟─f1f560ef-630c-4161-98a7-b56ad41ad154
+# ╟─b22a52b9-1ffa-49d3-9945-74fb590af5e4
+# ╟─24bb5b72-935e-40a9-b5c1-1d341b1c4392
+# ╟─fc6da046-815f-4d1b-8a47-e886907f0c3c
 # ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
 # ╟─b4599a16-e7f7-4a2a-b349-2648ee45208f
 # ╟─8315fb27-89e4-44a4-a51e-8e55fc3d58e5
