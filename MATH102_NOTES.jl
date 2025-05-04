@@ -2110,7 +2110,6 @@ md"""
 # 9.7 Taylor Polynomials and Approximations
 > 1. Find polynomial approximations of elementary functions and compare them with the elementary functions.
 > 2. Find Taylor and Maclaurin polynomial approximations of elementary functions.
-> 3. Use the remainder of a Taylor polynomial.
 """
 
 # ╔═╡ 4daf8c01-54e8-48b4-a991-f784fdc9f14f
@@ -2218,6 +2217,14 @@ let
 	)
 end
 
+# ╔═╡ c73fea91-cca0-4f7f-9c38-f85e6f3c56ae
+let
+	x = 50
+	n = 12
+	Pn(x) = sum((-1)^(i)*x^(2i)/(factorial(2i)) for i in 0:n)
+	cos(x), Pn(x)
+end
+
 # ╔═╡ b22a52b9-1ffa-49d3-9945-74fb590af5e4
 md"""
  # 9.8 Power Series
@@ -2229,6 +2236,133 @@ md"""
 
 # ╔═╡ 24bb5b72-935e-40a9-b5c1-1d341b1c4392
 md"##  Power Series"
+
+# ╔═╡ 42bff813-162c-4ee3-80cf-8a6a2a301de5
+md"##  Radius and Interval of Convergence"
+
+# ╔═╡ fa50f561-b6a3-4fea-8b96-d4fbbe8dcc8a
+md"## Endpoint Convergence"
+
+# ╔═╡ 412f219d-f1b3-4ad4-8459-badfc2993532
+md"## Differentiation and Integration of Power Series"
+
+# ╔═╡ 11841a6f-c0b0-426a-9d09-3b309f564a9c
+md"""
+# 9.9 Representation of Functions by Power Series
+> - Find a geometric power series that represents a function.
+> - Construct a power series using series operations.
+"""
+
+# ╔═╡ 35ddd4ab-86db-4d69-8d9b-458365b1c7ae
+md"## Geometric Power Series"
+
+# ╔═╡ 343254fa-c7e5-4abd-8bd1-a95da1abd6c6
+cm"""
+```math
+\frac{1}{1-x} = \sum_{n=1}^{\infty}x^n = 1 + x + x^2 + x^3 + \cdots, \quad |x| < 1.
+```
+"""
+
+# ╔═╡ 9f65c135-02ba-4f1f-bef9-e9695adb3df9
+md"## Operations with Power Series"
+
+# ╔═╡ 2f54441f-5562-4d7f-a53a-814b67aafdb6
+let
+	f(x;n=5) =sum(i -> begin
+		pwr = 2*i+1
+		(-1)^i*(x^pwr)/pwr
+	end,0:n) 
+	pi_over_4 = 4*f(1/5) - f(1/239)
+	map(i->4*i,(f(1),π/4,pi_over_4))
+	
+end
+
+# ╔═╡ b9dee3b1-6502-4797-9c57-4a52123dea4f
+md"""
+# 9.10 taylor and Maclaurin Series
+> 1. Find a Taylor or Maclaurin series for a function.
+> 1. Find a binomial series.
+> 1. Use a basic list of Taylor series to find other Taylor series.
+"""
+
+# ╔═╡ e3a0a647-ba9e-4835-ba70-c769baba876b
+md"""
+> * Students have to memorize the power series representations of the functions $f(x)=\frac{1}{1+x}, e^x, \sin x, \cos x, \arctan x,(1+x)^k$ in page 674.
+"""
+
+# ╔═╡ 53e4cf4b-1fb6-41fd-bb29-67a5ccabfcbe
+md"## POWER SERIES FOR ELEMENTARY FUNCTIONS"
+
+# ╔═╡ a35fe3e0-2857-4e91-82b1-d11bc228d6d2
+cm"""
+<div style="display:flex;justify-content: space-between;flex-wrap: wrap;">
+<div style="width: 80%; padding-bottom: 0.2em;font-weight: 700;border-bottom: 1px solid black;margin-bottom: 10px;">
+ Function 
+
+</div>
+<div style="width: 20%; padding-bottom: 0.2em;font-weight: 700;border-bottom: 1px solid black;margin-bottom: 10px;">
+
+Interval of
+Convergence
+</div>
+
+<div style="width: 80%; padding-bottom: 2em;">
+
+``\displaystyle\frac{1}{1+x}=1-x+x^2-x^3+x^4-x^5+\cdots+(-1)^n x^n+\cdots``
+</div>
+
+<div style="width: 20%; padding-bottom: 2em;">
+
+``-1 < x <1``
+</div>
+
+<div style="width: 80%; padding-bottom: 2em;">
+
+``\displaystyle e^x=1+x+\frac{x^2}{2!}+\frac{x^3}{3!}+\frac{x^4}{4!}+\frac{x^5}{5!}+\cdots+\frac{x^n}{n!}+\cdots ``
+</div>
+
+<div style="width: 20%; padding-bottom: 2em;">
+
+
+``-\infty < x <\infty``
+</div>
+
+<div style="width: 80%; padding-bottom: 2em;">
+
+``\displaystyle \sin x=x-\frac{x^3}{3!}+\frac{x^5}{5!}-\frac{x^7}{7!}+\frac{x^9}{9!}-\cdots+\frac{(-1)^n x^{2 n+1}}{(2 n+1)!}+\cdots ``
+</div>
+<div style="width: 20%; padding-bottom: 2em;">
+
+
+``-\infty < x <\infty``
+</div>
+
+
+<div style="width: 80%; padding-bottom: 2em;">
+
+``\displaystyle \cos x=1-\frac{x^2}{2!}+\frac{x^4}{4!}-\frac{x^6}{6!}+\frac{x^8}{8!}-\cdots+\frac{(-1)^n x^{2 n}}{(2 n)!}+\cdots  ``
+</div>
+<div style="width: 20%; padding-bottom: 2em;">
+
+
+``-\infty < x <\infty``
+</div>
+
+<div style="width: 80%; padding-bottom: 2em;">
+
+``\displaystyle\arctan x=x-\frac{x^3}{3}+\frac{x^5}{5}-\frac{x^7}{7}+\frac{x^9}{9}-\cdots+\frac{(-1)^n x^{2 n+1}}{2 n+1}+\cdots``
+</div>
+
+<div style="width: 20%; padding-bottom: 2em;">
+
+
+``-1 \leq x \leq 1``
+</div>
+
+
+</div>
+
+"""
 
 # ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
 function rect(x, Δx, xs, f;direction=:x) 
@@ -5139,6 +5273,208 @@ is called a __power series__. More generally, an infinite series of the form
 is called a __power series centered at ``\boldsymbol{c}``__, where ``c`` is a constant.
 """
 
+# ╔═╡ 621f4afc-8b5d-4f51-a4e6-4a5a4c65f39b
+cm"""
+A power series in ``x`` can be viewed as a function of ``x``
+```math
+f(x)=\sum_{n=0}^{\infty} a_n(x-c)^n
+```
+where 
+```math
+\text{the domain of }f = \left\{x\in \mathbb{R} | \text{ the power series converges at } x\right\}.
+```
+$(bbl("",""))
+<div style="color: #ff4f11;font-size: 1.2em;display:flex;justify-content: center; padding: 2em;">
+
+<div style="width: 50%;">
+<span style="line-height: 2.4;">
+Determination of the domain of a power series is the primary concern in this section.
+</span>
+</div>
+</div>
+</div>
+
+"""
+
+# ╔═╡ 0aa832ba-13d0-4e31-aa02-3e166d4a837c
+cm"""
+$(ex(2,"Finding the Radius of Convergence"))
+Find the radius of convergence of 
+```math
+\sum_{n=0}^{\infty} n!x^n.
+```
+"""
+
+# ╔═╡ f38df00c-ce6a-4e5f-ab1f-34f1009c4d57
+cm"""
+$(ex(3,"Finding the Radius of Convergence"))
+Find the radius of convergence of 
+```math
+\sum_{n=0}^{\infty} 3(x-2)^n.
+```
+"""
+
+# ╔═╡ 0468a238-b5ce-4c0b-82eb-d3525646c66c
+cm"""
+$(ex(4,"Finding the Radius of Convergence"))
+Find the radius of convergence of 
+```math
+\sum_{n=0}^{\infty} \frac{(-1)^n x^{2 n+1}}{(2 n+1)!}
+```
+"""
+
+# ╔═╡ ae9cbf12-fd6c-4a9d-b292-a691bfcdace2
+cm"""
+$(bth("Convergence of a Power Series"))
+For a power series centered at ``c``, precisely one of the following is true.
+1. The series converges only at ``c``.
+2. There exists a real number ``R> 0`` such that the series converges absolutely for
+```math
+|x-c| < R
+```
+$(add_space(10))and diverges for
+```math
+|x-c|>R .
+```
+3. The series converges absolutely for all ``x``.
+
+- The number ``R`` is the __radius of convergence__ of the power series. 
+
+- If the series converges only at ``c``, then the radius of convergence is ``R=0``.
+
+- If the series converges for all ``x``, then the radius of convergence is ``R=\infty``. 
+
+- The set of all values of ``x`` for which the power series converges is the __interval of convergence__ of the power series.
+"""
+
+# ╔═╡ 732098bf-c3da-4e88-b3d0-698bcd19f2f9
+cm"""
+$(ex(5,"Finding the Interval of Convergence"))
+
+Find the interval of convergence of
+```math
+\sum_{n=1}^{\infty} \frac{x^n}{n}
+```
+"""
+
+# ╔═╡ a633e01b-7bc0-42ad-a1bc-7e3c0c6323ae
+cm"""
+$(ex(6,"Finding the Interval of Convergence"))
+Find the interval of convergence of 
+```math
+\sum_{n=0}^{\infty} \frac{(-1)^n(x+1)^n}{2^n}.
+```
+"""
+
+# ╔═╡ c0cf197b-0638-463f-9472-7418c843d6de
+cm"""
+$(ex(6,"Finding the Interval of Convergence"))
+Find the interval of convergence of 
+```math
+\sum_{n=1}^{\infty} \frac{x^n}{n^2}.
+```
+"""
+
+# ╔═╡ fdbb1b07-bdb9-426f-b75d-6b94b0283c11
+cm"""
+$(bth("Properties of Functions Defined by Power Series"))
+If the function
+```math
+\begin{aligned}
+f(x) & =\sum_{n=0}^{\infty} a_n(x-c)^n \\
+& =a_0+a_1(x-c)+a_2(x-c)^2+a_3(x-c)^3+\cdots
+\end{aligned}
+```
+has a radius of convergence of ``R>0``, then, on the interval
+```math
+(c-R, c+R)
+```
+``f`` is differentiable (and therefore continuous). Moreover, the derivative and antiderivative of ``f`` are as follows.
+
+1.
+```math
+\begin{aligned}
+f^{\prime}(x) & =\sum_{n=1}^{\infty} n a_n(x-c)^{n-1} \\
+& =a_1+2 a_2(x-c)+3 a_3(x-c)^2+\cdots
+\end{aligned}
+```
+2.
+```math
+\begin{aligned}
+\int f(x) d x & =C+\sum_{n=0}^{\infty} a_n \frac{(x-c)^{n+1}}{n+1} \\
+& =C+a_0(x-c)+a_1 \frac{(x-c)^2}{2}+a_2 \frac{(x-c)^3}{3}+\cdots
+\end{aligned}
+```
+
+The __radius of convergence__ of the series obtained by differentiating or integrating a power series is the same as that of the original power series. The __interval of convergence__, however, may differ as a result of the behavior at the endpoints.
+"""
+
+# ╔═╡ 457d84d7-7db0-43e3-a76e-810b28236779
+cm"""
+$(ex(8,"Intervals of Convergence for f(x), f'(x), and ∫f(x) d x"))
+Consider the function
+```math
+f(x)=\sum_{n=1}^{\infty} \frac{x^n}{n}=x+\frac{x^2}{2}+\frac{x^3}{3}+\cdots .
+```
+
+Find the interval of convergence for each of the following.
+- a. ``\displaystyle\int f(x) d x``
+- b. ``\displaystyle f(x)``
+- c. ``\displaystyle f^{\prime}(x)``
+"""
+
+# ╔═╡ e2b47e81-0d2f-40bf-a6e9-cda6633ce5c9
+cm"""
+$(ex(1,"Finding a Geometric Power Series Centered at 0"))
+Find a power series for ``f(x)=\displaystyle\frac{4}{x+2}``, centered at ``0`` .
+"""
+
+# ╔═╡ 866e1c81-ee36-4ec5-af9a-bf4aa7874be8
+cm"""
+$(ex(2,"Finding a Geometric Power Series Centered at 1"))
+Find a power series for ``f(x)=\displaystyle\frac{1}{x}``, centered at ``1`` .
+"""
+
+# ╔═╡ d8a67bb3-3805-4ee8-8b5d-12310b128e15
+cm"""
+$(bbl("Operations with Power Series",""))
+Let ``\displaystyle f(x)=\sum_{n=0}^{\infty} a_n x^n`` and ``g(x)=\sum_{n=0}^{\infty} b_n x^n``.
+1. ``\displaystyle f(k x)=\sum_{n=0}^{\infty} a_n k^n x^n``
+2. ``\displaystyle f\left(x^N\right)=\sum_{n=0}^{\infty} a_n x^{n N}``
+3. ``\displaystyle f(x) \pm g(x)=\sum_{n=0}^{\infty}\left(a_n \pm b_n\right) x^n``
+"""
+
+# ╔═╡ b9261546-c5e2-433b-ac9b-e5c59e124768
+cm"""
+$(ex(3,"Adding Two Power Series"))
+Find a power series for
+```math
+f(x)=\frac{3 x-1}{x^2-1}
+```
+centered at 0 .
+"""
+
+# ╔═╡ c2b679dc-4cae-4e83-8408-ac1840000a8b
+cm"""
+$(ex(4,"Finding a Power Series by Integration"))
+Find a power series for
+```math
+f(x)=\ln x
+```
+centered at 1 .
+"""
+
+# ╔═╡ c045541b-b0ca-46e6-8a99-1938b6c7f980
+cm"""
+$(ex(5,"Finding a Power Series by Integration"))
+
+Find a power series for
+```math
+g(x)=\arctan x
+```
+centered at 0 .
+"""
+
 # ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
 initialize_eqref()
 
@@ -7279,7 +7615,7 @@ version = "1.4.1+1"
 # ╟─a12f4fa0-0597-4447-a731-603849fbdcba
 # ╟─35b4d21b-c240-4a9c-867f-7a929e933e4e
 # ╟─4daf8c01-54e8-48b4-a991-f784fdc9f14f
-# ╠═2e6b9a41-d56e-4e95-ba78-f360e008335d
+# ╟─2e6b9a41-d56e-4e95-ba78-f360e008335d
 # ╟─5d2d71fe-1aff-4d28-b1d2-47dc3dd7485a
 # ╟─32c8cac4-b560-45bf-9c53-6a971b11e731
 # ╟─01ad1443-6736-41e3-ab73-c5ccdf373ab9
@@ -7289,11 +7625,40 @@ version = "1.4.1+1"
 # ╟─6abdb5a7-5b5b-44ed-9ba8-ac20c59c6dc7
 # ╟─e158bb3c-c351-41b1-ae8d-8f60297d6814
 # ╟─900ab898-f39e-4246-9d50-6430a2d6f645
+# ╠═c73fea91-cca0-4f7f-9c38-f85e6f3c56ae
 # ╟─4bfbb486-642d-4419-9039-eabe2569336a
 # ╟─f1f560ef-630c-4161-98a7-b56ad41ad154
 # ╟─b22a52b9-1ffa-49d3-9945-74fb590af5e4
 # ╟─24bb5b72-935e-40a9-b5c1-1d341b1c4392
 # ╟─fc6da046-815f-4d1b-8a47-e886907f0c3c
+# ╟─42bff813-162c-4ee3-80cf-8a6a2a301de5
+# ╟─621f4afc-8b5d-4f51-a4e6-4a5a4c65f39b
+# ╟─0aa832ba-13d0-4e31-aa02-3e166d4a837c
+# ╟─f38df00c-ce6a-4e5f-ab1f-34f1009c4d57
+# ╟─0468a238-b5ce-4c0b-82eb-d3525646c66c
+# ╟─ae9cbf12-fd6c-4a9d-b292-a691bfcdace2
+# ╟─fa50f561-b6a3-4fea-8b96-d4fbbe8dcc8a
+# ╟─732098bf-c3da-4e88-b3d0-698bcd19f2f9
+# ╟─a633e01b-7bc0-42ad-a1bc-7e3c0c6323ae
+# ╟─c0cf197b-0638-463f-9472-7418c843d6de
+# ╟─412f219d-f1b3-4ad4-8459-badfc2993532
+# ╟─fdbb1b07-bdb9-426f-b75d-6b94b0283c11
+# ╟─457d84d7-7db0-43e3-a76e-810b28236779
+# ╟─11841a6f-c0b0-426a-9d09-3b309f564a9c
+# ╟─35ddd4ab-86db-4d69-8d9b-458365b1c7ae
+# ╟─343254fa-c7e5-4abd-8bd1-a95da1abd6c6
+# ╟─e2b47e81-0d2f-40bf-a6e9-cda6633ce5c9
+# ╟─866e1c81-ee36-4ec5-af9a-bf4aa7874be8
+# ╟─9f65c135-02ba-4f1f-bef9-e9695adb3df9
+# ╟─d8a67bb3-3805-4ee8-8b5d-12310b128e15
+# ╟─b9261546-c5e2-433b-ac9b-e5c59e124768
+# ╟─c2b679dc-4cae-4e83-8408-ac1840000a8b
+# ╟─c045541b-b0ca-46e6-8a99-1938b6c7f980
+# ╠═2f54441f-5562-4d7f-a53a-814b67aafdb6
+# ╟─b9dee3b1-6502-4797-9c57-4a52123dea4f
+# ╟─e3a0a647-ba9e-4835-ba70-c769baba876b
+# ╟─53e4cf4b-1fb6-41fd-bb29-67a5ccabfcbe
+# ╟─a35fe3e0-2857-4e91-82b1-d11bc228d6d2
 # ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
 # ╟─b4599a16-e7f7-4a2a-b349-2648ee45208f
 # ╟─8315fb27-89e4-44a4-a51e-8e55fc3d58e5
