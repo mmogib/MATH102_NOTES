@@ -2220,7 +2220,7 @@ end
 # ╔═╡ c73fea91-cca0-4f7f-9c38-f85e6f3c56ae
 let
 	x = 50
-	n = 12
+	n = 4
 	Pn(x) = sum((-1)^(i)*x^(2i)/(factorial(2i)) for i in 0:n)
 	cos(x), Pn(x)
 end
@@ -2239,6 +2239,9 @@ md"##  Power Series"
 
 # ╔═╡ 42bff813-162c-4ee3-80cf-8a6a2a301de5
 md"##  Radius and Interval of Convergence"
+
+# ╔═╡ 9480006c-fd6a-4d5e-831f-4ef1b923d972
+
 
 # ╔═╡ fa50f561-b6a3-4fea-8b96-d4fbbe8dcc8a
 md"## Endpoint Convergence"
@@ -2262,6 +2265,34 @@ cm"""
 \frac{1}{1-x} = \sum_{n=1}^{\infty}x^n = 1 + x + x^2 + x^3 + \cdots, \quad |x| < 1.
 ```
 """
+
+# ╔═╡ d085cbd1-5ae3-41b7-9608-45d838131c78
+let
+	n = 15
+	c = 0
+	f(x)=1/(1-x)
+	xs = range(-2,4,length=200)
+	P(x,n) = sum(x^i for i in 0:n)
+	P(n) = begin
+		
+		str = map(0:n) do i
+			pn = iseven(i) ? "+" : "+"
+		xpower, frac = i == 0 ? ("1","") : i==1 ? ("x","+") : ("x^{$i}","$(pn)")
+		L"%$frac %$xpower"
+		end |> s -> join(s,"") 
+		L"P_{%$n}(x)=" * str
+	end
+	p = plot(xs,f.(xs),
+		label 			= L"f(x)=\frac{1}{1-x}",
+		color 			= :red,
+		frame_style 	= :origin,
+		xlims 			= (minimum(xs), maximum(xs)),
+		ylims 			= (-2, maximum(xs)),
+	)
+	p = plot(p, xs, x->P(x,n),
+		label 			= P(n),
+	)
+end
 
 # ╔═╡ 9f65c135-02ba-4f1f-bef9-e9695adb3df9
 md"## Operations with Power Series"
@@ -2300,7 +2331,7 @@ cm"""
  Function 
 
 </div>
-<div style="width: 20%; padding-bottom: 0.2em;font-weight: 700;border-bottom: 1px solid black;margin-bottom: 10px;">
+<div style="width: 15%; padding-bottom: 0.2em;font-weight: 700;border-bottom: 1px solid black;margin-bottom: 10px;">
 
 Interval of
 Convergence
@@ -2311,7 +2342,7 @@ Convergence
 ``\displaystyle\frac{1}{1+x}=1-x+x^2-x^3+x^4-x^5+\cdots+(-1)^n x^n+\cdots``
 </div>
 
-<div style="width: 20%; padding-bottom: 2em;">
+<div style="width: 15%; padding-bottom: 2em;">
 
 ``-1 < x <1``
 </div>
@@ -2321,7 +2352,7 @@ Convergence
 ``\displaystyle e^x=1+x+\frac{x^2}{2!}+\frac{x^3}{3!}+\frac{x^4}{4!}+\frac{x^5}{5!}+\cdots+\frac{x^n}{n!}+\cdots ``
 </div>
 
-<div style="width: 20%; padding-bottom: 2em;">
+<div style="width: 15%; padding-bottom: 2em;">
 
 
 ``-\infty < x <\infty``
@@ -2331,7 +2362,7 @@ Convergence
 
 ``\displaystyle \sin x=x-\frac{x^3}{3!}+\frac{x^5}{5!}-\frac{x^7}{7!}+\frac{x^9}{9!}-\cdots+\frac{(-1)^n x^{2 n+1}}{(2 n+1)!}+\cdots ``
 </div>
-<div style="width: 20%; padding-bottom: 2em;">
+<div style="width: 15%; padding-bottom: 2em;">
 
 
 ``-\infty < x <\infty``
@@ -2342,7 +2373,7 @@ Convergence
 
 ``\displaystyle \cos x=1-\frac{x^2}{2!}+\frac{x^4}{4!}-\frac{x^6}{6!}+\frac{x^8}{8!}-\cdots+\frac{(-1)^n x^{2 n}}{(2 n)!}+\cdots  ``
 </div>
-<div style="width: 20%; padding-bottom: 2em;">
+<div style="width: 15%; padding-bottom: 2em;">
 
 
 ``-\infty < x <\infty``
@@ -2353,16 +2384,39 @@ Convergence
 ``\displaystyle\arctan x=x-\frac{x^3}{3}+\frac{x^5}{5}-\frac{x^7}{7}+\frac{x^9}{9}-\cdots+\frac{(-1)^n x^{2 n+1}}{2 n+1}+\cdots``
 </div>
 
-<div style="width: 20%; padding-bottom: 2em;">
+<div style="width: 15%; padding-bottom: 2em;">
 
 
 ``-1 \leq x \leq 1``
 </div>
 
+<div style="width: 80%; padding-bottom: 2em;">
 
+``(1+x)^k=1+k x+\frac{k(k-1) x^2}{2!}+\frac{k(k-1)(k-2) x^3}{3!}+\cdots+\frac{k(k-1) \cdots(k-n+1) x^n}{n!}+\cdots``
+</div>
+
+<div style="width: 15%; padding-bottom: 2em;">
+
+
+``-1 \leq x \leq 1``
+</div>
 </div>
 
 """
+
+# ╔═╡ bdb0ba5e-de80-4289-92ba-8f7366b0e0c9
+md"## Taylor Series and Maclaurin Series"
+
+# ╔═╡ 8ef89ddc-1cef-45d4-8887-3588f23df7cf
+md"##  Binomial Series"
+
+# ╔═╡ c7c77627-9b35-4f07-ba63-16a7223eed84
+md"## Deriving Taylor Series from a Basic List"
+
+# ╔═╡ 5734a65f-b0bf-4448-98fe-c2c9f5767c67
+let
+	
+end
 
 # ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
 function rect(x, Δx, xs, f;direction=:x) 
@@ -5475,6 +5529,115 @@ g(x)=\arctan x
 centered at 0 .
 """
 
+# ╔═╡ 3d0028e3-55b0-4888-add4-ab689ffa1f23
+cm"""
+$(bth("The Form of a Convergent Power Series"))
+If ``f`` is represented by a power series ``f(x)=\sum a_n(x-c)^n`` for all ``x`` in an open interval ``I`` containing ``c``, then
+```math
+a_n=\frac{f^{(n)}(c)}{n!}
+```
+and
+```math
+\begin{aligned}
+f(x)=f(c) & +f^{\prime}(c)(x-c)+\frac{f^{\prime \prime}(c)}{2!}(x-c)^2+\cdots \\
+& +\frac{f^{(n)}(c)}{n!}(x-c)^n+\cdots
+\end{aligned}
+```
+"""
+
+# ╔═╡ d4980faa-1acc-4d7a-91b4-d95092c97708
+cm"""
+$(define("Taylor and Maclaurin Series"))
+If a function ``f`` has derivatives of all orders at ``x=c``, then the series
+```math
+\sum_{n=0}^{\infty} \frac{f^{(n)}(c)}{n!}(x-c)^n=f(c)+f^{\prime}(c)(x-c)+\cdots+\frac{f^{(n)}(c)}{n!}(x-c)^n+\cdots
+```
+is called the Taylor series for ``\boldsymbol{f}`` at ``\boldsymbol{c}``. Moreover, if ``c=0``, then the series is the Maclaurin series for ``f``.
+"""
+
+# ╔═╡ 1608068c-bdfe-413a-85bf-71f6a6e51357
+cm"""
+$(ex(1,"Forming a Power Series"))
+
+Use the function
+```math
+f(x)=\sin x
+```
+to form the Maclaurin series
+```math
+\sum_{n=0}^{\infty} \frac{f^{(n)}(0)}{n!} x^n=f(0)+f^{\prime}(0) x+\frac{f^{\prime \prime}(0)}{2!} x^2+\frac{f^{\prime \prime \prime}(0)}{3!} x^3+\frac{f^{(4)}(0)}{4!} x^4+\cdots
+```
+and determine the interval of convergence.
+"""
+
+# ╔═╡ 1d24d351-4b8f-471c-92f6-1fb4cc336a3a
+cm"""
+$(ex(3,"Maclaurin Series for a Composite Function"))
+Find the Maclaurin series for
+```math
+f(x)=\sin x^2
+```
+"""
+
+# ╔═╡ 55f4cb06-b2e2-4eb8-a952-19fa0a5bc650
+cm"""
+$(ex(4,"Binomial Series"))
+Find the Maclaurin series for ``f(x)=(1+x)^k`` and determine its radius of convergence. Assume that ``k`` is not a positive integer and ``k \neq 0``.
+"""
+
+# ╔═╡ 597d7998-0d50-4e36-8c57-6817b892c11b
+cm"""
+$(ex(5,"Finding a Binomial Series"))
+
+Find the power series for
+```math
+f(x)=\sqrt[3]{1+x}
+```
+"""
+
+# ╔═╡ 51275f9c-9d72-450a-8b22-35fe0ebf4d45
+cm"""
+$(ex(6,"Deriving a Power Series from a Basic List"))
+Find the power series for
+```math
+f(x)=\cos \sqrt{x}
+```
+"""
+
+# ╔═╡ d24d51eb-5cef-4b12-b8c5-02b2e549482d
+cm"""
+$(ex(7,"Multiplication of Power Series"))
+Find the first three nonzero terms in the Maclaurin series ``e^x \arctan x``.
+"""
+
+# ╔═╡ e26ad50a-67db-449b-aa90-1bd87e06d5cb
+cm"""
+$(ex(8,"Division of Power Series"))
+
+Find the first three nonzero terms in the Maclaurin series ``\tan x``.
+"""
+
+# ╔═╡ 224f4771-7bf7-4433-9f36-b82875ad4b6c
+cm"""
+$(ex(9,"A Power Series for sin²x"))
+
+Find the power series for
+```math
+f(x)=\sin ^2 x
+```
+"""
+
+# ╔═╡ 66e78b57-c224-4beb-bddb-e4b5a2997d2c
+cm"""
+$(ex(10,"Power Series Approximation of a Definite Integral"))
+
+Use a power series to approximate
+```math
+\int_0^1 e^{-x^2} d x
+```
+with an error of less than 0.01 .
+"""
+
 # ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
 initialize_eqref()
 
@@ -7635,6 +7798,7 @@ version = "1.4.1+1"
 # ╟─621f4afc-8b5d-4f51-a4e6-4a5a4c65f39b
 # ╟─0aa832ba-13d0-4e31-aa02-3e166d4a837c
 # ╟─f38df00c-ce6a-4e5f-ab1f-34f1009c4d57
+# ╠═9480006c-fd6a-4d5e-831f-4ef1b923d972
 # ╟─0468a238-b5ce-4c0b-82eb-d3525646c66c
 # ╟─ae9cbf12-fd6c-4a9d-b292-a691bfcdace2
 # ╟─fa50f561-b6a3-4fea-8b96-d4fbbe8dcc8a
@@ -7647,6 +7811,7 @@ version = "1.4.1+1"
 # ╟─11841a6f-c0b0-426a-9d09-3b309f564a9c
 # ╟─35ddd4ab-86db-4d69-8d9b-458365b1c7ae
 # ╟─343254fa-c7e5-4abd-8bd1-a95da1abd6c6
+# ╟─d085cbd1-5ae3-41b7-9608-45d838131c78
 # ╟─e2b47e81-0d2f-40bf-a6e9-cda6633ce5c9
 # ╟─866e1c81-ee36-4ec5-af9a-bf4aa7874be8
 # ╟─9f65c135-02ba-4f1f-bef9-e9695adb3df9
@@ -7659,6 +7824,21 @@ version = "1.4.1+1"
 # ╟─e3a0a647-ba9e-4835-ba70-c769baba876b
 # ╟─53e4cf4b-1fb6-41fd-bb29-67a5ccabfcbe
 # ╟─a35fe3e0-2857-4e91-82b1-d11bc228d6d2
+# ╟─bdb0ba5e-de80-4289-92ba-8f7366b0e0c9
+# ╟─3d0028e3-55b0-4888-add4-ab689ffa1f23
+# ╟─d4980faa-1acc-4d7a-91b4-d95092c97708
+# ╟─1608068c-bdfe-413a-85bf-71f6a6e51357
+# ╟─1d24d351-4b8f-471c-92f6-1fb4cc336a3a
+# ╟─8ef89ddc-1cef-45d4-8887-3588f23df7cf
+# ╟─55f4cb06-b2e2-4eb8-a952-19fa0a5bc650
+# ╟─597d7998-0d50-4e36-8c57-6817b892c11b
+# ╟─c7c77627-9b35-4f07-ba63-16a7223eed84
+# ╟─51275f9c-9d72-450a-8b22-35fe0ebf4d45
+# ╟─d24d51eb-5cef-4b12-b8c5-02b2e549482d
+# ╟─e26ad50a-67db-449b-aa90-1bd87e06d5cb
+# ╟─224f4771-7bf7-4433-9f36-b82875ad4b6c
+# ╟─66e78b57-c224-4beb-bddb-e4b5a2997d2c
+# ╠═5734a65f-b0bf-4448-98fe-c2c9f5767c67
 # ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
 # ╟─b4599a16-e7f7-4a2a-b349-2648ee45208f
 # ╟─8315fb27-89e4-44a4-a51e-8e55fc3d58e5
