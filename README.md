@@ -1,6 +1,6 @@
 # Calculus II | MATH 102
 
-## [GO TO COURSE MATERIAL](./docs/MATH102_NOTES.html)
+## [GO TO COURSE MATERIAL](./docs/index.html)
 
 
 ## Course Information
@@ -33,6 +33,14 @@
 
 Feel free to use these notes and resources for your studies or teaching purposes. Contributions and corrections are welcome through pull requests.
 
+
+
+
+
+### Build & Export
+- Notes are authored in Julia using Pluto.jl. The main notebook is at `src/MATH102_NOTES.jl`.
+- To install dependencies: `julia --project=. -e "using Pkg; Pkg.instantiate()"`
+- To export the site to `docs/index.html`: `julia --project=. src/export.jl`
 
 ## Contact
 
