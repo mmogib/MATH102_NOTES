@@ -1,48 +1,29 @@
-# Calculus II | MATH 102
+# MATH102: Calculus II (Term 252)
 
 ## [GO TO COURSE MATERIAL](./docs/index.html)
 
+This repository contains notes, exercises, and resources for MATH102 – Calculus II, offered by the Department of Mathematics at King Fahd University of Petroleum & Minerals (KFUPM).
 
-## Course Information
+Notes are authored in Julia using Pluto.jl. The main notebook is located at  and can be exported to  using .
 
-- **Instructor:** Dr. Mohammed Alshahrani
-- **Email:** @mshahrani
-- **Office:** Building 5 – Room 201-1
-- **Office Hours:**
-  - In-Person: 
-    - Sunday at 02:00PM - 02:50PM
-    - Tuesday at 02:00PM - 02:50PM
-  - Also by appointment through TEAMS
-- **Course Website:** [mshahrani.website](https://mshahrani.website/)
+## 📖 Course Description
+Definite and indefinite integrals of single-variable functions. Fundamental Theorem of Calculus. Techniques of integration. Hyperbolic functions. Applications of the definite integral to area, volume, arc length, and surface area. Improper integrals. Sequences and series: convergence tests (integral, comparison, ratio, root), alternating series, absolute/conditional convergence, power series, and Taylor/Maclaurin series.
 
-- **Textbook:** : Larson, R. & Edwards, B., Calculus: Early Transcendental Functions, Metric Version, 7th edition, Cengage Learning, Inc., 2019
+## 🧠 Learning Outcomes
+By the end of the course, students will be able to:
+1. Estimate areas and definite integrals by Riemann sums and apply the Fundamental Theorem of Calculus.
+2. Evaluate integrals using standard techniques and compute averages, areas, volumes, lengths, and surface areas.
+3. Evaluate improper integrals and limits of sequences.
+4. Apply convergence tests for series and evaluate selected convergent series.
+5. Determine interval/radius of convergence and express functions as power series (Taylor/Maclaurin).
 
-## Contents
+## 📚 Textbook
+Calculus: Early Transcendental Functions, 7th Edition (Metric Version) — Ron Larson & Bruce Edwards
 
-- **Lecture Notes**: Detailed notes from each lecture, covering fundamental concepts in intergarl calculus, sequences and series.
-- **Course Description**: Definite and indefinite integrals of functions of a single variable. Fundamental Theorem of Calculus. Techniques of integration. Hyperbolic functions Applications of the definite integral to area, volume, arc length and surface area. Improper integrals. Sequences and series: convergence tests, integral, comparison, ratio and root tests. Alternating series. Absolute and conditional convergence. Power series. Taylor and Maclaurin series. 
-- **Course Learning Outcomes**: Upon successful completion of the course, a student should be able to
-  1. Estimate areas and definite integrals by Riemann sums.
-  1. Apply the Fundamental Theorem of Calculus.
-  2. Evaluate integrals using various techniques of integration.
-  3. Calculate the average value of a function, areas between curves, length of curves, volumes and surface areas of solids of revolutions.
-   4. Evaluate improper integrals and limits of sequences.
-   5. Apply convergence tests of series and evaluate sum of some selected convergent series.
-   6. Find interval and radius of convergence of a power series and express a function as a power series (Taylor and Maclaurin). 
-## Usage
+## 🧑‍🏫 Instructor
+Dr. Mohammed Alshahrani
 
-Feel free to use these notes and resources for your studies or teaching purposes. Contributions and corrections are welcome through pull requests.
-
-
-
-
-
-### Build & Export
-- Notes are authored in Julia using Pluto.jl. The main notebook is at `src/MATH102_NOTES.jl`.
-- To install dependencies: `julia --project=. -e "using Pkg; Pkg.instantiate()"`
-- To export the site to `docs/index.html`: `julia --project=. src/export.jl`
-
-## Contact
-
-For any inquiries or suggestions regarding these materials, please contact @mshahrani.
-
+## 🔧 Build & Export
+- Install deps: 
+- Export site: 
+- Preview locally: 

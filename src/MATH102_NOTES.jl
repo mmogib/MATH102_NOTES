@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.20.4
+# v0.20.21
 
 using Markdown
 using InteractiveUtils
@@ -7,7 +7,7 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     #! format: off
-    quote
+    return quote
         local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
         local el = $(esc(element))
         global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
@@ -29,13 +29,13 @@ begin
     using SymPy
     using QRCoders
     using PrettyTables
-	# using Primes
+    # using Primes
     # using LinearSolve
     # using NonlinearSolve
     # using ForwardDiff
     # using Integrals
     # using OrdinaryDiffEq
-	using IntervalArithmetic
+    using IntervalArithmetic
 end
 
 # ╔═╡ 71bc54d5-d0ed-42d3-9bc1-48aa86e91d1d
@@ -55,9 +55,9 @@ end
 
 # ╔═╡ cd269caf-ef81-43d7-a1a8-6668932b6363
 # exportqrcode("https://www.mathmatize.com/")
-let 
-	img = LocalImage("./qrcode.png")
-end
+# let
+#     img = LocalImage("../qrcode.png")
+# end
 
 # ╔═╡ 8b65d45c-ca7c-4e5d-9cfd-a7348547ebe0
 md"# 5.2 Area"
@@ -214,14 +214,14 @@ end
 
 # ╔═╡ 5f37c3d1-449f-4a6d-9af5-55f9a4c8feec
 begin
-s52q1Check = @bind s52q1chk Radio(["show", "hide"],default="hide")
-md"""$(s52q1Check)"""
+    s52q1Check = @bind s52q1chk Radio(["show", "hide"], default="hide")
+    md"""$(s52q1Check)"""
 end
 
 # ╔═╡ 4aa43e57-d9a4-49da-b7d8-fe39d21df414
-let 
-	val = s52q1chk == "show" ? 15 : ""
-	cm" the nswer is = $val"
+let
+    val = s52q1chk == "show" ? 15 : ""
+    cm" the nswer is = $val"
 end
 
 # ╔═╡ 229d9694-2751-479d-9872-218f7cea2261
@@ -262,9 +262,9 @@ end
 
 
 # ╔═╡ 4e358ab2-9be7-4d7f-b295-1e85943da027
-let 
-	x = symbols("x", real=true)
-	integrate(exp(x))
+let
+    x = symbols("x", real=true)
+    integrate(exp(x))
 end
 
 
@@ -391,34 +391,34 @@ md"## Average Value of a Function"
 
 # ╔═╡ 56153ee8-aa22-40ba-bab3-235cc8b1fef6
 let
-	x = symbols("x", real=true)
-	end_points = [0.0; 11.5;22.0;32.0;50.0;80.0]
-	end_points_zipped = collect(zip(end_points[1:end-1],end_points[2:end]))
-	As = map(((a,b,),)->interval(a,b), end_points_zipped)
-	piece_wise(x) = findlast(x->x,map(t->in_interval(x,t),As))
-	fns =[x->-4*x+341
-		x-> 295.0 + x - x
-		x-> (3/4)*x+278.5
-		x-> (3/2)*x+254.5
-		x-> -(3/2)*x+404.5
-	]
-	fns_sym = map(f->f(x),fns)
-	fns_int = [
-		integrate(fns_sym[1],x)
-		integrate(fns_sym[2],x)
-		integrate(fns_sym[3],x)
-		integrate(fns_sym[4],x)
-		integrate(fns_sym[5],x)
-	]
-	
-	s(x) = fns[piece_wise(x)](x)
-	
-	n = 100
-	xs =  range(0.0,80.0, length=n)
-	plot(xs, s.(xs))
-	distanse_0_80= map( ((i,(a,b),),)->subs(fns_int[i],x,b)-subs(fns_int[i],x,a), enumerate(end_points_zipped)) |> sum
+    x = symbols("x", real=true)
+    end_points = [0.0; 11.5; 22.0; 32.0; 50.0; 80.0]
+    end_points_zipped = collect(zip(end_points[1:end-1], end_points[2:end]))
+    As = map(((a, b,),) -> interval(a, b), end_points_zipped)
+    piece_wise(x) = findlast(x -> x, map(t -> in_interval(x, t), As))
+    fns = [x -> -4 * x + 341
+        x -> 295.0 + x - x
+        x -> (3 / 4) * x + 278.5
+        x -> (3 / 2) * x + 254.5
+        x -> -(3 / 2) * x + 404.5
+    ]
+    fns_sym = map(f -> f(x), fns)
+    fns_int = [
+        integrate(fns_sym[1], x)
+        integrate(fns_sym[2], x)
+        integrate(fns_sym[3], x)
+        integrate(fns_sym[4], x)
+        integrate(fns_sym[5], x)
+    ]
 
-	Average_speed = (1/80)*distanse_0_80
+    s(x) = fns[piece_wise(x)](x)
+
+    n = 100
+    xs = range(0.0, 80.0, length=n)
+    plot(xs, s.(xs))
+    distanse_0_80 = map(((i, (a, b),),) -> subs(fns_int[i], x, b) - subs(fns_int[i], x, a), enumerate(end_points_zipped)) |> sum
+
+    Average_speed = (1 / 80) * distanse_0_80
 end
 
 # ╔═╡ b25051b6-8b33-4976-86b9-4db2166c291c
@@ -490,39 +490,39 @@ end
 
 # ╔═╡ 42f171ca-09e4-45ed-8910-427ab7dc3aee
 let
-	ff(x) = 2 * x - x^2;
+    ff(x) = 2 * x - x^2
 
 
 
 
-md"""
-
-A=$(integrate(ff(xx),(xx,0,2)))
-
-	
-## Table of Indefinite Integrals
-
-|  | |  |
-|--------------|--------------|------- |
-| $$\int c f(x) dx =c\int  f(x) dx$$ |    | $\int [f(x)+g(x)] dx =\int  f(x) dx+\int g(x) dx$|
-| | | |
-|$$\int k dx = kx + C$$ | | $$\int x^n dx = \frac{x^{n+1}}{n+1} + C, n\not=-1$$ 
-| | | |
-|$$\int \frac{1}{x} dx = \ln \|x\| + C$$  || $$\int e^x dx = e^x + C$$ 
-| | | |
-|$$\int a^x dx = \frac{a^x}{\ln a}+ C$$  || $$\int \sin x dx = -\cos x + C$$ 
-| | | |
-|$$\int \cos x dx = \sin x + C$$ || $$\int \sec^2 x dx = \tan x + C$$
-| | | |
-|$$\int \csc^2 x dx = -\cot x + C$$ || $$\int \sec x\tan x dx = \sec x + C$$
-| | | |
-|$$\int \frac{1}{x^2+1} dx = \tan^{-1} x + C$$ || $$\int \frac{1}{\sqrt{1-x^2}} dx = \sin^{-1} x + C$$
-| | | |
-|$$\int \sinh x dx = \cosh x + C$$ || $$\int \cosh x dx = \sinh x + C$$
-| | | |
-|$$\int \csc x\cot x dx = -\csc x + C$$ ||
-| | | |
-"""
+    md"""
+    
+    A=$(integrate(ff(xx),(xx,0,2)))
+    
+    	
+    ## Table of Indefinite Integrals
+    
+    |  | |  |
+    |--------------|--------------|------- |
+    | $$\int c f(x) dx =c\int  f(x) dx$$ |    | $\int [f(x)+g(x)] dx =\int  f(x) dx+\int g(x) dx$|
+    | | | |
+    |$$\int k dx = kx + C$$ | | $$\int x^n dx = \frac{x^{n+1}}{n+1} + C, n\not=-1$$ 
+    | | | |
+    |$$\int \frac{1}{x} dx = \ln \|x\| + C$$  || $$\int e^x dx = e^x + C$$ 
+    | | | |
+    |$$\int a^x dx = \frac{a^x}{\ln a}+ C$$  || $$\int \sin x dx = -\cos x + C$$ 
+    | | | |
+    |$$\int \cos x dx = \sin x + C$$ || $$\int \sec^2 x dx = \tan x + C$$
+    | | | |
+    |$$\int \csc^2 x dx = -\cot x + C$$ || $$\int \sec x\tan x dx = \sec x + C$$
+    | | | |
+    |$$\int \frac{1}{x^2+1} dx = \tan^{-1} x + C$$ || $$\int \frac{1}{\sqrt{1-x^2}} dx = \sin^{-1} x + C$$
+    | | | |
+    |$$\int \sinh x dx = \cosh x + C$$ || $$\int \cosh x dx = \sinh x + C$$
+    | | | |
+    |$$\int \csc x\cot x dx = -\csc x + C$$ ||
+    | | | |
+    """
 
 end
 
@@ -533,7 +533,7 @@ md"## Net Change Theorem "
 # ╔═╡ 8458322d-c34a-475f-b11a-f9cb74a91a95
 
 let
-	v(t) = t^3 - 10 * t^2 + 29 * t - 20
+    v(t) = t^3 - 10 * t^2 + 29 * t - 20
     u = symbols("u", real=true)
     v1(t) = v(t)
     s1(t) = convert(Float64, integrate(v1(u), (u, 0, t)).n())
@@ -567,7 +567,7 @@ let
             vvv[1:i],
             xlims=(0, myXlims[2]),
             ylims=myYlims,
-            xticks=(1:b1, map(i->Symbol("$i"),1:b1)),
+            xticks=(1:b1, map(i -> Symbol("$i"), 1:b1)),
             framestyle=:origin,
             label=nothing,
             xlabel="x",
@@ -578,7 +578,7 @@ let
         # annotate!(pp,[(5,8.2,("velocity graph",10))], subplot=2)
     end
 
-	gif(anim,"net_change_ex10.gif", fps=15)
+    gif(anim, "net_change_ex10.gif", fps=15)
 end
 
 
@@ -808,79 +808,79 @@ md""" # 7.1 Area of a Region Between Two Curves
 
 # ╔═╡ 3df06d3d-7bd1-45fe-bd46-c1429b11ee14
 begin
-	cnstSlider = @bind cnstslider Slider(-2:1:2, default=0)
-	n1Slider = @bind n1slider Slider(1:200, default=1,show_value=true)
-	sec71Chbx = @bind sec71chbx CheckBox(default=true)
-	md"""
-	| | | |
-	|---|---|---|
-	|move $cnstSlider| ``n`` = $n1Slider| Cases $sec71Chbx
-	|||
-	"""
+    cnstSlider = @bind cnstslider Slider(-2:1:2, default=0)
+    n1Slider = @bind n1slider Slider(1:200, default=1, show_value=true)
+    sec71Chbx = @bind sec71chbx CheckBox(default=true)
+    md"""
+    | | | |
+    |---|---|---|
+    |move $cnstSlider| ``n`` = $n1Slider| Cases $sec71Chbx
+    |||
+    """
 end
 
 # ╔═╡ dda364fa-80e5-4d6c-8ed1-9b2bfccf4b18
 let
-	p1Opt = (framestyle=:origin, aspectration=1)
-	f1(x) = sin(x)+3+cnstslider
-	f2(x) = cos(2x)+1+cnstslider
-	f3(x) = cos(2x)+4+cnstslider
-	x = symbols("x",real=true)
-	poi1=solve(f1(x)-f3(x),x) .|> p -> real(p.n()) .|> Float64 
-	theme(:wong)
-	a1,b1 = 1, 5
-	Δx1 = (b1-a1)/n1slider
-	x1Rect =a1:Δx1:b1
-	x1 = a1:0.1:b1
-	y1 = f1.(collect(x1))
-	y2 = f2.(x1)
-	y3 = f3.(x1)
-	
-	p1=plot(x1,y1, fill=(y2,0.25,:green), label=nothing,c=:red)
-	p2=plot(x1,y1, fill=(y3,0.25,:green), label=nothing,c=:red)
-	
-	plot!(p1,x1,y2,label=nothing)
-	plot!(p2,x1,y3,label=nothing)
-	annotate!(p1,[
-				(3.5,3.5+cnstslider,L"y=f(x)",:red),
-				(5.9,0,L"x"),
-				(0.2,6,L"y"),
-				(3.2,1+cnstslider,L"y=g(x)",:blue)
-				]
-			)
-	annotate!(p2,[
-				(1.2,4.5+cnstslider,L"y=f(x)",:red),
-				(5.9,0,L"x"),
-				(0.2,6,L"y"),
-				(4,5+cnstslider,L"y=g(x)",:blue)
-				]
-			)
-	
-	plot!(p1; p1Opt...,ylims=(-3,6),xlims=(-1,6))
-	recs =[
-			Shape([(xi,f2(xi)),(xi+Δx1,f2(xi)),(xi+Δx1,f1(xi+Δx1)),(xi,f1(xi+Δx1))]) 			 for xi in x1Rect[1:end-1]
-		  ]
-	n1slider>2 && plot!(p1,recs, label=nothing,c=:green)
-	plot!(p2; p1Opt...,ylims=(-3,6),xlims=(-1,6))
-	
-	scatter!(p2,(poi1[1],f3(poi1[1])), label="Point of instersection",legend=:bottomright)
-	# save("./imgs/6.1/sec6.1p2.png",p2)
-	# annotate!(p2,[(4,0.51,(L"$\sum_{i=1}^{%$n2} f (x^*_{i})\Delta x=%$s2$",12))])
-	formula=sec71chbx ? cm"""```math
-Area = \int_a^b \left[{\color{red}f(x)} - {\color{blue}g(x)}\right] dx
-```""" : cm"""```math
-Area = \int_a^b \left|f(x) - g(x)\right| dx
-```"""
-	
-cm""" **How can we find the area between the two curves?**
-	
-$(sec71chbx && p1)
+    p1Opt = (framestyle=:origin, aspectration=1)
+    f1(x) = sin(x) + 3 + cnstslider
+    f2(x) = cos(2x) + 1 + cnstslider
+    f3(x) = cos(2x) + 4 + cnstslider
+    x = symbols("x", real=true)
+    poi1 = solve(f1(x) - f3(x), x) .|> p -> real(p.n()) .|> Float64
+    theme(:wong)
+    a1, b1 = 1, 5
+    Δx1 = (b1 - a1) / n1slider
+    x1Rect = a1:Δx1:b1
+    x1 = a1:0.1:b1
+    y1 = f1.(collect(x1))
+    y2 = f2.(x1)
+    y3 = f3.(x1)
 
-	
-$(!sec71chbx && p2)
+    p1 = plot(x1, y1, fill=(y2, 0.25, :green), label=nothing, c=:red)
+    p2 = plot(x1, y1, fill=(y3, 0.25, :green), label=nothing, c=:red)
 
-$(formula)
-"""
+    plot!(p1, x1, y2, label=nothing)
+    plot!(p2, x1, y3, label=nothing)
+    annotate!(p1, [
+        (3.5, 3.5 + cnstslider, L"y=f(x)", :red),
+        (5.9, 0, L"x"),
+        (0.2, 6, L"y"),
+        (3.2, 1 + cnstslider, L"y=g(x)", :blue)
+    ]
+    )
+    annotate!(p2, [
+        (1.2, 4.5 + cnstslider, L"y=f(x)", :red),
+        (5.9, 0, L"x"),
+        (0.2, 6, L"y"),
+        (4, 5 + cnstslider, L"y=g(x)", :blue)
+    ]
+    )
+
+    plot!(p1; p1Opt..., ylims=(-3, 6), xlims=(-1, 6))
+    recs = [
+        Shape([(xi, f2(xi)), (xi + Δx1, f2(xi)), (xi + Δx1, f1(xi + Δx1)), (xi, f1(xi + Δx1))]) for xi in x1Rect[1:end-1]
+    ]
+    n1slider > 2 && plot!(p1, recs, label=nothing, c=:green)
+    plot!(p2; p1Opt..., ylims=(-3, 6), xlims=(-1, 6))
+
+    scatter!(p2, (poi1[1], f3(poi1[1])), label="Point of instersection", legend=:bottomright)
+    # save("./imgs/6.1/sec6.1p2.png",p2)
+    # annotate!(p2,[(4,0.51,(L"$\sum_{i=1}^{%$n2} f (x^*_{i})\Delta x=%$s2$",12))])
+    formula = sec71chbx ? cm"""```math
+     Area = \int_a^b \left[{\color{red}f(x)} - {\color{blue}g(x)}\right] dx
+     ```""" : cm"""```math
+     Area = \int_a^b \left|f(x) - g(x)\right| dx
+     ```"""
+
+    cm""" **How can we find the area between the two curves?**
+    	
+    $(sec71chbx && p1)
+    
+    	
+    $(!sec71chbx && p2)
+    
+    $(formula)
+    """
 
 end
 
@@ -889,108 +889,96 @@ p1Opt = (framestyle=:origin, aspectration=1)
 
 # ╔═╡ 932e13f0-0949-4e77-b3a8-f344784b1f1d
 begin
-	
-	ex1x=0:0.01:1
-	ex1y=exp.(ex1x)
-	ex1plt=plot(ex1x,ex1y,label=nothing,fill=(0,0.5,:red))
-	plot!(ex1plt,ex1x,ex1x,fill=(0,0,:white),label=nothing)
-	plot!(;p1Opt...,xlims=(-0.4,1.5),ylims=(-0.4,3.5),label=nothing,xticks=[0,0,1])
-	ex1Rect = Shape([(0.5,0.55),(0.55,0.55),(0.55,exp(0.55)),(0.5,exp(0.55))])
-	plot!(ex1Rect,label=nothing)
-	annotate!([	(0.77,0.6,L"y=x")
-			  ,	(0.7,exp(0.7)+0.2,L"y=e^x")
-			  , (1.1,1.7,L"x=1")
-			  , (-0.1,0.5,L"x=0")
-			  , (0.54,0.44,text(L"\Delta x",10))
-			  ])
-	md"""
-	**Solution**
-	
-	$ex1plt
-	"""
+
+    ex1x = 0:0.01:1
+    ex1y = exp.(ex1x)
+    ex1plt = plot(ex1x, ex1y, label=nothing, fill=(0, 0.5, :red))
+    plot!(ex1plt, ex1x, ex1x, fill=(0, 0, :white), label=nothing)
+    plot!(; p1Opt..., xlims=(-0.4, 1.5), ylims=(-0.4, 3.5), label=nothing, xticks=[0, 0, 1])
+    ex1Rect = Shape([(0.5, 0.55), (0.55, 0.55), (0.55, exp(0.55)), (0.5, exp(0.55))])
+    plot!(ex1Rect, label=nothing)
+    annotate!([(0.77, 0.6, L"y=x"), (0.7, exp(0.7) + 0.2, L"y=e^x"), (1.1, 1.7, L"x=1"), (-0.1, 0.5, L"x=0"), (0.54, 0.44, text(L"\Delta x", 10))
+    ])
+    md"""
+    **Solution**
+    
+    $ex1plt
+    """
 end
 
 # ╔═╡ d993fe50-4792-4f54-b4a6-23cb91718f00
 let
-	ex2f1(x)=x^2
-	ex2f2(x)=2x-x^2
-	x = symbols("x",real=true)
-	ex2poi=solve(ex2f1(x)-ex2f2(x)) .|> p->p.n() .|> Float64
-	ex2x=0:0.01:1
-	ex2widex=-1:0.01:2
-	ex2y1=ex2f1.(ex2x)
-	ex2y1wide=ex2f1.(ex2widex)
-	ex2y2=ex2f2.(ex2x)
-	ex2y2wide=ex2f2.(ex2widex)
-	ex2plt=plot(ex2x,ex2y2,label=nothing,fill=(0,0.5,:green))
-	plot!(ex2plt,ex2x,ex2y1,fill=(0,0,:white),label=nothing)
-	plot!(ex2widex,ex2y1wide, c=:red,label=nothing)
-	plot!(ex2widex,ex2y2wide, c=:blue,label=nothing)
-	plot!(;p1Opt...,xlims=(-0.4,1.5),ylims=(-0.4,2),label=nothing,xticks=[0,0,1])
-	ex2Rect = Shape([ (0.5,ex2f2(0.55))
-					, (0.55,ex2f2(0.55))
-					, (0.55,ex2f1(0.55))
-					, (0.5,ex2f1(0.55))
-					])
-	plot!(ex2Rect,label=nothing)
-	scatter!(ex2poi,ex2f1.(ex2poi),label=nothing)
-	annotate!([	(0.77,0.4,L"y=x^2")
-			  ,	(0.7,1.1,L"y=2x-x^2")
-			  , (0.54,0.24,text(L"\Delta x",10))
-			  ])
-	md"""
-	**Solution**
-	
-	$ex2plt
-	"""
+    ex2f1(x) = x^2
+    ex2f2(x) = 2x - x^2
+    x = symbols("x", real=true)
+    ex2poi = solve(ex2f1(x) - ex2f2(x)) .|> p -> p.n() .|> Float64
+    ex2x = 0:0.01:1
+    ex2widex = -1:0.01:2
+    ex2y1 = ex2f1.(ex2x)
+    ex2y1wide = ex2f1.(ex2widex)
+    ex2y2 = ex2f2.(ex2x)
+    ex2y2wide = ex2f2.(ex2widex)
+    ex2plt = plot(ex2x, ex2y2, label=nothing, fill=(0, 0.5, :green))
+    plot!(ex2plt, ex2x, ex2y1, fill=(0, 0, :white), label=nothing)
+    plot!(ex2widex, ex2y1wide, c=:red, label=nothing)
+    plot!(ex2widex, ex2y2wide, c=:blue, label=nothing)
+    plot!(; p1Opt..., xlims=(-0.4, 1.5), ylims=(-0.4, 2), label=nothing, xticks=[0, 0, 1])
+    ex2Rect = Shape([(0.5, ex2f2(0.55)), (0.55, ex2f2(0.55)), (0.55, ex2f1(0.55)), (0.5, ex2f1(0.55))
+    ])
+    plot!(ex2Rect, label=nothing)
+    scatter!(ex2poi, ex2f1.(ex2poi), label=nothing)
+    annotate!([(0.77, 0.4, L"y=x^2"), (0.7, 1.1, L"y=2x-x^2"), (0.54, 0.24, text(L"\Delta x", 10))
+    ])
+    md"""
+    **Solution**
+    
+    $ex2plt
+    """
 end
 
 # ╔═╡ a2a2d894-7588-48a8-84fd-65e5ead80072
 begin
-	ex3f1(x) = cos(x)
-	ex3f2(x) = sin(2x)
-	ex3X=0:0.01:(π+0.019)/2
-	
-	ex3Y1=ex3f1.(ex3X)
-	ex3Y2=ex3f2.(ex3X)
-	ex3P = plot(ex3X,ex3Y1,label=L"y=\cos(x)", c=:red)
-	plot!(ex3P,ex3X,ex3Y1,fill=(ex3Y2,0.25,:green),label=nothing,c=nothing)
-	plot!(ex3P,ex3X,ex3Y2,label=L"y=\sin(2x)",c=:blue)
-	plot!(ex3P;p1Opt...,xlims=(-1,π),ylims=(-1.1,1.1))
-	scatter!(ex3P,(π/6,ex3f1(π/6)),label=nothing,c=:black)
-	
-	md"""
-	**Solution**
-	
-	$ex3P
-	"""
+    ex3f1(x) = cos(x)
+    ex3f2(x) = sin(2x)
+    ex3X = 0:0.01:(π+0.019)/2
+
+    ex3Y1 = ex3f1.(ex3X)
+    ex3Y2 = ex3f2.(ex3X)
+    ex3P = plot(ex3X, ex3Y1, label=L"y=\cos(x)", c=:red)
+    plot!(ex3P, ex3X, ex3Y1, fill=(ex3Y2, 0.25, :green), label=nothing, c=nothing)
+    plot!(ex3P, ex3X, ex3Y2, label=L"y=\sin(2x)", c=:blue)
+    plot!(ex3P; p1Opt..., xlims=(-1, π), ylims=(-1.1, 1.1))
+    scatter!(ex3P, (π / 6, ex3f1(π / 6)), label=nothing, c=:black)
+
+    md"""
+    **Solution**
+    
+    $ex3P
+    """
 end
 
 # ╔═╡ 64ee7ca1-4feb-470a-900c-fbb8a413b3f5
 let
-	ex4FRight(y)=3-y^2
-	ex4FLeft(y)=y+1
-	y,x = symbols("y,x",real=true)
-	ex4p = plot(x->-x^2 +3,x->x,-3,6,c=:blue,label=L"y^2=3-x")
-	ex4Rect = Shape([ (ex4FRight(0.1),-0.2)
-					, (ex4FLeft(-0.2),-0.2)
-					, (ex4FLeft(-0.2),0.1)
-					, (ex4FRight(0.1),0.1)
-					])
-	plot!(ex4Rect,label=nothing)
-	plot!(ex4p,x->x,x->x-1,-5,6;p1Opt...,c=:red,label=L"y=x-1",xticks=-3:1:15)
-	(ex4poi1,ex4poi2)=solve([x+y^2-3,x-y-1],[x,y]) .|> p -> map(q->Float64(q.n()),p)
-	scatter!([ex4poi1,ex4poi2],xlims=(-3.5,7),label=nothing,legend=:topleft)
-	md"""
-	**Solution:**
-	$ex4p
-	"""
+    ex4FRight(y) = 3 - y^2
+    ex4FLeft(y) = y + 1
+    y, x = symbols("y,x", real=true)
+    ex4p = plot(x -> -x^2 + 3, x -> x, -3, 6, c=:blue, label=L"y^2=3-x")
+    ex4Rect = Shape([(ex4FRight(0.1), -0.2), (ex4FLeft(-0.2), -0.2), (ex4FLeft(-0.2), 0.1), (ex4FRight(0.1), 0.1)
+    ])
+    plot!(ex4Rect, label=nothing)
+    plot!(ex4p, x -> x, x -> x - 1, -5, 6; p1Opt..., c=:red, label=L"y=x-1", xticks=-3:1:15)
+    (ex4poi1, ex4poi2) = solve([x + y^2 - 3, x - y - 1], [x, y]) .|> p -> map(q -> Float64(q.n()), p)
+    scatter!([ex4poi1, ex4poi2], xlims=(-3.5, 7), label=nothing, legend=:topleft)
+    md"""
+    **Solution:**
+    $ex4p
+    """
 end
 
 # ╔═╡ 358c0e61-da8c-4eba-9765-58760940c7c3
 let
-	x,y = symbols("x,y", real=true)
-	integrate(y+1-(y^2/2-3),(y,-2,4))
+    x, y = symbols("x,y", real=true)
+    integrate(y + 1 - (y^2 / 2 - 3), (y, -2, 4))
 end
 
 # ╔═╡ e0d5df0d-03bb-45f7-9f36-909830e6203f
@@ -1009,14 +997,14 @@ Find the area of the region enclosed by the curves ``y= {1\over x}``, ``y=x``, a
 
 # ╔═╡ 42053189-d0d4-4c70-9c4c-41fbacae9891
 begin
-	x5=0.1:0.1:10
-	x51=0:0.1:1
-	p5 = plot(x->x/4, xlims=(-1,10), framestyle=:origin, aspectratio=1,label=nothing)
-	plot!(x->x,c=:red,label=nothing)
-	# plot!(x51,1 ./ x51,fill=(x51/4,0.5,:blue),c=:white)
-	plot!(x5,1 ./ x5,c=:green,label=nothing)
-	xlims!(-0.1,3)
-	ylims!(-0.1,2)
+    x5 = 0.1:0.1:10
+    x51 = 0:0.1:1
+    p5 = plot(x -> x / 4, xlims=(-1, 10), framestyle=:origin, aspectratio=1, label=nothing)
+    plot!(x -> x, c=:red, label=nothing)
+    # plot!(x51,1 ./ x51,fill=(x51/4,0.5,:blue),c=:white)
+    plot!(x5, 1 ./ x5, c=:green, label=nothing)
+    xlims!(-0.1, 3)
+    ylims!(-0.1, 2)
 end
 
 # ╔═╡ 9050671d-cbb1-4d2c-9b7b-ba502655e238
@@ -1213,40 +1201,37 @@ md"""
 
 # ╔═╡ 1ab4d457-1c4e-4c8b-bd4d-bdeb233a6580
 begin
-	show_graph_s = @bind show_graph CheckBox() 
-	show_rect_s = @bind show_rect CheckBox() 
-	show_labels_s = @bind show_labels CheckBox() 
-	md"""
-	Step 1: $show_graph_s
-	Step 2: $show_rect_s
-	Step 3: $show_labels_s
-	"""
+    show_graph_s = @bind show_graph CheckBox()
+    show_rect_s = @bind show_rect CheckBox()
+    show_labels_s = @bind show_labels CheckBox()
+    md"""
+    Step 1: $show_graph_s
+    Step 2: $show_rect_s
+    Step 3: $show_labels_s
+    """
 end
 
 # ╔═╡ e4699314-51be-4cda-b2d8-5005e72abc2a
 let
-	
-	f30(x)=2*x^2-x^3
-	s3e0p0 = plot(0:0.01:2, f30)
-	annotate!(s3e0p0,[(1,1.2,L"y=2x^2-x^3")])
-	recty=Shape([ (0.75,f30(0.75))
-			, (1.75,f30(0.75))
-			, (1.75,f30(0.75)+0.05)
-			, (0.75,f30(0.75)+0.05)])
-	ux, lx = Plots.unzip(Plots.partialcircle(0,π,100,-0.1))
-	plot!(ux,lx .+ 1.15,c=:red,frame_style=:origin)
-	anns = [(0.65,f30(0.76),L"x_L=?",10),(1.88,f30(0.76),L"x_R=?",10)]
-	s3e0p =	if show_labels 
-		plot!(s3e0p0,recty,label=nothing)
-		annotate!(anns)
-	elseif show_rect
-		plot!(s3e0p0,recty,label=nothing)
-	elseif show_graph
-		s3e0p0
-		
-	else
-		""
-	end
+
+    f30(x) = 2 * x^2 - x^3
+    s3e0p0 = plot(0:0.01:2, f30)
+    annotate!(s3e0p0, [(1, 1.2, L"y=2x^2-x^3")])
+    recty = Shape([(0.75, f30(0.75)), (1.75, f30(0.75)), (1.75, f30(0.75) + 0.05), (0.75, f30(0.75) + 0.05)])
+    ux, lx = Plots.unzip(Plots.partialcircle(0, π, 100, -0.1))
+    plot!(ux, lx .+ 1.15, c=:red, frame_style=:origin)
+    anns = [(0.65, f30(0.76), L"x_L=?", 10), (1.88, f30(0.76), L"x_R=?", 10)]
+    s3e0p = if show_labels
+        plot!(s3e0p0, recty, label=nothing)
+        annotate!(anns)
+    elseif show_rect
+        plot!(s3e0p0, recty, label=nothing)
+    elseif show_graph
+        s3e0p0
+
+    else
+        ""
+    end
 end
 
 # ╔═╡ 6f8a882b-d41c-41e5-b156-9be4112194c2
@@ -1322,17 +1307,17 @@ $(Resource("https://www.dropbox.com/s/ivbwuge5ti8vrff/shell_x.png?raw=1"))
 # Find the volume of the solid generated by rotating the region bounded by ``y=2x^2-x^3`` and ``y=0`` about the ``y-``axis.
 
 # Solution:
-	
+
 # $s3e0p1
 # """
 # end
 
 # ╔═╡ 3865e317-a19a-4a9a-a8c4-2813ec0a7f0a
 let
-	y= 00.0:0.1:1.0
-	x = exp.(-y.^2)
-	plot(x,y,aspect_ratio=:1,frame_style=:origin)
-	
+    y = 00.0:0.1:1.0
+    x = exp.(-y .^ 2)
+    plot(x, y, aspect_ratio=:1, frame_style=:origin)
+
 end
 
 # ╔═╡ a3c5f9a8-35b4-4daf-9314-5d4af3413770
@@ -1432,15 +1417,15 @@ md"""
 
 # ╔═╡ d41e0530-1b75-412c-828c-d53a58523293
 begin
-	
-	md"""
-	**Solution:**
-	
-	```math
-	\int x \cos(x) dx = \int \underbrace{x}_{f(x)} \overbrace{\cos(x)}^{g'(x)} dx = x \sin(x) - \int \sin(x) \overbrace{ \;\;\;\;dx}^{f'\,(x) dx} = x\sin(x) + \cos(x) +C  
-	
-	```
-	"""
+
+    md"""
+    **Solution:**
+    
+    ```math
+    \int x \cos(x) dx = \int \underbrace{x}_{f(x)} \overbrace{\cos(x)}^{g'(x)} dx = x \sin(x) - \int \sin(x) \overbrace{ \;\;\;\;dx}^{f'\,(x) dx} = x\sin(x) + \cos(x) +C  
+    
+    ```
+    """
 end
 
 # ╔═╡ ca728595-e908-4839-a9be-04a6e884a3f4
@@ -1777,102 +1762,103 @@ a_1, a_2, a_3, \cdots, a_n, \cdots
 
 # ╔═╡ 1cc30502-ec6c-4aa9-b178-58b3e425dac9
 let
-	@syms n::Unsigned
-	a(n) = 3+(-1)^n
-	b(n) = n/(1-2n)
-	c(n) = n^2/(2^n-1)
-	d(n) = n==1 ? 25 : d(n-1) - 5 
-	k=Unsigned(5)
-	seq(an::Function,lastn::Int;kwargs...)=seq(an,lastn:lastn;kwargs...)
-	seq(an::Function,lastn::AbstractUnitRange;as_list::Bool=true) = begin
-		st = join(map(i-> "$(String(Symbol(an)))_{$i}=$(an(i))",lastn)," ,")
-		stl = join(map(i-> "$(an(i))",lastn)," ,")
-		final_str = if as_list==false 
-			st 
-		else 
-			"\\{$stl, \\cdots\\}"
-		end
-		L"%$(final_str)"
-	
-	end
-	seq(a,1:5)
-	seq(b,10000)
-	# seq(c,1:5)
-	# seq(d,1:5)
-	
-	# cm""
-	
+    @syms n::Unsigned
+    a(n) = 3 + (-1)^n
+    b(n) = n / (1 - 2n)
+    c(n) = n^2 / (2^n - 1)
+    d(n) = n == 1 ? 25 : d(n - 1) - 5
+    k = Unsigned(5)
+    seq(an::Function, lastn::Int; kwargs...) = seq(an, lastn:lastn; kwargs...)
+    seq(an::Function, lastn::AbstractUnitRange; as_list::Bool=true) = begin
+        st = join(map(i -> "$(String(Symbol(an)))_{$i}=$(an(i))", lastn), " ,")
+        stl = join(map(i -> "$(an(i))", lastn), " ,")
+        final_str = if as_list == false
+            st
+        else
+            "\\{$stl, \\cdots\\}"
+        end
+        L"%$(final_str)"
+
+    end
+    seq(a, 1:5)
+    seq(b, 10000)
+    # seq(c,1:5)
+    # seq(d,1:5)
+
+    # cm""
+
 end
 
 # ╔═╡ 355007a5-91c8-454e-8463-31c6abc9f87f
 md"## Limit of a Sequence"
 
 # ╔═╡ eae5658b-a235-40de-84a3-00152a109e93
-n91Slider = @bind n91slider  NumberField(1:1000,default=1);md"n = $n91Slider"
+n91Slider = @bind n91slider NumberField(1:1000, default=1);
+md"n = $n91Slider";
 
 # ╔═╡ af5c9045-66ec-483a-a197-db544f30b1b6
 let
-	seqns = [
-		(n ->  n/(n+1), L"a_n=\frac{n}{n+1}",-0.1,1.1),
-		(n ->  (1+1/n)^n, L"a_n=\left(1+\frac{1}{n}\right)^n",-0.1,3.2),
-	]
-	a1,label,ymin,ymax =seqns[2]
-	d1=1:n91slider
-	plt1 = scatter(a1.(d1), zeros(10),
-		frame_style=:origin, 
-		ylimits=(ymin,ymax),
-		xlimits=(-0.2,ymax+0.5),
-		yaxis=nothing,
-		label=label,
-		showaxis=:x,
-		legend=:outertopright,
-		title_location=:left,
-		grid=:none,
-		title="Example 1"
-	)
-	annotate!(plt1,[(0.4,0.5,L"a_{%$n91slider}=\frac{%$n91slider}{%$(1+n91slider)}=%$(round(a1(n91slider),digits=6))")])
-	
-	d2=1:n91slider
-	plt2 = scatter(d2, a1.(d2),
-		frame_style=:origin, 
-		ylimits=(ymin,ymax),
-		xlimits=(-2,200),
-		label=label,
-		legend=:outerbottom,
-		title_location=:left,
-		title="Visualization (Graph)",
-		marker=(1,2,:green,stroke(0.0, 0.0, :green, :dot))
-	)
-	annotate!(plt2,[(100,ymax/2,L"a_{%$n91slider}=\frac{%$n91slider}{%$(1+n91slider)}=%$(round(a1(n91slider),digits=6))")])
-# 	if (n91slider>=10)
-		
-# 		lens!(plt2,[n91slider-20.1, n91slider+20.1], [0.9,1.01], 
-# 			inset = (1, bbox(0.6, -0.1, 0.4, 0.4)),
-# 			grid=:none,
-			
-# 		)
-	# end
-	# if (n91slider>=99)
-		
-	# 	lens!(plt1,[ymax-0.11, ymax], [ymin,ymax], inset = (1, bbox(0.6, 0.0, 0.4, 0.5)),
-	# 			yaxis=nothing,
-	# 			frame_style=:origin, 
-	# 			showaxis=:x,
-	# 		grid=:none,
-	# 		annotations=[(ymax-0.11,0.3,"Zoom",7)]
-	# 	)
-	# 	lens!(plt2,[ymax-0.11, ymax], [ymin,ymax], inset = (1, bbox(0.6, 0.0, 0.4, 0.5)),
-	# 			yaxis=nothing,
-	# 			frame_style=:origin, 
-	# 			showaxis=:x,
-	# 		grid=:none,
-	# 		annotations=[(ymax-0.11,0.3,"Zoom",7)]
-	# 	)
-	# end
-	md"""
-	$plt2
-	"""
-		
+    seqns = [
+        (n -> n / (n + 1), L"a_n=\frac{n}{n+1}", -0.1, 1.1),
+        (n -> (1 + 1 / n)^n, L"a_n=\left(1+\frac{1}{n}\right)^n", -0.1, 3.2),
+    ]
+    a1, label, ymin, ymax = seqns[2]
+    d1 = 1:n91slider
+    plt1 = scatter(a1.(d1), zeros(10),
+        frame_style=:origin,
+        ylimits=(ymin, ymax),
+        xlimits=(-0.2, ymax + 0.5),
+        yaxis=nothing,
+        label=label,
+        showaxis=:x,
+        legend=:outertopright,
+        title_location=:left,
+        grid=:none,
+        title="Example 1"
+    )
+    annotate!(plt1, [(0.4, 0.5, L"a_{%$n91slider}=\frac{%$n91slider}{%$(1+n91slider)}=%$(round(a1(n91slider),digits=6))")])
+
+    d2 = 1:n91slider
+    plt2 = scatter(d2, a1.(d2),
+        frame_style=:origin,
+        ylimits=(ymin, ymax),
+        xlimits=(-2, 200),
+        label=label,
+        legend=:outerbottom,
+        title_location=:left,
+        title="Visualization (Graph)",
+        marker=(1, 2, :green, stroke(0.0, 0.0, :green, :dot))
+    )
+    annotate!(plt2, [(100, ymax / 2, L"a_{%$n91slider}=\frac{%$n91slider}{%$(1+n91slider)}=%$(round(a1(n91slider),digits=6))")])
+    # 	if (n91slider>=10)
+
+    # 		lens!(plt2,[n91slider-20.1, n91slider+20.1], [0.9,1.01], 
+    # 			inset = (1, bbox(0.6, -0.1, 0.4, 0.4)),
+    # 			grid=:none,
+
+    # 		)
+    # end
+    # if (n91slider>=99)
+
+    # 	lens!(plt1,[ymax-0.11, ymax], [ymin,ymax], inset = (1, bbox(0.6, 0.0, 0.4, 0.5)),
+    # 			yaxis=nothing,
+    # 			frame_style=:origin, 
+    # 			showaxis=:x,
+    # 		grid=:none,
+    # 		annotations=[(ymax-0.11,0.3,"Zoom",7)]
+    # 	)
+    # 	lens!(plt2,[ymax-0.11, ymax], [ymin,ymax], inset = (1, bbox(0.6, 0.0, 0.4, 0.5)),
+    # 			yaxis=nothing,
+    # 			frame_style=:origin, 
+    # 			showaxis=:x,
+    # 		grid=:none,
+    # 		annotations=[(ymax-0.11,0.3,"Zoom",7)]
+    # 	)
+    # end
+    md"""
+    $plt2
+    """
+
 end
 
 # ╔═╡ 4507039d-b5e0-4c22-a698-ccbfc7eeb6ed
@@ -1898,8 +1884,8 @@ md"## Infinite Series"
 
 # ╔═╡ 12ae12a8-c47b-4d15-af4d-d6bb92c8a026
 let
-	1/2 + 1/4 + 1/8 + 1/16 # 1/2^n
-	sum([1/2^n for n in 1:30])
+    1 / 2 + 1 / 4 + 1 / 8 + 1 / 16 # 1/2^n
+    sum([1 / 2^n for n in 1:30])
 end
 
 
@@ -1943,44 +1929,44 @@ __Questions we want to answer about `Series`__
 
 # ╔═╡ 9fe2db35-a1d7-4af7-be2c-e34c1ce66929
 begin
-	n8Slider = @bind n8slider  Slider(1:1000,show_value=true)
-	md"""
-	
-	----
-	
-	||
-	|---|
-	|n = $n8Slider |
-	
-	----
-	"""
+    n8Slider = @bind n8slider Slider(1:1000, show_value=true)
+    md"""
+    
+    ----
+    
+    ||
+    |---|
+    |n = $n8Slider |
+    
+    ----
+    """
 end
 
 # ╔═╡ b73b6b29-6d18-4308-80dd-e0cc2aedd038
 let
-	@syms n
-	s1(n) = 1/(2^n)
-	s1exact = summation(s1(n),(n,1,n8slider))
-	s2exact = summation(n,(n,1,n8slider))
-	s1exactn=round(Float64(s1exact.n()),digits=8)
-	s1exactsol= (n8slider<20) ? s1exact : s1exactn
-	s2exactn=round(Float64(s2exact.n()),digits=8)
-	# # gr(size = (500, 165))
-	plot(;		yaxis=nothing,
-				frame_style=:origin, 
-				showaxis=false,
-				ticks=[],
-				ylims=(0,1),
-		annotations=[
-			(0.6,0.75,
-				L"\sum_{i=1}^na_i=\sum_{n=1}^{%$n8slider}\frac{1}{2^n}=%$s1exactsol",10
-			),
-			(0.58,0.5,
-				L"\sum_{i=1}^na_i=\sum_{n=1}^{%$n8slider}n=%$s2exact",10
-			)
-		],
-			grid=:none,)
-	
+    @syms n
+    s1(n) = 1 / (2^n)
+    s1exact = summation(s1(n), (n, 1, n8slider))
+    s2exact = summation(n, (n, 1, n8slider))
+    s1exactn = round(Float64(s1exact.n()), digits=8)
+    s1exactsol = (n8slider < 20) ? s1exact : s1exactn
+    s2exactn = round(Float64(s2exact.n()), digits=8)
+    # # gr(size = (500, 165))
+    plot(; yaxis=nothing,
+        frame_style=:origin,
+        showaxis=false,
+        ticks=[],
+        ylims=(0, 1),
+        annotations=[
+            (0.6, 0.75,
+                L"\sum_{i=1}^na_i=\sum_{n=1}^{%$n8slider}\frac{1}{2^n}=%$s1exactsol", 10
+            ),
+            (0.58, 0.5,
+                L"\sum_{i=1}^na_i=\sum_{n=1}^{%$n8slider}n=%$s2exact", 10
+            )
+        ],
+        grid=:none,)
+
 end
 
 # ╔═╡ a1b22caf-ec34-4abd-9460-bce43203b742
@@ -2035,10 +2021,10 @@ md"## Alternating Series"
 
 # ╔═╡ f94aa75a-2712-4936-9c4a-06b2a623b904
 let
-	a(n)=n/2^(n-1)
-	b(n)=((-1)^(n-1))*a(n)
-	s(n)=sum(b(i) for i in 1:n)
-	s(10),	a(11)
+    a(n) = n / 2^(n - 1)
+    b(n) = ((-1)^(n - 1)) * a(n)
+    s(n) = sum(b(i) for i in 1:n)
+    s(10), a(11)
 end
 
 # ╔═╡ 376852e6-9a1b-4f86-8681-d307c7fd610a
@@ -2046,22 +2032,22 @@ md"##  Alternating Series Remainder"
 
 # ╔═╡ 4f407428-dd3b-4df4-9fdc-9cff3aaafb56
 let
-	a(n) =(1/factorial(n))
-	b(n) = ((-1)^(n+1))*(a(n))
-	s(n) = sum(b(i) for i in 1:n)
-	s6=s(6)
-	s6,a(7)
-	s6-a(7), s6+a(7)
+    a(n) = (1 / factorial(n))
+    b(n) = ((-1)^(n + 1)) * (a(n))
+    s(n) = sum(b(i) for i in 1:n)
+    s6 = s(6)
+    s6, a(7)
+    s6 - a(7), s6 + a(7)
 end
 
 # ╔═╡ 10b81e79-03ff-46fb-8557-172b3f51dce3
 let
-	a(n) =(1/n^4)
-	b(n) = ((-1)^(n+1))*(a(n))
-	s(n) = sum(b(i) for i in 1:n)
-	N = (1000)^(1/4)-1
-	N = 5
-	s(5)-a(6),s(5)+a(6) 
+    a(n) = (1 / n^4)
+    b(n) = ((-1)^(n + 1)) * (a(n))
+    s(n) = sum(b(i) for i in 1:n)
+    N = (1000)^(1 / 4) - 1
+    N = 5
+    s(5) - a(6), s(5) + a(6)
 end
 
 # ╔═╡ 47754429-df92-4523-b459-5fb6d76bd67a
@@ -2116,7 +2102,8 @@ md"""
 md"## Polynomial Approximations of Elementary Functions"
 
 # ╔═╡ 5d2d71fe-1aff-4d28-b1d2-47dc3dd7485a
-sec_97_n_str = @bind  sec_97_n NumberField(0:10,default=0);md""
+sec_97_n_str = @bind sec_97_n NumberField(0:10, default=0);
+md"";
 
 # ╔═╡ 32c8cac4-b560-45bf-9c53-6a971b11e731
 cm"""
@@ -2125,65 +2112,65 @@ cm"""
 
 # ╔═╡ 01ad1443-6736-41e3-ab73-c5ccdf373ab9
 let
-	n = sec_97_n
-	f(x)=exp(x)
-	xs = range(-2,10,length=200)
-	P(x,n) = sum((1/factorial(i))*x^i for i in 0:n)
-	P(n) = begin
-		
-		str = map(0:n) do i
-		fc = factorial(i)
-		xpower, frac = i == 0 ? ("","1") : i == 1 ? ("x","") : ("x^{$i}","\\frac{1}{$fc}")
-		L"%$frac %$xpower"
-		end |> s -> join(s,"+") 
-		L"P_{%$n}(x)=" * str
-	end
-	p = plot(xs,f.(xs),
-		label 			= L"f(x)=e^x",
-		color 			= :red,
-		frame_style 	= :origin,
-		xlims 			= (minimum(xs), maximum(xs)),
-		ylims 			= (minimum(xs), maximum(xs)),
-	)
-	p = plot(p, xs, x->P(x,n),
-		label 			= P(n),
-	)
+    n = sec_97_n
+    f(x) = exp(x)
+    xs = range(-2, 10, length=200)
+    P(x, n) = sum((1 / factorial(i)) * x^i for i in 0:n)
+    P(n) = begin
+
+        str = map(0:n) do i
+            fc = factorial(i)
+            xpower, frac = i == 0 ? ("", "1") : i == 1 ? ("x", "") : ("x^{$i}", "\\frac{1}{$fc}")
+            L"%$frac %$xpower"
+        end |> s -> join(s, "+")
+        L"P_{%$n}(x)=" * str
+    end
+    p = plot(xs, f.(xs),
+        label=L"f(x)=e^x",
+        color=:red,
+        frame_style=:origin,
+        xlims=(minimum(xs), maximum(xs)),
+        ylims=(minimum(xs), maximum(xs)),
+    )
+    p = plot(p, xs, x -> P(x, n),
+        label=P(n),
+    )
 end
 
 # ╔═╡ f4dd80e2-3df2-4c9f-bd29-5a8a92d0639a
 let
-	xs =[-1.0;-0.2;-0.1;0;0.1;0.2;1]
-	P(x,n) = sum((1/factorial(i))*x^i for i in 0:n)
-	Pxs = map(x->P(x,sec_97_n), xs)
-	head = HTML("<td>", "x", "</td>  <td>e^x</td> <td> P$sec_97_n(x)</td>")
-	rows = map(xs) do x 
-		return "
-	<tr>
-		<td> $x </td>
-		<td> $(exp(x)) </td>
-		<td> $(P(x,sec_97_n)) </td>
-	</tr>
-	"
-	end |> s->join(s,"")
-cm"""
-<table>
-<thead>
-<tr> 
-
-$(head)
-
-</tr>
-</thead>
-
-<tbody>
-
-$(rows)
-
-</tbody>
-
-
-</table>
-"""
+    xs = [-1.0; -0.2; -0.1; 0; 0.1; 0.2; 1]
+    P(x, n) = sum((1 / factorial(i)) * x^i for i in 0:n)
+    Pxs = map(x -> P(x, sec_97_n), xs)
+    head = HTML("<td>", "x", "</td>  <td>e^x</td> <td> P$sec_97_n(x)</td>")
+    rows = map(xs) do x
+        return "
+       <tr>
+       	<td> $x </td>
+       	<td> $(exp(x)) </td>
+       	<td> $(P(x,sec_97_n)) </td>
+       </tr>
+       "
+    end |> s -> join(s, "")
+    cm"""
+    <table>
+    <thead>
+    <tr> 
+    
+    $(head)
+    
+    </tr>
+    </thead>
+    
+    <tbody>
+    
+    $(rows)
+    
+    </tbody>
+    
+    
+    </table>
+    """
 end
 
 # ╔═╡ e08ab6af-108d-4e87-91fb-051c5fd19fcd
@@ -2191,38 +2178,38 @@ md"## Taylor and Maclaurin Polynomials"
 
 # ╔═╡ e158bb3c-c351-41b1-ae8d-8f60297d6814
 let
-	n = 3
-	c = 1
-	f(x)=log(x)
-	xs = range(0.001,4,length=200)
-	P(x,n) = sum(((-1)^(i+1)/i)*(x-c)^i for i in 1:n)
-	P(n) = begin
-		
-		str = map(1:n) do i
-			pn = iseven(i) ? "-" : "+"
-		xpower, frac = i == 1 ? ("(x-$c)","") : ("(x-$c)^{$i}","$(pn)\\frac{1}{$i}")
-		L"%$frac %$xpower"
-		end |> s -> join(s,"") 
-		L"P_{%$n}(x)=" * str
-	end
-	p = plot(xs,f.(xs),
-		label 			= L"f(x)=\ln{x}",
-		color 			= :red,
-		frame_style 	= :origin,
-		xlims 			= (minimum(xs), maximum(xs)),
-		ylims 			= (-2, maximum(xs)),
-	)
-	p = plot(p, xs, x->P(x,n),
-		label 			= P(n),
-	)
+    n = 3
+    c = 1
+    f(x) = log(x)
+    xs = range(0.001, 4, length=200)
+    P(x, n) = sum(((-1)^(i + 1) / i) * (x - c)^i for i in 1:n)
+    P(n) = begin
+
+        str = map(1:n) do i
+            pn = iseven(i) ? "-" : "+"
+            xpower, frac = i == 1 ? ("(x-$c)", "") : ("(x-$c)^{$i}", "$(pn)\\frac{1}{$i}")
+            L"%$frac %$xpower"
+        end |> s -> join(s, "")
+        L"P_{%$n}(x)=" * str
+    end
+    p = plot(xs, f.(xs),
+        label=L"f(x)=\ln{x}",
+        color=:red,
+        frame_style=:origin,
+        xlims=(minimum(xs), maximum(xs)),
+        ylims=(-2, maximum(xs)),
+    )
+    p = plot(p, xs, x -> P(x, n),
+        label=P(n),
+    )
 end
 
 # ╔═╡ c73fea91-cca0-4f7f-9c38-f85e6f3c56ae
 let
-	x = 50
-	n = 4
-	Pn(x) = sum((-1)^(i)*x^(2i)/(factorial(2i)) for i in 0:n)
-	cos(x), Pn(x)
+    x = 50
+    n = 4
+    Pn(x) = sum((-1)^(i) * x^(2i) / (factorial(2i)) for i in 0:n)
+    cos(x), Pn(x)
 end
 
 # ╔═╡ b22a52b9-1ffa-49d3-9945-74fb590af5e4
@@ -2268,30 +2255,30 @@ cm"""
 
 # ╔═╡ d085cbd1-5ae3-41b7-9608-45d838131c78
 let
-	n = 15
-	c = 0
-	f(x)=1/(1-x)
-	xs = range(-2,4,length=200)
-	P(x,n) = sum(x^i for i in 0:n)
-	P(n) = begin
-		
-		str = map(0:n) do i
-			pn = iseven(i) ? "+" : "+"
-		xpower, frac = i == 0 ? ("1","") : i==1 ? ("x","+") : ("x^{$i}","$(pn)")
-		L"%$frac %$xpower"
-		end |> s -> join(s,"") 
-		L"P_{%$n}(x)=" * str
-	end
-	p = plot(xs,f.(xs),
-		label 			= L"f(x)=\frac{1}{1-x}",
-		color 			= :red,
-		frame_style 	= :origin,
-		xlims 			= (minimum(xs), maximum(xs)),
-		ylims 			= (-2, maximum(xs)),
-	)
-	p = plot(p, xs, x->P(x,n),
-		label 			= P(n),
-	)
+    n = 15
+    c = 0
+    f(x) = 1 / (1 - x)
+    xs = range(-2, 4, length=200)
+    P(x, n) = sum(x^i for i in 0:n)
+    P(n) = begin
+
+        str = map(0:n) do i
+            pn = iseven(i) ? "+" : "+"
+            xpower, frac = i == 0 ? ("1", "") : i == 1 ? ("x", "+") : ("x^{$i}", "$(pn)")
+            L"%$frac %$xpower"
+        end |> s -> join(s, "")
+        L"P_{%$n}(x)=" * str
+    end
+    p = plot(xs, f.(xs),
+        label=L"f(x)=\frac{1}{1-x}",
+        color=:red,
+        frame_style=:origin,
+        xlims=(minimum(xs), maximum(xs)),
+        ylims=(-2, maximum(xs)),
+    )
+    p = plot(p, xs, x -> P(x, n),
+        label=P(n),
+    )
 end
 
 # ╔═╡ 9f65c135-02ba-4f1f-bef9-e9695adb3df9
@@ -2299,13 +2286,13 @@ md"## Operations with Power Series"
 
 # ╔═╡ 2f54441f-5562-4d7f-a53a-814b67aafdb6
 let
-	f(x;n=5) =sum(i -> begin
-		pwr = 2*i+1
-		(-1)^i*(x^pwr)/pwr
-	end,0:n) 
-	pi_over_4 = 4*f(1/5) - f(1/239)
-	map(i->4*i,(f(1),π/4,pi_over_4))
-	
+    f(x; n=5) = sum(i -> begin
+            pwr = 2 * i + 1
+            (-1)^i * (x^pwr) / pwr
+        end, 0:n)
+    pi_over_4 = 4 * f(1 / 5) - f(1 / 239)
+    map(i -> 4 * i, (f(1), π / 4, pi_over_4))
+
 end
 
 # ╔═╡ b9dee3b1-6502-4797-9c57-4a52123dea4f
@@ -2415,40 +2402,40 @@ md"## Deriving Taylor Series from a Basic List"
 
 # ╔═╡ 5734a65f-b0bf-4448-98fe-c2c9f5767c67
 let
-	
+
 end
 
 # ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
-function rect(x, Δx, xs, f;direction=:x) 
-	if direction==:y
-		Shape([(0,x), (0,x + Δx), (f(xs), x + Δx), (f(xs), x )])
-	else
-		Shape([(x, 0), (x + Δx, 0), (x + Δx, f(xs)), (x, f(xs))])
-	end
-		
+function rect(x, Δx, xs, f; direction=:x)
+    if direction == :y
+        Shape([(0, x), (0, x + Δx), (f(xs), x + Δx), (f(xs), x)])
+    else
+        Shape([(x, 0), (x + Δx, 0), (x + Δx, f(xs)), (x, f(xs))])
+    end
+
 end
 
 # ╔═╡ 8315fb27-89e4-44a4-a51e-8e55fc3d58e5
-function reimannSum(f, n, a, b; method="l", color=:green, plot_it=false,direction=:x)
+function reimannSum(f, n, a, b; method="l", color=:green, plot_it=false, direction=:x)
     Δx = (b - a) / n
     x = a:0.01:b
     # plot(f;xlim=(-2π,2π), xticks=(-2π:(π/2):2π,["$c π" for c in -2:0.5:2]))
 
     (partition, recs) = if method == "r"
         parts = (a+Δx):Δx:b
-        rcs = [rect(p - Δx, Δx, p, f;direction=direction) for p in parts]
+        rcs = [rect(p - Δx, Δx, p, f; direction=direction) for p in parts]
         (parts, rcs)
     elseif method == "m"
         parts = (a+(Δx/2)):Δx:(b-(Δx/2))
-        rcs = [rect(p - Δx / 2, Δx, p, f;direction=direction) for p in parts]
+        rcs = [rect(p - Δx / 2, Δx, p, f; direction=direction) for p in parts]
         (parts, rcs)
     elseif method == "l"
         parts = a:Δx:(b-Δx)
-        rcs = [rect(p, Δx, p, f;direction=direction) for p in parts]
+        rcs = [rect(p, Δx, p, f; direction=direction) for p in parts]
         (parts, rcs)
     else
         parts = a:Δx:(b-Δx)
-        rcs = [rect(p, Δx, rand(p:0.1:p+Δx), f;direction=direction) for p in parts]
+        rcs = [rect(p, Δx, rand(p:0.1:p+Δx), f; direction=direction) for p in parts]
         (parts, rcs)
     end
     # recs= [rect(sample(p,Δx),Δx,p,f) for p in partition]
@@ -2461,150 +2448,150 @@ end
 
 # ╔═╡ f80cc26d-120b-4f14-b31e-b50c9283c0b9
 let
-	if showPlot == "show"
-    theme(:wong)
-    anchor1 = 0.5
-    (p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true)
+    if showPlot == "show"
+        theme(:wong)
+        anchor1 = 0.5
+        (p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true)
 
-    annotate!(p, [(anchor1, f(anchor1) - 2, text(L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$", 12, n > 500 ? :white : :black))])
-    annotate!(p, [(anchor1 + 0.5, f(anchor1 + 0.1), text(L"$y=%$f(x)$", 12, :black))])
+        annotate!(p, [(anchor1, f(anchor1) - 2, text(L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$", 12, n > 500 ? :white : :black))])
+        annotate!(p, [(anchor1 + 0.5, f(anchor1 + 0.1), text(L"$y=%$f(x)$", 12, :black))])
 
-    md""" 	
+        md""" 	
 
-    $p
-    """
-	end
+        $p
+        """
+    end
 
 end
 
 # ╔═╡ 8c2f85bb-9b81-4b70-b7e8-1a91e2738838
 let
-	n = 4
-	lr="r"
-	f(x)= x^2
-	a,b = 0, 2
-	theme(:wong)
+    n = 4
+    lr = "r"
+    f(x) = x^2
+    a, b = 0, 2
+    theme(:wong)
     anchor1 = 0.5
     (p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true)
-	sum_text = if lr == "l"
-			L"$\sum_{i=1}^{%$n} f (x_{i-1})\Delta x=%$s$"
-		elseif lr=="r"
-			L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$"
-		else
-			L"$\sum_{i=1}^{%$n} f (x^*_{i})\Delta x=%$s$"
-		end
-    annotate!(p, [(anchor1, f(anchor1) +2, text(sum_text, 12, n > 500 ? :white : :black))])
-    annotate!(p, [(1.2, f(1)+0.1, text(L"$y=%$f(x)$", 12, :black))])
+    sum_text = if lr == "l"
+        L"$\sum_{i=1}^{%$n} f (x_{i-1})\Delta x=%$s$"
+    elseif lr == "r"
+        L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$"
+    else
+        L"$\sum_{i=1}^{%$n} f (x^*_{i})\Delta x=%$s$"
+    end
+    annotate!(p, [(anchor1, f(anchor1) + 2, text(sum_text, 12, n > 500 ? :white : :black))])
+    annotate!(p, [(1.2, f(1) + 0.1, text(L"$y=%$f(x)$", 12, :black))])
 
     md""" 	
 
     $p
     """
-	
+
 end
 
 # ╔═╡ 208abdcc-dc12-4a08-a1f8-2177f95886f7
 let
-	n = 300
-	lr="r"
-	f(x)= x^3
-	a,b = 0, 1
-	theme(:wong)
+    n = 300
+    lr = "r"
+    f(x) = x^3
+    a, b = 0, 1
+    theme(:wong)
     anchor1 = 0.5
-	(p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true)
+    (p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true)
     sum_text = if lr == "l"
-		L"$\sum_{i=1}^{%$n} f (x_{i-1})\Delta x=%$s$"
-	elseif lr=="r"
-		L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$"
-	else
-		L"$\sum_{i=1}^{%$n} f (x^*_{i})\Delta x=%$s$"
-	end
-	
-    annotate!(p, [(anchor1, f(anchor1)+0.5, text(sum_text, 12, n > 500 ? :white : :black))])
-    
+        L"$\sum_{i=1}^{%$n} f (x_{i-1})\Delta x=%$s$"
+    elseif lr == "r"
+        L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$"
+    else
+        L"$\sum_{i=1}^{%$n} f (x^*_{i})\Delta x=%$s$"
+    end
+
+    annotate!(p, [(anchor1, f(anchor1) + 0.5, text(sum_text, 12, n > 500 ? :white : :black))])
+
     md""" 	
 
     $p
     """
-	
+
 end
 
 # ╔═╡ fd7161bc-1e1b-42e3-8758-c8e3e3ec0877
 let
-	n = 400
-	lr="l"
-	f(y)= y^2
-	a,b = 0, 1
-	theme(:wong)
+    n = 400
+    lr = "l"
+    f(y) = y^2
+    a, b = 0, 1
+    theme(:wong)
     anchor1 = 0.5
-	(p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true,direction=:y)
+    (p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true, direction=:y)
     sum_text = if lr == "l"
-		L"$\sum_{i=1}^{%$n} f (x_{i-1})\Delta x=%$s$"
-	elseif lr=="r"
-		L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$"
-	else
-		L"$\sum_{i=1}^{%$n} f (x^*_{i})\Delta x=%$s$"
-	end
-	
-    annotate!(p, [(anchor1, f(anchor1)-0.01, text(sum_text, 12, n > 500 ? :white : :black))])
-    
+        L"$\sum_{i=1}^{%$n} f (x_{i-1})\Delta x=%$s$"
+    elseif lr == "r"
+        L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$"
+    else
+        L"$\sum_{i=1}^{%$n} f (x^*_{i})\Delta x=%$s$"
+    end
+
+    annotate!(p, [(anchor1, f(anchor1) - 0.01, text(sum_text, 12, n > 500 ? :white : :black))])
+
     md""" 	
 
     $p
     """
-	
+
 end
 
 # ╔═╡ 01008c60-bcfa-42a1-b5e8-fa67db2131ba
 let
-	n = 4
-	lr="m"
-	f(x)= sin(x)
-	a,b = 0, π
-	theme(:wong)
+    n = 4
+    lr = "m"
+    f(x) = sin(x)
+    a, b = 0, π
+    theme(:wong)
     anchor1 = 0.5
-	(p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true,direction=:x)
+    (p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true, direction=:x)
     sum_text = if lr == "l"
-		L"$\sum_{i=1}^{%$n} f (x_{i-1})\Delta x=%$s$"
-	elseif lr=="r"
-		L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$"
-	else
-		L"$\sum_{i=1}^{%$n} f (x^*_{i})\Delta x=%$s$"
-	end
-	
-    annotate!(p, [(anchor1+0.1, f(anchor1)+0.4, text(sum_text, 12, n > 500 ? :white : :black))])
-    
+        L"$\sum_{i=1}^{%$n} f (x_{i-1})\Delta x=%$s$"
+    elseif lr == "r"
+        L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$"
+    else
+        L"$\sum_{i=1}^{%$n} f (x^*_{i})\Delta x=%$s$"
+    end
+
+    annotate!(p, [(anchor1 + 0.1, f(anchor1) + 0.4, text(sum_text, 12, n > 500 ? :white : :black))])
+
     md""" 	
 
     $p
     """
-	
+
 end
 
 # ╔═╡ a7c8710c-2256-425e-a946-0e2791773592
 let
-	n = n2
-	lr=lr2
-	f(x) = √x
-	a,b = a2, b2
-	theme(:wong)
+    n = n2
+    lr = lr2
+    f(x) = √x
+    a, b = a2, b2
+    theme(:wong)
     anchor1 = 0.15
-	(p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true,direction=:x)
+    (p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true, direction=:x)
     sum_text = if lr == "l"
-		L"$\sum_{i=1}^{%$n} f (x_{i-1})\Delta x=%$s$"
-	elseif lr=="r"
-		L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$"
-	else
-		L"$\sum_{i=1}^{%$n} f (x^*_{i})\Delta x=%$s$"
-	end
-	
-    annotate!(p, [(anchor1+0.1, f(anchor1)+0.4, text(sum_text, 12, n > 500 ? :white : :black))])
-    
+        L"$\sum_{i=1}^{%$n} f (x_{i-1})\Delta x=%$s$"
+    elseif lr == "r"
+        L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$"
+    else
+        L"$\sum_{i=1}^{%$n} f (x^*_{i})\Delta x=%$s$"
+    end
+
+    annotate!(p, [(anchor1 + 0.1, f(anchor1) + 0.4, text(sum_text, 12, n > 500 ? :white : :black))])
+
     md""" 	
 
     $p
     """
-	
+
 end
 
 # ╔═╡ cad95270-ba9f-4821-87da-e457a00b9617
@@ -2748,7 +2735,7 @@ begin
     #    ">$desc</div>
     #    </div>"""
     # end
-	function example(lable, desc)
+    function example(lable, desc)
         """<div class="example-box">
     <div class="example-header">
       $lable
@@ -2759,9 +2746,9 @@ begin
     <div class="example-content">
       
   </div>
-		"""
+  """
     end
-	 
+
     @htl("")
 end
 
@@ -2770,7 +2757,7 @@ begin
     text_book = post_img("https://www.dropbox.com/scl/fi/upln00gqvnbdy7whr23pj/larson_book.jpg?rlkey=wlkgmzw2ernadd9b8v8qwu2jd&dl=1", 200)
     md""" # Syllabus
     ## Syallbus
-    See here [Term 242 - MATH102 - Syllabus](https://www.dropbox.com/scl/fi/mhlakw1roc1vv0mytjm42/Math102-Syllabus-242.pdf?rlkey=cf4egj8p25d4yrusj28r8nxw5&raw=1)
+    See here [Term 252 - MATH102 - Syllabus](https://math.kfupm.edu.sa/docs/default-source/default-document-library/math102-252.pdf1)
     ## Textbook
     __Textbook: Edwards, C. H., Penney, D. E., and Calvis, D. T., Differential Equations and Linear Algebra, Fourth edition, Pearson, 2021__
     $text_book
@@ -2780,8 +2767,8 @@ begin
 
     | Day       | Time        |
     |-----------|-------------|
-    | Sunday    | 02:00-02:50PM |
-    | Tuesday    | 02:00-02:50PM |
+    | Sunday    | 11:00-11:50AM |
+    | Tuesday    | 11:00-11:50AM |
     Also you can ask for an online meeting through __TEAMS__.
     """
 end
@@ -3079,7 +3066,7 @@ $(post_img("https://www.dropbox.com/s/ol9l38j2a53usei/note3.png?raw=1"))
 
 # ╔═╡ d7cb77c3-7875-43d8-bab6-7281455700b0
 begin
-    
+
     cm""" 
     **Question 1:** 
 
@@ -3087,7 +3074,7 @@ begin
 
     where each of the regions ``A, B`` and ``C`` has area equal to 5, then the area between the graph and the x-axis from ``x=-4`` to ``x=2`` is
 
-   
+
     	
     """
 
@@ -3252,19 +3239,19 @@ begin
     s54e3_p = plot(s54e3_x, s54e3_f.(s54e3_x), label=nothing, c=:green)
     plot!(s54e3_p, s54e3_x, s54e3_f.(s54e3_x) / 2, ribbon=s54e3_f.(s54e3_x) / 2, linestyle=:dot, linealpha=0.1, framestyle=:origin, xticks=(1:4, [:1, :2, :3]), label=nothing, ylims=(-0.1, 1.5), xlims=(-0.1, 3))
     annotate!(s54e3_p, [(2, 1, L"y=\frac{1}{x}"), (exp(1), -0.1, L"e")])
-	plot!(s54e3_p,[1,1,NaN,exp(1),exp(1)],[0,1.0,NaN,0.0,exp(-1)],label=nothing, c=:black,lw=3)
-cm"""
-$(ex(3))
-Find the area of the region bounded by the graph of
-```math
-y=\frac{1}{x}
-```
-the ``x``-axis, and the vertical lines ``x=1`` and ``x=e``.
-$(ebl())
-
-$s54e3_p
-
-"""
+    plot!(s54e3_p, [1, 1, NaN, exp(1), exp(1)], [0, 1.0, NaN, 0.0, exp(-1)], label=nothing, c=:black, lw=3)
+    cm"""
+    $(ex(3))
+    Find the area of the region bounded by the graph of
+    ```math
+    y=\frac{1}{x}
+    ```
+    the ``x``-axis, and the vertical lines ``x=1`` and ``x=e``.
+    $(ebl())
+    
+    $s54e3_p
+    
+    """
 end
 
 
@@ -3456,41 +3443,41 @@ v(t)=t^3-10t^2+29t-20,
 begin
     f155(x) = x / sqrt(1 - 4 * x^2)
     # ex1_55=plot(-0.49:0.01:0.49,f155.(-0.49:0.01:0.49), framestyle=:origin)
-cm"""
-$(bth("Antidifferentiation of a Composite Function"))
-Let ``g`` be a function whose range is an interval ``I``, and let ``f`` be a function that is continuous on ``I``. If ``g`` is differentiable on its domain and  ``F`` is an antiderivative of ``f`` on ``I``, then
-```math
-\int f(g(x))g'(x)dx = F(g(x)) + C.
-```
-Letting ``u=g(x)`` gives ``du=g'(x)dx`` and
-```math
-\int f(u) du = F(u) + C.
-```
-$(ebl())
-<div class="img-container">
-
-$(Resource("https://www.dropbox.com/s/uua8vuahfxnp48c/subs_th.jpg?raw=1"))
-
-</div>
-
-$(bbl("Remark","Substitution Rule says:"))
-It is permissible to operate with ``dx`` and ``du`` after integral signs as if they were differentials.
-$(ebl())
-
-$(ex())
-Find 
-```math
-\begin{array}{ll}
-(i) & \int \bigl(x^2+1 \bigr)^2 (2x) dx \\ \\
-(ii) & \int 5e^{5x} dx \\ \\
-(iii) & \int \frac{x}{\sqrt{1-4x^2}} dx \\ \\
-(iv) & \int \sqrt{1+x^2} \;\; x^5 dx \\ \\ 
-(v) & \int \tan x dx \\ \\
-\end{array}
-```
-
-
-    """
+    cm"""
+    $(bth("Antidifferentiation of a Composite Function"))
+    Let ``g`` be a function whose range is an interval ``I``, and let ``f`` be a function that is continuous on ``I``. If ``g`` is differentiable on its domain and  ``F`` is an antiderivative of ``f`` on ``I``, then
+    ```math
+    \int f(g(x))g'(x)dx = F(g(x)) + C.
+    ```
+    Letting ``u=g(x)`` gives ``du=g'(x)dx`` and
+    ```math
+    \int f(u) du = F(u) + C.
+    ```
+    $(ebl())
+    <div class="img-container">
+    
+    $(Resource("https://www.dropbox.com/s/uua8vuahfxnp48c/subs_th.jpg?raw=1"))
+    
+    </div>
+    
+    $(bbl("Remark","Substitution Rule says:"))
+    It is permissible to operate with ``dx`` and ``du`` after integral signs as if they were differentials.
+    $(ebl())
+    
+    $(ex())
+    Find 
+    ```math
+    \begin{array}{ll}
+    (i) & \int \bigl(x^2+1 \bigr)^2 (2x) dx \\ \\
+    (ii) & \int 5e^{5x} dx \\ \\
+    (iii) & \int \frac{x}{\sqrt{1-4x^2}} dx \\ \\
+    (iv) & \int \sqrt{1+x^2} \;\; x^5 dx \\ \\ 
+    (v) & \int \tan x dx \\ \\
+    \end{array}
+    ```
+    
+    
+        """
 end
 
 
@@ -3676,20 +3663,20 @@ Solve the differential equation
 """
 
 # ╔═╡ 01c13365-f758-47c4-9b96-b9f2616b3824
-let 
-	t = md"## Integrals of Trigonometric Functions"
+let
+    t = md"## Integrals of Trigonometric Functions"
 
 
 
-cm"""
-$(t)
-
-$(ex(8,"Using a trigonometric Identity"))
-```math
-\int \tan x dx, \quad \int \sec x dx
-```
-
-"""
+    cm"""
+    $(t)
+    
+    $(ex(8,"Using a trigonometric Identity"))
+    ```math
+    \int \tan x dx, \quad \int \sec x dx
+    ```
+    
+    """
 end
 
 
@@ -4050,13 +4037,13 @@ Find the volume of the solid generated by rotating the region bounded by ``y=2x^
 """
 
 # ╔═╡ cf309f63-2534-45f6-98b4-7bc90100493c
-begin 
-	
-	md"""
-	A shell is a hallow circular cylinder
-	
-	$(post_img("https://www.dropbox.com/s/8a2njc50e2hptok/shell.png?dl=1"))
-	"""
+begin
+
+    md"""
+    A shell is a hallow circular cylinder
+    
+    $(post_img("https://www.dropbox.com/s/8a2njc50e2hptok/shell.png?dl=1"))
+    """
 end
 
 # ╔═╡ eb56826a-2315-421a-aec8-1c0e17539b0d
@@ -5742,9 +5729,9 @@ SymPy = "~2.2.0"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.11.4"
+julia_version = "1.12.4"
 manifest_format = "2.0"
-project_hash = "81a86a43942ca0d9cd7492fade0513388f9b8155"
+project_hash = "731bb4d3d77329e0bb604709a00ca768dd299451"
 
 [[deps.AbstractFFTs]]
 deps = ["LinearAlgebra"]
@@ -5871,7 +5858,7 @@ weakdeps = ["Dates", "LinearAlgebra"]
 [[deps.CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
-version = "1.1.1+0"
+version = "1.3.0+1"
 
 [[deps.ConcurrentUtilities]]
 deps = ["Serialization", "Sockets"]
@@ -5954,7 +5941,7 @@ version = "0.9.3"
 [[deps.Downloads]]
 deps = ["ArgTools", "FileWatching", "LibCURL", "NetworkOptions"]
 uuid = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
-version = "1.6.0"
+version = "1.7.0"
 
 [[deps.EarCut_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -6285,6 +6272,11 @@ git-tree-sha1 = "25ee0be4d43d0269027024d75a24c24d6c6e590c"
 uuid = "aacddb02-875f-59d6-b918-886e6ef4fbf8"
 version = "3.0.4+0"
 
+[[deps.JuliaSyntaxHighlighting]]
+deps = ["StyledStrings"]
+uuid = "ac6e5ff7-fb65-4e79-a425-ec3bc9c03011"
+version = "1.12.0"
+
 [[deps.LAME_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
 git-tree-sha1 = "170b660facf5df5de098d866564877e119141cbd"
@@ -6341,24 +6333,24 @@ uuid = "b27032c2-a3e7-50c8-80cd-2d36dbcbfd21"
 version = "0.6.4"
 
 [[deps.LibCURL_jll]]
-deps = ["Artifacts", "LibSSH2_jll", "Libdl", "MbedTLS_jll", "Zlib_jll", "nghttp2_jll"]
+deps = ["Artifacts", "LibSSH2_jll", "Libdl", "OpenSSL_jll", "Zlib_jll", "nghttp2_jll"]
 uuid = "deac9b47-8bc7-5906-a0fe-35ac56dc84c0"
-version = "8.6.0+0"
+version = "8.15.0+0"
 
 [[deps.LibGit2]]
-deps = ["Base64", "LibGit2_jll", "NetworkOptions", "Printf", "SHA"]
+deps = ["LibGit2_jll", "NetworkOptions", "Printf", "SHA"]
 uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
 version = "1.11.0"
 
 [[deps.LibGit2_jll]]
-deps = ["Artifacts", "LibSSH2_jll", "Libdl", "MbedTLS_jll"]
+deps = ["Artifacts", "LibSSH2_jll", "Libdl", "OpenSSL_jll"]
 uuid = "e37daf67-58a4-590a-8e99-b0245dd2ffc5"
-version = "1.7.2+0"
+version = "1.9.0+0"
 
 [[deps.LibSSH2_jll]]
-deps = ["Artifacts", "Libdl", "MbedTLS_jll"]
+deps = ["Artifacts", "Libdl", "OpenSSL_jll"]
 uuid = "29816b5a-b9ab-546f-933c-edad1886dfa8"
-version = "1.11.0+1"
+version = "1.11.3+1"
 
 [[deps.Libdl]]
 uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
@@ -6415,7 +6407,7 @@ version = "2.40.1+0"
 [[deps.LinearAlgebra]]
 deps = ["Libdl", "OpenBLAS_jll", "libblastrampoline_jll"]
 uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
-version = "1.11.0"
+version = "1.12.0"
 
 [[deps.LittleCMS_jll]]
 deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll"]
@@ -6472,7 +6464,7 @@ uuid = "299715c1-40a9-479a-aaf9-4a633d36f717"
 version = "0.1.9"
 
 [[deps.Markdown]]
-deps = ["Base64"]
+deps = ["Base64", "JuliaSyntaxHighlighting", "StyledStrings"]
 uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
 version = "1.11.0"
 
@@ -6483,9 +6475,10 @@ uuid = "739be429-bea8-5141-9913-cc70e7f3736d"
 version = "1.1.9"
 
 [[deps.MbedTLS_jll]]
-deps = ["Artifacts", "Libdl"]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "0eef589dd1c26a3ac9d753fe1a8bcad63f956fa6"
 uuid = "c8ffd9c3-330d-5841-b78e-0817d7145fa1"
-version = "2.28.6+0"
+version = "2.16.8+1"
 
 [[deps.Measures]]
 git-tree-sha1 = "c13304c81eec1ed3af7fc20e75fb6b26092a1102"
@@ -6510,7 +6503,7 @@ version = "0.3.4"
 
 [[deps.MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
-version = "2023.12.12"
+version = "2025.11.4"
 
 [[deps.NaNMath]]
 deps = ["OpenLibm_jll"]
@@ -6526,7 +6519,7 @@ version = "1.1.1"
 
 [[deps.NetworkOptions]]
 uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
-version = "1.2.0"
+version = "1.3.0"
 
 [[deps.OffsetArrays]]
 git-tree-sha1 = "1a27764e945a152f7ca7efa04de513d473e9542e"
@@ -6548,7 +6541,7 @@ version = "1.3.5+1"
 [[deps.OpenBLAS_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
 uuid = "4536629a-c528-5b80-bd46-f80d51c5b363"
-version = "0.3.27+1"
+version = "0.3.29+0"
 
 [[deps.OpenEXR]]
 deps = ["Colors", "FileIO", "OpenEXR_jll"]
@@ -6571,7 +6564,7 @@ version = "2.5.2+0"
 [[deps.OpenLibm_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "05823500-19ac-5b8b-9628-191a04bc5112"
-version = "0.8.1+4"
+version = "0.8.7+0"
 
 [[deps.OpenSSL]]
 deps = ["BitFlags", "Dates", "MozillaCACerts_jll", "OpenSSL_jll", "Sockets"]
@@ -6580,10 +6573,9 @@ uuid = "4d8831e6-92b7-49fb-bdf8-b643e874388c"
 version = "1.4.3"
 
 [[deps.OpenSSL_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "7493f61f55a6cce7325f197443aa80d32554ba10"
+deps = ["Artifacts", "Libdl"]
 uuid = "458c3c95-2e84-50aa-8efc-19380b2a3a95"
-version = "3.0.15+1"
+version = "3.5.4+0"
 
 [[deps.OpenSpecFun_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Pkg"]
@@ -6605,7 +6597,7 @@ version = "1.6.3"
 [[deps.PCRE2_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "efcefdf7-47ab-520b-bdef-62a2eaa19f15"
-version = "10.42.0+1"
+version = "10.44.0+1"
 
 [[deps.PNGFiles]]
 deps = ["Base64", "CEnum", "ImageCore", "IndirectArrays", "OffsetArrays", "libpng_jll"]
@@ -6645,7 +6637,7 @@ version = "0.43.4+0"
 [[deps.Pkg]]
 deps = ["Artifacts", "Dates", "Downloads", "FileWatching", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "Random", "SHA", "TOML", "Tar", "UUIDs", "p7zip_jll"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
-version = "1.11.0"
+version = "1.12.1"
 weakdeps = ["REPL"]
 
     [deps.Pkg.extensions]
@@ -6773,7 +6765,7 @@ uuid = "e99dba38-086e-5de3-a5b1-6e4c66e897c3"
 version = "6.7.1+1"
 
 [[deps.REPL]]
-deps = ["InteractiveUtils", "Markdown", "Sockets", "StyledStrings", "Unicode"]
+deps = ["InteractiveUtils", "JuliaSyntaxHighlighting", "Markdown", "Sockets", "StyledStrings", "Unicode"]
 uuid = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
 version = "1.11.0"
 
@@ -6877,7 +6869,7 @@ version = "1.2.1"
 [[deps.SparseArrays]]
 deps = ["Libdl", "LinearAlgebra", "Random", "Serialization", "SuiteSparse_jll"]
 uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
-version = "1.11.0"
+version = "1.12.0"
 
 [[deps.SpecialFunctions]]
 deps = ["IrrationalConstants", "LogExpFunctions", "OpenLibm_jll", "OpenSpecFun_jll"]
@@ -6969,7 +6961,7 @@ version = "1.11.0"
 [[deps.SuiteSparse_jll]]
 deps = ["Artifacts", "Libdl", "libblastrampoline_jll"]
 uuid = "bea87d4a-7f5b-5778-9afe-8cc45184846c"
-version = "7.7.0+0"
+version = "7.8.3+2"
 
 [[deps.SymPy]]
 deps = ["CommonEq", "CommonSolve", "LinearAlgebra", "PyCall", "SpecialFunctions", "SymPyCore"]
@@ -7277,7 +7269,7 @@ version = "1.5.0+0"
 [[deps.Zlib_jll]]
 deps = ["Libdl"]
 uuid = "83775a58-1f1d-513f-b197-d71354ab007a"
-version = "1.2.13+1"
+version = "1.3.1+2"
 
 [[deps.Zstd_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -7318,7 +7310,7 @@ version = "0.15.2+0"
 [[deps.libblastrampoline_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "8e850b90-86db-534c-a0d3-1478176c7d93"
-version = "5.11.0+0"
+version = "5.15.0+0"
 
 [[deps.libdecor_jll]]
 deps = ["Artifacts", "Dbus_jll", "JLLWrappers", "Libdl", "Libglvnd_jll", "Pango_jll", "Wayland_jll", "xkbcommon_jll"]
@@ -7371,12 +7363,12 @@ version = "1.1.6+0"
 [[deps.nghttp2_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "8e850ede-7688-5339-a07c-302acd2aaf8d"
-version = "1.59.0+0"
+version = "1.64.0+1"
 
 [[deps.p7zip_jll]]
-deps = ["Artifacts", "Libdl"]
+deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
 uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
-version = "17.4.0+2"
+version = "17.7.0+0"
 
 [[deps.x264_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
