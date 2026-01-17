@@ -123,6 +123,9 @@ begin
     """
 end
 
+# ╔═╡ 4da75997-9674-4775-b095-bcf0c0a64b93
+# sum(2k^2 for k in 1:12), 2*12*(2*12+1)*(12+1)/6
+
 # ╔═╡ 6caae83a-3aa3-4f79-9f05-fb969f952286
 md"## Area "
 
@@ -159,6 +162,30 @@ end
 # ╔═╡ 9463762b-50bb-49be-80be-5f67cb141d1c
 md"## Finding Area by the Limit Definition"
 
+# ╔═╡ 523d5a06-fafd-4d67-b8af-457b4d2f76e8
+cm"""
+
+```math
+\begin{aligned}
+& f\left(m_i\right)=\text { Minimum value of } f(x) \text { in } i \text { th subinterval } \\
+& f\left(M_i\right)=\text { Maximum value of } f(x) \text { in } i \text { th subinterval }
+\end{aligned}
+```
+```math
+\binom{\text { Area of inscribed }}{\text { rectangle }}=f\left(m_i\right) \Delta x \leq f\left(M_i\right) \Delta x=\binom{\text { Area of circumscribed }}{\text { rectangle }}
+```
+
+```math
+\begin{array}{ll}
+\text { Lower sum }=s(n)=\displaystyle\sum_{i=1}^n f\left(m_i\right) \Delta x & \color{red}{\text { Area of inscribed rectangles }} \\
+\text { Upper sum }=S(n)=\displaystyle\sum_{i=1}^n f\left(M_i\right) \Delta x & \textcolor{red}{ \text{Area of circumscribed rectangles} }
+\end{array}
+```
+"""
+
+# ╔═╡ 812de6c7-f5b3-4b93-bb44-ba147d6fc140
+[sin(xi) for xi in (π/8):π/4:π]
+
 # ╔═╡ ee50e46d-6580-4a68-a061-6179c895a219
 md"""#  5.3 Riemann Sums and Definite Integrals 
 
@@ -174,7 +201,7 @@ begin
     ns2 = @bind n2 Slider(2:2000, show_value=true, default=4)
     as2 = @bind a2 NumberField(-10:10, default=0)
     bs2 = @bind b2 NumberField(a+1:10)
-    lrs2 = @bind lr2 Select(["l" => "Left", "r" => "Right", "m" => "Midpoint", "rnd" => "Random"])
+    lrs2 = @bind lr2 Select(["l" => "Left", "r" => "Right", "m" => "Midpoint", "rnd" => "Random","u"=>"User Defined"])
     md"""
     n = $ns2  a = $as2  b = $bs2 method = $lrs2
 
@@ -2400,11 +2427,6 @@ md"##  Binomial Series"
 # ╔═╡ c7c77627-9b35-4f07-ba63-16a7223eed84
 md"## Deriving Taylor Series from a Basic List"
 
-# ╔═╡ 5734a65f-b0bf-4448-98fe-c2c9f5767c67
-let
-
-end
-
 # ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
 function rect(x, Δx, xs, f; direction=:x)
     if direction == :y
@@ -2416,32 +2438,42 @@ function rect(x, Δx, xs, f; direction=:x)
 end
 
 # ╔═╡ 8315fb27-89e4-44a4-a51e-8e55fc3d58e5
-function reimannSum(f, n, a, b; method="l", color=:green, plot_it=false, direction=:x)
+function reimannSum(f, n, a, b; method="l", color=:green, 
+					plot_it=false, 
+					direction=:x,
+					partitioning=nothing
+				   )
     Δx = (b - a) / n
     x = a:0.01:b
     # plot(f;xlim=(-2π,2π), xticks=(-2π:(π/2):2π,["$c π" for c in -2:0.5:2]))
 
-    (partition, recs) = if method == "r"
+    (partition, recs, ss) = if method == "r"
         parts = (a+Δx):Δx:b
         rcs = [rect(p - Δx, Δx, p, f; direction=direction) for p in parts]
-        (parts, rcs)
+        (parts, rcs, nothing)
     elseif method == "m"
         parts = (a+(Δx/2)):Δx:(b-(Δx/2))
         rcs = [rect(p - Δx / 2, Δx, p, f; direction=direction) for p in parts]
-        (parts, rcs)
+        (parts, rcs, nothing)
     elseif method == "l"
         parts = a:Δx:(b-Δx)
         rcs = [rect(p, Δx, p, f; direction=direction) for p in parts]
-        (parts, rcs)
+        (parts, rcs, nothing)
+	elseif method == "u" # for user
+		@assert !isnothing(partitioning) "You must provide a partitioning function."
+        Δxs, parts = partitioning()
+        rcs = [rect(parts[i]-Δxs[i], Δxs[i], parts[i], f; direction=direction) for i in 1:length(parts)]
+		ss = round(sum(f.(parts) .* Δxs), sigdigits=6)
+        (parts, rcs, ss)	
     else
         parts = a:Δx:(b-Δx)
         rcs = [rect(p, Δx, rand(p:0.1:p+Δx), f; direction=direction) for p in parts]
-        (parts, rcs)
+        (parts, rcs, nothing)
     end
     # recs= [rect(sample(p,Δx),Δx,p,f) for p in partition]
     p = direction == :y ? plot(f.(x), x; legend=nothing) : plot(x, f.(x); legend=nothing)
     plot!(p, recs, framestyle=:origin, opacity=0.4, color=color)
-    s = round(sum(f.(partition) * Δx), sigdigits=6)
+    s = isnothing(ss) ? round(sum(f.(partition) * Δx), sigdigits=6) : ss
     return plot_it ? (p, s) : s
 end
 
@@ -2451,8 +2483,9 @@ let
     if showPlot == "show"
         theme(:wong)
         anchor1 = 0.5
+		# tks = map(i->Strint)
         (p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true)
-
+		xticks!(p,round.([a:(b-a)/n:2.0]...,digits=2))	
         annotate!(p, [(anchor1, f(anchor1) - 2, text(L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$", 12, n > 500 ? :white : :black))])
         annotate!(p, [(anchor1 + 0.5, f(anchor1 + 0.1), text(L"$y=%$f(x)$", 12, :black))])
 
@@ -2472,7 +2505,7 @@ let
     a, b = 0, 2
     theme(:wong)
     anchor1 = 0.5
-    (p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true)
+	(p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true)
     sum_text = if lr == "l"
         L"$\sum_{i=1}^{%$n} f (x_{i-1})\Delta x=%$s$"
     elseif lr == "r"
@@ -2576,7 +2609,14 @@ let
     a, b = a2, b2
     theme(:wong)
     anchor1 = 0.15
-    (p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true, direction=:x)
+	function parts()
+		ci = [i^2/n^2 for i in 1:n]
+		acib = vcat(a,ci)
+		dxi =[acib[i+1]-acib[i] for i in 1:length(acib)-1]
+		dxi, ci
+	end
+	parts()
+    (p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true, direction=:x, partitioning=parts)
     sum_text = if lr == "l"
         L"$\sum_{i=1}^{%$n} f (x_{i-1})\Delta x=%$s$"
     elseif lr == "r"
@@ -2777,7 +2817,7 @@ end
 cm"""
 $(ex())
 
-Evaluate ``\displaystyle \sum_{i=1}^n\frac{i+1}{n}`` for ``n=10, 100, 1000`` and ``10,000``.
+Evaluate ``\displaystyle \sum_{i=1}^n\frac{i+1}{n^2}`` for ``n=10, 100, 1000`` and ``10,000``.
 
 """
 
@@ -2908,6 +2948,11 @@ $(ebl())
 $(ex(8,"Approximating Area with the Midpoint Rule"))
 
 Use the Midpoint Rule with ``n=4`` to approximate the area of the region bounded by the graph of ``f(x)=\sin x`` and the ``x``-axis for ``0\leq x\leq \pi``, 
+"""
+
+# ╔═╡ cff81ba7-fab6-4cd7-ba24-e4a9104177aa
+cm"""
+$(post_img("https://www.dropbox.com/scl/fi/wcig2f3t3ir3j26u5sdr4/info_5_2.png?rlkey=0pxq5ve3eegktvgtz6gk7hke8&dl=1"))
 """
 
 # ╔═╡ 845d8b0a-6550-49f4-9308-13ec2b2bd0c1
@@ -3043,7 +3088,7 @@ If ``f`` is continuous and nonnegative on the closed interval ``[a,b]``, then th
 
 # ╔═╡ 7f7b1152-5dd0-4f97-b931-4fe74c51b3a3
 cm"""
-$(ex(3))
+$(ex(3,"Kahoot it 😃"))
  Sketch the region corresponding to each definite integral. Then evaluate each integral using a geometric formula.
 
 - (a) ``\displaystyle \int_1^3 4 dx``
@@ -7398,6 +7443,7 @@ version = "1.4.1+1"
 # ╟─02c15fce-abf1-427e-b648-2554ee18ed5a
 # ╟─38eabacb-a71a-448d-875d-7f7230dba49e
 # ╟─bd6fff85-5fcc-4810-898d-d6f22b8e917d
+# ╠═4da75997-9674-4775-b095-bcf0c0a64b93
 # ╟─d60ca33d-fa31-49a2-9a4a-dfc54aef46ae
 # ╟─6caae83a-3aa3-4f79-9f05-fb969f952286
 # ╟─52333157-9913-489d-8784-dc3b542af1e9
@@ -7411,17 +7457,20 @@ version = "1.4.1+1"
 # ╟─bb77f844-76c9-401f-8c2c-dcc5891b0a09
 # ╟─9463762b-50bb-49be-80be-5f67cb141d1c
 # ╟─15277097-7c11-4b03-8579-8f9c376361cd
+# ╟─523d5a06-fafd-4d67-b8af-457b4d2f76e8
 # ╟─8f673110-65a1-4f6d-8de1-ebcfb49fb50d
-# ╠═8c2f85bb-9b81-4b70-b7e8-1a91e2738838
+# ╟─8c2f85bb-9b81-4b70-b7e8-1a91e2738838
 # ╟─f89bbb38-906b-45f3-9eff-617924e0b719
 # ╟─a862aa36-d811-427d-bc1a-4502175b71f4
 # ╟─b9434085-81d7-4a3d-bed5-deebea3cd48a
-# ╠═208abdcc-dc12-4a08-a1f8-2177f95886f7
+# ╟─208abdcc-dc12-4a08-a1f8-2177f95886f7
 # ╟─1615be4c-fb84-418f-8406-c274550cfb86
-# ╠═fd7161bc-1e1b-42e3-8758-c8e3e3ec0877
+# ╟─fd7161bc-1e1b-42e3-8758-c8e3e3ec0877
 # ╟─38ab6c6d-c5e0-49f9-8c76-61e0b8dc13c6
+# ╠═812de6c7-f5b3-4b93-bb44-ba147d6fc140
 # ╟─01008c60-bcfa-42a1-b5e8-fa67db2131ba
 # ╟─ee50e46d-6580-4a68-a061-6179c895a219
+# ╟─cff81ba7-fab6-4cd7-ba24-e4a9104177aa
 # ╟─845d8b0a-6550-49f4-9308-13ec2b2bd0c1
 # ╟─1f0c53c0-611f-4b4e-9718-efac2f0b893d
 # ╟─a7c8710c-2256-425e-a946-0e2791773592
@@ -7830,10 +7879,9 @@ version = "1.4.1+1"
 # ╟─e26ad50a-67db-449b-aa90-1bd87e06d5cb
 # ╟─224f4771-7bf7-4433-9f36-b82875ad4b6c
 # ╟─66e78b57-c224-4beb-bddb-e4b5a2997d2c
-# ╠═5734a65f-b0bf-4448-98fe-c2c9f5767c67
 # ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
 # ╟─b4599a16-e7f7-4a2a-b349-2648ee45208f
-# ╟─8315fb27-89e4-44a4-a51e-8e55fc3d58e5
+# ╠═8315fb27-89e4-44a4-a51e-8e55fc3d58e5
 # ╟─ef081dfa-b610-4c7a-a039-7258f4f6e80e
 # ╟─da9230a6-088d-4735-b206-9514c12dd223
 # ╟─107407c8-5da0-4833-9965-75a82d84a0fb
