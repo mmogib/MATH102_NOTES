@@ -381,6 +381,7 @@ end
 
 md"""
 **Exercises:**
+__Kahoot 😃__
 
 1. Wrtie as definite integral 
 $\lim_{n\to \infty}\sum_{i=1}^n\frac{1}{n}\cos\left(1+\frac{i}{n}\right)^2=$
