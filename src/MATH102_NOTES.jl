@@ -291,7 +291,7 @@ end
 # ╔═╡ 4e358ab2-9be7-4d7f-b295-1e85943da027
 let
     x = symbols("x", real=true)
-    integrate(exp(x))
+	integrate(exp(x), (x,1,3))
 end
 
 
@@ -528,28 +528,6 @@ let
     A=$(integrate(ff(xx),(xx,0,2)))
     
     	
-    ## Table of Indefinite Integrals
-    
-    |  | |  |
-    |--------------|--------------|------- |
-    | $$\int c f(x) dx =c\int  f(x) dx$$ |    | $\int [f(x)+g(x)] dx =\int  f(x) dx+\int g(x) dx$|
-    | | | |
-    |$$\int k dx = kx + C$$ | | $$\int x^n dx = \frac{x^{n+1}}{n+1} + C, n\not=-1$$ 
-    | | | |
-    |$$\int \frac{1}{x} dx = \ln \|x\| + C$$  || $$\int e^x dx = e^x + C$$ 
-    | | | |
-    |$$\int a^x dx = \frac{a^x}{\ln a}+ C$$  || $$\int \sin x dx = -\cos x + C$$ 
-    | | | |
-    |$$\int \cos x dx = \sin x + C$$ || $$\int \sec^2 x dx = \tan x + C$$
-    | | | |
-    |$$\int \csc^2 x dx = -\cot x + C$$ || $$\int \sec x\tan x dx = \sec x + C$$
-    | | | |
-    |$$\int \frac{1}{x^2+1} dx = \tan^{-1} x + C$$ || $$\int \frac{1}{\sqrt{1-x^2}} dx = \sin^{-1} x + C$$
-    | | | |
-    |$$\int \sinh x dx = \cosh x + C$$ || $$\int \cosh x dx = \sinh x + C$$
-    | | | |
-    |$$\int \csc x\cot x dx = -\csc x + C$$ ||
-    | | | |
     """
 
 end
@@ -2798,7 +2776,7 @@ begin
     text_book = post_img("https://www.dropbox.com/scl/fi/upln00gqvnbdy7whr23pj/larson_book.jpg?rlkey=wlkgmzw2ernadd9b8v8qwu2jd&dl=1", 200)
     md""" # Syllabus
     ## Syallbus
-    See here [Term 252 - MATH102 - Syllabus](https://math.kfupm.edu.sa/docs/default-source/default-document-library/math102-252.pdf1)
+    See here [Term 252 - MATH102 - Syllabus](https://math.kfupm.edu.sa/docs/default-source/css-library/math102-252.pdf)
     ## Textbook
     __Textbook: Edwards, C. H., Penney, D. E., and Calvis, D. T., Differential Equations and Linear Algebra, Fourth edition, Pearson, 2021__
     $text_book
@@ -3254,6 +3232,11 @@ We use the notation
 
 
 
+
+# ╔═╡ 17770e44-b45c-4505-bb61-213ff4eff007
+cm"""
+$(post_img("https://www.dropbox.com/scl/fi/8uc8l8b156oh01wwgrzh5/basic_integration_rules.png?rlkey=weir126wcflyahcs11ab7mknr&dl=1", 900))
+"""
 
 # ╔═╡ 66b482d7-4c12-4f41-9d09-3eb723a1001b
 
@@ -7511,6 +7494,7 @@ version = "1.4.1+1"
 # ╟─9d6d8399-d063-42c4-af47-dbf5ab38d434
 # ╟─2543320e-dd76-4edf-adb8-ceac71805337
 # ╟─8cc0d5fd-c988-4f16-a07f-a6439fccbc8a
+# ╟─17770e44-b45c-4505-bb61-213ff4eff007
 # ╟─66b482d7-4c12-4f41-9d09-3eb723a1001b
 # ╟─4a9a8e25-2db5-495a-bf55-94d589bdb699
 # ╟─fa78d2d3-afc7-40d8-9e06-4df6f65321ac
