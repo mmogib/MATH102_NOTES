@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.20.21
+# v0.20.24
 
 using Markdown
 using InteractiveUtils
@@ -58,6 +58,12 @@ end
 # let
 #     img = LocalImage("../qrcode.png")
 # end
+
+# ╔═╡ d6d85087-9ecc-4043-9002-e4a6442b829e
+md"""
+
+# [AI-STUDY RESOURCE](https://notebooklm.google.com/notebook/f9f5eb4d-5782-4586-9f7e-abdb60f1b694)
+"""
 
 # ╔═╡ 8b65d45c-ca7c-4e5d-9cfd-a7348547ebe0
 md"# 5.2 Area"
@@ -576,7 +582,7 @@ let
             xticks=(1:b1, map(i -> Symbol("$i"), 1:b1)),
             framestyle=:origin,
             label=nothing,
-            xlabel="x",
+            xlabel="t",
             subplot=2,
             title="Velocity Graph"
         )
@@ -801,6 +807,39 @@ $(Resource("https://www.dropbox.com/s/24biyozrcl7mk2q/wire.jpg?raw=1"))
 
 # ╔═╡ db150ea2-4895-415e-97a9-f7eff4180d63
 md"## Inverse Hyperbolic Functions"
+
+# ╔═╡ cad95270-ba9f-4821-87da-e457a00b9617
+# begin
+#     theme(:wong)
+#     anchor1 = 0.5
+#     (p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true)
+
+#     annotate!(p, [(anchor1, f(anchor1) - 2, text(L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$", 12, n > 500 ? :white : :black))])
+#     annotate!(p, [(anchor1 + 0.5, f(anchor1 + 0.1), text(L"$y=%$f(x)$", 12, :black))])
+
+#     md""" 	
+
+#     $p
+#     """
+
+# end
+
+# ╔═╡ 9b02faca-b5cb-442d-8a63-82f584b054fd
+
+
+
+
+# begin
+#     left_sum = reimannSum(f, n, a, b; method="l")
+#     right_sum = reimannSum(f, n, a, b; method="r")
+#     l_sum_txt = L"R_{%$n}= %$right_sum \leq A\leq %$left_sum =L_{%$n}"
+
+
+#     l_sum_txt
+
+
+# end
+
 
 # ╔═╡ 1f1b3439-630e-4db6-9a01-321ed75bed84
 md""" # 7.1 Area of a Region Between Two Curves
@@ -1253,12 +1292,22 @@ V = 2 \pi r h \Delta r = \text{[circumference][height][thickness]}
 ```
 """
 
+# ╔═╡ cbb27812-b1ff-4deb-a9f5-c4d5428c3bdb
+html"""
+<div style="display: flex; justify-content:center; padding:20px; border: 2px solid rgba(125,125,125,0.2);">
+<div>
+<h5>Calculating Volume by Cylindrical Shells</h5>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/MNU5DT-CDrc?si=cXhu5K5u2KZCbNMV" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+</div>
+"""
+
 # ╔═╡ a89799eb-01a8-4dd4-a2a3-3576c26f29ef
 html"""
 <div style="display: flex; justify-content:center; padding:20px; border: 2px solid rgba(125,125,125,0.2);">
 <div>
 <h5>Cylindrical Shells Illustration</h5>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/JrRniVSW9tg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/JrRniVSW9tg?si=qMTkfYTJ16xdw29r" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </div>
 </div>
 """
@@ -1433,9 +1482,6 @@ begin
     ```
     """
 end
-
-# ╔═╡ ca728595-e908-4839-a9be-04a6e884a3f4
-
 
 # ╔═╡ 507bc0c8-ef40-4ef4-ac3f-b66ae162362f
 md"""
@@ -2612,39 +2658,6 @@ let
     """
 
 end
-
-# ╔═╡ cad95270-ba9f-4821-87da-e457a00b9617
-begin
-    theme(:wong)
-    anchor1 = 0.5
-    (p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true)
-
-    annotate!(p, [(anchor1, f(anchor1) - 2, text(L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$", 12, n > 500 ? :white : :black))])
-    annotate!(p, [(anchor1 + 0.5, f(anchor1 + 0.1), text(L"$y=%$f(x)$", 12, :black))])
-
-    md""" 	
-
-    $p
-    """
-
-end
-
-# ╔═╡ 9b02faca-b5cb-442d-8a63-82f584b054fd
-
-
-
-
-begin
-    left_sum = reimannSum(f, n, a, b; method="l")
-    right_sum = reimannSum(f, n, a, b; method="r")
-    l_sum_txt = L"R_{%$n}= %$right_sum \leq A\leq %$left_sum =L_{%$n}"
-
-
-    l_sum_txt
-
-
-end
-
 
 # ╔═╡ ef081dfa-b610-4c7a-a039-7258f4f6e80e
 begin
@@ -4266,7 +4279,7 @@ Find ``\displaystyle\int x^2 \ln x d x``.
 # ╔═╡ 9a0bbdd2-c9fe-4932-94f3-3727baa6b9a6
 cm"""
 $(ex(3,"An Integrand with a Single Term"))
-Find ``\displaystyle\int \sin^{-1}x d x``.
+Find ``\displaystyle\int_0^1 \sin^{-1}x d x``.
 """
 
 # ╔═╡ 5c4497e8-e02d-4265-ba7c-aa607231ee6d
@@ -5758,7 +5771,7 @@ SymPy = "~2.2.0"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.12.4"
+julia_version = "1.12.5"
 manifest_format = "2.0"
 project_hash = "731bb4d3d77329e0bb604709a00ca768dd299451"
 
@@ -7423,6 +7436,7 @@ version = "1.4.1+1"
 # ╟─e414122f-b93a-4510-b8ae-026c303e0df9
 # ╟─8408e369-40eb-4f9b-a7d7-26cde3e34a74
 # ╟─cd269caf-ef81-43d7-a1a8-6668932b6363
+# ╟─d6d85087-9ecc-4043-9002-e4a6442b829e
 # ╟─8b65d45c-ca7c-4e5d-9cfd-a7348547ebe0
 # ╟─02c15fce-abf1-427e-b648-2554ee18ed5a
 # ╟─38eabacb-a71a-448d-875d-7f7230dba49e
@@ -7605,6 +7619,7 @@ version = "1.4.1+1"
 # ╟─6f8a882b-d41c-41e5-b156-9be4112194c2
 # ╟─cf309f63-2534-45f6-98b4-7bc90100493c
 # ╟─dbe837f1-85da-4572-b8c3-738ba346d67f
+# ╟─cbb27812-b1ff-4deb-a9f5-c4d5428c3bdb
 # ╟─a89799eb-01a8-4dd4-a2a3-3576c26f29ef
 # ╟─3b6613fa-523a-49ef-a68b-fab0763111e6
 # ╟─6b312eea-1ad6-414a-bfa1-2f8ba1498add
@@ -7640,7 +7655,6 @@ version = "1.4.1+1"
 # ╟─3888f083-86e2-4edb-a700-62028ad295b4
 # ╟─7d50c4c7-e6f0-43b7-8583-7b47cbcc2156
 # ╟─9a0bbdd2-c9fe-4932-94f3-3727baa6b9a6
-# ╠═ca728595-e908-4839-a9be-04a6e884a3f4
 # ╟─5c4497e8-e02d-4265-ba7c-aa607231ee6d
 # ╟─fa99131e-13b2-4f4a-a752-4afd26b6596c
 # ╟─a856ee7d-a0d9-4d4b-aa13-449a827a954d
