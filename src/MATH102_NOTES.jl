@@ -1845,8 +1845,10 @@ end
 md"## Limit of a Sequence"
 
 # ╔═╡ eae5658b-a235-40de-84a3-00152a109e93
-n91Slider = @bind n91slider NumberField(1:1000, default=1);
-md"n = $n91Slider";
+begin
+	n91Slider = @bind n91slider NumberField(1:1000, default=1);
+	md"n = $n91Slider";
+end
 
 # ╔═╡ af5c9045-66ec-483a-a197-db544f30b1b6
 let
@@ -1856,61 +1858,37 @@ let
     ]
     a1, label, ymin, ymax = seqns[2]
     d1 = 1:n91slider
-    plt1 = scatter(a1.(d1), zeros(10),
-        frame_style=:origin,
-        ylimits=(ymin, ymax),
-        xlimits=(-0.2, ymax + 0.5),
+    plt1 = scatter(a1.(d1), zeros(length(d1)),   # fix: zeros(10) → zeros(length(d1))
+        framestyle=:origin,                        # fix: frame_style → framestyle
+        ylims=(ymin, ymax),                        # fix: ylimits → ylims
+        xlims=(-0.2, ymax + 0.5),                 # fix: xlimits → xlims
         yaxis=nothing,
         label=label,
         showaxis=:x,
         legend=:outertopright,
         title_location=:left,
-        grid=:none,
+        grid=false,                                # fix: :none → false
         title="Example 1"
     )
-    annotate!(plt1, [(0.4, 0.5, L"a_{%$n91slider}=\frac{%$n91slider}{%$(1+n91slider)}=%$(round(a1(n91slider),digits=6))")])
-
+    annotate!(plt1, [(0.4, 0.5, L"a_{%$n91slider}=\left(1+\frac{1}{%$n91slider}\right)^{%$n91slider}=%$(round(a1(n91slider),digits=6))")])
     d2 = 1:n91slider
     plt2 = scatter(d2, a1.(d2),
-        frame_style=:origin,
-        ylimits=(ymin, ymax),
-        xlimits=(-2, 200),
+        framestyle=:origin,                        # fix: frame_style → framestyle
+        ylims=(ymin, ymax),                        # fix: ylimits → ylims
+        xlims=(-2, 200),                           # fix: xlimits → xlims
         label=label,
         legend=:outerbottom,
         title_location=:left,
         title="Visualization (Graph)",
-        marker=(1, 2, :green, stroke(0.0, 0.0, :green, :dot))
+        markersize=2,
+        markercolor=:green,
+        markerstrokewidth=0,                       # fix: remove stroke() call entirely
+        markerstrokecolor=:green,
     )
-    annotate!(plt2, [(100, ymax / 2, L"a_{%$n91slider}=\frac{%$n91slider}{%$(1+n91slider)}=%$(round(a1(n91slider),digits=6))")])
-    # 	if (n91slider>=10)
-
-    # 		lens!(plt2,[n91slider-20.1, n91slider+20.1], [0.9,1.01], 
-    # 			inset = (1, bbox(0.6, -0.1, 0.4, 0.4)),
-    # 			grid=:none,
-
-    # 		)
-    # end
-    # if (n91slider>=99)
-
-    # 	lens!(plt1,[ymax-0.11, ymax], [ymin,ymax], inset = (1, bbox(0.6, 0.0, 0.4, 0.5)),
-    # 			yaxis=nothing,
-    # 			frame_style=:origin, 
-    # 			showaxis=:x,
-    # 		grid=:none,
-    # 		annotations=[(ymax-0.11,0.3,"Zoom",7)]
-    # 	)
-    # 	lens!(plt2,[ymax-0.11, ymax], [ymin,ymax], inset = (1, bbox(0.6, 0.0, 0.4, 0.5)),
-    # 			yaxis=nothing,
-    # 			frame_style=:origin, 
-    # 			showaxis=:x,
-    # 		grid=:none,
-    # 		annotations=[(ymax-0.11,0.3,"Zoom",7)]
-    # 	)
-    # end
+    annotate!(plt2, [(100, ymax / 2, L"a_{%$n91slider}=\left(1+\frac{1}{%$n91slider}\right)^{%$n91slider}=%$(round(a1(n91slider),digits=6))")])
     md"""
     $plt2
     """
-
 end
 
 # ╔═╡ 4507039d-b5e0-4c22-a698-ccbfc7eeb6ed
@@ -4500,6 +4478,15 @@ Write the partial fraction decomposition for
 ```
 """
 
+# ╔═╡ 16f26878-cbe0-4ac1-a593-691a2fe55aca
+cm"""
+$(ex(2,"Repeated Linear Factors"))
+Find
+```math
+\int  \frac{5x^2+20x+6}{x^3+2x^2+x}dx.
+```
+"""
+
 # ╔═╡ 7daad386-47a2-44d7-9af8-743d5712cec0
 cm"""
 $(ex(3,"Distinct Linear and Quadratic Factors"))
@@ -4518,15 +4505,6 @@ $(ex(4," Repeated Quadratic Factors"))
 \int  \frac{8x^3+13x}{(x^2+2)^2}dx. 
 ```
 
-"""
-
-# ╔═╡ 16f26878-cbe0-4ac1-a593-691a2fe55aca
-cm"""
-$(ex(2,"Repeated Linear Factors"))
-Find
-```math
-\int  \frac{5x^2+20x+6}{x^3+2x^2+x}dx.
-```
 """
 
 # ╔═╡ 0cef9fcd-3734-4694-ad23-ca1465d1f96e
