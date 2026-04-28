@@ -22,6 +22,8 @@ The split should preserve course content, package setup, helper functions, local
 - Use `notes/` for project plans, specs, and discussion notes.
 - Use `refs/` for reference files, including the syllabus and the archived legacy notebook.
 - Do not delete or reorganize assets unless explicitly approved.
+- Add an `AGENTS.md` project guide so future Codex sessions follow the repository-specific workflow.
+- Add/update Codex project memory so future sessions remember the MATH102 split conventions.
 
 ## Split Strategy
 
@@ -80,7 +82,28 @@ Before archiving the original notebook:
 4. Confirm `docs/index.html` links to all chapter pages.
 5. Spot-check each exported chapter page for expected headings and visible images.
 6. Search for obvious broken local references.
-7. Only after successful validation, archive `src/MATH102_NOTES.jl` under `refs/`.
+7. Review `.gitignore` before staging to decide which generated files, references, notebook outputs, and local artifacts should be tracked.
+8. Only after successful validation, archive `src/MATH102_NOTES.jl` under `refs/`.
+
+## Project Guidance Files
+
+Create or update `AGENTS.md` with repository-specific instructions:
+
+- This is a MATH102 Calculus II Pluto/static-site project.
+- Chapter notebooks are standalone and should not depend on a shared `common.jl`.
+- `src/export.jl` is the build entry point.
+- `export_push.sh` and `export_push.bat` are the normal publish workflow.
+- `docs/` is generated static-site output.
+- `refs/` is for syllabus/reference material and archived legacy sources.
+- `notes/` is for plans, specs, and discussion notes.
+- Review `.gitignore` before staging broad generated changes.
+
+Add/update Codex memory with the same durable project conventions, especially:
+
+- Use `notes/`, not `docs/superpowers/...`, for project specs.
+- Keep chapter notebook splits standalone.
+- Keep the original notebook until split exports are validated.
+- Treat `docs/` as generated static output.
 
 ## README Update
 
@@ -93,6 +116,7 @@ At the end of the implementation session, update `README.md` to:
 - Clarify that `docs/` is generated static-site output.
 - Clarify that `refs/` contains reference material and archived legacy sources.
 - Clarify that `notes/` contains planning notes and project remarks.
+- Point future contributors to `AGENTS.md`.
 
 ## Out Of Scope
 
