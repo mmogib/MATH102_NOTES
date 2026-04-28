@@ -6,6 +6,7 @@ using InteractiveUtils
 
 # ╔═╡ 71bc54d5-d0ed-42d3-9bc1-48aa86e91d1d
 TableOfContents(title="📚 MATH102: Calculus III", indent=true, depth=4)
+
 # ╔═╡ e414122f-b93a-4510-b8ae-026c303e0df9
 begin
     struct LocalImage
@@ -16,6 +17,7 @@ begin
         write(io, read(w.filename))
     end
 end
+
 # ╔═╡ 8408e369-40eb-4f9b-a7d7-26cde3e34a74
 begin
     text_book = post_img("https://www.dropbox.com/scl/fi/upln00gqvnbdy7whr23pj/larson_book.jpg?rlkey=wlkgmzw2ernadd9b8v8qwu2jd&dl=1", 200)
@@ -36,16 +38,19 @@ begin
     Also you can ask for an online meeting through __TEAMS__.
     """
 end
+
 # ╔═╡ cd269caf-ef81-43d7-a1a8-6668932b6363
 # exportqrcode("https://www.mathmatize.com/")
 # let
 #     img = LocalImage("../qrcode.png")
 # end
+
 # ╔═╡ d6d85087-9ecc-4043-9002-e4a6442b829e
 md"""
 
 # [AI-STUDY RESOURCE](https://notebooklm.google.com/notebook/f9f5eb4d-5782-4586-9f7e-abdb60f1b694)
 """
+
 # ╔═╡ 1e507853-e2e6-493d-9d62-f33da7a7caa8
 md"""
 # 9.1 Sequences
@@ -55,8 +60,10 @@ __Objectives__
 > 1. Write a formula for the nth term of a sequence.
 > 1. Use properties of monotonic sequences and bounded sequences.
 """
+
 # ╔═╡ 2eb6bb15-066f-4601-8a94-eb1ce880e7ac
 md"## Sequences"
+
 # ╔═╡ 8c345896-0123-40a5-8f00-c6ebefcee822
 cm"""
 __Sequence__: A sequence can be thought of as a list of numbers written in a definite order:
@@ -71,6 +78,7 @@ a_1, a_2, a_3, \cdots, a_n, \cdots
 - ``a_n``: ``\text{n}^\text{th}`` term,
 
 """
+
 # ╔═╡ 25157d2c-d719-438e-b4c4-6fa7d9787820
 cm"""
 $(ex(1,"Writing the Terms of a Sequence"))
@@ -80,6 +88,7 @@ $(ex(1,"Writing the Terms of a Sequence"))
 4.  The terms of the __recursively defined__ sequence ``\{d_n\}``, where ``d_1=25`` and ``d_{n+1}=d_n−5``.
 
 """
+
 # ╔═╡ 1cc30502-ec6c-4aa9-b178-58b3e425dac9
 let
     @syms n::Unsigned
@@ -108,8 +117,10 @@ let
     # cm""
 
 end
+
 # ╔═╡ 355007a5-91c8-454e-8463-31c6abc9f87f
 md"## Limit of a Sequence"
+
 # ╔═╡ 5c65c8e6-f08f-42ce-81dd-f80638cbf7b4
 cm"""
 $(define("the Limit of a Sequence"))
@@ -122,11 +133,13 @@ $(ebl())
 
 $(post_img("https://www.dropbox.com/scl/fi/c536ibwk7eycy0v2lb0rj/fig_9_1.png?rlkey=22y9oi2iy52z82iehh59pf0gs&dl=1",500))
 """
+
 # ╔═╡ eae5658b-a235-40de-84a3-00152a109e93
 begin
 	n91Slider = @bind n91slider NumberField(1:1000, default=1);
 	md"n = $n91Slider";
 end
+
 # ╔═╡ af5c9045-66ec-483a-a197-db544f30b1b6
 let
     seqns = [
@@ -167,6 +180,7 @@ let
     $plt2
     """
 end
+
 # ╔═╡ 9b9a82cc-a3c1-448f-9cb8-375e8dbd59ea
 cm"""
 $(bth("Limit of a Sequence"))
@@ -180,11 +194,13 @@ If ``\left\{a_n\right\}`` is a sequence such that ``f(n)=a_n`` for every positiv
 \lim _{n \rightarrow \infty} a_n=L
 ```
 """
+
 # ╔═╡ 3c9ab8ae-dda1-45eb-a635-92acf6e2f10b
 cm"""
 $(ex(2,"Finding the Limit of a Sequence"))
 Find the limit of the sequence whose ``n``th term is ``a_n=\left(1+\frac{1}{n}\right)^n``.
 """
+
 # ╔═╡ ff84cfbf-d387-4bde-b9d3-407b88e1bf30
 cm"""
 $(bth("Properties of Limits of Sequences"))
@@ -195,28 +211,33 @@ Let ``\lim _{n \rightarrow \infty} a_n=L`` and ``\lim _{n \rightarrow \infty} b_
 4. Quotient: ``\lim _{n \rightarrow \infty} \frac{a_n}{b_n}=\frac{L}{K}, b_n \neq 0`` and ``K \neq 0``
 
 """
+
 # ╔═╡ 9a594bd8-68f7-4f6a-8dd6-3c70780f098d
 cm"""
 $(ex(3,"Determining Convergence or Divergence"))
 1.  ``\{a_n\}=\{3+(−1)^n\}`` 
 2.  ``\{b_n\}=\displaystyle\left\{\frac{n}{1-2n}\right\}``
 """
+
 # ╔═╡ ef95cecf-00fe-429b-b94e-50f2de8a16bb
 cm"""
 $(ex(4,"Using L'Hôpital's Rule to Determine Convergence"))
 Show that the sequence whose ``n``th term is ``a_n=\frac{n^2}{2^n-1}`` converges.
 """
+
 # ╔═╡ e62d5f92-8ad6-4317-ab62-771b96f0c3f9
 cm"""
 $(bth("Squeeze Theorem for Sequences"))
 If ``\lim _{n \rightarrow \infty} a_n=L=\lim _{n \rightarrow \infty} b_n`` and there exists an integer ``N`` such that ``a_n \leq c_n \leq b_n`` for all ``n>N``, then ``\lim _{n \rightarrow \infty} c_n=L``.
 
 """
+
 # ╔═╡ 63dbebd7-85d2-42fd-b09a-f0d9c1ce640f
 cm"""
 $(ex(5,"Using the Squeeze Theorem"))
 Show that the sequence ``\left\{c_n\right\}=\left\{(-1)^n \frac{1}{n!}\right\}`` converges, and find its limit.
 """
+
 # ╔═╡ 664c41b1-6459-4dfc-9999-5b2acad3301c
 cm"""
 $(bbl("Remark",""))
@@ -226,6 +247,7 @@ In fact, it can be shown that for any fixed number ``k``,
 ```
 - This means that the factorial function grows faster than any exponential function.
 """
+
 # ╔═╡ aa6664e3-5081-4c48-8754-e65ba7263f46
 cm"""
 $(bth("Absolute Value Theorem"))
@@ -234,8 +256,10 @@ For the sequence ``\left\{a_n\right\}``, if
 \lim _{n \rightarrow \infty}\left|a_n\right|=0 \text { then } \lim _{n \rightarrow \infty} a_n=0
 ```
 """
+
 # ╔═╡ 4507039d-b5e0-4c22-a698-ccbfc7eeb6ed
 md"## Pattern Recognition for Sequences"
+
 # ╔═╡ 7bafde52-30ed-41f9-9522-02b3c9b7316a
 cm"""
 $(ex(6,"Finding the <i>nth</i> Term of a Sequence"))
@@ -245,6 +269,7 @@ Find a sequence ``\left\{a_n\right\}`` whose first five terms are
 ```
 and then determine whether the sequence you have chosen converges or diverges.
 """
+
 # ╔═╡ d3729415-161a-41f0-ad07-120944323d9f
 cm"""
 $(ex(7,"Finding the nth Term of a Sequence"))
@@ -254,8 +279,10 @@ Determine the ``n``th term for a sequence whose first five terms are
 ```
 and then decide whether the sequence converges or diverges.
 """
+
 # ╔═╡ b568193c-ba85-4f59-89e9-6d5b824d08cd
 md"## Monotonic Sequences and Bounded Sequences"
+
 # ╔═╡ 471eba70-40bf-42f9-a476-b13f37ccf823
 cm"""
 $(define("Monotonic Sequence"))
@@ -269,6 +296,7 @@ a_1 \geq a_2 \geq a_3 \geq \cdots \geq a_n \geq \cdots
 ```
 
 """
+
 # ╔═╡ 6c261c5d-d478-4750-ac04-bb36734a6fe1
 cm"""
 $(ex(8,"
@@ -278,7 +306,9 @@ Determine whether each sequence having the given ``n``th term is monotonic.
 - b. ``b_n=\frac{2 n}{1+n}``
 - c. ``c_n=\frac{n^2}{2^n-1}``
 """
+
 # ╔═╡ f27fe033-30da-4174-9f1c-23910a036481
+
 # ╔═╡ 18d5f404-685e-4781-8edf-ac7374c55526
 cm"""
 $(define("Bounded Sequence"))
@@ -286,11 +316,13 @@ $(define("Bounded Sequence"))
 2. A sequence ``\left\{a_n\right\}`` is bounded below when there is a real number ``N`` such that ``N \leq a_n`` for all ``n``. The number ``N`` is called a lower bound of the sequence.
 3. A sequence ``\left\{a_n\right\}`` is bounded when it is bounded above and bounded below.
 """
+
 # ╔═╡ 7c50563b-0f12-4974-9acf-598247793200
 cm"""
 $(bth("Bounded Monotonic Sequences"))
 If a sequence ``\left\{a_n\right\}`` is bounded and monotonic, then it converges.
 """
+
 # ╔═╡ dbc02f9a-5bc9-478e-8de1-767fd64faaec
 cm"""
 $(ex(9,"
@@ -299,6 +331,7 @@ Bounded and Monotonic Sequences"))
 - b. The divergent sequence ``\left\{b_n\right\}=\left\{n^2 /(n+1)\right\}`` is monotonic but not bounded. (It is bounded below.)
 - c. The divergent sequence ``\left\{c_n\right\}=\left\{(-1)^n\right\}`` is bounded but not monotonic.
 """
+
 # ╔═╡ 7d460b80-8319-4129-862e-695ebb8cff28
 md"""
 # 9.2 Series and Convergence
@@ -307,13 +340,16 @@ md"""
 > 2. Use properties of infinite geometric series.
 > 3. Use the nth-Term Test for Divergence of an infinite series.
 """
+
 # ╔═╡ d8322419-3ebe-4718-ba84-9c435615d1ba
 md"## Infinite Series"
+
 # ╔═╡ 12ae12a8-c47b-4d15-af4d-d6bb92c8a026
 let
     1 / 2 + 1 / 4 + 1 / 8 + 1 / 16 # 1/2^n
     sum([1 / 2^n for n in 1:30])
 end
+
 # ╔═╡ 02def290-7dcd-4c8f-9c41-228033cc3e7c
 cm"""
 Consider the sequence ``\left\{a_n\right\}_{n=1}^{\infty}``. The expression 
@@ -339,6 +375,7 @@ s_n & = & a_1 + a_2 + \cdots + a_n =\sum_{i=1}^n a_i \\
 ```
 and give the following definition
 """
+
 # ╔═╡ 137be6c2-5b86-4e1d-b457-b4f71646e633
 cm"""
 $(define("Convergent and Divergent Series"))
@@ -354,6 +391,7 @@ S=a_1+a_2+\cdots+a_n+\cdots \quad \color{red}{S=\sum_{n=1}^{\infty} a_n}
 
 If ``\left\{S_n\right\}`` diverges, then the series diverges.
 """
+
 # ╔═╡ 84942358-6f19-4d7f-b367-4dc5e81009f5
 cm"""
 __Questions we want to answer about `Series`__
@@ -365,6 +403,7 @@ __Questions we want to answer about `Series`__
 2. if it does, what is its sum?
 
 """
+
 # ╔═╡ 9fe2db35-a1d7-4af7-be2c-e34c1ce66929
 begin
     n8Slider = @bind n8slider Slider(1:1000, show_value=true)
@@ -379,6 +418,7 @@ begin
     ----
     """
 end
+
 # ╔═╡ b73b6b29-6d18-4308-80dd-e0cc2aedd038
 let
     @syms n
@@ -405,6 +445,7 @@ let
         grid=:none,)
 
 end
+
 # ╔═╡ 7eeff659-9f83-47eb-8f96-6fac093f0e64
 cm"""
 $(ex(1,"Convergent and Divergent Series"))
@@ -413,11 +454,13 @@ $(ex(1,"Convergent and Divergent Series"))
 1. ``\displaystyle \sum_{n=1}^{\infty} 1``
 
 """
+
 # ╔═╡ 71e4523b-b68c-49cb-8877-ff819c4a13e9
 cm"""
 $(ex(2,"Writing a Series in telescoping Form"))
  Find the sum of the series  ``\displaystyle \sum_{n=1}^{\infty} \frac{2}{4n^2-1}``
 """
+
 # ╔═╡ 125169d6-bfd0-443f-87aa-a7117f481088
 cm"""
 Geometric Series
@@ -434,17 +477,20 @@ A geometric series with ratio ``r`` diverges when ``|r| \geq 1``. If ``|r|<1``, 
 \sum_{n=0}^{\infty} a r^n=\frac{a}{1-r}, \quad|r|<1
 ```
 """
+
 # ╔═╡ 4202e249-ca1c-4b00-a482-8fe15a6064ed
 cm"""
 $(ex(3,"Convergent and Divergent Geometric Series"))
 - (a) ``\displaystyle \sum_{n=0}^{\infty}\frac{3}{2^n}``
 - (b) ``\displaystyle \sum_{n=0}^{\infty}\left(\frac{3}{2}\right)^n``
 """
+
 # ╔═╡ d5965014-2e70-4023-80ef-526f28a0334f
 cm"""
 $(ex(4,"A Geometric Series for a Repeating Decimal"))
 Use a geometric series to write ``0.08`` as the ratio of two integers.
 """
+
 # ╔═╡ 27a7a6b4-6462-410d-a26a-ffd384efe461
 cm"""
 $(bth("Properties of Infinite Series"))
@@ -458,11 +504,13 @@ $(ebl())
 $(bth("Limit of the nth Term of a Convergent Series"))
 If ``\sum_{n=1}^{\infty} a_n`` converges, then ``\lim _{n \rightarrow \infty} a_n=0``.
 """
+
 # ╔═╡ 7b3cf490-87d4-4294-95af-f6e6deee043d
 cm"""
 $(bth("nth-Term Test for Divergence"))
 If ``\lim _{n \rightarrow \infty} a_n \neq 0`` then ``\sum_{n=1}^{\infty} a_n`` diverges.
 """
+
 # ╔═╡ c69ecdb4-a312-45bc-874d-85d4d3747f77
 cm"""
 $(ex(5,"Using the nth-term test for Divergence"))
@@ -471,21 +519,26 @@ $(ex(5,"Using the nth-term test for Divergence"))
 1. ``\displaystyle\sum_{n=0}^{\infty} \frac{1}{n}``
 
 """
+
 # ╔═╡ a1b22caf-ec34-4abd-9460-bce43203b742
+
 # ╔═╡ 8c2447b3-c26e-47e1-8701-7e4a18ae92a8
 cm"""
 $(ex(6," Bouncing Ball Problem"))
 A ball is dropped from a height of 6 feet and begins bouncing
 The height of each bounce is three-fourths the height of the previous bounce. Find the  total vertical distance traveled by the ball.
 """
+
 # ╔═╡ 2abfc0da-1d95-49dd-837d-6718ce473c5d
 md"""
 # 9.3 The Integral Test and p-Series
 > 1. Use the Integral Test to determine whether an infinite series converges or diverges.
 > 2. Use properties of p-series and harmonic series.
 """
+
 # ╔═╡ f08b1731-59dd-4d82-8b42-6824bc216d5a
 md"## The Integral Test"
+
 # ╔═╡ 3a4b2178-47ee-474e-bbaf-72c00b3d3c2d
 cm"""
 $(bth("The Integral Test"))
@@ -495,18 +548,22 @@ If ``f`` is positive, continuous, and decreasing for ``x \geq 1`` and ``a_n=f(n)
 ```
 either both converge or both diverge.
 """
+
 # ╔═╡ 69abc9da-4596-4268-9dea-95baaf687f67
 cm"""
 $(ex(1,"Using the Integral Test"))
 Apply the Integral Test to the series ``\sum_{n=1}^{\infty} \frac{n}{n^2+1}``.
 """
+
 # ╔═╡ ced2268b-d0c8-4cb0-9e0d-083d6db388c8
 cm"""
 $(ex(2,"Using the Integral Test"))
 Apply the Integral Test to the series ``\sum_{n=1}^{\infty} \frac{1}{n^2+1}``.
 """
+
 # ╔═╡ f8f72024-5ea6-474d-8123-dd9b19a03fa7
 md"## p-Series and Harmonic Series"
+
 # ╔═╡ 7df6433b-0c5b-4bd8-a96a-eb70d0efa0e3
 cm"""
 $(bth("Convergence of p-Series"))
@@ -516,12 +573,14 @@ The ``p``-series
 ```
 converges for ``p >1`` and diverges for ``0 < p \leq 1``.
 """
+
 # ╔═╡ 976a8ef5-fd7f-45a4-8f1d-2a99318ad33a
 cm"""
 $(ex(3,"Convergent and Divergent p-Series"))
 
 Discuss the convergence or divergence of (a) the harmonic series and (b) the ``p``-series with ``p=2``.
 """
+
 # ╔═╡ db5771f6-1bf6-4996-a515-5e7ad37d1404
 cm"""
 $(ex(4,"Testing a Series for Convergence"))
@@ -531,14 +590,17 @@ Determine whether the series
 ```
 converges or diverges.
 """
+
 # ╔═╡ 986e1b28-ad65-4d2e-ad70-9dc515c8a08c
 md"""
 # 9.4 Comparisons of Series
 > 1. Use the Direct Comparison Test to determine whether a series converges or diverges.
 > 2. Use the Limit Comparison Test to determine whether a series converges or diverges
 """
+
 # ╔═╡ a749dce9-5f63-43f0-95e5-d36558cc6533
 md"## Direct Comparison Test"
+
 # ╔═╡ 22fd0b92-cfad-450e-b855-1ce7648fb93b
 cm"""
 $(bth("Direct Comparison Test"))
@@ -546,6 +608,7 @@ Let ``0 < a_n \leq b_n`` for all ``n``.
 1. If ``\displaystyle\sum_{n=1}^{\infty} b_n`` converges, then ``\displaystyle\sum_{n=1}^{\infty} a_n`` converges.
 2. If ``\displaystyle\sum_{n=1}^{\infty} a_n`` diverges, then ``\displaystyle\sum_{n=1}^{\infty} b_n`` diverges.
 """
+
 # ╔═╡ be156c4f-af26-4e6e-907d-99e73b68c4aa
 cm"""
 $(ex(1,"Using the Direct Comparison Test"))
@@ -554,6 +617,7 @@ Determine the convergence or divergence of
 \sum_{n=1}^{\infty} \frac{1}{2+3^n}
 ```
 """
+
 # ╔═╡ 07aa2d3e-0387-4e41-bcbc-d24d5f572497
 cm"""
 $(ex(2,"Using the Direct Comparison Test"))
@@ -562,8 +626,10 @@ Determine the convergence or divergence of
 \sum_{n=1}^{\infty} \frac{1}{2+\sqrt{n}}
 ```
 """
+
 # ╔═╡ f65563e8-6eef-4526-be12-7051d3e8d437
 md"## Limit Comparison Test"
+
 # ╔═╡ 080f38b7-8cc3-497a-badf-5748c617f56b
 cm"""
 $(bth("Limit Comparison Test"))
@@ -577,6 +643,7 @@ where ``L`` is finite and positive, then
 ```
 either both converge or both diverge.
 """
+
 # ╔═╡ 8c6ba535-e37f-4210-8d59-5a28afcff45f
 cm"""
 $(ex(3,"Using the Limit Comparison Test"))
@@ -586,6 +653,7 @@ Show that the general harmonic series below diverges.
 \sum_{n=1}^{\infty} \frac{1}{a n+b}, \quad a>0, \quad b>0
 ```
 """
+
 # ╔═╡ d8b8ec7c-fee3-4475-8552-6b33b091a728
 cm"""
 $(ex(4,"Using the Limit Comparison Test"))
@@ -594,6 +662,7 @@ Determine the convergence or divergence of
 \sum_{n=1}^{\infty} \frac{\sqrt{n}}{n^2+1}
 ```
 """
+
 # ╔═╡ 61ebbc9f-8bc3-4712-9bd5-d1bad2bc6640
 cm"""
 $(ex(5,"Using the Limit Comparison Test"))
@@ -602,6 +671,7 @@ Determine the convergence or divergence of
 \sum_{n=1}^{\infty} \frac{n 2^n}{4 n^3+1}
 ```
 """
+
 # ╔═╡ caa1abe9-b736-4cc1-a8c6-ecada36e449a
 cm"""
 ### Tests
@@ -609,6 +679,7 @@ cm"""
 2. Integral Test
 3. Comparizon Test (Limit Comparizon Test)
 """
+
 # ╔═╡ 1a9ea230-6841-429e-bcca-f013d39514a9
 md"""
 # 9.5 Alternating Series
@@ -617,8 +688,10 @@ md"""
 > 3. Classify a convergent series as absolutely or conditionally convergent.
 > 4. Rearrange an infinite series to obtain a different sum.
 """
+
 # ╔═╡ 15f491d1-9436-44b1-a307-0ebd98cdf722
 md"## Alternating Series"
+
 # ╔═╡ 222d45a6-60f2-49c1-a10e-ae2688bd6734
 cm"""
 $(bth("Alternating Series Test"))
@@ -630,6 +703,7 @@ converge when these two conditions are met.
 1. ``\lim _{n \rightarrow \infty} a_n=0``
 2. ``a_{n+1} \leq a_n``, for all ``n``
 """
+
 # ╔═╡ 3cdf3d2b-81e7-4b91-ae61-f7cc214d5154
 cm"""
 $(ex(1,"Using the Alternating Series Test"))
@@ -639,6 +713,7 @@ Determine the convergence or divergence of
 \sum_{n=1}^{\infty}(-1)^{n+1} \frac{1}{n} .
 ```
 """
+
 # ╔═╡ c4a55daf-8b5f-48e2-90e8-1c215deeb804
 cm"""
 $(ex(2,"Using the Alternating Series Test"))
@@ -648,6 +723,7 @@ Determine the convergence or divergence of
 \sum_{n=1}^{\infty} \frac{n}{(-2)^{n-1}} .
 ```
 """
+
 # ╔═╡ f94aa75a-2712-4936-9c4a-06b2a623b904
 let
     a(n) = n / 2^(n - 1)
@@ -655,6 +731,7 @@ let
     s(n) = sum(b(i) for i in 1:n)
     s(10), a(11)
 end
+
 # ╔═╡ a946547f-8507-49ec-b5fc-007dc89d0e92
 cm"""
 $(ex(3,"When the Alternating Series Test Does Not Apply"))
@@ -667,8 +744,10 @@ b.
 \frac{2}{1}-\frac{1}{1}+\frac{2}{2}-\frac{1}{2}+\frac{2}{3}-\frac{1}{3}+\frac{2}{4}-\frac{1}{4}+\cdots
 ```
 """
+
 # ╔═╡ 376852e6-9a1b-4f86-8681-d307c7fd610a
 md"##  Alternating Series Remainder"
+
 # ╔═╡ 218c723f-8921-475b-b9be-9e88a3522829
 cm"""
 $(bth("Alternating Series Remainder"))
@@ -678,6 +757,7 @@ If a convergent alternating series satisfies the condition ``a_{n+1} \leq a_n``,
 ```
 
 """
+
 # ╔═╡ b4e85b19-989f-4caf-85f7-519d95178a4d
 cm"""
 $(ex(4,"Approximating the Sum of an Alternating Series"))
@@ -686,6 +766,7 @@ Approximate the sum of the series by its first six terms.
 \sum_{n=1}^{\infty}(-1)^{n+1}\left(\frac{1}{n!}\right)=\frac{1}{1!}-\frac{1}{2!}+\frac{1}{3!}-\frac{1}{4!}+\frac{1}{5!}-\frac{1}{6!}+\cdots
 ```
 """
+
 # ╔═╡ 4f407428-dd3b-4df4-9fdc-9cff3aaafb56
 let
     a(n) = (1 / factorial(n))
@@ -695,6 +776,7 @@ let
     s6, a(7)
     s6 - a(7), s6 + a(7)
 end
+
 # ╔═╡ f6330660-6de9-454a-b23a-3b64e763b17a
 cm"""
 $(ex(5,"Finding the Number of Terms"))
@@ -703,6 +785,7 @@ Determine the number of terms required to approximate the sum of the series with
 \sum_{n=1}^{\infty} \frac{(-1)^{n+1}}{n^4}
 ```
 """
+
 # ╔═╡ 10b81e79-03ff-46fb-8557-172b3f51dce3
 let
     a(n) = (1 / n^4)
@@ -712,19 +795,23 @@ let
     N = 5
     s(5) - a(6), s(5) + a(6)
 end
+
 # ╔═╡ 47754429-df92-4523-b459-5fb6d76bd67a
 md"## Absolute and Conditional Convergence"
+
 # ╔═╡ bc81fb58-4060-41d3-bc7c-fc96e2627c77
 cm"""
 $(bth("Absolute Convergence"))
 If the series ``\Sigma\left|a_n\right|`` converges, then the series ``\Sigma a_n`` also converges.
 """
+
 # ╔═╡ 93e8dfc5-8bbe-4642-bef0-e5fcd0c9b781
 cm"""
 $(define("Absolute and Conditional Convergence"))
 1. The series ``\sum a_n`` is __absolutely convergent__ when ``\Sigma\left|a_n\right|`` converges.
 2. The series ``\sum a_n`` is __conditionally convergent__ when ``\sum a_n`` converges but ``\Sigma\left|a_n\right|`` diverges.
 """
+
 # ╔═╡ ad68d8e3-815a-4498-9132-d144f4f3f958
 cm"""
 - __Abs. Convergence__
@@ -736,6 +823,7 @@ cm"""
 \sum_{n=1}^{\infty}\frac{(-1)^{n+1}}{n}
 ```
 """
+
 # ╔═╡ 22b0134b-6a5c-4a5c-8daa-966c8c636eeb
 cm"""
 $(ex(6,"Absolute and Conditional Convergence"))
@@ -746,6 +834,7 @@ a. ``\sum_{n=0}^{\infty} \frac{(-1)^n n!}{2^n}=\frac{0!}{2^0}-\frac{1!}{2^1}+\fr
 b. ``\sum_{n=1}^{\infty} \frac{(-1)^n}{\sqrt{n}}=-\frac{1}{\sqrt{1}}+\frac{1}{\sqrt{2}}-\frac{1}{\sqrt{3}}+\frac{1}{\sqrt{4}}-\cdots``
 
 """
+
 # ╔═╡ 485e0d4f-ba2d-4493-bf66-5b4c39eee8c8
 cm"""
 $(ex(7,"Absolute and Conditional Convergence"))
@@ -755,13 +844,16 @@ a. ``\displaystyle\sum_{n=1}^{\infty} \frac{(-1)^{n(n+1) / 2}}{3^n}=-\frac{1}{3}
 
 b. ``\displaystyle\sum_{n=1}^{\infty} \frac{(-1)^n}{\ln (n+1)}=-\frac{1}{\ln 2}+\frac{1}{\ln 3}-\frac{1}{\ln 4}+\frac{1}{\ln 5}-\cdots``
 """
+
 # ╔═╡ 0cfd9bcf-2545-4df2-a70f-3334b8454e31
 md"## Rearrangement of Series"
+
 # ╔═╡ c7201240-7f39-4904-8fd1-5cbbd87800ca
 cm"""
 1. If a series is __absolutely convergent__, then its terms can be rearranged in any order without changing the sum of the series.
 2. If a series is __conditionally convergent__, then its terms can be rearranged to give a different sum.
 """
+
 # ╔═╡ 54f2a8e1-03c2-4cd9-8159-9b8fbdda29bb
 cm"""
 $(ex(8,"Rearrangement of a Series"))
@@ -773,6 +865,7 @@ The alternating harmonic series converges to ``\ln 2``. That is,
 
 Rearrange the terms of the series to produce a different sum.
 """
+
 # ╔═╡ e8c01c5f-4d8b-4fdc-8e37-90fdd449492a
 md"""
 # 9.6 The Ratio and Root Tests
@@ -780,8 +873,10 @@ md"""
 > 2. Use the Root Test to determine whether a series converges or diverges.
 > 3. Review the tests for convergence and divergence of an infinite series.
 """
+
 # ╔═╡ f4f976af-baaf-495a-bf31-c7226040fe35
 md"## The Ratio Test"
+
 # ╔═╡ a3c046e9-7c15-46e6-8288-0ec16000fe80
 cm"""
 $(bth("Ratio Test"))
@@ -790,6 +885,7 @@ Let ``\sum a_n`` be a series with nonzero terms.
 2. The series ``\sum a_n`` diverges when ``\displaystyle\lim _{n \rightarrow \infty}\left|\frac{a_{n+1}}{a_n}\right|>1`` or ``\displaystyle\lim _{n \rightarrow \infty}\left|\frac{a_{n+1}}{a_n}\right|=\infty``.
 3. The Ratio Test is inconclusive when ``\displaystyle\lim _{n \rightarrow \infty}\left|\frac{a_{n+1}}{a_n}\right|=1``.
 """
+
 # ╔═╡ 775ee452-d3c0-46e4-a1bb-07939b37d050
 cm"""
 $(ex(1,"Using the Ratio Test"))
@@ -798,6 +894,7 @@ Determine the convergence or divergence of
 \sum_{n=0}^{\infty} \frac{2^n}{n!} .
 ```
 """
+
 # ╔═╡ af54ce43-acb4-4b14-8f6d-2fffb4a55c69
 cm"""
 $(ex(2,"Using the Ratio Test"))
@@ -807,6 +904,7 @@ a. ``\displaystyle\sum_{n=0}^{\infty} \frac{n^2 2^{n+1}}{3^n}``
 
 b. ``\displaystyle\sum_{n=1}^{\infty} \frac{n^n}{n!}``
 """
+
 # ╔═╡ d9a49705-1e01-4e98-9915-f285cb16df28
 cm"""
 $(ex(3,"A Failure of the Ratio Test"))
@@ -816,8 +914,10 @@ Determine the convergence or divergence of
 ```
 
 """
+
 # ╔═╡ f1b64d24-e2d4-4f20-83d5-095333a5264c
 md"## The Root Test"
+
 # ╔═╡ cf6f8342-703a-49e7-ab9b-35cce160b9f3
 cm"""
 $(bth("Root Test"))
@@ -832,8 +932,10 @@ Determine the convergence or divergence of
 \sum_{n=1}^{\infty} \frac{e^{2 n}}{n^n} .
 ```
 """
+
 # ╔═╡ a98edbef-50c2-44fa-ae24-241c9bff99f7
 md"## Strategies for Testing Series"
+
 # ╔═╡ 8e645546-7f33-42a5-b6b6-4f100f93918f
 cm"""
 $(bbl("GUIDELINES FOR TESTING A SERIES FOR CONVERGENCE OR DIVERGENCE",""))
@@ -861,18 +963,22 @@ f. ``\displaystyle \sum_{n=1}^{\infty} \frac{n!}{10^n}``
 g. ``\displaystyle \sum_{n=1}^{\infty}\left(\frac{n+1}{2 n+1}\right)^n``
 
 """
+
 # ╔═╡ a12f4fa0-0597-4447-a731-603849fbdcba
 cm"""
 $(post_img("https://www.dropbox.com/scl/fi/0t0hwwc5omsvbcmahvbxp/SUMMARY_OF_TESTS_FOR_SERIES.png?rlkey=8e9l8eri9mezitxlfoc3r40nq&dl=1",700))
 """
+
 # ╔═╡ 35b4d21b-c240-4a9c-867f-7a929e933e4e
 md"""
 # 9.7 Taylor Polynomials and Approximations
 > 1. Find polynomial approximations of elementary functions and compare them with the elementary functions.
 > 2. Find Taylor and Maclaurin polynomial approximations of elementary functions.
 """
+
 # ╔═╡ 4daf8c01-54e8-48b4-a991-f784fdc9f14f
 md"## Polynomial Approximations of Elementary Functions"
+
 # ╔═╡ 2e6b9a41-d56e-4e95-ba78-f360e008335d
 cm"""
 $(ex("Ex",""))
@@ -882,13 +988,16 @@ P(0)=f(0), P'(0)=f'(0), P''(0)=f''(0), \cdots, P^{(n)}(0)=f^{(n)}(0).
 ```
 
 """
+
 # ╔═╡ 5d2d71fe-1aff-4d28-b1d2-47dc3dd7485a
 sec_97_n_str = @bind sec_97_n NumberField(0:10, default=0);
 md"";
+
 # ╔═╡ 32c8cac4-b560-45bf-9c53-6a971b11e731
 cm"""
 ``n =`` $sec_97_n_str
 """
+
 # ╔═╡ 01ad1443-6736-41e3-ab73-c5ccdf373ab9
 let
     n = sec_97_n
@@ -915,6 +1024,7 @@ let
         label=P(n),
     )
 end
+
 # ╔═╡ f4dd80e2-3df2-4c9f-bd29-5a8a92d0639a
 let
     xs = [-1.0; -0.2; -0.1; 0; 0.1; 0.2; 1]
@@ -950,8 +1060,10 @@ let
     </table>
     """
 end
+
 # ╔═╡ e08ab6af-108d-4e87-91fb-051c5fd19fcd
 md"## Taylor and Maclaurin Polynomials"
+
 # ╔═╡ 36431e5d-97bd-4843-9775-6211c4a2d8b3
 cm"""
 $(define("nth Taylor Polynomial and nth Maclaurin Polynomial"))
@@ -965,6 +1077,7 @@ P_n(x)=f(0)+f^{\prime}(0) x+\frac{f^{\prime \prime}(0)}{2!} x^2+\frac{f^{\prime 
 ```
 is also called the __``\boldsymbol{n}`` th Maclaurin polynomial for ``\boldsymbol{f}``__.
 """
+
 # ╔═╡ 6abdb5a7-5b5b-44ed-9ba8-ac20c59c6dc7
 cm"""
 $(ex(4,"Finding Taylor Polynomials for ln x"))
@@ -975,6 +1088,7 @@ f(x)=\ln x
 ```
 centered at ``c=1``.
 """
+
 # ╔═╡ e158bb3c-c351-41b1-ae8d-8f60297d6814
 let
     n = 3
@@ -1002,6 +1116,7 @@ let
         label=P(n),
     )
 end
+
 # ╔═╡ 900ab898-f39e-4246-9d50-6430a2d6f645
 cm"""
 $(ex(5,"Finding Maclaurin Polynomials for `cos x`"))
@@ -1009,6 +1124,7 @@ Find the Maclaurin polynomials ``P_0, P_2, P_4``, and ``P_6`` for ``f(x)=\cos x`
 
 Use ``P_6(x)`` to approximate the value of ``\cos (0.1)``.
 """
+
 # ╔═╡ c73fea91-cca0-4f7f-9c38-f85e6f3c56ae
 let
     x = 50
@@ -1016,17 +1132,20 @@ let
     Pn(x) = sum((-1)^(i) * x^(2i) / (factorial(2i)) for i in 0:n)
     cos(x), Pn(x)
 end
+
 # ╔═╡ 4bfbb486-642d-4419-9039-eabe2569336a
 cm"""
 $(ex(6,"Finding a Taylor Polynomial for `sin x`"))
 Find the third Taylor polynomial for ``f(x)=\sin x``, expanded about ``c=\pi / 6``.
 """
+
 # ╔═╡ f1f560ef-630c-4161-98a7-b56ad41ad154
 cm"""
 $(ex(7,"Approximation Using Maclaurin Polynomials"))
 
 Use a fourth Maclaurin polynomial to approximate the value of ``\ln (1.1)``.
 """
+
 # ╔═╡ b22a52b9-1ffa-49d3-9945-74fb590af5e4
 md"""
  # 9.8 Power Series
@@ -1035,8 +1154,10 @@ md"""
  > 1. Determine the endpoint convergence of a power series.
  > 1. Differentiate and integrate a power series.
 """
+
 # ╔═╡ 24bb5b72-935e-40a9-b5c1-1d341b1c4392
 md"##  Power Series"
+
 # ╔═╡ fc6da046-815f-4d1b-8a47-e886907f0c3c
 cm"""
 $(define("Power Series"))
@@ -1050,8 +1171,10 @@ is called a __power series__. More generally, an infinite series of the form
 ```
 is called a __power series centered at ``\boldsymbol{c}``__, where ``c`` is a constant.
 """
+
 # ╔═╡ 42bff813-162c-4ee3-80cf-8a6a2a301de5
 md"##  Radius and Interval of Convergence"
+
 # ╔═╡ 621f4afc-8b5d-4f51-a4e6-4a5a4c65f39b
 cm"""
 A power series in ``x`` can be viewed as a function of ``x``
@@ -1074,6 +1197,7 @@ Determination of the domain of a power series is the primary concern in this sec
 </div>
 
 """
+
 # ╔═╡ 0aa832ba-13d0-4e31-aa02-3e166d4a837c
 cm"""
 $(ex(2,"Finding the Radius of Convergence"))
@@ -1082,6 +1206,7 @@ Find the radius of convergence of
 \sum_{n=0}^{\infty} n!x^n.
 ```
 """
+
 # ╔═╡ f38df00c-ce6a-4e5f-ab1f-34f1009c4d57
 cm"""
 $(ex(3,"Finding the Radius of Convergence"))
@@ -1090,7 +1215,9 @@ Find the radius of convergence of
 \sum_{n=0}^{\infty} 3(x-2)^n.
 ```
 """
+
 # ╔═╡ 9480006c-fd6a-4d5e-831f-4ef1b923d972
+
 # ╔═╡ 0468a238-b5ce-4c0b-82eb-d3525646c66c
 cm"""
 $(ex(4,"Finding the Radius of Convergence"))
@@ -1099,6 +1226,7 @@ Find the radius of convergence of
 \sum_{n=0}^{\infty} \frac{(-1)^n x^{2 n+1}}{(2 n+1)!}
 ```
 """
+
 # ╔═╡ ae9cbf12-fd6c-4a9d-b292-a691bfcdace2
 cm"""
 $(bth("Convergence of a Power Series"))
@@ -1122,8 +1250,10 @@ $(add_space(10))and diverges for
 
 - The set of all values of ``x`` for which the power series converges is the __interval of convergence__ of the power series.
 """
+
 # ╔═╡ fa50f561-b6a3-4fea-8b96-d4fbbe8dcc8a
 md"## Endpoint Convergence"
+
 # ╔═╡ 732098bf-c3da-4e88-b3d0-698bcd19f2f9
 cm"""
 $(ex(5,"Finding the Interval of Convergence"))
@@ -1133,6 +1263,7 @@ Find the interval of convergence of
 \sum_{n=1}^{\infty} \frac{x^n}{n}
 ```
 """
+
 # ╔═╡ a633e01b-7bc0-42ad-a1bc-7e3c0c6323ae
 cm"""
 $(ex(6,"Finding the Interval of Convergence"))
@@ -1141,6 +1272,7 @@ Find the interval of convergence of
 \sum_{n=0}^{\infty} \frac{(-1)^n(x+1)^n}{2^n}.
 ```
 """
+
 # ╔═╡ c0cf197b-0638-463f-9472-7418c843d6de
 cm"""
 $(ex(6,"Finding the Interval of Convergence"))
@@ -1149,8 +1281,10 @@ Find the interval of convergence of
 \sum_{n=1}^{\infty} \frac{x^n}{n^2}.
 ```
 """
+
 # ╔═╡ 412f219d-f1b3-4ad4-8459-badfc2993532
 md"## Differentiation and Integration of Power Series"
+
 # ╔═╡ fdbb1b07-bdb9-426f-b75d-6b94b0283c11
 cm"""
 $(bth("Properties of Functions Defined by Power Series"))
@@ -1184,6 +1318,7 @@ f^{\prime}(x) & =\sum_{n=1}^{\infty} n a_n(x-c)^{n-1} \\
 
 The __radius of convergence__ of the series obtained by differentiating or integrating a power series is the same as that of the original power series. The __interval of convergence__, however, may differ as a result of the behavior at the endpoints.
 """
+
 # ╔═╡ 457d84d7-7db0-43e3-a76e-810b28236779
 cm"""
 $(ex(8,"Intervals of Convergence for f(x), f'(x), and ∫f(x) d x"))
@@ -1197,20 +1332,24 @@ Find the interval of convergence for each of the following.
 - b. ``\displaystyle f(x)``
 - c. ``\displaystyle f^{\prime}(x)``
 """
+
 # ╔═╡ 11841a6f-c0b0-426a-9d09-3b309f564a9c
 md"""
 # 9.9 Representation of Functions by Power Series
 > - Find a geometric power series that represents a function.
 > - Construct a power series using series operations.
 """
+
 # ╔═╡ 35ddd4ab-86db-4d69-8d9b-458365b1c7ae
 md"## Geometric Power Series"
+
 # ╔═╡ 343254fa-c7e5-4abd-8bd1-a95da1abd6c6
 cm"""
 ```math
 \frac{1}{1-x} = \sum_{n=1}^{\infty}x^n = 1 + x + x^2 + x^3 + \cdots, \quad |x| < 1.
 ```
 """
+
 # ╔═╡ d085cbd1-5ae3-41b7-9608-45d838131c78
 let
     n = 15
@@ -1238,18 +1377,22 @@ let
         label=P(n),
     )
 end
+
 # ╔═╡ e2b47e81-0d2f-40bf-a6e9-cda6633ce5c9
 cm"""
 $(ex(1,"Finding a Geometric Power Series Centered at 0"))
 Find a power series for ``f(x)=\displaystyle\frac{4}{x+2}``, centered at ``0`` .
 """
+
 # ╔═╡ 866e1c81-ee36-4ec5-af9a-bf4aa7874be8
 cm"""
 $(ex(2,"Finding a Geometric Power Series Centered at 1"))
 Find a power series for ``f(x)=\displaystyle\frac{1}{x}``, centered at ``1`` .
 """
+
 # ╔═╡ 9f65c135-02ba-4f1f-bef9-e9695adb3df9
 md"## Operations with Power Series"
+
 # ╔═╡ d8a67bb3-3805-4ee8-8b5d-12310b128e15
 cm"""
 $(bbl("Operations with Power Series",""))
@@ -1258,6 +1401,7 @@ Let ``\displaystyle f(x)=\sum_{n=0}^{\infty} a_n x^n`` and ``g(x)=\sum_{n=0}^{\i
 2. ``\displaystyle f\left(x^N\right)=\sum_{n=0}^{\infty} a_n x^{n N}``
 3. ``\displaystyle f(x) \pm g(x)=\sum_{n=0}^{\infty}\left(a_n \pm b_n\right) x^n``
 """
+
 # ╔═╡ b9261546-c5e2-433b-ac9b-e5c59e124768
 cm"""
 $(ex(3,"Adding Two Power Series"))
@@ -1267,6 +1411,7 @@ f(x)=\frac{3 x-1}{x^2-1}
 ```
 centered at 0 .
 """
+
 # ╔═╡ c2b679dc-4cae-4e83-8408-ac1840000a8b
 cm"""
 $(ex(4,"Finding a Power Series by Integration"))
@@ -1276,6 +1421,7 @@ f(x)=\ln x
 ```
 centered at 1 .
 """
+
 # ╔═╡ c045541b-b0ca-46e6-8a99-1938b6c7f980
 cm"""
 $(ex(5,"Finding a Power Series by Integration"))
@@ -1286,6 +1432,7 @@ g(x)=\arctan x
 ```
 centered at 0 .
 """
+
 # ╔═╡ 2f54441f-5562-4d7f-a53a-814b67aafdb6
 let
     f(x; n=5) = sum(i -> begin
@@ -1296,6 +1443,7 @@ let
     map(i -> 4 * i, (f(1), π / 4, pi_over_4))
 
 end
+
 # ╔═╡ b9dee3b1-6502-4797-9c57-4a52123dea4f
 md"""
 # 9.10 taylor and Maclaurin Series
@@ -1303,12 +1451,15 @@ md"""
 > 1. Find a binomial series.
 > 1. Use a basic list of Taylor series to find other Taylor series.
 """
+
 # ╔═╡ e3a0a647-ba9e-4835-ba70-c769baba876b
 md"""
 > * Students have to memorize the power series representations of the functions $f(x)=\frac{1}{1+x}, e^x, \sin x, \cos x, \arctan x,(1+x)^k$ in page 674.
 """
+
 # ╔═╡ 53e4cf4b-1fb6-41fd-bb29-67a5ccabfcbe
 md"## POWER SERIES FOR ELEMENTARY FUNCTIONS"
+
 # ╔═╡ a35fe3e0-2857-4e91-82b1-d11bc228d6d2
 cm"""
 <div style="display:flex;justify-content: space-between;flex-wrap: wrap;">
@@ -1388,8 +1539,10 @@ Convergence
 </div>
 
 """
+
 # ╔═╡ bdb0ba5e-de80-4289-92ba-8f7366b0e0c9
 md"## Taylor Series and Maclaurin Series"
+
 # ╔═╡ 3d0028e3-55b0-4888-add4-ab689ffa1f23
 cm"""
 $(bth("The Form of a Convergent Power Series"))
@@ -1405,6 +1558,7 @@ f(x)=f(c) & +f^{\prime}(c)(x-c)+\frac{f^{\prime \prime}(c)}{2!}(x-c)^2+\cdots \\
 \end{aligned}
 ```
 """
+
 # ╔═╡ d4980faa-1acc-4d7a-91b4-d95092c97708
 cm"""
 $(define("Taylor and Maclaurin Series"))
@@ -1414,6 +1568,7 @@ If a function ``f`` has derivatives of all orders at ``x=c``, then the series
 ```
 is called the Taylor series for ``\boldsymbol{f}`` at ``\boldsymbol{c}``. Moreover, if ``c=0``, then the series is the Maclaurin series for ``f``.
 """
+
 # ╔═╡ 1608068c-bdfe-413a-85bf-71f6a6e51357
 cm"""
 $(ex(1,"Forming a Power Series"))
@@ -1428,6 +1583,7 @@ to form the Maclaurin series
 ```
 and determine the interval of convergence.
 """
+
 # ╔═╡ 1d24d351-4b8f-471c-92f6-1fb4cc336a3a
 cm"""
 $(ex(3,"Maclaurin Series for a Composite Function"))
@@ -1436,13 +1592,16 @@ Find the Maclaurin series for
 f(x)=\sin x^2
 ```
 """
+
 # ╔═╡ 8ef89ddc-1cef-45d4-8887-3588f23df7cf
 md"##  Binomial Series"
+
 # ╔═╡ 55f4cb06-b2e2-4eb8-a952-19fa0a5bc650
 cm"""
 $(ex(4,"Binomial Series"))
 Find the Maclaurin series for ``f(x)=(1+x)^k`` and determine its radius of convergence. Assume that ``k`` is not a positive integer and ``k \neq 0``.
 """
+
 # ╔═╡ 597d7998-0d50-4e36-8c57-6817b892c11b
 cm"""
 $(ex(5,"Finding a Binomial Series"))
@@ -1452,8 +1611,10 @@ Find the power series for
 f(x)=\sqrt[3]{1+x}
 ```
 """
+
 # ╔═╡ c7c77627-9b35-4f07-ba63-16a7223eed84
 md"## Deriving Taylor Series from a Basic List"
+
 # ╔═╡ 51275f9c-9d72-450a-8b22-35fe0ebf4d45
 cm"""
 $(ex(6,"Deriving a Power Series from a Basic List"))
@@ -1462,17 +1623,20 @@ Find the power series for
 f(x)=\cos \sqrt{x}
 ```
 """
+
 # ╔═╡ d24d51eb-5cef-4b12-b8c5-02b2e549482d
 cm"""
 $(ex(7,"Multiplication of Power Series"))
 Find the first three nonzero terms in the Maclaurin series ``e^x \arctan x``.
 """
+
 # ╔═╡ e26ad50a-67db-449b-aa90-1bd87e06d5cb
 cm"""
 $(ex(8,"Division of Power Series"))
 
 Find the first three nonzero terms in the Maclaurin series ``\tan x``.
 """
+
 # ╔═╡ 224f4771-7bf7-4433-9f36-b82875ad4b6c
 cm"""
 $(ex(9,"A Power Series for sin²x"))
@@ -1482,6 +1646,7 @@ Find the power series for
 f(x)=\sin ^2 x
 ```
 """
+
 # ╔═╡ 66e78b57-c224-4beb-bddb-e4b5a2997d2c
 cm"""
 $(ex(10,"Power Series Approximation of a Definite Integral"))
@@ -1492,6 +1657,7 @@ Use a power series to approximate
 ```
 with an error of less than 0.01 .
 """
+
 # ╔═╡ f2d4c2a5-f486-407b-b31b-d2efcc7476b3
 begin
     using CommonMark
@@ -1513,6 +1679,7 @@ begin
     # using OrdinaryDiffEq
     using IntervalArithmetic
 end
+
 # ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
 function rect(x, Δx, xs, f; direction=:x)
     if direction == :y
@@ -1522,6 +1689,7 @@ function rect(x, Δx, xs, f; direction=:x)
     end
 
 end
+
 # ╔═╡ 8315fb27-89e4-44a4-a51e-8e55fc3d58e5
 function reimannSum(f, n, a, b; method="l", color=:green, 
 					plot_it=false, 
@@ -1561,6 +1729,7 @@ function reimannSum(f, n, a, b; method="l", color=:green,
     s = isnothing(ss) ? round(sum(f.(partition) * Δx), sigdigits=6) : ss
     return plot_it ? (p, s) : s
 end
+
 # ╔═╡ ef081dfa-b610-4c7a-a039-7258f4f6e80e
 begin
     function add_space(n=1)
@@ -1685,8 +1854,10 @@ begin
 
     @htl("")
 end
+
 # ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
 initialize_eqref()
+
 # ╔═╡ 107407c8-5da0-4833-9965-75a82d84a0fb
 @htl("""
 <style>
@@ -1746,6 +1917,7 @@ ul li:before {
     }
 </style>
 """)
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
@@ -1782,6 +1954,7 @@ PrettyTables = "~3.3.2"
 QRCoders = "~1.4.5"
 SymPy = "~2.3.3"
 """
+
 # ╔═╡ 00000000-0000-0000-0000-000000000002
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
@@ -3576,5 +3749,5 @@ version = "1.13.0+0"
 # ╠═ef081dfa-b610-4c7a-a039-7258f4f6e80e
 # ╠═da9230a6-088d-4735-b206-9514c12dd223
 # ╠═107407c8-5da0-4833-9965-75a82d84a0fb
-# ╠═00000000-0000-0000-0000-000000000001
-# ╠═00000000-0000-0000-0000-000000000002
+# ╟─00000000-0000-0000-0000-000000000001
+# ╟─00000000-0000-0000-0000-000000000002

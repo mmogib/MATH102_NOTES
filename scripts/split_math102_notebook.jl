@@ -73,6 +73,7 @@ function assign_chapter_cells(cells, preamble_ids)
 
     for cell in cells
         cell.id in preamble_ids && continue
+        is_pluto_package_cell(cell) && continue
         chapter = heading_chapter(cell.text)
         if chapter !== nothing && haskey(assigned, chapter)
             active = chapter
@@ -86,11 +87,15 @@ function assign_chapter_cells(cells, preamble_ids)
     return assigned
 end
 
+function is_pluto_package_cell(cell::Cell)
+    cell.id in ("00000000-0000-0000-0000-000000000001", "00000000-0000-0000-0000-000000000002")
+end
+
 function cell_order(cells)
     lines = [CELL_ORDER_START]
     for cell in cells
         # Pluto's cell order uses ╠═ for code-like cells and ╟─ for markdown-like cells.
-        order_prefix = startswith(cell.marker_prefix, "╟") ? "╟─" : "╠═"
+        order_prefix = startswith(cell.marker_prefix, "╟") || is_pluto_package_cell(cell) ? "╟─" : "╠═"
         push!(lines, "# $(order_prefix)$(cell.id)")
     end
     return join(lines, "\n") * "\n"
@@ -99,7 +104,7 @@ end
 function write_notebook(filename::String, cells)
     output = joinpath(OUT_DIR, filename)
     header = "### A Pluto.jl notebook ###\n# v0.20.24\n\nusing Markdown\nusing InteractiveUtils\n\n"
-    body = join((rstrip(cell.text) for cell in cells), "\n") * "\n\n"
+    body = join((rstrip(cell.text) for cell in cells), "\n\n") * "\n\n"
     write(output, header * body * cell_order(cells))
     println("Wrote ", relpath(output, ROOT), " with ", length(cells), " cells")
 end
@@ -108,9 +113,11 @@ function main()
     cells, order_ids = read_notebook()
     cells_by_id = Dict(cell.id => cell for cell in cells)
     ordered_cells = [cells_by_id[id] for id in order_ids if haskey(cells_by_id, id)]
+    package_cells = filter(is_pluto_package_cell, ordered_cells)
+    content_cells = filter(!is_pluto_package_cell, ordered_cells)
 
     first_ch5 = nothing
-    for cell in ordered_cells
+    for cell in content_cells
         if heading_chapter(cell.text) == "5"
             first_ch5 = cell.id
             break
@@ -118,11 +125,11 @@ function main()
     end
     first_ch5 === nothing && error("Could not find first Chapter 5 cell.")
 
-    preamble = choose_preamble(ordered_cells, first_ch5)
+    preamble = choose_preamble(content_cells, first_ch5)
     assigned = assign_chapter_cells(ordered_cells, Set(cell.id for cell in preamble))
 
     for (chapter, filename) in CHAPTERS
-        write_notebook(filename, vcat(preamble, assigned[chapter]))
+        write_notebook(filename, vcat(preamble, assigned[chapter], package_cells))
     end
 end
 
