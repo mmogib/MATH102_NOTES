@@ -14,10 +14,10 @@
 
 ## Chapter Boundary Check
 
-- Chapter 5: detected from `5.2 Area` through the cell before `7.1`.
-- Chapter 7: detected from `7.1 Area of a Region Between Two Curves` through the cell before `8.1`.
-- Chapter 8: detected from `8.1 Basic Integration Rules` through the cell before `9.1`.
-- Chapter 9: detected from `9.1 Sequences` through the end of course content.
+- Chapter 5: detected from `5.2 Area` through the cell before `7.1`; generated 142 cells.
+- Chapter 7: detected from `7.1 Area of a Region Between Two Curves` through the cell before `8.1`; generated 72 cells.
+- Chapter 8: detected from `8.1 Basic Integration Rules` through the cell before `9.1`; generated 81 cells.
+- Chapter 9: detected from `9.1 Sequences` through the end of course content; generated 174 cells.
 
 ## Export Validation
 
