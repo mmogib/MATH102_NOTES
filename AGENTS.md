@@ -10,6 +10,7 @@ This repository contains MATH102 Calculus II course notes authored as Pluto note
 - Export/publish through `export_push.sh` or `export_push.bat` with a commit message.
 - Use `src/export.jl` as the build/export entry point.
 - Treat `docs/` as generated static-site output.
+- Prefer Julia for repository automation scripts. Do not add Python or a Python environment unless there is a clear technical reason.
 
 ## Notebook Split Conventions
 

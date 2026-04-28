@@ -24,6 +24,7 @@ The split should preserve course content, package setup, helper functions, local
 - Do not delete or reorganize assets unless explicitly approved.
 - Add an `AGENTS.md` project guide so future Codex sessions follow the repository-specific workflow.
 - Add/update Codex project memory so future sessions remember the MATH102 split conventions.
+- Prefer Julia for repository automation scripts; do not add Python environments unless there is a clear technical reason.
 
 ## Split Strategy
 
@@ -97,6 +98,7 @@ Create or update `AGENTS.md` with repository-specific instructions:
 - `refs/` is for syllabus/reference material and archived legacy sources.
 - `notes/` is for plans, specs, and discussion notes.
 - Review `.gitignore` before staging broad generated changes.
+- Prefer Julia for repository automation.
 
 Add/update Codex memory with the same durable project conventions, especially:
 

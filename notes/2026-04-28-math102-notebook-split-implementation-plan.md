@@ -6,13 +6,13 @@
 
 **Architecture:** Add a small deterministic splitter script that parses Pluto cells and cell-order metadata, writes standalone chapter notebooks, and preserves the original notebook until validation passes. Update `src/export.jl` to export every chapter notebook and generate `docs/index.html`.
 
-**Tech Stack:** Julia, Pluto.jl, PlutoSliderServer.jl, PowerShell/Bash, Python standard library for the one-off splitter.
+**Tech Stack:** Julia, Pluto.jl, PlutoSliderServer.jl, PowerShell/Bash. Prefer Julia for repository automation; do not add a Python environment for this task.
 
 ---
 
 ## File Structure
 
-- Create: `scripts/split_math102_notebook.py`
+- Create: `scripts/split_math102_notebook.jl`
   - Parses `src/MATH102_NOTES.jl`.
   - Extracts Pluto cells and cell-order metadata.
   - Copies shared preamble cells into each chapter notebook.
@@ -136,7 +136,7 @@ Expected: Commit succeeds if files changed. If `.gitignore` is unchanged, stage 
 ### Task 2: Build The Pluto Splitter
 
 **Files:**
-- Create: `scripts/split_math102_notebook.py`
+- Create: `scripts/split_math102_notebook.jl`
 - Modify: `notes/2026-04-28-math102-split-report.md`
 
 - [ ] **Step 1: Create the scripts directory if needed**
@@ -149,136 +149,134 @@ New-Item -ItemType Directory -Force -Path scripts
 
 Expected: `scripts/` exists.
 
-- [ ] **Step 2: Add the splitter script**
+- [ ] **Step 2: Add the Julia splitter script**
 
-Create `scripts/split_math102_notebook.py`:
+Create `scripts/split_math102_notebook.jl`:
 
-```python
-from __future__ import annotations
-
-import re
-from dataclasses import dataclass
-from pathlib import Path
-
-
-ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "src" / "MATH102_NOTES.jl"
-OUT_DIR = ROOT / "src"
-
-CELL_MARKER_RE = re.compile(r"^# [╔╠╟]═[╡╪─] ([0-9a-f-]{36})\s*$")
-CELL_ORDER_START = "# ╔═╡ Cell order:"
-CELL_ORDER_RE = re.compile(r"^# [╠╟]═([0-9a-f-]{36})\s*$")
-
-CHAPTERS = [
+```julia
+const ROOT = normpath(joinpath(@__DIR__, ".."))
+const SOURCE = joinpath(ROOT, "src", "MATH102_NOTES.jl")
+const OUT_DIR = joinpath(ROOT, "src")
+const CELL_ORDER_START = "# ╔═╡ Cell order:"
+const UUID_RE = r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+const CELL_MARKER_RE = Regex("^# [╔╠╟]═[╡╪─] (" * UUID_RE.pattern * ")\\s*\$", "m")
+const CELL_ORDER_RE = Regex("^# [╠╟]═(" * UUID_RE.pattern * ")\\s*\$", "m")
+const CHAPTERS = [
     ("5", "MATH_102_CH5.jl"),
     ("7", "MATH_102_CH7.jl"),
     ("8", "MATH_102_CH8.jl"),
     ("9", "MATH_102_CH9.jl"),
 ]
 
+struct Cell
+    id::String
+    text::String
+end
 
-@dataclass(frozen=True)
-class Cell:
-    cell_id: str
-    marker: str
-    text: str
+function split_cells(body::String)
+    matches = collect(eachmatch(CELL_MARKER_RE, body))
+    isempty(matches) && error("No Pluto cells found in $SOURCE")
 
-
-def split_cells(body: str) -> list[Cell]:
-    matches = list(CELL_MARKER_RE.finditer(body))
-    if not matches:
-        raise SystemExit("No Pluto cells found.")
-    cells: list[Cell] = []
-    for index, match in enumerate(matches):
-        start = match.start()
-        end = matches[index + 1].start() if index + 1 < len(matches) else len(body)
-        cell_text = body[start:end].rstrip() + "\n"
-        cells.append(Cell(cell_id=match.group(1), marker=match.group(0), text=cell_text))
+    cells = Cell[]
+    for (index, match) in pairs(matches)
+        start_index = first(match.offset)
+        end_index = index < length(matches) ? prevind(body, first(matches[index + 1].offset)) : lastindex(body)
+        push!(cells, Cell(match.captures[1], rstrip(body[start_index:end_index]) * "\n"))
+    end
     return cells
+end
 
+function read_notebook()
+    text = read(SOURCE, String)
+    parts = split(text, CELL_ORDER_START; limit=2)
+    length(parts) == 2 || error("Missing Pluto Cell order section.")
 
-def read_notebook() -> tuple[str, list[Cell], list[str]]:
-    text = SOURCE.read_text(encoding="utf-8")
-    if CELL_ORDER_START not in text:
-        raise SystemExit("Missing Pluto Cell order section.")
-    body, order_text = text.split(CELL_ORDER_START, 1)
+    body, order_text = parts
     cells = split_cells(body)
-    order_ids = [m.group(1) for m in CELL_ORDER_RE.finditer(order_text)]
-    if not order_ids:
-        raise SystemExit("No cell IDs found in Pluto Cell order section.")
-    return body, cells, order_ids
+    order_ids = [match.captures[1] for match in eachmatch(CELL_ORDER_RE, order_text)]
+    isempty(order_ids) && error("No cell IDs found in Pluto Cell order section.")
+    return cells, order_ids
+end
 
-
-def heading_chapter(cell_text: str) -> str | None:
+function heading_chapter(text::String)
     patterns = [
-        r'md"""[\s\r\n]*#\s*([5789])\.',
-        r'md"\s*#\s*([5789])\.',
-        r"^\s*#\s*([5789])\.",
+        r"md\"\"\"[\s\r\n]*#\s*([5789])\.",
+        r"md\"\s*#\s*([5789])\.",
+        r"(?m)^\s*#\s*([5789])\.",
     ]
-    for pattern in patterns:
-        match = re.search(pattern, cell_text, flags=re.MULTILINE)
-        if match:
-            return match.group(1)
-    return None
 
+    for pattern in patterns
+        match = match(pattern, text)
+        match === nothing || return match.captures[1]
+    end
+    return nothing
+end
 
-def choose_preamble(cells: list[Cell], first_chapter_cell_id: str) -> list[Cell]:
-    preamble: list[Cell] = []
-    for cell in cells:
-        if cell.cell_id == first_chapter_cell_id:
-            break
-        preamble.append(cell)
+function choose_preamble(cells, first_chapter_cell_id::String)
+    preamble = Cell[]
+    for cell in cells
+        cell.id == first_chapter_cell_id && break
+        push!(preamble, cell)
+    end
     return preamble
+end
 
+function assign_chapter_cells(cells, preamble_ids)
+    assigned = Dict(chapter => Cell[] for (chapter, _) in CHAPTERS)
+    active = nothing
 
-def assign_chapter_cells(cells: list[Cell], preamble_ids: set[str]) -> dict[str, list[Cell]]:
-    assigned = {chapter: [] for chapter, _ in CHAPTERS}
-    active: str | None = None
-    for cell in cells:
-        if cell.cell_id in preamble_ids:
-            continue
+    for cell in cells
+        cell.id in preamble_ids && continue
         chapter = heading_chapter(cell.text)
-        if chapter in assigned:
+        if chapter !== nothing && haskey(assigned, chapter)
             active = chapter
-        if active is not None:
-            assigned[active].append(cell)
-    for chapter, chapter_cells in assigned.items():
-        if not chapter_cells:
-            raise SystemExit(f"No cells assigned to Chapter {chapter}.")
+        end
+        active === nothing || push!(assigned[active], cell)
+    end
+
+    for (chapter, _) in CHAPTERS
+        isempty(assigned[chapter]) && error("No cells assigned to Chapter $chapter.")
+    end
     return assigned
+end
 
-
-def cell_order(cells: list[Cell]) -> str:
+function cell_order(cells)
     lines = [CELL_ORDER_START]
-    for cell in cells:
-        lines.append(f"# ╠═{cell.cell_id}")
-    return "\n".join(lines) + "\n"
+    append!(lines, ["# ╠═$(cell.id)" for cell in cells])
+    return join(lines, "\n") * "\n"
+end
 
-
-def write_notebook(filename: str, cells: list[Cell]) -> None:
-    output = OUT_DIR / filename
+function write_notebook(filename::String, cells)
+    output = joinpath(OUT_DIR, filename)
     header = "### A Pluto.jl notebook ###\n# v0.20.24\n\nusing Markdown\nusing InteractiveUtils\n\n"
-    body = "\n".join(cell.text.rstrip() for cell in cells).rstrip() + "\n\n"
-    output.write_text(header + body + cell_order(cells), encoding="utf-8")
-    print(f"Wrote {output.relative_to(ROOT)} with {len(cells)} cells")
+    body = join(rstrip(cell.text) for cell in cells, "\n") * "\n\n"
+    write(output, header * body * cell_order(cells))
+    println("Wrote ", relpath(output, ROOT), " with ", length(cells), " cells")
+end
 
+function main()
+    cells, order_ids = read_notebook()
+    cells_by_id = Dict(cell.id => cell for cell in cells)
+    ordered_cells = [cells_by_id[id] for id in order_ids if haskey(cells_by_id, id)]
 
-def main() -> None:
-    _, cells, order_ids = read_notebook()
-    cells_by_id = {cell.cell_id: cell for cell in cells}
-    ordered_cells = [cells_by_id[cell_id] for cell_id in order_ids if cell_id in cells_by_id]
-    first_ch5 = next((cell.cell_id for cell in ordered_cells if heading_chapter(cell.text) == "5"), None)
-    if first_ch5 is None:
-        raise SystemExit("Could not find first Chapter 5 cell.")
+    first_ch5 = nothing
+    for cell in ordered_cells
+        if heading_chapter(cell.text) == "5"
+            first_ch5 = cell.id
+            break
+        end
+    end
+    first_ch5 === nothing && error("Could not find first Chapter 5 cell.")
+
     preamble = choose_preamble(ordered_cells, first_ch5)
-    preamble_ids = {cell.cell_id for cell in preamble}
-    assigned = assign_chapter_cells(ordered_cells, preamble_ids)
-    for chapter, filename in CHAPTERS:
-        write_notebook(filename, preamble + assigned[chapter])
+    assigned = assign_chapter_cells(ordered_cells, Set(cell.id for cell in preamble))
 
+    for (chapter, filename) in CHAPTERS
+        write_notebook(filename, vcat(preamble, assigned[chapter]))
+    end
+end
 
-if __name__ == "__main__":
-    main()
+main()
 ```
 
 - [ ] **Step 3: Run the splitter**
@@ -286,7 +284,7 @@ if __name__ == "__main__":
 Run:
 
 ```powershell
-python scripts\split_math102_notebook.py
+julia --project=. scripts\split_math102_notebook.jl
 ```
 
 Expected output:
@@ -323,7 +321,7 @@ Expected: Chapter 5 headings only in `MATH_102_CH5.jl`, Chapter 7 headings only 
 Run:
 
 ```powershell
-git add scripts\split_math102_notebook.py src\MATH_102_CH5.jl src\MATH_102_CH7.jl src\MATH_102_CH8.jl src\MATH_102_CH9.jl notes\2026-04-28-math102-split-report.md
+git add scripts\split_math102_notebook.jl src\MATH_102_CH5.jl src\MATH_102_CH7.jl src\MATH_102_CH8.jl src\MATH_102_CH9.jl notes\2026-04-28-math102-split-report.md
 git commit -m "Split MATH102 notebook by chapter"
 ```
 
@@ -545,15 +543,24 @@ Expected: Any local references point to existing files relative to the notebook 
 Run:
 
 ```powershell
-python -c "from pathlib import Path; import re; ok=True; \
-for p in Path('src').glob('MATH_102_CH*.jl'): \
- t=p.read_text(encoding='utf-8'); body, order=t.split('# ╔═╡ Cell order:',1); \
- cells=set(re.findall(r'^# [╔╠╟]═[╡╪─] ([0-9a-f-]{36})', body, re.M)); \
- ordered=set(re.findall(r'^# [╠╟]═([0-9a-f-]{36})', order, re.M)); \
- missing=cells-ordered; extra=ordered-cells; \
- print(p, 'cells', len(cells), 'ordered', len(ordered), 'missing', len(missing), 'extra', len(extra)); \
- ok=ok and not missing and not extra; \
-raise SystemExit(0 if ok else 1)"
+@'
+uuid = r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+ok = true
+for path in filter(p -> occursin(r"MATH_102_CH\d+\.jl$", p), readdir("src"; join=true))
+    text = read(path, String)
+    parts = split(text, "Cell order:"; limit=2)
+    length(parts) == 2 || error("Missing Cell order in $path")
+    body, order = parts
+    cell_re = Regex("^# .* (" * uuid.pattern * ")\\s*\$", "m")
+    cells = Set(match.captures[1] for match in eachmatch(cell_re, body))
+    ordered = Set(match.match for match in eachmatch(uuid, order))
+    missing = setdiff(cells, ordered)
+    extra = setdiff(ordered, cells)
+    println(path, " cells ", length(cells), " ordered ", length(ordered), " missing ", length(missing), " extra ", length(extra))
+    global ok = ok && isempty(missing) && isempty(extra)
+end
+exit(ok ? 0 : 1)
+'@ | julia --project=.
 ```
 
 Expected: each notebook reports `missing 0 extra 0`.
@@ -786,4 +793,3 @@ Prepare a final summary with:
 - Validation command run: julia --project=. src/export.jl
 - Any unresolved risks or user cleanup changes left untouched.
 ```
-
