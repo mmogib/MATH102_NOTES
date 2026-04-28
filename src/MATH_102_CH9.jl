@@ -4,229 +4,6 @@
 using Markdown
 using InteractiveUtils
 
-# ╔═╡ f2d4c2a5-f486-407b-b31b-d2efcc7476b3
-begin
-    using CommonMark
-    using PlutoUI, PlutoExtras
-    using Plots, PlotThemes, LaTeXStrings
-    using Latexify
-    using HypertextLiteral
-    using Colors
-    using LinearAlgebra, Random, Printf, SparseArrays
-    # using Symbolics
-    using SymPy
-    using QRCoders
-    using PrettyTables
-    # using Primes
-    # using LinearSolve
-    # using NonlinearSolve
-    # using ForwardDiff
-    # using Integrals
-    # using OrdinaryDiffEq
-    using IntervalArithmetic
-end
-
-# ╔═╡ 71bc54d5-d0ed-42d3-9bc1-48aa86e91d1d
-TableOfContents(title="📚 MATH102: Calculus III", indent=true, depth=4)
-
-# ╔═╡ e414122f-b93a-4510-b8ae-026c303e0df9
-begin
-    struct LocalImage
-        filename
-    end
-
-    function Base.show(io::IO, ::MIME"image/png", w::LocalImage)
-        write(io, read(w.filename))
-    end
-end
-
-# ╔═╡ cd269caf-ef81-43d7-a1a8-6668932b6363
-# exportqrcode("https://www.mathmatize.com/")
-# let
-#     img = LocalImage("../qrcode.png")
-# end
-
-# ╔═╡ d6d85087-9ecc-4043-9002-e4a6442b829e
-md"""
-
-# [AI-STUDY RESOURCE](https://notebooklm.google.com/notebook/f9f5eb4d-5782-4586-9f7e-abdb60f1b694)
-"""
-
-# ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
-function rect(x, Δx, xs, f; direction=:x)
-    if direction == :y
-        Shape([(0, x), (0, x + Δx), (f(xs), x + Δx), (f(xs), x)])
-    else
-        Shape([(x, 0), (x + Δx, 0), (x + Δx, f(xs)), (x, f(xs))])
-    end
-
-end
-
-# ╔═╡ 8315fb27-89e4-44a4-a51e-8e55fc3d58e5
-function reimannSum(f, n, a, b; method="l", color=:green, 
-					plot_it=false, 
-					direction=:x,
-					partitioning=nothing
-				   )
-    Δx = (b - a) / n
-    x = a:0.01:b
-    # plot(f;xlim=(-2π,2π), xticks=(-2π:(π/2):2π,["$c π" for c in -2:0.5:2]))
-
-    (partition, recs, ss) = if method == "r"
-        parts = (a+Δx):Δx:b
-        rcs = [rect(p - Δx, Δx, p, f; direction=direction) for p in parts]
-        (parts, rcs, nothing)
-    elseif method == "m"
-        parts = (a+(Δx/2)):Δx:(b-(Δx/2))
-        rcs = [rect(p - Δx / 2, Δx, p, f; direction=direction) for p in parts]
-        (parts, rcs, nothing)
-    elseif method == "l"
-        parts = a:Δx:(b-Δx)
-        rcs = [rect(p, Δx, p, f; direction=direction) for p in parts]
-        (parts, rcs, nothing)
-	elseif method == "u" # for user
-		@assert !isnothing(partitioning) "You must provide a partitioning function."
-        Δxs, parts = partitioning()
-        rcs = [rect(parts[i]-Δxs[i], Δxs[i], parts[i], f; direction=direction) for i in 1:length(parts)]
-		ss = round(sum(f.(parts) .* Δxs), sigdigits=6)
-        (parts, rcs, ss)	
-    else
-        parts = a:Δx:(b-Δx)
-        rcs = [rect(p, Δx, rand(p:0.1:p+Δx), f; direction=direction) for p in parts]
-        (parts, rcs, nothing)
-    end
-    # recs= [rect(sample(p,Δx),Δx,p,f) for p in partition]
-    p = direction == :y ? plot(f.(x), x; legend=nothing) : plot(x, f.(x); legend=nothing)
-    plot!(p, recs, framestyle=:origin, opacity=0.4, color=color)
-    s = isnothing(ss) ? round(sum(f.(partition) * Δx), sigdigits=6) : ss
-    return plot_it ? (p, s) : s
-end
-
-# ╔═╡ ef081dfa-b610-4c7a-a039-7258f4f6e80e
-begin
-    function add_space(n=1)
-        repeat("&nbsp;", n)
-    end
-    function post_img(img::String, w=500)
-        res = Resource(img, :width => w)
-        cm"""
-      <div class="img-container">
-
-      $(res)
-
-      </div>"""
-    end
-    function poolcode()
-        cm"""
-      <div class="img-container">
-
-      $(Resource("https://www.dropbox.com/s/cat9ots4ausfzyc/qrcode_itempool.com_kfupm.png?raw=1",:width=>300))
-
-      </div>"""
-    end
-    function define(t="")
-        beginBlock("Definition", t)
-    end
-    function remark(t="")
-        beginBlock("Remark", t)
-    end
-    function remarks(t="")
-        beginBlock("Remarks", t)
-    end
-    function bbl(t)
-        beginBlock(t, "")
-    end
-    function bbl(t, s)
-        beginBlock(t, s)
-    end
-    ebl() = endBlock()
-    function theorem(s)
-        bth(s)
-    end
-    function bth(s)
-        beginTheorem(s)
-    end
-    eth() = endTheorem()
-    ex(n::Int; s::String="") = ex("Example $n", s)
-    ex(t::Int, s::String) = example("Example $t", s)
-    ex(t, s) = example(t, s)
-    function beginBlock(title, subtitle)
-        """<div style="box-sizing: border-box;">
-       	<div style="display: flex;flex-direction: column;border: 6px solid rgba(200,200,200,0.5);box-sizing: border-box;">
-       	<div style="display: flex;">
-       	<div style="background-color: #FF9733;
-       	    border-left: 10px solid #df7300;
-       	    padding: 5px 10px;
-       	    color: #fff!important;
-       	    clear: left;
-       	    margin-left: 0;font-size: 112%;
-       	    line-height: 1.3;
-       	    font-weight: 600;">$title</div>  <div style="olor: #000!important;
-       	    margin: 0 0 20px 25px;
-       	    float: none;
-       	    clear: none;
-       	    padding: 5px 0 0 0;
-       	    margin: 0 0 0 20px;
-       	    background-color: transparent;
-       	    border: 0;
-       	    overflow: hidden;
-       	    min-width: 100px;font-weight: 600;
-       	    line-height: 1.5;">$subtitle</div>
-       	</div>
-       	<p style="padding:5px;">
-       """
-    end
-    function beginTheorem(subtitle)
-        beginBlock("Theorem", subtitle)
-    end
-    function endBlock()
-        """</p></div></div>"""
-    end
-    function endTheorem()
-        endBlock()
-    end
-    ex() = example("Example", "")
-    # function example(lable, desc)
-    #     """<div style="display:flex;">
-    #    <div style="
-    #    font-size: 112%;
-    #        line-height: 1.3;
-    #        font-weight: 600;
-    #        color: #f9ce4e;
-    #        float: left;
-    #        background-color: #5c5c5c;
-    #        border-left: 10px solid #474546;
-    #        padding: 5px 10px;
-    #        margin: 0 12px 20px 0;
-    #        border-radius: 0;
-    #    ">$lable:</div>
-    #    <div style="flex-grow:3;
-    #    line-height: 1.3;
-    #        font-weight: 600;
-    #        float: left;
-    #        padding: 5px 10px;
-    #        margin: 0 12px 20px 0;
-    #        border-radius: 0;
-    #    ">$desc</div>
-    #    </div>"""
-    # end
-    function example(lable, desc)
-        """<div class="example-box">
-    <div class="example-header">
-      $lable
-    </div>
-    <div class="example-title">
-      $desc
-    </div>
-    <div class="example-content">
-      
-  </div>
-  """
-    end
-
-    @htl("")
-end
-
 # ╔═╡ 1e507853-e2e6-493d-9d62-f33da7a7caa8
 md"""
 # 9.1 Sequences
@@ -244,7 +21,7 @@ md"## Sequences"
 cm"""
 __Sequence__: A sequence can be thought of as a list of numbers written in a definite order:
 ```math
-a_1, a_2, a_3, \cdots, a_n, \cdots 
+a_1, a_2, a_3, \cdots, a_n, \cdots
 ```
 
 - ``a_1``: first term,
@@ -258,9 +35,9 @@ a_1, a_2, a_3, \cdots, a_n, \cdots
 # ╔═╡ 25157d2c-d719-438e-b4c4-6fa7d9787820
 cm"""
 $(ex(1,"Writing the Terms of a Sequence"))
-1.  ``\{a_n\}=\{3+(−1)^n\}_{n\geq 1}`` 
-2.  ``\{b_n\}=\displaystyle\left\{\frac{n}{1-2n}\right\}`` 
-3.  ``\{c_n\}=\displaystyle\left\{\frac{n^2}{2^n-1}\right\}`` 
+1.  ``\{a_n\}=\{3+(−1)^n\}_{n\geq 1}``
+2.  ``\{b_n\}=\displaystyle\left\{\frac{n}{1-2n}\right\}``
+3.  ``\{c_n\}=\displaystyle\left\{\frac{n^2}{2^n-1}\right\}``
 4.  The terms of the __recursively defined__ sequence ``\{d_n\}``, where ``d_1=25`` and ``d_{n+1}=d_n−5``.
 
 """
@@ -312,8 +89,8 @@ $(post_img("https://www.dropbox.com/scl/fi/c536ibwk7eycy0v2lb0rj/fig_9_1.png?rlk
 
 # ╔═╡ eae5658b-a235-40de-84a3-00152a109e93
 begin
-	n91Slider = @bind n91slider NumberField(1:1000, default=1);
-	md"n = $n91Slider";
+    n91Slider = @bind n91slider NumberField(1:1000, default=1);
+    md"n = $n91Slider";
 end
 
 # ╔═╡ af5c9045-66ec-483a-a197-db544f30b1b6
@@ -391,7 +168,7 @@ Let ``\lim _{n \rightarrow \infty} a_n=L`` and ``\lim _{n \rightarrow \infty} b_
 # ╔═╡ 9a594bd8-68f7-4f6a-8dd6-3c70780f098d
 cm"""
 $(ex(3,"Determining Convergence or Divergence"))
-1.  ``\{a_n\}=\{3+(−1)^n\}`` 
+1.  ``\{a_n\}=\{3+(−1)^n\}``
 2.  ``\{b_n\}=\displaystyle\left\{\frac{n}{1-2n}\right\}``
 """
 
@@ -417,7 +194,7 @@ Show that the sequence ``\left\{c_n\right\}=\left\{(-1)^n \frac{1}{n!}\right\}``
 # ╔═╡ 664c41b1-6459-4dfc-9999-5b2acad3301c
 cm"""
 $(bbl("Remark",""))
-In fact, it can be shown that for any fixed number ``k``, 
+In fact, it can be shown that for any fixed number ``k``,
 ```math
 \lim _{n \rightarrow \infty}\left(k^n / n!\right)=0.
 ```
@@ -528,9 +305,9 @@ end
 
 # ╔═╡ 02def290-7dcd-4c8f-9c41-228033cc3e7c
 cm"""
-Consider the sequence ``\left\{a_n\right\}_{n=1}^{\infty}``. The expression 
+Consider the sequence ``\left\{a_n\right\}_{n=1}^{\infty}``. The expression
 ```math
-a_1 + a_2 + a_3 +\cdots 
+a_1 + a_2 + a_3 +\cdots
 ```
 is called an __infinite series__ (or simply __series__) and we use the notation
 
@@ -584,13 +361,13 @@ __Questions we want to answer about `Series`__
 begin
     n8Slider = @bind n8slider Slider(1:1000, show_value=true)
     md"""
-    
+
     ----
-    
+
     ||
     |---|
     |n = $n8Slider |
-    
+
     ----
     """
 end
@@ -911,7 +688,7 @@ end
 # ╔═╡ a946547f-8507-49ec-b5fc-007dc89d0e92
 cm"""
 $(ex(3,"When the Alternating Series Test Does Not Apply"))
-a. 
+a.
 ```math
 \sum_{n=1}^{\infty} \frac{(-1)^{n+1}(n+1)}{n}=\frac{2}{1}-\frac{3}{2}+\frac{4}{3}-\frac{5}{4}+\frac{6}{5}-\cdots
 ```
@@ -1158,7 +935,7 @@ md"## Polynomial Approximations of Elementary Functions"
 # ╔═╡ 2e6b9a41-d56e-4e95-ba78-f360e008335d
 cm"""
 $(ex("Ex",""))
-Find polynomial approximations ``P_n(x)`` of ``\displaystyle f(x)=e^x`` such that 
+Find polynomial approximations ``P_n(x)`` of ``\displaystyle f(x)=e^x`` such that
 ```math
 P(0)=f(0), P'(0)=f'(0), P''(0)=f''(0), \cdots, P^{(n)}(0)=f^{(n)}(0).
 ```
@@ -1210,29 +987,29 @@ let
     rows = map(xs) do x
         return "
        <tr>
-       	<td> $x </td>
-       	<td> $(exp(x)) </td>
-       	<td> $(P(x,sec_97_n)) </td>
+           <td> $x </td>
+           <td> $(exp(x)) </td>
+           <td> $(P(x,sec_97_n)) </td>
        </tr>
        "
     end |> s -> join(s, "")
     cm"""
     <table>
     <thead>
-    <tr> 
-    
+    <tr>
+
     $(head)
-    
+
     </tr>
     </thead>
-    
+
     <tbody>
-    
+
     $(rows)
-    
+
     </tbody>
-    
-    
+
+
     </table>
     """
 end
@@ -1296,7 +1073,7 @@ end
 # ╔═╡ 900ab898-f39e-4246-9d50-6430a2d6f645
 cm"""
 $(ex(5,"Finding Maclaurin Polynomials for `cos x`"))
-Find the Maclaurin polynomials ``P_0, P_2, P_4``, and ``P_6`` for ``f(x)=\cos x``. 
+Find the Maclaurin polynomials ``P_0, P_2, P_4``, and ``P_6`` for ``f(x)=\cos x``.
 
 Use ``P_6(x)`` to approximate the value of ``\cos (0.1)``.
 """
@@ -1357,7 +1134,7 @@ A power series in ``x`` can be viewed as a function of ``x``
 ```math
 f(x)=\sum_{n=0}^{\infty} a_n(x-c)^n
 ```
-where 
+where
 ```math
 \text{the domain of }f = \left\{x\in \mathbb{R} | \text{ the power series converges at } x\right\}.
 ```
@@ -1377,7 +1154,7 @@ Determination of the domain of a power series is the primary concern in this sec
 # ╔═╡ 0aa832ba-13d0-4e31-aa02-3e166d4a837c
 cm"""
 $(ex(2,"Finding the Radius of Convergence"))
-Find the radius of convergence of 
+Find the radius of convergence of
 ```math
 \sum_{n=0}^{\infty} n!x^n.
 ```
@@ -1386,7 +1163,7 @@ Find the radius of convergence of
 # ╔═╡ f38df00c-ce6a-4e5f-ab1f-34f1009c4d57
 cm"""
 $(ex(3,"Finding the Radius of Convergence"))
-Find the radius of convergence of 
+Find the radius of convergence of
 ```math
 \sum_{n=0}^{\infty} 3(x-2)^n.
 ```
@@ -1397,7 +1174,7 @@ Find the radius of convergence of
 # ╔═╡ 0468a238-b5ce-4c0b-82eb-d3525646c66c
 cm"""
 $(ex(4,"Finding the Radius of Convergence"))
-Find the radius of convergence of 
+Find the radius of convergence of
 ```math
 \sum_{n=0}^{\infty} \frac{(-1)^n x^{2 n+1}}{(2 n+1)!}
 ```
@@ -1418,11 +1195,11 @@ $(add_space(10))and diverges for
 ```
 3. The series converges absolutely for all ``x``.
 
-- The number ``R`` is the __radius of convergence__ of the power series. 
+- The number ``R`` is the __radius of convergence__ of the power series.
 
 - If the series converges only at ``c``, then the radius of convergence is ``R=0``.
 
-- If the series converges for all ``x``, then the radius of convergence is ``R=\infty``. 
+- If the series converges for all ``x``, then the radius of convergence is ``R=\infty``.
 
 - The set of all values of ``x`` for which the power series converges is the __interval of convergence__ of the power series.
 """
@@ -1443,7 +1220,7 @@ Find the interval of convergence of
 # ╔═╡ a633e01b-7bc0-42ad-a1bc-7e3c0c6323ae
 cm"""
 $(ex(6,"Finding the Interval of Convergence"))
-Find the interval of convergence of 
+Find the interval of convergence of
 ```math
 \sum_{n=0}^{\infty} \frac{(-1)^n(x+1)^n}{2^n}.
 ```
@@ -1452,7 +1229,7 @@ Find the interval of convergence of
 # ╔═╡ c0cf197b-0638-463f-9472-7418c843d6de
 cm"""
 $(ex(6,"Finding the Interval of Convergence"))
-Find the interval of convergence of 
+Find the interval of convergence of
 ```math
 \sum_{n=1}^{\infty} \frac{x^n}{n^2}.
 ```
@@ -1640,7 +1417,7 @@ md"## POWER SERIES FOR ELEMENTARY FUNCTIONS"
 cm"""
 <div style="display:flex;justify-content: space-between;flex-wrap: wrap;">
 <div style="width: 80%; padding-bottom: 0.2em;font-weight: 700;border-bottom: 1px solid black;margin-bottom: 10px;">
- Function 
+ Function
 
 </div>
 <div style="width: 15%; padding-bottom: 0.2em;font-weight: 700;border-bottom: 1px solid black;margin-bottom: 10px;">
@@ -1851,7 +1628,7 @@ ul li:before {
 }
 
 .p40 {
-	padding-left: 40px;
+    padding-left: 40px;
 }
     example-box {
       max-width: 600px;           /* Limits the box width */
@@ -1896,6 +1673,214 @@ ul li:before {
     }
 </style>
 """)
+
+# ╔═╡ e414122f-b93a-4510-b8ae-026c303e0df9
+begin
+    struct LocalImage
+        filename
+    end
+
+    function Base.show(io::IO, ::MIME"image/png", w::LocalImage)
+        write(io, read(w.filename))
+    end
+end
+
+# ╔═╡ f2d4c2a5-f486-407b-b31b-d2efcc7476b3
+begin
+    using CommonMark
+    using PlutoUI, PlutoExtras
+    using Plots, PlotThemes, LaTeXStrings
+    using Latexify
+    using HypertextLiteral
+    using Colors
+    using LinearAlgebra, Random, Printf, SparseArrays
+    # using Symbolics
+    using SymPy
+    using QRCoders
+    using PrettyTables
+    # using Primes
+    # using LinearSolve
+    # using NonlinearSolve
+    # using ForwardDiff
+    # using Integrals
+    # using OrdinaryDiffEq
+    using IntervalArithmetic
+end
+
+# ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
+function rect(x, Δx, xs, f; direction=:x)
+    if direction == :y
+        Shape([(0, x), (0, x + Δx), (f(xs), x + Δx), (f(xs), x)])
+    else
+        Shape([(x, 0), (x + Δx, 0), (x + Δx, f(xs)), (x, f(xs))])
+    end
+
+end
+
+# ╔═╡ 8315fb27-89e4-44a4-a51e-8e55fc3d58e5
+function reimannSum(f, n, a, b; method="l", color=:green,
+                    plot_it=false,
+                    direction=:x,
+                    partitioning=nothing
+                   )
+    Δx = (b - a) / n
+    x = a:0.01:b
+    # plot(f;xlim=(-2π,2π), xticks=(-2π:(π/2):2π,["$c π" for c in -2:0.5:2]))
+
+    (partition, recs, ss) = if method == "r"
+        parts = (a+Δx):Δx:b
+        rcs = [rect(p - Δx, Δx, p, f; direction=direction) for p in parts]
+        (parts, rcs, nothing)
+    elseif method == "m"
+        parts = (a+(Δx/2)):Δx:(b-(Δx/2))
+        rcs = [rect(p - Δx / 2, Δx, p, f; direction=direction) for p in parts]
+        (parts, rcs, nothing)
+    elseif method == "l"
+        parts = a:Δx:(b-Δx)
+        rcs = [rect(p, Δx, p, f; direction=direction) for p in parts]
+        (parts, rcs, nothing)
+    elseif method == "u" # for user
+        @assert !isnothing(partitioning) "You must provide a partitioning function."
+        Δxs, parts = partitioning()
+        rcs = [rect(parts[i]-Δxs[i], Δxs[i], parts[i], f; direction=direction) for i in 1:length(parts)]
+        ss = round(sum(f.(parts) .* Δxs), sigdigits=6)
+        (parts, rcs, ss)
+    else
+        parts = a:Δx:(b-Δx)
+        rcs = [rect(p, Δx, rand(p:0.1:p+Δx), f; direction=direction) for p in parts]
+        (parts, rcs, nothing)
+    end
+    # recs= [rect(sample(p,Δx),Δx,p,f) for p in partition]
+    p = direction == :y ? plot(f.(x), x; legend=nothing) : plot(x, f.(x); legend=nothing)
+    plot!(p, recs, framestyle=:origin, opacity=0.4, color=color)
+    s = isnothing(ss) ? round(sum(f.(partition) * Δx), sigdigits=6) : ss
+    return plot_it ? (p, s) : s
+end
+
+# ╔═╡ ef081dfa-b610-4c7a-a039-7258f4f6e80e
+begin
+    function add_space(n=1)
+        repeat("&nbsp;", n)
+    end
+    function post_img(img::String, w=500)
+        res = Resource(img, :width => w)
+        cm"""
+      <div class="img-container">
+
+      $(res)
+
+      </div>"""
+    end
+    function poolcode()
+        cm"""
+      <div class="img-container">
+
+      $(Resource("https://www.dropbox.com/s/cat9ots4ausfzyc/qrcode_itempool.com_kfupm.png?raw=1",:width=>300))
+
+      </div>"""
+    end
+    function define(t="")
+        beginBlock("Definition", t)
+    end
+    function remark(t="")
+        beginBlock("Remark", t)
+    end
+    function remarks(t="")
+        beginBlock("Remarks", t)
+    end
+    function bbl(t)
+        beginBlock(t, "")
+    end
+    function bbl(t, s)
+        beginBlock(t, s)
+    end
+    ebl() = endBlock()
+    function theorem(s)
+        bth(s)
+    end
+    function bth(s)
+        beginTheorem(s)
+    end
+    eth() = endTheorem()
+    ex(n::Int; s::String="") = ex("Example $n", s)
+    ex(t::Int, s::String) = example("Example $t", s)
+    ex(t, s) = example(t, s)
+    function beginBlock(title, subtitle)
+        """<div style="box-sizing: border-box;">
+           <div style="display: flex;flex-direction: column;border: 6px solid rgba(200,200,200,0.5);box-sizing: border-box;">
+           <div style="display: flex;">
+           <div style="background-color: #FF9733;
+               border-left: 10px solid #df7300;
+               padding: 5px 10px;
+               color: #fff!important;
+               clear: left;
+               margin-left: 0;font-size: 112%;
+               line-height: 1.3;
+               font-weight: 600;">$title</div>  <div style="olor: #000!important;
+               margin: 0 0 20px 25px;
+               float: none;
+               clear: none;
+               padding: 5px 0 0 0;
+               margin: 0 0 0 20px;
+               background-color: transparent;
+               border: 0;
+               overflow: hidden;
+               min-width: 100px;font-weight: 600;
+               line-height: 1.5;">$subtitle</div>
+           </div>
+           <p style="padding:5px;">
+       """
+    end
+    function beginTheorem(subtitle)
+        beginBlock("Theorem", subtitle)
+    end
+    function endBlock()
+        """</p></div></div>"""
+    end
+    function endTheorem()
+        endBlock()
+    end
+    ex() = example("Example", "")
+    # function example(lable, desc)
+    #     """<div style="display:flex;">
+    #    <div style="
+    #    font-size: 112%;
+    #        line-height: 1.3;
+    #        font-weight: 600;
+    #        color: #f9ce4e;
+    #        float: left;
+    #        background-color: #5c5c5c;
+    #        border-left: 10px solid #474546;
+    #        padding: 5px 10px;
+    #        margin: 0 12px 20px 0;
+    #        border-radius: 0;
+    #    ">$lable:</div>
+    #    <div style="flex-grow:3;
+    #    line-height: 1.3;
+    #        font-weight: 600;
+    #        float: left;
+    #        padding: 5px 10px;
+    #        margin: 0 12px 20px 0;
+    #        border-radius: 0;
+    #    ">$desc</div>
+    #    </div>"""
+    # end
+    function example(lable, desc)
+        """<div class="example-box">
+    <div class="example-header">
+      $lable
+    </div>
+    <div class="example-title">
+      $desc
+    </div>
+    <div class="example-content">
+
+  </div>
+  """
+    end
+
+    @htl("")
+end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -3556,11 +3541,8 @@ version = "1.13.0+0"
 """
 
 # ╔═╡ Cell order:
-# ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
-# ╠═71bc54d5-d0ed-42d3-9bc1-48aa86e91d1d
 # ╠═e414122f-b93a-4510-b8ae-026c303e0df9
-# ╠═cd269caf-ef81-43d7-a1a8-6668932b6363
-# ╠═d6d85087-9ecc-4043-9002-e4a6442b829e
+# ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
 # ╠═b4599a16-e7f7-4a2a-b349-2648ee45208f
 # ╠═8315fb27-89e4-44a4-a51e-8e55fc3d58e5
 # ╠═ef081dfa-b610-4c7a-a039-7258f4f6e80e

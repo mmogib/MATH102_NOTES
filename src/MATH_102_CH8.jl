@@ -4,229 +4,6 @@
 using Markdown
 using InteractiveUtils
 
-# ╔═╡ f2d4c2a5-f486-407b-b31b-d2efcc7476b3
-begin
-    using CommonMark
-    using PlutoUI, PlutoExtras
-    using Plots, PlotThemes, LaTeXStrings
-    using Latexify
-    using HypertextLiteral
-    using Colors
-    using LinearAlgebra, Random, Printf, SparseArrays
-    # using Symbolics
-    using SymPy
-    using QRCoders
-    using PrettyTables
-    # using Primes
-    # using LinearSolve
-    # using NonlinearSolve
-    # using ForwardDiff
-    # using Integrals
-    # using OrdinaryDiffEq
-    using IntervalArithmetic
-end
-
-# ╔═╡ 71bc54d5-d0ed-42d3-9bc1-48aa86e91d1d
-TableOfContents(title="📚 MATH102: Calculus III", indent=true, depth=4)
-
-# ╔═╡ e414122f-b93a-4510-b8ae-026c303e0df9
-begin
-    struct LocalImage
-        filename
-    end
-
-    function Base.show(io::IO, ::MIME"image/png", w::LocalImage)
-        write(io, read(w.filename))
-    end
-end
-
-# ╔═╡ cd269caf-ef81-43d7-a1a8-6668932b6363
-# exportqrcode("https://www.mathmatize.com/")
-# let
-#     img = LocalImage("../qrcode.png")
-# end
-
-# ╔═╡ d6d85087-9ecc-4043-9002-e4a6442b829e
-md"""
-
-# [AI-STUDY RESOURCE](https://notebooklm.google.com/notebook/f9f5eb4d-5782-4586-9f7e-abdb60f1b694)
-"""
-
-# ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
-function rect(x, Δx, xs, f; direction=:x)
-    if direction == :y
-        Shape([(0, x), (0, x + Δx), (f(xs), x + Δx), (f(xs), x)])
-    else
-        Shape([(x, 0), (x + Δx, 0), (x + Δx, f(xs)), (x, f(xs))])
-    end
-
-end
-
-# ╔═╡ 8315fb27-89e4-44a4-a51e-8e55fc3d58e5
-function reimannSum(f, n, a, b; method="l", color=:green, 
-					plot_it=false, 
-					direction=:x,
-					partitioning=nothing
-				   )
-    Δx = (b - a) / n
-    x = a:0.01:b
-    # plot(f;xlim=(-2π,2π), xticks=(-2π:(π/2):2π,["$c π" for c in -2:0.5:2]))
-
-    (partition, recs, ss) = if method == "r"
-        parts = (a+Δx):Δx:b
-        rcs = [rect(p - Δx, Δx, p, f; direction=direction) for p in parts]
-        (parts, rcs, nothing)
-    elseif method == "m"
-        parts = (a+(Δx/2)):Δx:(b-(Δx/2))
-        rcs = [rect(p - Δx / 2, Δx, p, f; direction=direction) for p in parts]
-        (parts, rcs, nothing)
-    elseif method == "l"
-        parts = a:Δx:(b-Δx)
-        rcs = [rect(p, Δx, p, f; direction=direction) for p in parts]
-        (parts, rcs, nothing)
-	elseif method == "u" # for user
-		@assert !isnothing(partitioning) "You must provide a partitioning function."
-        Δxs, parts = partitioning()
-        rcs = [rect(parts[i]-Δxs[i], Δxs[i], parts[i], f; direction=direction) for i in 1:length(parts)]
-		ss = round(sum(f.(parts) .* Δxs), sigdigits=6)
-        (parts, rcs, ss)	
-    else
-        parts = a:Δx:(b-Δx)
-        rcs = [rect(p, Δx, rand(p:0.1:p+Δx), f; direction=direction) for p in parts]
-        (parts, rcs, nothing)
-    end
-    # recs= [rect(sample(p,Δx),Δx,p,f) for p in partition]
-    p = direction == :y ? plot(f.(x), x; legend=nothing) : plot(x, f.(x); legend=nothing)
-    plot!(p, recs, framestyle=:origin, opacity=0.4, color=color)
-    s = isnothing(ss) ? round(sum(f.(partition) * Δx), sigdigits=6) : ss
-    return plot_it ? (p, s) : s
-end
-
-# ╔═╡ ef081dfa-b610-4c7a-a039-7258f4f6e80e
-begin
-    function add_space(n=1)
-        repeat("&nbsp;", n)
-    end
-    function post_img(img::String, w=500)
-        res = Resource(img, :width => w)
-        cm"""
-      <div class="img-container">
-
-      $(res)
-
-      </div>"""
-    end
-    function poolcode()
-        cm"""
-      <div class="img-container">
-
-      $(Resource("https://www.dropbox.com/s/cat9ots4ausfzyc/qrcode_itempool.com_kfupm.png?raw=1",:width=>300))
-
-      </div>"""
-    end
-    function define(t="")
-        beginBlock("Definition", t)
-    end
-    function remark(t="")
-        beginBlock("Remark", t)
-    end
-    function remarks(t="")
-        beginBlock("Remarks", t)
-    end
-    function bbl(t)
-        beginBlock(t, "")
-    end
-    function bbl(t, s)
-        beginBlock(t, s)
-    end
-    ebl() = endBlock()
-    function theorem(s)
-        bth(s)
-    end
-    function bth(s)
-        beginTheorem(s)
-    end
-    eth() = endTheorem()
-    ex(n::Int; s::String="") = ex("Example $n", s)
-    ex(t::Int, s::String) = example("Example $t", s)
-    ex(t, s) = example(t, s)
-    function beginBlock(title, subtitle)
-        """<div style="box-sizing: border-box;">
-       	<div style="display: flex;flex-direction: column;border: 6px solid rgba(200,200,200,0.5);box-sizing: border-box;">
-       	<div style="display: flex;">
-       	<div style="background-color: #FF9733;
-       	    border-left: 10px solid #df7300;
-       	    padding: 5px 10px;
-       	    color: #fff!important;
-       	    clear: left;
-       	    margin-left: 0;font-size: 112%;
-       	    line-height: 1.3;
-       	    font-weight: 600;">$title</div>  <div style="olor: #000!important;
-       	    margin: 0 0 20px 25px;
-       	    float: none;
-       	    clear: none;
-       	    padding: 5px 0 0 0;
-       	    margin: 0 0 0 20px;
-       	    background-color: transparent;
-       	    border: 0;
-       	    overflow: hidden;
-       	    min-width: 100px;font-weight: 600;
-       	    line-height: 1.5;">$subtitle</div>
-       	</div>
-       	<p style="padding:5px;">
-       """
-    end
-    function beginTheorem(subtitle)
-        beginBlock("Theorem", subtitle)
-    end
-    function endBlock()
-        """</p></div></div>"""
-    end
-    function endTheorem()
-        endBlock()
-    end
-    ex() = example("Example", "")
-    # function example(lable, desc)
-    #     """<div style="display:flex;">
-    #    <div style="
-    #    font-size: 112%;
-    #        line-height: 1.3;
-    #        font-weight: 600;
-    #        color: #f9ce4e;
-    #        float: left;
-    #        background-color: #5c5c5c;
-    #        border-left: 10px solid #474546;
-    #        padding: 5px 10px;
-    #        margin: 0 12px 20px 0;
-    #        border-radius: 0;
-    #    ">$lable:</div>
-    #    <div style="flex-grow:3;
-    #    line-height: 1.3;
-    #        font-weight: 600;
-    #        float: left;
-    #        padding: 5px 10px;
-    #        margin: 0 12px 20px 0;
-    #        border-radius: 0;
-    #    ">$desc</div>
-    #    </div>"""
-    # end
-    function example(lable, desc)
-        """<div class="example-box">
-    <div class="example-header">
-      $lable
-    </div>
-    <div class="example-title">
-      $desc
-    </div>
-    <div class="example-content">
-      
-  </div>
-  """
-    end
-
-    @htl("")
-end
-
 # ╔═╡ 8f8766fa-c168-4f09-8703-347a139b7069
 md"""
 # 8.1 Basic Integration Rules
@@ -239,7 +16,7 @@ md"""
 cm"""
 <div style="background-color:#FF9733;color:white;font-weight:800;padding:2px 10px;width:350px;">
 
-Review of Basic Integration Rules (``a>0``) 
+Review of Basic Integration Rules (``a>0``)
 </div>
 <div class="img-container">
 
@@ -252,7 +29,7 @@ $(Resource("https://www.dropbox.com/s/56svdxjfgowjojk/int_table.png?raw=1"))
 # ╔═╡ 200f43c8-fd32-438e-9582-a995a4026086
 cm"""
 $(ex())
-Find 
+Find
 ```math
 \int \frac{1}{1+e^x} dx.
 ```
@@ -297,8 +74,8 @@ __Indefinite Integrals__
 md"""
 **Example**
 
-```math 
-\int x \cos(x) dx 
+```math
+\int x \cos(x) dx
 ```
 
 
@@ -309,10 +86,10 @@ begin
 
     md"""
     **Solution:**
-    
+
     ```math
-    \int x \cos(x) dx = \int \underbrace{x}_{f(x)} \overbrace{\cos(x)}^{g'(x)} dx = x \sin(x) - \int \sin(x) \overbrace{ \;\;\;\;dx}^{f'\,(x) dx} = x\sin(x) + \cos(x) +C  
-    
+    \int x \cos(x) dx = \int \underbrace{x}_{f(x)} \overbrace{\cos(x)}^{g'(x)} dx = x \sin(x) - \int \sin(x) \overbrace{ \;\;\;\;dx}^{f'\,(x) dx} = x\sin(x) + \cos(x) +C
+
     ```
     """
 end
@@ -426,7 +203,7 @@ Find ``\int \sin ^3 x \cos ^4 x d x``.
 # ╔═╡ e40ba504-6b6c-4abc-81c8-67db621b90de
 cm"""
 $(ex(2,"Power of Cosine Is Odd and Positive"))
-Evaluate 
+Evaluate
 ```math
 \int_{\pi / 6}^{\pi / 3} \frac{\cos ^3 x}{\sqrt{\sin x}} d x.
 ```
@@ -489,7 +266,7 @@ Find ``\int \frac{\tan ^3 x}{\sqrt{\sec x}} d x``.
 # ╔═╡ b27f07f2-881c-42f0-8d9d-c49c4c54b780
 cm"""
 $(ex(5,"Power of Secant Is Even and Positive"))
-Find 
+Find
 ```math
 \int \sec ^4 3 x \tan ^3 3 x d x
 ```
@@ -498,7 +275,7 @@ Find
 # ╔═╡ 95099f5d-61ee-44ca-8d51-b01446f29649
 cm"""
 $(ex(6,"Power of Tangent Is Even"))
-Evaluate 
+Evaluate
 ```math
 \int_0^{\pi / 4} \tan ^4 x d x
 ```
@@ -509,7 +286,7 @@ Evaluate
 # ╔═╡ db377636-d9b6-4742-bf42-050a31860ad2
 cm"""
 $(ex(7,"Converting to Sines and Cosines"))
-Find 
+Find
 ```math
 \int \frac{\sec x}{\tan ^2 x} d x.
 ```
@@ -521,11 +298,11 @@ md"## Integrals Involving Sine-Cosine Products"
 # ╔═╡ dd402f3e-4580-41e6-89c5-d6e1eba01b63
 md"""
 __Using Product Identities__
-```math 
-\int \sin mx \cos n x dx, 
+```math
+\int \sin mx \cos n x dx,
 ```
 ```math
-\int \sin mx \sin n x dx, 
+\int \sin mx \sin n x dx,
 ```
 ```math
 \int \cos mx \cos n x dx.
@@ -549,7 +326,7 @@ Use
 # ╔═╡ d808a001-48ea-4eaa-9501-27d486133480
 cm"""
 $(ex(8,"Using a Product-to-Sum Formula"))
-Find 
+Find
 ```math
 \int \sin 5 x \cos 4 x d x
 ```
@@ -599,7 +376,7 @@ a \tan \theta \text { for } u>a, \text { where } 0 \leq \theta<\pi / 2 \\
 # ╔═╡ 22e8b5e8-8343-4e74-9f28-4b268e3157af
 cm"""
 $(ex(1,"Trigonometric Substitution: u=a sinθ "))
-Find 
+Find
 ```math
 \int \frac{d x}{x^2 \sqrt{9-x^2}}.
 ```
@@ -608,7 +385,7 @@ Find
 # ╔═╡ 11ebe671-ede6-438d-a896-45eca3beb94c
 cm"""
 $(ex(2,"Trigonometric Substitution: u=a tanθ "))
-Find 
+Find
 ```math
 \int \frac{d x}{\sqrt{4x^2+1}}.
 ```
@@ -617,7 +394,7 @@ Find
 # ╔═╡ c08feccc-e1aa-4a23-a42e-798dfe4278eb
 cm"""
 $(ex(3,"Trigonometric Substitution: Rational Powers"))
-Find 
+Find
 ```math
 \int \frac{d x}{\left(x^2+1\right)^{3 / 2}}.
 ```
@@ -626,7 +403,7 @@ Find
 # ╔═╡ f943eff3-357b-4a33-a272-fdf3a7d80a5f
 cm"""
 $(ex(4,"Converting the Limits of Integration"))
-Evaluate 
+Evaluate
 ```math
 \int_{\sqrt{3}}^2 \frac{\sqrt{x^2-3}}{x} d x
 ```
@@ -635,7 +412,7 @@ Evaluate
 # ╔═╡ da070497-1db3-4250-8d45-128daf2ff54f
 cm"""
 $(ex(5,"Finding Arc Length"))
-Find the arc length of the graph of ``f(x)=\frac{1}{2} x^2`` from ``x=0`` to ``x=1`` 
+Find the arc length of the graph of ``f(x)=\frac{1}{2} x^2`` from ``x=0`` to ``x=1``
 """
 
 # ╔═╡ c2d68428-99c5-45fb-b056-a1c0ae5f06ad
@@ -652,22 +429,22 @@ We learn how to integrate rational function: quotient of polunomial.
 ```math
  f(x) =\frac{P(x)}{Q(x)}, \qquad P, Q \text{ are polynomials}
 ```
- 
+
 **How?**
 
 ◾ __STEP 0__ : if degree of ``P`` is greater than or equal to degree of ``Q`` goto
 __STEP 1__, else GOTO __STEP 2__.
 
-◾ __STEP 1__ : Peform long division of ``P`` by ``Q`` to get 
+◾ __STEP 1__ : Peform long division of ``P`` by ``Q`` to get
 ```math
  \frac{P(x)}{Q(x)} = S(x) + \frac{R(x)}{Q(x)}
 ```
 and apply __STEP 2__ on  ``\frac{R(x)}{Q(x)}``.
 
-◾ __STEP 2__ : Write the __partial fractions decomposition__  
+◾ __STEP 2__ : Write the __partial fractions decomposition__
 
 ◾ __STEP 3__ : Integrate
- 
+
 """
 
 # ╔═╡ 5ad8d84d-9f32-4378-bd22-f6004023076c
@@ -679,7 +456,7 @@ __Partial Fractions Decomposition__
 We need to write ``\frac{R(x)}{Q(x)}`` as sum of __partial fractions__ by __factor__ ``Q(x)``. Based on the factors, we write the decomposition accoding to the following cases
 
 __case 1__: ``Q(x)`` is a product of distinct linear factors.
-we write 
+we write
 ```math
 Q(x)=(a_1x+b_1)(a_2x+b_2)\cdots (a_kx+b_k)
 ```
@@ -689,7 +466,7 @@ then there exist constants ``A_1, A_2, \cdots, A_k`` such that
 ```
 
 __case 2__: ``Q(x)`` is a product of linear factors, some of which are repeated.
-say first one 
+say first one
 ```math
 Q(x)=(a_1x+b_1)^r(a_2x+b_2)\cdots (a_kx+b_k)
 ```
@@ -761,7 +538,7 @@ md"## Linear Factors"
 # ╔═╡ 3de417dd-e670-4e28-bb27-88abe5476f84
 cm"""
 $(ex(1,"Distinct Linear Factors"))
-Write the partial fraction decomposition for 
+Write the partial fraction decomposition for
 ```math
  \frac{1}{x^2-5x+6}
 ```
@@ -794,7 +571,7 @@ Find
 cm"""
 $(ex(4," Repeated Quadratic Factors"))
 ```math
-\int  \frac{8x^3+13x}{(x^2+2)^2}dx. 
+\int  \frac{8x^3+13x}{(x^2+2)^2}dx.
 ```
 
 """
@@ -820,9 +597,9 @@ Find
 
 # ╔═╡ 72974703-d483-4d3c-be80-b89c7d7c503f
 # let
-# 	@syms x::Real
-# 	f(x) = (x^4-2x^2+4x+1)/(x^3-x^2-x+1)
-# 	integrate(f(x),x)
+#     @syms x::Real
+#     f(x) = (x^4-2x^2+4x+1)/(x^3-x^2-x+1)
+#     integrate(f(x),x)
 # end
 
 # ╔═╡ ff9221cc-70e3-4f14-9bf8-8340874c17c3
@@ -851,7 +628,7 @@ md"""
 
 # ╔═╡ dbd5a0da-cafb-4537-9410-215d87bdc60e
 md"""
-# 8.7 Rational Functions of Sine & Cosine 
+# 8.7 Rational Functions of Sine & Cosine
 > __Objectives__
 > 1. Find an indefinite integral involving rational functions of sine and cosine
 
@@ -992,7 +769,7 @@ In the first two cases, the improper integral __converges__ when the limit exist
 cm"""
 $(ex(6,"An Improper Integral with an Infinite Discontinuity"))
 
-Evaluate 
+Evaluate
 ```math
 \int_0^1 \frac{d x}{\sqrt[3]{x}}
 ```
@@ -1002,7 +779,7 @@ Evaluate
 cm"""
 $(ex(8,"An Improper Integral with an Interior Discontinuity"))
 
-Evaluate 
+Evaluate
 ```math
 \int_{-1}^2 \frac{d x}{x^3}
 ```
@@ -1012,7 +789,7 @@ Evaluate
 cm"""
 $(ex(9,"A Doubly Improper Integral"))
 
-Evaluate 
+Evaluate
 ```math
 \int_0^{\infty} \frac{d x}{\sqrt{x}(x+1)}
 ```
@@ -1022,7 +799,7 @@ Evaluate
 cm"""
 $(ex(7,"An Improper Integral That Diverges"))
 
-Evaluate 
+Evaluate
 ```math
 \int_0^2 \frac{d x}{x^3}
 ```
@@ -1050,6 +827,214 @@ cm"""
 $(ex(11,"An Application Involving a Solid of Revolution"))
 The solid formed by revolving (about the ``x``-axis) the unbounded region lying between the graph of ``f(x)=1 / x`` and the ``x``-axis ``(x \geq 1)`` is called Gabriel's Horn. Show that this solid has a finite volume and an infinite surface area.
 """
+
+# ╔═╡ e414122f-b93a-4510-b8ae-026c303e0df9
+begin
+    struct LocalImage
+        filename
+    end
+
+    function Base.show(io::IO, ::MIME"image/png", w::LocalImage)
+        write(io, read(w.filename))
+    end
+end
+
+# ╔═╡ f2d4c2a5-f486-407b-b31b-d2efcc7476b3
+begin
+    using CommonMark
+    using PlutoUI, PlutoExtras
+    using Plots, PlotThemes, LaTeXStrings
+    using Latexify
+    using HypertextLiteral
+    using Colors
+    using LinearAlgebra, Random, Printf, SparseArrays
+    # using Symbolics
+    using SymPy
+    using QRCoders
+    using PrettyTables
+    # using Primes
+    # using LinearSolve
+    # using NonlinearSolve
+    # using ForwardDiff
+    # using Integrals
+    # using OrdinaryDiffEq
+    using IntervalArithmetic
+end
+
+# ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
+function rect(x, Δx, xs, f; direction=:x)
+    if direction == :y
+        Shape([(0, x), (0, x + Δx), (f(xs), x + Δx), (f(xs), x)])
+    else
+        Shape([(x, 0), (x + Δx, 0), (x + Δx, f(xs)), (x, f(xs))])
+    end
+
+end
+
+# ╔═╡ 8315fb27-89e4-44a4-a51e-8e55fc3d58e5
+function reimannSum(f, n, a, b; method="l", color=:green,
+                    plot_it=false,
+                    direction=:x,
+                    partitioning=nothing
+                   )
+    Δx = (b - a) / n
+    x = a:0.01:b
+    # plot(f;xlim=(-2π,2π), xticks=(-2π:(π/2):2π,["$c π" for c in -2:0.5:2]))
+
+    (partition, recs, ss) = if method == "r"
+        parts = (a+Δx):Δx:b
+        rcs = [rect(p - Δx, Δx, p, f; direction=direction) for p in parts]
+        (parts, rcs, nothing)
+    elseif method == "m"
+        parts = (a+(Δx/2)):Δx:(b-(Δx/2))
+        rcs = [rect(p - Δx / 2, Δx, p, f; direction=direction) for p in parts]
+        (parts, rcs, nothing)
+    elseif method == "l"
+        parts = a:Δx:(b-Δx)
+        rcs = [rect(p, Δx, p, f; direction=direction) for p in parts]
+        (parts, rcs, nothing)
+    elseif method == "u" # for user
+        @assert !isnothing(partitioning) "You must provide a partitioning function."
+        Δxs, parts = partitioning()
+        rcs = [rect(parts[i]-Δxs[i], Δxs[i], parts[i], f; direction=direction) for i in 1:length(parts)]
+        ss = round(sum(f.(parts) .* Δxs), sigdigits=6)
+        (parts, rcs, ss)
+    else
+        parts = a:Δx:(b-Δx)
+        rcs = [rect(p, Δx, rand(p:0.1:p+Δx), f; direction=direction) for p in parts]
+        (parts, rcs, nothing)
+    end
+    # recs= [rect(sample(p,Δx),Δx,p,f) for p in partition]
+    p = direction == :y ? plot(f.(x), x; legend=nothing) : plot(x, f.(x); legend=nothing)
+    plot!(p, recs, framestyle=:origin, opacity=0.4, color=color)
+    s = isnothing(ss) ? round(sum(f.(partition) * Δx), sigdigits=6) : ss
+    return plot_it ? (p, s) : s
+end
+
+# ╔═╡ ef081dfa-b610-4c7a-a039-7258f4f6e80e
+begin
+    function add_space(n=1)
+        repeat("&nbsp;", n)
+    end
+    function post_img(img::String, w=500)
+        res = Resource(img, :width => w)
+        cm"""
+      <div class="img-container">
+
+      $(res)
+
+      </div>"""
+    end
+    function poolcode()
+        cm"""
+      <div class="img-container">
+
+      $(Resource("https://www.dropbox.com/s/cat9ots4ausfzyc/qrcode_itempool.com_kfupm.png?raw=1",:width=>300))
+
+      </div>"""
+    end
+    function define(t="")
+        beginBlock("Definition", t)
+    end
+    function remark(t="")
+        beginBlock("Remark", t)
+    end
+    function remarks(t="")
+        beginBlock("Remarks", t)
+    end
+    function bbl(t)
+        beginBlock(t, "")
+    end
+    function bbl(t, s)
+        beginBlock(t, s)
+    end
+    ebl() = endBlock()
+    function theorem(s)
+        bth(s)
+    end
+    function bth(s)
+        beginTheorem(s)
+    end
+    eth() = endTheorem()
+    ex(n::Int; s::String="") = ex("Example $n", s)
+    ex(t::Int, s::String) = example("Example $t", s)
+    ex(t, s) = example(t, s)
+    function beginBlock(title, subtitle)
+        """<div style="box-sizing: border-box;">
+           <div style="display: flex;flex-direction: column;border: 6px solid rgba(200,200,200,0.5);box-sizing: border-box;">
+           <div style="display: flex;">
+           <div style="background-color: #FF9733;
+               border-left: 10px solid #df7300;
+               padding: 5px 10px;
+               color: #fff!important;
+               clear: left;
+               margin-left: 0;font-size: 112%;
+               line-height: 1.3;
+               font-weight: 600;">$title</div>  <div style="olor: #000!important;
+               margin: 0 0 20px 25px;
+               float: none;
+               clear: none;
+               padding: 5px 0 0 0;
+               margin: 0 0 0 20px;
+               background-color: transparent;
+               border: 0;
+               overflow: hidden;
+               min-width: 100px;font-weight: 600;
+               line-height: 1.5;">$subtitle</div>
+           </div>
+           <p style="padding:5px;">
+       """
+    end
+    function beginTheorem(subtitle)
+        beginBlock("Theorem", subtitle)
+    end
+    function endBlock()
+        """</p></div></div>"""
+    end
+    function endTheorem()
+        endBlock()
+    end
+    ex() = example("Example", "")
+    # function example(lable, desc)
+    #     """<div style="display:flex;">
+    #    <div style="
+    #    font-size: 112%;
+    #        line-height: 1.3;
+    #        font-weight: 600;
+    #        color: #f9ce4e;
+    #        float: left;
+    #        background-color: #5c5c5c;
+    #        border-left: 10px solid #474546;
+    #        padding: 5px 10px;
+    #        margin: 0 12px 20px 0;
+    #        border-radius: 0;
+    #    ">$lable:</div>
+    #    <div style="flex-grow:3;
+    #    line-height: 1.3;
+    #        font-weight: 600;
+    #        float: left;
+    #        padding: 5px 10px;
+    #        margin: 0 12px 20px 0;
+    #        border-radius: 0;
+    #    ">$desc</div>
+    #    </div>"""
+    # end
+    function example(lable, desc)
+        """<div class="example-box">
+    <div class="example-header">
+      $lable
+    </div>
+    <div class="example-title">
+      $desc
+    </div>
+    <div class="example-content">
+
+  </div>
+  """
+    end
+
+    @htl("")
+end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -2710,11 +2695,8 @@ version = "1.13.0+0"
 """
 
 # ╔═╡ Cell order:
-# ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
-# ╠═71bc54d5-d0ed-42d3-9bc1-48aa86e91d1d
 # ╠═e414122f-b93a-4510-b8ae-026c303e0df9
-# ╠═cd269caf-ef81-43d7-a1a8-6668932b6363
-# ╠═d6d85087-9ecc-4043-9002-e4a6442b829e
+# ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
 # ╠═b4599a16-e7f7-4a2a-b349-2648ee45208f
 # ╠═8315fb27-89e4-44a4-a51e-8e55fc3d58e5
 # ╠═ef081dfa-b610-4c7a-a039-7258f4f6e80e

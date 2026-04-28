@@ -4,229 +4,6 @@
 using Markdown
 using InteractiveUtils
 
-# ╔═╡ f2d4c2a5-f486-407b-b31b-d2efcc7476b3
-begin
-    using CommonMark
-    using PlutoUI, PlutoExtras
-    using Plots, PlotThemes, LaTeXStrings
-    using Latexify
-    using HypertextLiteral
-    using Colors
-    using LinearAlgebra, Random, Printf, SparseArrays
-    # using Symbolics
-    using SymPy
-    using QRCoders
-    using PrettyTables
-    # using Primes
-    # using LinearSolve
-    # using NonlinearSolve
-    # using ForwardDiff
-    # using Integrals
-    # using OrdinaryDiffEq
-    using IntervalArithmetic
-end
-
-# ╔═╡ 71bc54d5-d0ed-42d3-9bc1-48aa86e91d1d
-TableOfContents(title="📚 MATH102: Calculus III", indent=true, depth=4)
-
-# ╔═╡ e414122f-b93a-4510-b8ae-026c303e0df9
-begin
-    struct LocalImage
-        filename
-    end
-
-    function Base.show(io::IO, ::MIME"image/png", w::LocalImage)
-        write(io, read(w.filename))
-    end
-end
-
-# ╔═╡ cd269caf-ef81-43d7-a1a8-6668932b6363
-# exportqrcode("https://www.mathmatize.com/")
-# let
-#     img = LocalImage("../qrcode.png")
-# end
-
-# ╔═╡ d6d85087-9ecc-4043-9002-e4a6442b829e
-md"""
-
-# [AI-STUDY RESOURCE](https://notebooklm.google.com/notebook/f9f5eb4d-5782-4586-9f7e-abdb60f1b694)
-"""
-
-# ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
-function rect(x, Δx, xs, f; direction=:x)
-    if direction == :y
-        Shape([(0, x), (0, x + Δx), (f(xs), x + Δx), (f(xs), x)])
-    else
-        Shape([(x, 0), (x + Δx, 0), (x + Δx, f(xs)), (x, f(xs))])
-    end
-
-end
-
-# ╔═╡ 8315fb27-89e4-44a4-a51e-8e55fc3d58e5
-function reimannSum(f, n, a, b; method="l", color=:green, 
-					plot_it=false, 
-					direction=:x,
-					partitioning=nothing
-				   )
-    Δx = (b - a) / n
-    x = a:0.01:b
-    # plot(f;xlim=(-2π,2π), xticks=(-2π:(π/2):2π,["$c π" for c in -2:0.5:2]))
-
-    (partition, recs, ss) = if method == "r"
-        parts = (a+Δx):Δx:b
-        rcs = [rect(p - Δx, Δx, p, f; direction=direction) for p in parts]
-        (parts, rcs, nothing)
-    elseif method == "m"
-        parts = (a+(Δx/2)):Δx:(b-(Δx/2))
-        rcs = [rect(p - Δx / 2, Δx, p, f; direction=direction) for p in parts]
-        (parts, rcs, nothing)
-    elseif method == "l"
-        parts = a:Δx:(b-Δx)
-        rcs = [rect(p, Δx, p, f; direction=direction) for p in parts]
-        (parts, rcs, nothing)
-	elseif method == "u" # for user
-		@assert !isnothing(partitioning) "You must provide a partitioning function."
-        Δxs, parts = partitioning()
-        rcs = [rect(parts[i]-Δxs[i], Δxs[i], parts[i], f; direction=direction) for i in 1:length(parts)]
-		ss = round(sum(f.(parts) .* Δxs), sigdigits=6)
-        (parts, rcs, ss)	
-    else
-        parts = a:Δx:(b-Δx)
-        rcs = [rect(p, Δx, rand(p:0.1:p+Δx), f; direction=direction) for p in parts]
-        (parts, rcs, nothing)
-    end
-    # recs= [rect(sample(p,Δx),Δx,p,f) for p in partition]
-    p = direction == :y ? plot(f.(x), x; legend=nothing) : plot(x, f.(x); legend=nothing)
-    plot!(p, recs, framestyle=:origin, opacity=0.4, color=color)
-    s = isnothing(ss) ? round(sum(f.(partition) * Δx), sigdigits=6) : ss
-    return plot_it ? (p, s) : s
-end
-
-# ╔═╡ ef081dfa-b610-4c7a-a039-7258f4f6e80e
-begin
-    function add_space(n=1)
-        repeat("&nbsp;", n)
-    end
-    function post_img(img::String, w=500)
-        res = Resource(img, :width => w)
-        cm"""
-      <div class="img-container">
-
-      $(res)
-
-      </div>"""
-    end
-    function poolcode()
-        cm"""
-      <div class="img-container">
-
-      $(Resource("https://www.dropbox.com/s/cat9ots4ausfzyc/qrcode_itempool.com_kfupm.png?raw=1",:width=>300))
-
-      </div>"""
-    end
-    function define(t="")
-        beginBlock("Definition", t)
-    end
-    function remark(t="")
-        beginBlock("Remark", t)
-    end
-    function remarks(t="")
-        beginBlock("Remarks", t)
-    end
-    function bbl(t)
-        beginBlock(t, "")
-    end
-    function bbl(t, s)
-        beginBlock(t, s)
-    end
-    ebl() = endBlock()
-    function theorem(s)
-        bth(s)
-    end
-    function bth(s)
-        beginTheorem(s)
-    end
-    eth() = endTheorem()
-    ex(n::Int; s::String="") = ex("Example $n", s)
-    ex(t::Int, s::String) = example("Example $t", s)
-    ex(t, s) = example(t, s)
-    function beginBlock(title, subtitle)
-        """<div style="box-sizing: border-box;">
-       	<div style="display: flex;flex-direction: column;border: 6px solid rgba(200,200,200,0.5);box-sizing: border-box;">
-       	<div style="display: flex;">
-       	<div style="background-color: #FF9733;
-       	    border-left: 10px solid #df7300;
-       	    padding: 5px 10px;
-       	    color: #fff!important;
-       	    clear: left;
-       	    margin-left: 0;font-size: 112%;
-       	    line-height: 1.3;
-       	    font-weight: 600;">$title</div>  <div style="olor: #000!important;
-       	    margin: 0 0 20px 25px;
-       	    float: none;
-       	    clear: none;
-       	    padding: 5px 0 0 0;
-       	    margin: 0 0 0 20px;
-       	    background-color: transparent;
-       	    border: 0;
-       	    overflow: hidden;
-       	    min-width: 100px;font-weight: 600;
-       	    line-height: 1.5;">$subtitle</div>
-       	</div>
-       	<p style="padding:5px;">
-       """
-    end
-    function beginTheorem(subtitle)
-        beginBlock("Theorem", subtitle)
-    end
-    function endBlock()
-        """</p></div></div>"""
-    end
-    function endTheorem()
-        endBlock()
-    end
-    ex() = example("Example", "")
-    # function example(lable, desc)
-    #     """<div style="display:flex;">
-    #    <div style="
-    #    font-size: 112%;
-    #        line-height: 1.3;
-    #        font-weight: 600;
-    #        color: #f9ce4e;
-    #        float: left;
-    #        background-color: #5c5c5c;
-    #        border-left: 10px solid #474546;
-    #        padding: 5px 10px;
-    #        margin: 0 12px 20px 0;
-    #        border-radius: 0;
-    #    ">$lable:</div>
-    #    <div style="flex-grow:3;
-    #    line-height: 1.3;
-    #        font-weight: 600;
-    #        float: left;
-    #        padding: 5px 10px;
-    #        margin: 0 12px 20px 0;
-    #        border-radius: 0;
-    #    ">$desc</div>
-    #    </div>"""
-    # end
-    function example(lable, desc)
-        """<div class="example-box">
-    <div class="example-header">
-      $lable
-    </div>
-    <div class="example-title">
-      $desc
-    </div>
-    <div class="example-content">
-      
-  </div>
-  """
-    end
-
-    @htl("")
-end
-
 # ╔═╡ 1f1b3439-630e-4db6-9a01-321ed75bed84
 md""" # 7.1 Area of a Region Between Two Curves
 
@@ -304,12 +81,12 @@ let
      ```"""
 
     cm""" **How can we find the area between the two curves?**
-    	
+
     $(sec71chbx && p1)
-    
-    	
+
+
     $(!sec71chbx && p2)
-    
+
     $(formula)
     """
 
@@ -345,7 +122,7 @@ begin
     ])
     md"""
     **Solution**
-    
+
     $ex1plt
     """
 end
@@ -385,7 +162,7 @@ let
     ])
     md"""
     **Solution**
-    
+
     $ex2plt
     """
 end
@@ -394,9 +171,9 @@ end
 cm"""
 $(ex(3,"A Region Lying Between Two Intersecting Graphs"))
 
-Find the area of the region bounded by the curves 
+Find the area of the region bounded by the curves
 
-```math 
+```math
 y=\cos(x), \;\; y=\sin(2x), \;\; x=0, \;\; x=\frac{\pi}{2}
 ```
 
@@ -420,7 +197,7 @@ begin
 
     md"""
     **Solution**
-    
+
     $ex3P
     """
 end
@@ -540,7 +317,7 @@ $(Resource("https://www.dropbox.com/s/odttq795nrpcznw/disk_method.png?raw=1"))
 ```math
 \begin{array}{lcl}
 \textrm{Volume of solid} & \approx &\displaystyle \sum_{i=1}^n\pi\bigl[R(x_i)\bigr]^2 \Delta x \\
-	& = &\displaystyle \pi\sum_{i=1}^n\bigl[R(x_i)\bigr]^2 \Delta x
+    & = &\displaystyle \pi\sum_{i=1}^n\bigl[R(x_i)\bigr]^2 \Delta x
 \end{array}
 ```
 Taking the limit ``\|\Delta\|\to 0 (n\to \infty)``, we get
@@ -627,7 +404,7 @@ V = \pi\int_a^b \bigl[\left(R[x]\right)^2-\left(r[x]\right)^2) dx
 
 # ╔═╡ d4963c8b-769c-47f4-8d23-00de15ca049a
 cm"""
-$(ex(3,"Using the Washer Method")) 
+$(ex(3,"Using the Washer Method"))
 Find the volume of the solid formed by revolving the region bounded by the graphs of
 ```math
 y=\sqrt{x} \qquad \textrm{and}\qquad  y = x^2
@@ -638,7 +415,7 @@ about the ``x``-axis.
 
 # ╔═╡ 55be9c08-66aa-44bb-86c5-36e45450950b
 cm"""
-$(ex(4,"Integrating with Respect to y: Two-Integral Case")) 
+$(ex(4,"Integrating with Respect to y: Two-Integral Case"))
 Find the volume of the solid formed by revolving the region bounded by the graphs of
 ```math
 y=x^2+1, \quad y=0, \quad x=0, \quad \textrm{and}\quad x=1
@@ -687,7 +464,7 @@ where ``h`` is the height of the pyramid and ``B`` is the area of the base.
 
 # ╔═╡ 0c507932-5cf6-48f0-84c4-b6ed06a54252
 # md"""
-# * Let’s divide ``S`` into ``n`` “slabs” of equal width ``\Delta x`` by using the planes``P_{x_1},P_{x_2},\cdots`` to slice the solid. (*Think of slicing a loaf of bread.*) 
+# * Let’s divide ``S`` into ``n`` “slabs” of equal width ``\Delta x`` by using the planes``P_{x_1},P_{x_2},\cdots`` to slice the solid. (*Think of slicing a loaf of bread.*)
 # * If we choose sample points ``x_i^*`` in ``[x_{i-1},x_i]`` , we can approximate the ``i``th slab ``S_i`` by a cylinder with base area ``A(x_i^*)`` and height ``\Delta x``.
 
 # ```math
@@ -700,7 +477,7 @@ where ``h`` is the height of the pyramid and ``B`` is the area of the base.
 # V \approx \sum_{i=1}^{n} A(x_i^*)\Delta x
 # ```
 # #### Definition of Volume
-# Let ``S`` be a solid that lies between ``x=a`` and ``x=b``. If the cross-sectional area of ``S`` in the plane ``P_x`` , through ``x`` and perpendicular to the ``x``-axis, is ``A(x)`` , where ``A`` is a continuous function, then the **volume** of ``S``  is 
+# Let ``S`` be a solid that lies between ``x=a`` and ``x=b``. If the cross-sectional area of ``S`` in the plane ``P_x`` , through ``x`` and perpendicular to the ``x``-axis, is ``A(x)`` , where ``A`` is a continuous function, then the **volume** of ``S``  is
 # ```math
 # V = \lim_{n\to\infty} \sum_{i=1}^{n} A(x_i^*)\Delta x = \int_{a}^{b}A(x) dx
 # ```
@@ -717,26 +494,26 @@ where ``h`` is the height of the pyramid and ``B`` is the area of the base.
 
 # ╔═╡ 1525ccb4-2f4c-48f0-8e6c-73cc117f92f0
 # begin
-# 	fun(x)=sqrt(x)
-# 	s6e1 = PlotData(0:0.01:1, fun)	
-# 	tt=range(0.1,stop=1,length=100) |> collect
-# 	ss=range(0.1,stop=1,length=100) |> collect
-# 	y_grid = [x for x=ss for y=tt]
-# 	z_grid = [y for x=ss for y=tt]
-# 	f(x, z) = begin
+#     fun(x)=sqrt(x)
+#     s6e1 = PlotData(0:0.01:1, fun)
+#     tt=range(0.1,stop=1,length=100) |> collect
+#     ss=range(0.1,stop=1,length=100) |> collect
+#     y_grid = [x for x=ss for y=tt]
+#     z_grid = [y for x=ss for y=tt]
+#     f(x, z) = begin
 #          x ^ 2 + z ^2
 #     end
-# 	p3 =plot(	
-# 				plot(s6e1; customcolor = :black )
-# 			,	plot_implicit((x,y,z)->y^2+z^2-x,xrng=(-2,2),yrng=(-1,1),zrng=(-1,2),
+#     p3 =plot(
+#                 plot(s6e1; customcolor = :black )
+#             ,    plot_implicit((x,y,z)->y^2+z^2-x,xrng=(-2,2),yrng=(-1,1),zrng=(-1,2),
 #    nlevels=200, slices=Dict(:x=>:red),aspect_ratio=1,frame_style=:origin)
-# 			)
-# 	md"""
-# 	**Solution**
+#             )
+#     md"""
+#     **Solution**
 
-# 	$p3
+#     $p3
 
-# 	"""
+#     """
 # end
 
 # ╔═╡ ebf77286-4f21-40a5-b13b-619ee9ed84a0
@@ -828,7 +605,7 @@ begin
 
     md"""
     A shell is a hallow circular cylinder
-    
+
     $(post_img("https://www.dropbox.com/s/8a2njc50e2hptok/shell.png?dl=1"))
     """
 end
@@ -897,16 +674,16 @@ $(Resource("https://www.dropbox.com/s/ivbwuge5ti8vrff/shell_x.png?raw=1"))
 
 # ╔═╡ 6b312eea-1ad6-414a-bfa1-2f8ba1498add
 # begin
-# 	s3e0p1 = plot(s3e0)
-# 	annotate!(s3e0p1,[(1,1.2,L"y=2x^2-x^3")])
-# 	plot!(s3e0p1, 
-# 			Shape( 
-# 				[ (1.2,0),(1.3,0),(1.3,f30(1.3)),(1.2,f30(1.3))
-# 				]
-# 				)
-# 		, label=nothing
-# 		)
-# 	md"""
+#     s3e0p1 = plot(s3e0)
+#     annotate!(s3e0p1,[(1,1.2,L"y=2x^2-x^3")])
+#     plot!(s3e0p1,
+#             Shape(
+#                 [ (1.2,0),(1.3,0),(1.3,f30(1.3)),(1.2,f30(1.3))
+#                 ]
+#                 )
+#         , label=nothing
+#         )
+#     md"""
 # **Example 1:**
 # Find the volume of the solid generated by rotating the region bounded by ``y=2x^2-x^3`` and ``y=0`` about the ``y-``axis.
 
@@ -945,7 +722,7 @@ end
 # ╔═╡ 6a3c2cd4-6c1f-4038-b0ac-d7992aee8d63
 cm"""
 $(ex(3,"Shell Method Preferable"))
-Find the volume of the solid formed by revolving the region bounded by the graphs of 
+Find the volume of the solid formed by revolving the region bounded by the graphs of
 ```math
 y=x^2+1, \quad y=0,\quad x=0, \quad \text{and}\quad x=1
 ```
@@ -957,7 +734,7 @@ y=x^2+1, \quad y=0,\quad x=0, \quad \text{and}\quad x=1
 cm"""
 $(ex(4,"Volume of a Pontoon"))
 The pontoon is designed by rotating the graph of
-```math 
+```math
 y=1 - \frac{x^2}{16}, \quad −4≤x≤4
 ```
  about the x-axis, where x and y are measured in feet. Find the volume of the pontoon.
@@ -966,7 +743,7 @@ y=1 - \frac{x^2}{16}, \quad −4≤x≤4
 # ╔═╡ 7d2e7631-5d0f-45cd-baa5-c280963b7973
 cm"""
 $(ex(5,"Shell Method Necessary"))
-Find the volume of the solid formed by revolving the region bounded by the graphs 
+Find the volume of the solid formed by revolving the region bounded by the graphs
 of ``y=x^3+x+1``, ``y=1``, and ``x=1`` about the line ``x=2``.
 """
 
@@ -1012,12 +789,12 @@ f(x)=m x+b
 # ╔═╡ 142f33a6-1355-4095-80f2-6fa48572c64b
 cm"""
 $(ex(2,"Finding Arc Length"))
-Find the arc length of the graph of ``y=\displaystyle \frac{x^3}{6}+\frac{1}{2x}`` on the interval ``[\frac{1}{2},2]``. 
+Find the arc length of the graph of ``y=\displaystyle \frac{x^3}{6}+\frac{1}{2x}`` on the interval ``[\frac{1}{2},2]``.
 """
 
 # ╔═╡ 8f7889c4-b786-465e-ba90-e448029399c1
 cm"""
-$(ex(3,"Finding Arc Length")) 
+$(ex(3,"Finding Arc Length"))
 Find the arc length of the graph of ``(y−1)^3=x^2`` on the interval ``[0, 8]``.
 
 """
@@ -1067,7 +844,7 @@ S=2\pi \int_a^b x \sqrt{1+[f'(x)]^2} dx.
 
 $(define("Area of a Surface of Revolution"))
 
-Let ``y=f(x)`` have a continuous derivative on the interval ``[a,b]``. 
+Let ``y=f(x)`` have a continuous derivative on the interval ``[a,b]``.
 
 <div class="img-container">
 
@@ -1079,7 +856,7 @@ The area ``S`` of the surface of revolution formed by revolving the graph of ``f
 ```math
 S=2\pi \int_a^b r(x) \sqrt{1+[f'(x)]^2} dx, \quad {\color{red} y \text{ is a function of x }}.
 ```
-where ``r(x)`` is the distance between the graph of ``f`` and the axis of revolution. 
+where ``r(x)`` is the distance between the graph of ``f`` and the axis of revolution.
 
 If ``x=g(y)`` on the interval ``[c,d]`` , then the surface area is
 
@@ -1092,18 +869,18 @@ where ``r(y)`` is the distance between the graph of ``g`` and the axis of revolu
 
 # ╔═╡ e7cef759-ccba-437b-a418-247d80704808
 cm"""
-__Remark__ 
+__Remark__
 
 The formulas can be written as
 
 ```math
 S=2\pi \int_a^b r(x) ds, \quad {\color{red} y \text{ is a function of x }}.
 ```
-and 
+and
 ```math
 S=2\pi \int_c^d r(y) ds, \quad {\color{red} x \text{ is a function of y }}.
 ```
-where 
+where
 ```math
 ds = \sqrt{1+\big[f'(x)\big]^2}dx \quad \text{and}\quad ds = \sqrt{1+\big[g'(y)\big]^2}dy \quad \text{respectively}.
 """
@@ -1116,6 +893,214 @@ $(ex(6,"The Area of a Surface of Revolution")) Find the area of the surface form
 $(ex(7,"The Area of a Surface of Revolution"))
 Find the area of the surface formed by revolving the graph of ``f(x)=x^2`` on the interval ``[0,\sqrt{2}]`` about the ``y``-axis.
 """
+
+# ╔═╡ e414122f-b93a-4510-b8ae-026c303e0df9
+begin
+    struct LocalImage
+        filename
+    end
+
+    function Base.show(io::IO, ::MIME"image/png", w::LocalImage)
+        write(io, read(w.filename))
+    end
+end
+
+# ╔═╡ f2d4c2a5-f486-407b-b31b-d2efcc7476b3
+begin
+    using CommonMark
+    using PlutoUI, PlutoExtras
+    using Plots, PlotThemes, LaTeXStrings
+    using Latexify
+    using HypertextLiteral
+    using Colors
+    using LinearAlgebra, Random, Printf, SparseArrays
+    # using Symbolics
+    using SymPy
+    using QRCoders
+    using PrettyTables
+    # using Primes
+    # using LinearSolve
+    # using NonlinearSolve
+    # using ForwardDiff
+    # using Integrals
+    # using OrdinaryDiffEq
+    using IntervalArithmetic
+end
+
+# ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
+function rect(x, Δx, xs, f; direction=:x)
+    if direction == :y
+        Shape([(0, x), (0, x + Δx), (f(xs), x + Δx), (f(xs), x)])
+    else
+        Shape([(x, 0), (x + Δx, 0), (x + Δx, f(xs)), (x, f(xs))])
+    end
+
+end
+
+# ╔═╡ 8315fb27-89e4-44a4-a51e-8e55fc3d58e5
+function reimannSum(f, n, a, b; method="l", color=:green,
+                    plot_it=false,
+                    direction=:x,
+                    partitioning=nothing
+                   )
+    Δx = (b - a) / n
+    x = a:0.01:b
+    # plot(f;xlim=(-2π,2π), xticks=(-2π:(π/2):2π,["$c π" for c in -2:0.5:2]))
+
+    (partition, recs, ss) = if method == "r"
+        parts = (a+Δx):Δx:b
+        rcs = [rect(p - Δx, Δx, p, f; direction=direction) for p in parts]
+        (parts, rcs, nothing)
+    elseif method == "m"
+        parts = (a+(Δx/2)):Δx:(b-(Δx/2))
+        rcs = [rect(p - Δx / 2, Δx, p, f; direction=direction) for p in parts]
+        (parts, rcs, nothing)
+    elseif method == "l"
+        parts = a:Δx:(b-Δx)
+        rcs = [rect(p, Δx, p, f; direction=direction) for p in parts]
+        (parts, rcs, nothing)
+    elseif method == "u" # for user
+        @assert !isnothing(partitioning) "You must provide a partitioning function."
+        Δxs, parts = partitioning()
+        rcs = [rect(parts[i]-Δxs[i], Δxs[i], parts[i], f; direction=direction) for i in 1:length(parts)]
+        ss = round(sum(f.(parts) .* Δxs), sigdigits=6)
+        (parts, rcs, ss)
+    else
+        parts = a:Δx:(b-Δx)
+        rcs = [rect(p, Δx, rand(p:0.1:p+Δx), f; direction=direction) for p in parts]
+        (parts, rcs, nothing)
+    end
+    # recs= [rect(sample(p,Δx),Δx,p,f) for p in partition]
+    p = direction == :y ? plot(f.(x), x; legend=nothing) : plot(x, f.(x); legend=nothing)
+    plot!(p, recs, framestyle=:origin, opacity=0.4, color=color)
+    s = isnothing(ss) ? round(sum(f.(partition) * Δx), sigdigits=6) : ss
+    return plot_it ? (p, s) : s
+end
+
+# ╔═╡ ef081dfa-b610-4c7a-a039-7258f4f6e80e
+begin
+    function add_space(n=1)
+        repeat("&nbsp;", n)
+    end
+    function post_img(img::String, w=500)
+        res = Resource(img, :width => w)
+        cm"""
+      <div class="img-container">
+
+      $(res)
+
+      </div>"""
+    end
+    function poolcode()
+        cm"""
+      <div class="img-container">
+
+      $(Resource("https://www.dropbox.com/s/cat9ots4ausfzyc/qrcode_itempool.com_kfupm.png?raw=1",:width=>300))
+
+      </div>"""
+    end
+    function define(t="")
+        beginBlock("Definition", t)
+    end
+    function remark(t="")
+        beginBlock("Remark", t)
+    end
+    function remarks(t="")
+        beginBlock("Remarks", t)
+    end
+    function bbl(t)
+        beginBlock(t, "")
+    end
+    function bbl(t, s)
+        beginBlock(t, s)
+    end
+    ebl() = endBlock()
+    function theorem(s)
+        bth(s)
+    end
+    function bth(s)
+        beginTheorem(s)
+    end
+    eth() = endTheorem()
+    ex(n::Int; s::String="") = ex("Example $n", s)
+    ex(t::Int, s::String) = example("Example $t", s)
+    ex(t, s) = example(t, s)
+    function beginBlock(title, subtitle)
+        """<div style="box-sizing: border-box;">
+           <div style="display: flex;flex-direction: column;border: 6px solid rgba(200,200,200,0.5);box-sizing: border-box;">
+           <div style="display: flex;">
+           <div style="background-color: #FF9733;
+               border-left: 10px solid #df7300;
+               padding: 5px 10px;
+               color: #fff!important;
+               clear: left;
+               margin-left: 0;font-size: 112%;
+               line-height: 1.3;
+               font-weight: 600;">$title</div>  <div style="olor: #000!important;
+               margin: 0 0 20px 25px;
+               float: none;
+               clear: none;
+               padding: 5px 0 0 0;
+               margin: 0 0 0 20px;
+               background-color: transparent;
+               border: 0;
+               overflow: hidden;
+               min-width: 100px;font-weight: 600;
+               line-height: 1.5;">$subtitle</div>
+           </div>
+           <p style="padding:5px;">
+       """
+    end
+    function beginTheorem(subtitle)
+        beginBlock("Theorem", subtitle)
+    end
+    function endBlock()
+        """</p></div></div>"""
+    end
+    function endTheorem()
+        endBlock()
+    end
+    ex() = example("Example", "")
+    # function example(lable, desc)
+    #     """<div style="display:flex;">
+    #    <div style="
+    #    font-size: 112%;
+    #        line-height: 1.3;
+    #        font-weight: 600;
+    #        color: #f9ce4e;
+    #        float: left;
+    #        background-color: #5c5c5c;
+    #        border-left: 10px solid #474546;
+    #        padding: 5px 10px;
+    #        margin: 0 12px 20px 0;
+    #        border-radius: 0;
+    #    ">$lable:</div>
+    #    <div style="flex-grow:3;
+    #    line-height: 1.3;
+    #        font-weight: 600;
+    #        float: left;
+    #        padding: 5px 10px;
+    #        margin: 0 12px 20px 0;
+    #        border-radius: 0;
+    #    ">$desc</div>
+    #    </div>"""
+    # end
+    function example(lable, desc)
+        """<div class="example-box">
+    <div class="example-header">
+      $lable
+    </div>
+    <div class="example-title">
+      $desc
+    </div>
+    <div class="example-content">
+
+  </div>
+  """
+    end
+
+    @htl("")
+end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -2776,11 +2761,8 @@ version = "1.13.0+0"
 """
 
 # ╔═╡ Cell order:
-# ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
-# ╠═71bc54d5-d0ed-42d3-9bc1-48aa86e91d1d
 # ╠═e414122f-b93a-4510-b8ae-026c303e0df9
-# ╠═cd269caf-ef81-43d7-a1a8-6668932b6363
-# ╠═d6d85087-9ecc-4043-9002-e4a6442b829e
+# ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
 # ╠═b4599a16-e7f7-4a2a-b349-2648ee45208f
 # ╠═8315fb27-89e4-44a4-a51e-8e55fc3d58e5
 # ╠═ef081dfa-b610-4c7a-a039-7258f4f6e80e

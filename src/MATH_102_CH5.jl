@@ -4,6 +4,18 @@
 using Markdown
 using InteractiveUtils
 
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
+macro bind(def, element)
+    #! format: off
+    return quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local el = $(esc(element))
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
+        el
+    end
+    #! format: on
+end
+
 # ╔═╡ f2d4c2a5-f486-407b-b31b-d2efcc7476b3
 begin
     using CommonMark
@@ -26,9 +38,6 @@ begin
     using IntervalArithmetic
 end
 
-# ╔═╡ 71bc54d5-d0ed-42d3-9bc1-48aa86e91d1d
-TableOfContents(title="📚 MATH102: Calculus III", indent=true, depth=4)
-
 # ╔═╡ e414122f-b93a-4510-b8ae-026c303e0df9
 begin
     struct LocalImage
@@ -39,18 +48,6 @@ begin
         write(io, read(w.filename))
     end
 end
-
-# ╔═╡ cd269caf-ef81-43d7-a1a8-6668932b6363
-# exportqrcode("https://www.mathmatize.com/")
-# let
-#     img = LocalImage("../qrcode.png")
-# end
-
-# ╔═╡ d6d85087-9ecc-4043-9002-e4a6442b829e
-md"""
-
-# [AI-STUDY RESOURCE](https://notebooklm.google.com/notebook/f9f5eb4d-5782-4586-9f7e-abdb60f1b694)
-"""
 
 # ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
 function rect(x, Δx, xs, f; direction=:x)
@@ -63,11 +60,11 @@ function rect(x, Δx, xs, f; direction=:x)
 end
 
 # ╔═╡ 8315fb27-89e4-44a4-a51e-8e55fc3d58e5
-function reimannSum(f, n, a, b; method="l", color=:green, 
-					plot_it=false, 
-					direction=:x,
-					partitioning=nothing
-				   )
+function reimannSum(f, n, a, b; method="l", color=:green,
+                    plot_it=false,
+                    direction=:x,
+                    partitioning=nothing
+                   )
     Δx = (b - a) / n
     x = a:0.01:b
     # plot(f;xlim=(-2π,2π), xticks=(-2π:(π/2):2π,["$c π" for c in -2:0.5:2]))
@@ -84,12 +81,12 @@ function reimannSum(f, n, a, b; method="l", color=:green,
         parts = a:Δx:(b-Δx)
         rcs = [rect(p, Δx, p, f; direction=direction) for p in parts]
         (parts, rcs, nothing)
-	elseif method == "u" # for user
-		@assert !isnothing(partitioning) "You must provide a partitioning function."
+    elseif method == "u" # for user
+        @assert !isnothing(partitioning) "You must provide a partitioning function."
         Δxs, parts = partitioning()
         rcs = [rect(parts[i]-Δxs[i], Δxs[i], parts[i], f; direction=direction) for i in 1:length(parts)]
-		ss = round(sum(f.(parts) .* Δxs), sigdigits=6)
-        (parts, rcs, ss)	
+        ss = round(sum(f.(parts) .* Δxs), sigdigits=6)
+        (parts, rcs, ss)
     else
         parts = a:Δx:(b-Δx)
         rcs = [rect(p, Δx, rand(p:0.1:p+Δx), f; direction=direction) for p in parts]
@@ -152,28 +149,28 @@ begin
     ex(t, s) = example(t, s)
     function beginBlock(title, subtitle)
         """<div style="box-sizing: border-box;">
-       	<div style="display: flex;flex-direction: column;border: 6px solid rgba(200,200,200,0.5);box-sizing: border-box;">
-       	<div style="display: flex;">
-       	<div style="background-color: #FF9733;
-       	    border-left: 10px solid #df7300;
-       	    padding: 5px 10px;
-       	    color: #fff!important;
-       	    clear: left;
-       	    margin-left: 0;font-size: 112%;
-       	    line-height: 1.3;
-       	    font-weight: 600;">$title</div>  <div style="olor: #000!important;
-       	    margin: 0 0 20px 25px;
-       	    float: none;
-       	    clear: none;
-       	    padding: 5px 0 0 0;
-       	    margin: 0 0 0 20px;
-       	    background-color: transparent;
-       	    border: 0;
-       	    overflow: hidden;
-       	    min-width: 100px;font-weight: 600;
-       	    line-height: 1.5;">$subtitle</div>
-       	</div>
-       	<p style="padding:5px;">
+           <div style="display: flex;flex-direction: column;border: 6px solid rgba(200,200,200,0.5);box-sizing: border-box;">
+           <div style="display: flex;">
+           <div style="background-color: #FF9733;
+               border-left: 10px solid #df7300;
+               padding: 5px 10px;
+               color: #fff!important;
+               clear: left;
+               margin-left: 0;font-size: 112%;
+               line-height: 1.3;
+               font-weight: 600;">$title</div>  <div style="olor: #000!important;
+               margin: 0 0 20px 25px;
+               float: none;
+               clear: none;
+               padding: 5px 0 0 0;
+               margin: 0 0 0 20px;
+               background-color: transparent;
+               border: 0;
+               overflow: hidden;
+               min-width: 100px;font-weight: 600;
+               line-height: 1.5;">$subtitle</div>
+           </div>
+           <p style="padding:5px;">
        """
     end
     function beginTheorem(subtitle)
@@ -219,7 +216,7 @@ begin
       $desc
     </div>
     <div class="example-content">
-      
+
   </div>
   """
     end
@@ -265,7 +262,7 @@ begin
     \\
     \displaystyle\sum_{i=1}^n (a_i-b_i) &=& \sum_{i=1}^n  a_i-\sum_{i=1}^n  b_i \\
     \\
-    \end{array} 
+    \end{array}
     ```
 
     #### Summation Formulas
@@ -281,7 +278,7 @@ begin
     \\
     (4) & \displaystyle\sum_{i=1}^n i^3 = \left[\frac{n(n+1)}{2}\right]^2 \\
     \\
-    \end{array} 
+    \end{array}
     ```
 
 
@@ -306,7 +303,7 @@ Evaluate ``\displaystyle \sum_{i=1}^n\frac{i+1}{n^2}`` for ``n=10, 100, 1000`` a
 md"## Area "
 
 # ╔═╡ 52333157-9913-489d-8784-dc3b542af1e9
-cm""" 
+cm"""
 
 
 
@@ -361,13 +358,13 @@ let
     if showPlot == "show"
         theme(:wong)
         anchor1 = 0.5
-		# tks = map(i->Strint)
+        # tks = map(i->Strint)
         (p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true)
-		xticks!(p,round.([a:(b-a)/n:2.0]...,digits=2))	
+        xticks!(p,round.([a:(b-a)/n:2.0]...,digits=2))
         annotate!(p, [(anchor1, f(anchor1) - 2, text(L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$", 12, n > 500 ? :white : :black))])
         annotate!(p, [(anchor1 + 0.5, f(anchor1 + 0.1), text(L"$y=%$f(x)$", 12, :black))])
 
-        md""" 	
+        md"""
 
         $p
         """
@@ -398,7 +395,7 @@ let
         (3.9, 4, text(L"f", 14))
     ])
     cm"""
-    
+
     __Find the area of the region is bounded below by the ``x``-axis, and the left and right boundaries of the region are the vertical lines ``x=a`` and ``x=b``.__
 
     $findingAreaP
@@ -442,7 +439,7 @@ let
     a, b = 0, 2
     theme(:wong)
     anchor1 = 0.5
-	(p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true)
+    (p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true)
     sum_text = if lr == "l"
         L"$\sum_{i=1}^{%$n} f (x_{i-1})\Delta x=%$s$"
     elseif lr == "r"
@@ -453,7 +450,7 @@ let
     annotate!(p, [(anchor1, f(anchor1) + 2, text(sum_text, 12, n > 500 ? :white : :black))])
     annotate!(p, [(1.2, f(1) + 0.1, text(L"$y=%$f(x)$", 12, :black))])
 
-    md""" 	
+    md"""
 
     $p
     """
@@ -473,7 +470,7 @@ Let ``f`` be continuous and nonnegative on the interval ``[a,b]``. The limits as
 ```
 ‍
 ‍
-where  
+where
 ```math
 \Delta x = \frac{b-a}{n}
 ```
@@ -484,11 +481,11 @@ and ``f(m_i)`` and ``f(M_i)`` are the minimum and maximum values of ``f`` on the
 # ╔═╡ a862aa36-d811-427d-bc1a-4502175b71f4
 cm"""
 $(define("Area of a Region in the Plane"))
-Let ``f`` be continuous and nonnegative on the interval ``[a,b]``.  The area of the region bounded by the graph of ``f`` , the ``x``-axis, and the vertical lines ``x=a`` and ``y=b`` is 
+Let ``f`` be continuous and nonnegative on the interval ``[a,b]``.  The area of the region bounded by the graph of ``f`` , the ``x``-axis, and the vertical lines ``x=a`` and ``y=b`` is
 ```math
 \textrm{Area} = \displaystyle \lim_{n\to\infty}\sum_{i=1}^nf(c_i)\Delta x
 ```
-where 
+where
 ```math
 x_{i-1}\leq c_i\leq x_i\quad \textrm{and}\quad \Delta x =\frac{b-a}{n}.
 ```
@@ -527,7 +524,7 @@ let
 
     annotate!(p, [(anchor1, f(anchor1) + 0.5, text(sum_text, 12, n > 500 ? :white : :black))])
 
-    md""" 	
+    md"""
 
     $p
     """
@@ -561,7 +558,7 @@ let
 
     annotate!(p, [(anchor1, f(anchor1) - 0.01, text(sum_text, 12, n > 500 ? :white : :black))])
 
-    md""" 	
+    md"""
 
     $p
     """
@@ -580,7 +577,7 @@ $(ebl())
 
 $(ex(8,"Approximating Area with the Midpoint Rule"))
 
-Use the Midpoint Rule with ``n=4`` to approximate the area of the region bounded by the graph of ``f(x)=\sin x`` and the ``x``-axis for ``0\leq x\leq \pi``, 
+Use the Midpoint Rule with ``n=4`` to approximate the area of the region bounded by the graph of ``f(x)=\sin x`` and the ``x``-axis for ``0\leq x\leq \pi``,
 """
 
 # ╔═╡ 812de6c7-f5b3-4b93-bb44-ba147d6fc140
@@ -605,7 +602,7 @@ let
 
     annotate!(p, [(anchor1 + 0.1, f(anchor1) + 0.4, text(sum_text, 12, n > 500 ? :white : :black))])
 
-    md""" 	
+    md"""
 
     $p
     """
@@ -613,7 +610,7 @@ let
 end
 
 # ╔═╡ ee50e46d-6580-4a68-a061-6179c895a219
-md"""#  5.3 Riemann Sums and Definite Integrals 
+md"""#  5.3 Riemann Sums and Definite Integrals
 
 > __Objectives__
 > 1. Understand the definition of a Riemann sum.
@@ -658,13 +655,13 @@ let
     a, b = a2, b2
     theme(:wong)
     anchor1 = 0.15
-	function parts()
-		ci = [i^2/n^2 for i in 1:n]
-		acib = vcat(a,ci)
-		dxi =[acib[i+1]-acib[i] for i in 1:length(acib)-1]
-		dxi, ci
-	end
-	parts()
+    function parts()
+        ci = [i^2/n^2 for i in 1:n]
+        acib = vcat(a,ci)
+        dxi =[acib[i+1]-acib[i] for i in 1:length(acib)-1]
+        dxi, ci
+    end
+    parts()
     (p, s) = reimannSum(f, n, a, b; method=lr, plot_it=true, direction=:x, partitioning=parts)
     sum_text = if lr == "l"
         L"$\sum_{i=1}^{%$n} f (x_{i-1})\Delta x=%$s$"
@@ -676,7 +673,7 @@ let
 
     annotate!(p, [(anchor1 + 0.1, f(anchor1) + 0.4, text(sum_text, 12, n > 500 ? :white : :black))])
 
-    md""" 	
+    md"""
 
     $p
     """
@@ -715,7 +712,7 @@ is called a __Riemann sum__ of ``f`` for the partition ``\Delta``.
 cm"""
 $(bbl("Remark",""))
 
-The width of the largest subinterval of a partition ``\Delta`` is the __norm__ of the partition and is denoted by ``\|\Delta\|``. 
+The width of the largest subinterval of a partition ``\Delta`` is the __norm__ of the partition and is denoted by ``\|\Delta\|``.
 
 - If every subinterval is of equal width, then the partition is __regular__ and the norm is denoted by
 ```math
@@ -740,7 +737,7 @@ md"## Definite Integral"
 # ╔═╡ c19ba868-ca3b-4987-8e9b-eacffd6f9158
 cm"""
 $(define("Definite Integral"))
-If ``f`` is defined on the closed interval ``[a,b]`` and the limit of Riemann sums over partitions ``\Delta`` 
+If ``f`` is defined on the closed interval ``[a,b]`` and the limit of Riemann sums over partitions ``\Delta``
 ```math
 \lim_{\|\Delta\|\to 0}\sum_{i=1}^nf(c_i)\Delta x_i
 ```
@@ -759,7 +756,7 @@ $(bbl("Remark",""))
 The definite integral  is a **number**; it does not depend on ``x``. In fact, we could use any letter in place of ``x`` without changing the value of the integral:
 
 ```math
-\int_a^b f(x) dx = \int_a^b f(y) dy =\int_a^b f(w) dw =\int_a^b f(😀) d😀 
+\int_a^b f(x) dx = \int_a^b f(y) dy =\int_a^b f(w) dw =\int_a^b f(😀) d😀
 ```
 """
 
@@ -767,7 +764,7 @@ The definite integral  is a **number**; it does not depend on ``x``. In fact, we
 cm"""
 $(bth("Continuity Implies Integrability"))
 
-If a function ``f`` is continuous on the closed interval ``[a,b]``, then ``f`` is integrable on ``[a,b]``. That is, 
+If a function ``f`` is continuous on the closed interval ``[a,b]``, then ``f`` is integrable on ``[a,b]``. That is,
 
 ```math
 \int_a^b f(x) dx \quad \textrm{exists}.
@@ -812,7 +809,7 @@ let
     annotate!(p3, [(3.5, 2.5, L"y=f(x)"), (5.2, 0, L"x"), (0.2, 4, L"y")])
     # annotate!(p2,[(4,0.51,(L"$\sum_{i=1}^{%$n2} f (x^*_{i})\Delta x=%$s2$",12))])
 
-    md""" * If ``f(x)\ge 0``, the integral ``\int_a^b f(x) dx`` is the area under the curve ``y=f(x)`` from ``a`` to ``b``.	
+    md""" * If ``f(x)\ge 0``, the integral ``\int_a^b f(x) dx`` is the area under the curve ``y=f(x)`` from ``a`` to ``b``.
 
     $p3
     """
@@ -831,7 +828,7 @@ $(ex(3,"Kahoot it 😃"))
 """
 
 # ╔═╡ b5d1d68a-ad7e-4140-a818-addead342c53
-cm""" 
+cm"""
 
 - ``\displaystyle \int_a^b f(x) dx`` is the net area
 
@@ -841,15 +838,15 @@ $(post_img("https://www.dropbox.com/s/ol9l38j2a53usei/note3.png?raw=1"))
 # ╔═╡ d7cb77c3-7875-43d8-bab6-7281455700b0
 begin
 
-    cm""" 
-    **Question 1:** 
+    cm"""
+    **Question 1:**
 
     $(post_img("https://www.dropbox.com/s/7esby3czioyzk26/q1.png?dl=1"))
 
     where each of the regions ``A, B`` and ``C`` has area equal to 5, then the area between the graph and the x-axis from ``x=-4`` to ``x=2`` is
 
 
-    	
+
     """
 
 end
@@ -870,16 +867,16 @@ end
 begin
     s52q1Check1 = @bind s52q1chk1 Radio(["show" => "show", "hide" => "hide"], default="hide")
 
-    md""" 
-    **Question 2:** 
+    md"""
+    **Question 2:**
 
     $(post_img("https://www.dropbox.com/s/7esby3czioyzk26/q1.png?dl=1"))
 
-    where each of the regions ``A, B`` and ``C`` has area equal to 5, then 
-    	``\int_{-4}^2 f(x) dx = `` 
+    where each of the regions ``A, B`` and ``C`` has area equal to 5, then
+        ``\int_{-4}^2 f(x) dx = ``
 
     $(s52q1Check1)
-    	
+
     """
 
 end
@@ -966,9 +963,9 @@ begin
 
     **Example:**
 
-    1. Set up an expression for $\int_1^3 e^x dx$ as a limit of sums. 
+    1. Set up an expression for $\int_1^3 e^x dx$ as a limit of sums.
     2. Use a computer algebra system to evaluate the expression
-    	
+
     **Solution:**
     1. In class
     """
@@ -978,7 +975,7 @@ end
 # ╔═╡ 4e358ab2-9be7-4d7f-b295-1e85943da027
 let
     x = symbols("x", real=true)
-	integrate(exp(x), (x,1,3))
+    integrate(exp(x), (x,1,3))
 end
 
 # ╔═╡ 81e4ac99-3388-49e0-a168-5d9961c80ddf
@@ -989,7 +986,7 @@ __3. Interpreting as areas__
 
 Evaluate the following integrals by interpreting each in terms of areas
 
-(i) $\int_0^3  \sqrt{9-x^2} dx$  
+(i) $\int_0^3  \sqrt{9-x^2} dx$
 
 (ii) $\int_{-2}^1|x|dx$
 
@@ -1015,13 +1012,13 @@ md""" __4. Approximating (Midpoint Rule)__
 f(\overline{x_1})+\cdots+f(\overline{x_n})
 \right]
 ```
-```math 
+```math
 \text{where} \qquad \Delta x = \frac{b-a}{n}
 ```
-```math 
+```math
 \text{and} \qquad \overline{x_i} = \frac{1}{2}\left(x_{i-1}+x_i\right) = \textrm{midpoint of } [x_{i-1},x_i].
 ```
-**Example**: Use the Midpoint Rule to approximate 
+**Example**: Use the Midpoint Rule to approximate
 $${\large \int_1^2\frac{1}{x}dx}$$
 with $n=5$.
 
@@ -1037,8 +1034,8 @@ integrate(1 / xx, (xx, 1, 2)).n()
 
 # ╔═╡ 124a0bb3-b89e-4ac5-9178-01cda06045ec
 md""" **Example**
-Estimate 
-```math 
+Estimate
+```math
 \int_0^1 e^{-x^2} dx
 ```
 
@@ -1056,7 +1053,7 @@ md"""
 **Exercises:**
 __Kahoot 😃__
 
-1. Wrtie as definite integral 
+1. Wrtie as definite integral
 $\lim_{n\to \infty}\sum_{i=1}^n\frac{1}{n}\cos\left(1+\frac{i}{n}\right)^2=$
 2. If $\int_{-5}^7f(x)dx=-17, \int_{-5}^{11}f(x)dx=32$, and $\int_{8}^7f(x)dx=5$, then $\int_{11}^8f(x)dx=$
 
@@ -1092,9 +1089,9 @@ $(Resource("https://www.dropbox.com/s/8f52dty2aywwr92/diff_vs_antidiff.jpg?raw=1
 
 * ✒ ``\displaystyle \int_a^b f(x) dx``
     * definite integral
-    * number              
+    * number
 * ✒ ``\displaystyle \int f(x) dx``
-    * indefinite integral 
+    * indefinite integral
     * function
 
 $(bth("The Fundamental Theorem of Calculus"))
@@ -1107,9 +1104,9 @@ $(ebl())
 
 $(bbl("Remark",""))
 
-We use the notation 
+We use the notation
 ```math
-\int_a^b f(x) dx = \bigl. F(x)\Biggr|_a^b= F(b)-F(a) \quad \textrm{or}\quad 
+\int_a^b f(x) dx = \bigl. F(x)\Biggr|_a^b= F(b)-F(a) \quad \textrm{or}\quad
 \int_a^b f(x) dx =\Bigl[F(x)\Bigr]_a^b = F(b)-F(a)
 ```
 """
@@ -1157,9 +1154,9 @@ begin
     ```
     the ``x``-axis, and the vertical lines ``x=1`` and ``x=e``.
     $(ebl())
-    
+
     $s54e3_p
-    
+
     """
 end
 
@@ -1255,9 +1252,9 @@ $(post_img("https://www.dropbox.com/s/knjbngrqs2r2h1z/ftc2.jpg?raw=1",600))
 # ╔═╡ af619399-4655-45a0-847b-60357e53d2a5
 cm"""
 $(bbl("Exploration",""))
-Consider the following function 
+Consider the following function
 
-```math 
+```math
 F(x) = \int_a^x f(t) dt
 ```
 where ``f`` is a continuous function on the interval ``[a,b]`` and ``x \in [a,b]``.
@@ -1296,12 +1293,12 @@ end
 
 # ╔═╡ f64e2917-76fc-4ba8-8a47-d8c4c3654880
 cm"""
-**Example** 
+**Example**
 If ``g(x) = \int_0^x f(t) dt``
 
 $(post_img("https://www.dropbox.com/scl/fi/ozabhnwfju0zskug7quzl/ex_5_3.png?rlkey=zcdt9bn7p9s6dsuvep7y547vk&dl=1"))
 
-Find ``g(2)`` 
+Find ``g(2)``
 
 """
 
@@ -1381,10 +1378,10 @@ let
 
 
     md"""
-    
+
     A=$(integrate(ff(xx),(xx,0,2)))
-    
-    	
+
+
     """
 
 end
@@ -1413,7 +1410,7 @@ $(ebl())
 
 If an object moves along a straight line with position function ``s(t)``, then its velocity is ``v(t)=s'(t)``, so
 ```math
-\int_{t_1}^{t_2}v(t) dt = s(t_2)-s(t_1) 
+\int_{t_1}^{t_2}v(t) dt = s(t_2)-s(t_1)
 ```
 
 - **Remarks**
@@ -1537,28 +1534,28 @@ begin
     ```
     $(ebl())
     <div class="img-container">
-    
+
     $(Resource("https://www.dropbox.com/s/uua8vuahfxnp48c/subs_th.jpg?raw=1"))
-    
+
     </div>
-    
+
     $(bbl("Remark","Substitution Rule says:"))
     It is permissible to operate with ``dx`` and ``du`` after integral signs as if they were differentials.
     $(ebl())
-    
+
     $(ex())
-    Find 
+    Find
     ```math
     \begin{array}{ll}
     (i) & \int \bigl(x^2+1 \bigr)^2 (2x) dx \\ \\
     (ii) & \int 5e^{5x} dx \\ \\
     (iii) & \int \frac{x}{\sqrt{1-4x^2}} dx \\ \\
-    (iv) & \int \sqrt{1+x^2} \;\; x^5 dx \\ \\ 
+    (iv) & \int \sqrt{1+x^2} \;\; x^5 dx \\ \\
     (v) & \int \tan x dx \\ \\
     \end{array}
     ```
-    
-    
+
+
         """
 end
 
@@ -1567,19 +1564,20 @@ md"## Change of Variables for Indefinite Integrals"
 
 # ╔═╡ a73db7b8-3464-4852-a9ef-5d0de43d4395
 
+
 # ╔═╡ 2b68430f-08ac-4bfb-a484-e6fbe08738ba
 
 cm"""
 
 __Example__: Find
 ```math
-	\begin{array}{ll}
-	(i) & \int \sqrt{2x-1} dx \\ \\
-	(ii) & \int x\sqrt{2x-1} dx \\ \\
-	(iii) & \int \sin^23x\cos3x dx \\ \\
-	\end{array}
+    \begin{array}{ll}
+    (i) & \int \sqrt{2x-1} dx \\ \\
+    (ii) & \int x\sqrt{2x-1} dx \\ \\
+    (iii) & \int \sin^23x\cos3x dx \\ \\
+    \end{array}
 ```
-	
+
 """
 
 # ╔═╡ 1beace3e-3a7e-411b-b6c0-3eca1fbf8536
@@ -1598,15 +1596,15 @@ If ``g`` is a differentiable function of ``x``, then
 
 $(ex()) Find
 ```math
-	\begin{array}{ll}
-	(i) & \int 3(3x-1)^4 dx \\ \\
-	(ii) & \int (e^x+1)(e^x+x) dx \\ \\
-	(iii) & \int 3x^2\sqrt{x^3-2} \;dx \\ \\
-	(iv) & \displaystyle \int \frac{-4x}{(1-2x^2)^2}\; dx \\ \\
-	(v) & \int \cos^2 x\sin x \;dx \\ \\
-	\end{array}
+    \begin{array}{ll}
+    (i) & \int 3(3x-1)^4 dx \\ \\
+    (ii) & \int (e^x+1)(e^x+x) dx \\ \\
+    (iii) & \int 3x^2\sqrt{x^3-2} \;dx \\ \\
+    (iv) & \displaystyle \int \frac{-4x}{(1-2x^2)^2}\; dx \\ \\
+    (v) & \int \cos^2 x\sin x \;dx \\ \\
+    \end{array}
 ```
-	
+
 
 """
 
@@ -1644,19 +1642,19 @@ let
     # plot!(ex2plt2,ex2x,ex2y, framestyle=:origin, xlims=(1,exp(1)), fillrange =0,fillalpha=0.5,c=:red)
     # xlims!(ex2plt1,-1,2)
     # plot!(ex2plt1, fill=(0, 0.5, :red), xlims=(1,2))
-    cm""" 
+    cm"""
     $(ex())
-    	Evaluate
+        Evaluate
 
     ```math
     \begin{array}{ll}
     (i) & \int_1^2 \frac{dx}{\left(3-5x\right)^2} \\ \\
-    (ii) & \int_1^e \frac{\ln x}{x} dx \\ \\ 
-    (iii) & \int_0^1 x(x^2+1)^3 \;dx \\ \\ 
-    (iv) & \int_1^5 \frac{x}{\sqrt{2x-1}}\;dx \\ \\ 
+    (ii) & \int_1^e \frac{\ln x}{x} dx \\ \\
+    (iii) & \int_0^1 x(x^2+1)^3 \;dx \\ \\
+    (iv) & \int_1^5 \frac{x}{\sqrt{2x-1}}\;dx \\ \\
     \end{array}
     ```
-    $ex2plt1	
+    $ex2plt1
 
     $ex2plt2
 
@@ -1675,21 +1673,21 @@ $(bth("Integration of even and Odd Function"))
 
 Suppose ``f`` is continuous on **``[-a,a]``**.
 
-* If ``f`` is **even** ``\left[f(-x)=f(x)\right]``, then 
+* If ``f`` is **even** ``\left[f(-x)=f(x)\right]``, then
 ```math
 \int_{-a}^a f(x) dx = 2\int_0^a f(x) dx
 ```
 
-* If ``f`` is **odd** ``\left[f(-x)=-f(x)\right]``, then 
+* If ``f`` is **odd** ``\left[f(-x)=-f(x)\right]``, then
 ```math
 \int_{-a}^a f(x) dx = 0
 ```
 $(ebl())
 
 $(ex())
-Find 
+Find
 ```math
-\int_{-1}^1 \frac{\tan x}{1+x^2+x^4} dx 
+\int_{-1}^1 \frac{\tan x}{1+x^2+x^4} dx
 ```
 
 """
@@ -1712,10 +1710,10 @@ $(bth("Log Rule for Integration"))
 
 Let ``u``  be a differentiable function of ``x``.
 ```math
-	\begin{array}{llll}
-	\textrm{(i) }& \displaystyle \int \frac{1}{x} dx &=& \ln|x| + C  \\ \\
-	\textrm{(ii) }& \displaystyle \int \frac{1}{u} du &=& \ln|u| + C  \\ \\
-	\end{array}
+    \begin{array}{llll}
+    \textrm{(i) }& \displaystyle \int \frac{1}{x} dx &=& \ln|x| + C  \\ \\
+    \textrm{(ii) }& \displaystyle \int \frac{1}{u} du &=& \ln|u| + C  \\ \\
+    \end{array}
 ```
 $(ebl())
 
@@ -1745,12 +1743,12 @@ the ``x``-axis, and the line ``x=3``.
 cm"""
 $(ex(4,"Recognizing Quotient Forms of the Log Rule"))
 ```math
-	\begin{array}{llll}
-	\textrm{(a) }& \displaystyle \int \frac{3x^2+1}{x^3+x} dx   \\ \\
-	\textrm{(b) }& \displaystyle \int \frac{\sec^2x}{\tan x} dx   \\ \\
-	\textrm{(c) }& \displaystyle \int \frac{x+1}{x^2+2x} dx   \\ \\
-	\textrm{(d) }& \displaystyle \int \frac{1}{3x+2} dx   \\ \\
-	\end{array}
+    \begin{array}{llll}
+    \textrm{(a) }& \displaystyle \int \frac{3x^2+1}{x^3+x} dx   \\ \\
+    \textrm{(b) }& \displaystyle \int \frac{\sec^2x}{\tan x} dx   \\ \\
+    \textrm{(c) }& \displaystyle \int \frac{x+1}{x^2+2x} dx   \\ \\
+    \textrm{(d) }& \displaystyle \int \frac{1}{3x+2} dx   \\ \\
+    \end{array}
 ```
 """
 
@@ -1759,12 +1757,12 @@ cm"""
 $(ex(5,"Using Long Division Before Integrating"))
 Find the indefinite integral.
 ```math
-\displaystyle \int \frac{x^2+x+1}{x^2+1} dx  
+\displaystyle \int \frac{x^2+x+1}{x^2+1} dx
 ```
 $(ex(6,"Change of Variables with the Log Rule"))
 Find the indefinite integral.
 ```math
-\displaystyle \int \frac{2x}{(x+1)^2} dx  
+\displaystyle \int \frac{2x}{(x+1)^2} dx
 ```
 
 """
@@ -1786,12 +1784,12 @@ let
 
     cm"""
     $(t)
-    
+
     $(ex(8,"Using a trigonometric Identity"))
     ```math
     \int \tan x dx, \quad \int \sec x dx
     ```
-    
+
     """
 end
 
@@ -1800,14 +1798,14 @@ cm"""
 $(bbl("INTEGRALS OF THE SIX BASIC TRIGONOMETRIC FUNCTIONS",""))
 
 ```math
-	\begin{array}{llll}
-	\displaystyle \int \sin u du &=& -\cos u + C &\qquad&  \displaystyle \int \cos u du &=& \sin u + C \\ \\
+    \begin{array}{llll}
+    \displaystyle \int \sin u du &=& -\cos u + C &\qquad&  \displaystyle \int \cos u du &=& \sin u + C \\ \\
 
-	\displaystyle \int \tan u du &=& -\ln|\cos u| + C &\qquad&  \displaystyle \int \cot u du &=& \ln|\sin u| + C \\ \\
+    \displaystyle \int \tan u du &=& -\ln|\cos u| + C &\qquad&  \displaystyle \int \cot u du &=& \ln|\sin u| + C \\ \\
 
 
-	\displaystyle \int \sec u du &=& \ln|\sec u +\tan u| + C &\qquad&  \displaystyle \int \csc u du &=& -\ln|\csc u +\cot u| + C \\ \\
-	\end{array}
+    \displaystyle \int \sec u du &=& \ln|\sec u +\tan u| + C &\qquad&  \displaystyle \int \csc u du &=& -\ln|\csc u +\cot u| + C \\ \\
+    \end{array}
 ```
 
 """
@@ -1961,11 +1959,11 @@ cm"""
 __Definitions of the Hyperbolic Functions__
 ```math
 \begin{array}{lllllll}
-\sinh x &=& \displaystyle \frac{e^x-e^{-x}}{2} &\qquad& 
+\sinh x &=& \displaystyle \frac{e^x-e^{-x}}{2} &\qquad&
 \text{csch}\; x &=& \displaystyle \frac{1}{\sinh x},\; x\neq 0\\ \\
-\cosh x &=& \displaystyle \frac{e^x+e^{-x}}{2} &\qquad& 
+\cosh x &=& \displaystyle \frac{e^x+e^{-x}}{2} &\qquad&
 \text{sech}\; x &=& \displaystyle \frac{1}{\cosh x}\\ \\
-\tanh x &=& \displaystyle \frac{\sinh x}{\cosh x} &\qquad& 
+\tanh x &=& \displaystyle \frac{\sinh x}{\cosh x} &\qquad&
 \text{coth}\; x &=& \displaystyle \frac{1}{\tanh x},\; x\neq 0\\ \\
 \end{array}
 ```
@@ -1983,24 +1981,24 @@ cm"""
 $(bbl("Hyperbolic Identities",""))
 ```math
 \begin{array}{rllllll}
-\cosh^2 x - \sinh^2 x &=& 1, &\qquad& 
+\cosh^2 x - \sinh^2 x &=& 1, &\qquad&
 \sinh (x+y)\;  &=& \sinh x\cosh y +\cosh x\sinh y\\ \\
 
-\tanh^2 x + \text{sech}^2 x &=& 1, &\qquad& 
+\tanh^2 x + \text{sech}^2 x &=& 1, &\qquad&
 \sinh (x-y)\;  &=& \sinh x\cosh y -\cosh x\sinh y\\ \\
 
 
-\coth^2 x - \text{csch}^2 x &=& 1, &\qquad& 
+\coth^2 x - \text{csch}^2 x &=& 1, &\qquad&
 \cosh (x+y)\;  &=& \cosh x\cosh y +\sinh x\sinh y\\ \\
 
- &&  &\qquad& 
+ &&  &\qquad&
 \cosh (x-y)\;  &=& \cosh x\cosh y -\sinh x\sinh y\\ \\
 
-\sinh^2 x &=& \displaystyle\frac{\cosh 2x -1}{2}, &\qquad& 
+\sinh^2 x &=& \displaystyle\frac{\cosh 2x -1}{2}, &\qquad&
 \cosh^2 x\;  &=& \displaystyle\frac{\cosh 2x +1}{2}\\ \\
 
 
-\sin 2x &=& 2\sinh x\cosh x, &\qquad& 
+\sin 2x &=& 2\sinh x\cosh x, &\qquad&
 \cosh 2x\;  &=& \cosh^2 x +\sinh^2 x\\ \\
 
 
@@ -2015,23 +2013,23 @@ $(bth("Differentiation and Integration of Hyperbolic Functions"))
 Let ``u`` be a differentiable function of ``x``.
 ```math
 \begin{array}{rllllll}
-\displaystyle \frac{d}{dx}\left(\sinh u\right) &=& \left(\cosh u\right)u', &\qquad& 
+\displaystyle \frac{d}{dx}\left(\sinh u\right) &=& \left(\cosh u\right)u', &\qquad&
 \displaystyle \int \cosh u du  &=& \sinh u \; +\; C\\ \\
 
-\displaystyle \frac{d}{dx}\left(\cosh u\right) &=& \left(\sinh u\right)u', &\qquad& 
+\displaystyle \frac{d}{dx}\left(\cosh u\right) &=& \left(\sinh u\right)u', &\qquad&
 \displaystyle \int \sinh u du  &=& \cosh u \; +\; C\\ \\
 
-\displaystyle \frac{d}{dx}\left(\tanh u\right) &=& \left(\text{sech}^2 u\right)u', &\qquad& 
+\displaystyle \frac{d}{dx}\left(\tanh u\right) &=& \left(\text{sech}^2 u\right)u', &\qquad&
 \displaystyle \int \text{sech}^2 u du  &=& \tanh u \; +\; C\\ \\
 
-\displaystyle \frac{d}{dx}\left(\coth u\right) &=& -\left(\text{csch}^2 u\right)u', &\qquad& 
+\displaystyle \frac{d}{dx}\left(\coth u\right) &=& -\left(\text{csch}^2 u\right)u', &\qquad&
 \displaystyle \int \text{csch}^2 u du  &=& -\coth u \; +\; C\\ \\
 
-\displaystyle \frac{d}{dx}\left(\text{sech} u\right) &=& -\left(\text{sech }u \tanh u\right)u', &\qquad& 
+\displaystyle \frac{d}{dx}\left(\text{sech} u\right) &=& -\left(\text{sech }u \tanh u\right)u', &\qquad&
 \displaystyle \int \text{sech } u\tanh u du  &=& -\text{sech } u \; +\; C\\ \\
 
 
-\displaystyle \frac{d}{dx}\left(\text{csch} u\right) &=& -\left(\text{csch }u \coth u\right)u', &\qquad& 
+\displaystyle \frac{d}{dx}\left(\text{csch} u\right) &=& -\left(\text{csch }u \coth u\right)u', &\qquad&
 \displaystyle \int \text{csch } u\coth u du  &=& -\text{csch } u \; +\; C\\ \\
 
 \end{array}
@@ -2120,7 +2118,7 @@ $(Resource("https://www.dropbox.com/s/yc0305sd3i8yr44/inverse_hyper_graphs.jpg?r
 #     annotate!(p, [(anchor1, f(anchor1) - 2, text(L"$\sum_{i=1}^{%$n} f (x_{i})\Delta x=%$s$", 12, n > 500 ? :white : :black))])
 #     annotate!(p, [(anchor1 + 0.5, f(anchor1 + 0.1), text(L"$y=%$f(x)$", 12, :black))])
 
-#     md""" 	
+#     md"""
 
 #     $p
 #     """
@@ -3802,11 +3800,8 @@ version = "1.13.0+0"
 """
 
 # ╔═╡ Cell order:
-# ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
-# ╠═71bc54d5-d0ed-42d3-9bc1-48aa86e91d1d
 # ╠═e414122f-b93a-4510-b8ae-026c303e0df9
-# ╠═cd269caf-ef81-43d7-a1a8-6668932b6363
-# ╠═d6d85087-9ecc-4043-9002-e4a6442b829e
+# ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
 # ╠═b4599a16-e7f7-4a2a-b349-2648ee45208f
 # ╠═8315fb27-89e4-44a4-a51e-8e55fc3d58e5
 # ╠═ef081dfa-b610-4c7a-a039-7258f4f6e80e

@@ -1,6 +1,7 @@
 const ROOT = normpath(joinpath(@__DIR__, ".."))
 const SOURCE = joinpath(ROOT, "src", "MATH102_NOTES.jl")
 const OUT_DIR = joinpath(ROOT, "src")
+const AUDIT_PATH = joinpath(ROOT, "notes", "math102-common-cell-audit.md")
 const CELL_ORDER_START = "# ╔═╡ Cell order:"
 const UUID_PATTERN = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
 const CELL_MARKER_RE = Regex("^# ([╔╠╟]═[╡╪─]) (" * UUID_PATTERN * ")\\s*\$", "m")
@@ -26,8 +27,7 @@ function split_cells(body::AbstractString)
     for (index, regex_match) in pairs(matches)
         start_index = regex_match.offset
         end_index = index < length(matches) ? prevind(body, matches[index + 1].offset) : lastindex(body)
-        cell_text = rstrip(body[start_index:end_index]) * "\n"
-        push!(cells, Cell(regex_match.captures[2], regex_match.captures[1], cell_text))
+        push!(cells, Cell(regex_match.captures[2], regex_match.captures[1], rstrip(body[start_index:end_index]) * "\n"))
     end
     return cells
 end
@@ -58,89 +58,122 @@ function heading_chapter(text::String)
     return nothing
 end
 
-function choose_preamble(cells, first_chapter_cell_id::String)
-    preamble = Cell[]
-    for cell in cells
-        cell.id == first_chapter_cell_id && break
-        push!(preamble, cell)
-    end
-    return preamble
+is_pluto_package_cell(cell::Cell) =
+    cell.id in ("00000000-0000-0000-0000-000000000001", "00000000-0000-0000-0000-000000000002")
+
+function common_cell_reason(cell::Cell)
+    text = cell.text
+    occursin("using CommonMark", text) && return "package/import setup"
+    occursin("struct LocalImage", text) && return "global image helper"
+    occursin("function rect(", text) && return "global plotting helper"
+    occursin("function reimannSum(", text) && return "global Riemann-sum helper"
+    occursin("function post_img(", text) && return "global presentation helpers"
+    return nothing
 end
 
-function assign_chapter_cells(cells, preamble_ids)
-    assigned = Dict(chapter => Cell[] for (chapter, _) in CHAPTERS)
+function collect_common_cells(cells_by_id, order_ids)
+    common = Cell[]
+    seen = Set{String}()
+    for id in order_ids
+        cell = get(cells_by_id, id, nothing)
+        cell === nothing && continue
+        is_pluto_package_cell(cell) && continue
+        reason = common_cell_reason(cell)
+        if reason !== nothing && !(cell.id in seen)
+            push!(common, cell)
+            push!(seen, cell.id)
+        end
+    end
+    return common
+end
+
+function chapter_slices(cells_by_id, order_ids, common_ids)
+    chapter_cells = Dict(chapter => Cell[] for (chapter, _) in CHAPTERS)
     active = nothing
 
-    for cell in cells
-        cell.id in preamble_ids && continue
+    for id in order_ids
+        cell = get(cells_by_id, id, nothing)
+        cell === nothing && continue
         is_pluto_package_cell(cell) && continue
+        cell.id in common_ids && continue
+
         chapter = heading_chapter(cell.text)
-        if chapter !== nothing && haskey(assigned, chapter)
+        if chapter !== nothing && haskey(chapter_cells, chapter)
             active = chapter
         end
-        active === nothing || push!(assigned[active], cell)
+        active === nothing || push!(chapter_cells[active], cell)
     end
 
     for (chapter, _) in CHAPTERS
-        isempty(assigned[chapter]) && error("No cells assigned to Chapter $chapter.")
+        isempty(chapter_cells[chapter]) && error("No cells assigned to Chapter $chapter.")
     end
-    return assigned
+    return chapter_cells
 end
 
-function is_pluto_package_cell(cell::Cell)
-    cell.id in ("00000000-0000-0000-0000-000000000001", "00000000-0000-0000-0000-000000000002")
-end
-
-function is_shared_helper_cell(cell::Cell)
-    occursin("function rect(", cell.text) ||
-        occursin("function reimannSum(", cell.text) ||
-        occursin("function post_img(", cell.text)
+function order_line(cell::Cell)
+    order_prefix = startswith(cell.marker_prefix, "╟") || is_pluto_package_cell(cell) ? "╟─" : "╠═"
+    return "# $(order_prefix)$(cell.id)"
 end
 
 function cell_order(cells)
-    lines = [CELL_ORDER_START]
-    for cell in cells
-        # Pluto's cell order uses ╠═ for code-like cells and ╟─ for markdown-like cells.
-        order_prefix = startswith(cell.marker_prefix, "╟") || is_pluto_package_cell(cell) ? "╟─" : "╠═"
-        push!(lines, "# $(order_prefix)$(cell.id)")
-    end
-    return join(lines, "\n") * "\n"
+    return join(vcat([CELL_ORDER_START], order_line.(cells)), "\n") * "\n"
 end
 
-function write_notebook(filename::String, cells)
+function normalize_generated_cell(text::String)
+    return replace(replace(rstrip(text), "\t" => "    "), r"[ ]+(?=\r?\n)" => "")
+end
+
+function write_notebook(filename::String; physical_cells, execution_cells)
     output = joinpath(OUT_DIR, filename)
     header = "### A Pluto.jl notebook ###\n# v0.20.24\n\nusing Markdown\nusing InteractiveUtils\n\n"
-    body = join((rstrip(cell.text) for cell in cells), "\n\n") * "\n\n"
-    write(output, header * body * cell_order(cells))
-    println("Wrote ", relpath(output, ROOT), " with ", length(cells), " cells")
+    body = join((normalize_generated_cell(cell.text) for cell in physical_cells), "\n\n") * "\n\n"
+    write(output, header * body * cell_order(execution_cells))
+    println("Wrote ", relpath(output, ROOT), " with ", length(physical_cells), " physical cells and ", length(execution_cells), " ordered cells")
+end
+
+function write_audit(common_cells, chapter_cells)
+    lines = String[
+        "# MATH102 Common Cell Audit",
+        "",
+        "Generated by `scripts/split_math102_notebook.jl`.",
+        "",
+        "## Common Cells",
+        "",
+        "| UUID | Reason | Preview |",
+        "|---|---|---|",
+    ]
+
+    for cell in common_cells
+        reason = common_cell_reason(cell)
+        preview = replace(strip(first(cell.text, min(lastindex(cell.text), 90))), "\n" => " ")
+        push!(lines, "| `$(cell.id)` | $(reason) | `$(preview)` |")
+    end
+
+    push!(lines, "", "## Chapter Cell Counts", "")
+    for (chapter, _) in CHAPTERS
+        push!(lines, "- Chapter $(chapter): $(length(chapter_cells[chapter])) content cells")
+    end
+
+    write(AUDIT_PATH, join(lines, "\n") * "\n")
 end
 
 function main()
     cells, order_ids = read_notebook()
     cells_by_id = Dict(cell.id => cell for cell in cells)
-    ordered_cells = [cells_by_id[id] for id in order_ids if haskey(cells_by_id, id)]
-    package_cells = filter(is_pluto_package_cell, ordered_cells)
-    physical_content_cells = filter(!is_pluto_package_cell, cells)
-    ordered_content_cells = filter(!is_pluto_package_cell, ordered_cells)
-    shared_helper_cells = filter(is_shared_helper_cell, physical_content_cells)
-    shared_helper_ids = Set(cell.id for cell in shared_helper_cells)
-
-    first_ch5 = nothing
-    for cell in physical_content_cells
-        if heading_chapter(cell.text) == "5"
-            first_ch5 = cell.id
-            break
-        end
-    end
-    first_ch5 === nothing && error("Could not find first Chapter 5 cell.")
-
-    preamble = choose_preamble(physical_content_cells, first_ch5)
-    shared_ids = union(Set(cell.id for cell in preamble), shared_helper_ids)
-    assigned = assign_chapter_cells(ordered_content_cells, shared_ids)
+    package_cells = [cells_by_id[id] for id in order_ids if haskey(cells_by_id, id) && is_pluto_package_cell(cells_by_id[id])]
+    common_cells = collect_common_cells(cells_by_id, order_ids)
+    common_ids = Set(cell.id for cell in common_cells)
+    chapter_cells = chapter_slices(cells_by_id, order_ids, common_ids)
 
     for (chapter, filename) in CHAPTERS
-        write_notebook(filename, vcat(preamble, shared_helper_cells, assigned[chapter], package_cells))
+        content = chapter_cells[chapter]
+        physical_cells = vcat(content, common_cells, package_cells)
+        execution_cells = vcat(common_cells, content, package_cells)
+        write_notebook(filename; physical_cells, execution_cells)
     end
+
+    write_audit(common_cells, chapter_cells)
+    println("Wrote ", relpath(AUDIT_PATH, ROOT))
 end
 
 main()
