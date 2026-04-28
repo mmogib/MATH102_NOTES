@@ -52,6 +52,181 @@ md"""
 # [AI-STUDY RESOURCE](https://notebooklm.google.com/notebook/f9f5eb4d-5782-4586-9f7e-abdb60f1b694)
 """
 
+# ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
+function rect(x, Δx, xs, f; direction=:x)
+    if direction == :y
+        Shape([(0, x), (0, x + Δx), (f(xs), x + Δx), (f(xs), x)])
+    else
+        Shape([(x, 0), (x + Δx, 0), (x + Δx, f(xs)), (x, f(xs))])
+    end
+
+end
+
+# ╔═╡ 8315fb27-89e4-44a4-a51e-8e55fc3d58e5
+function reimannSum(f, n, a, b; method="l", color=:green, 
+					plot_it=false, 
+					direction=:x,
+					partitioning=nothing
+				   )
+    Δx = (b - a) / n
+    x = a:0.01:b
+    # plot(f;xlim=(-2π,2π), xticks=(-2π:(π/2):2π,["$c π" for c in -2:0.5:2]))
+
+    (partition, recs, ss) = if method == "r"
+        parts = (a+Δx):Δx:b
+        rcs = [rect(p - Δx, Δx, p, f; direction=direction) for p in parts]
+        (parts, rcs, nothing)
+    elseif method == "m"
+        parts = (a+(Δx/2)):Δx:(b-(Δx/2))
+        rcs = [rect(p - Δx / 2, Δx, p, f; direction=direction) for p in parts]
+        (parts, rcs, nothing)
+    elseif method == "l"
+        parts = a:Δx:(b-Δx)
+        rcs = [rect(p, Δx, p, f; direction=direction) for p in parts]
+        (parts, rcs, nothing)
+	elseif method == "u" # for user
+		@assert !isnothing(partitioning) "You must provide a partitioning function."
+        Δxs, parts = partitioning()
+        rcs = [rect(parts[i]-Δxs[i], Δxs[i], parts[i], f; direction=direction) for i in 1:length(parts)]
+		ss = round(sum(f.(parts) .* Δxs), sigdigits=6)
+        (parts, rcs, ss)	
+    else
+        parts = a:Δx:(b-Δx)
+        rcs = [rect(p, Δx, rand(p:0.1:p+Δx), f; direction=direction) for p in parts]
+        (parts, rcs, nothing)
+    end
+    # recs= [rect(sample(p,Δx),Δx,p,f) for p in partition]
+    p = direction == :y ? plot(f.(x), x; legend=nothing) : plot(x, f.(x); legend=nothing)
+    plot!(p, recs, framestyle=:origin, opacity=0.4, color=color)
+    s = isnothing(ss) ? round(sum(f.(partition) * Δx), sigdigits=6) : ss
+    return plot_it ? (p, s) : s
+end
+
+# ╔═╡ ef081dfa-b610-4c7a-a039-7258f4f6e80e
+begin
+    function add_space(n=1)
+        repeat("&nbsp;", n)
+    end
+    function post_img(img::String, w=500)
+        res = Resource(img, :width => w)
+        cm"""
+      <div class="img-container">
+
+      $(res)
+
+      </div>"""
+    end
+    function poolcode()
+        cm"""
+      <div class="img-container">
+
+      $(Resource("https://www.dropbox.com/s/cat9ots4ausfzyc/qrcode_itempool.com_kfupm.png?raw=1",:width=>300))
+
+      </div>"""
+    end
+    function define(t="")
+        beginBlock("Definition", t)
+    end
+    function remark(t="")
+        beginBlock("Remark", t)
+    end
+    function remarks(t="")
+        beginBlock("Remarks", t)
+    end
+    function bbl(t)
+        beginBlock(t, "")
+    end
+    function bbl(t, s)
+        beginBlock(t, s)
+    end
+    ebl() = endBlock()
+    function theorem(s)
+        bth(s)
+    end
+    function bth(s)
+        beginTheorem(s)
+    end
+    eth() = endTheorem()
+    ex(n::Int; s::String="") = ex("Example $n", s)
+    ex(t::Int, s::String) = example("Example $t", s)
+    ex(t, s) = example(t, s)
+    function beginBlock(title, subtitle)
+        """<div style="box-sizing: border-box;">
+       	<div style="display: flex;flex-direction: column;border: 6px solid rgba(200,200,200,0.5);box-sizing: border-box;">
+       	<div style="display: flex;">
+       	<div style="background-color: #FF9733;
+       	    border-left: 10px solid #df7300;
+       	    padding: 5px 10px;
+       	    color: #fff!important;
+       	    clear: left;
+       	    margin-left: 0;font-size: 112%;
+       	    line-height: 1.3;
+       	    font-weight: 600;">$title</div>  <div style="olor: #000!important;
+       	    margin: 0 0 20px 25px;
+       	    float: none;
+       	    clear: none;
+       	    padding: 5px 0 0 0;
+       	    margin: 0 0 0 20px;
+       	    background-color: transparent;
+       	    border: 0;
+       	    overflow: hidden;
+       	    min-width: 100px;font-weight: 600;
+       	    line-height: 1.5;">$subtitle</div>
+       	</div>
+       	<p style="padding:5px;">
+       """
+    end
+    function beginTheorem(subtitle)
+        beginBlock("Theorem", subtitle)
+    end
+    function endBlock()
+        """</p></div></div>"""
+    end
+    function endTheorem()
+        endBlock()
+    end
+    ex() = example("Example", "")
+    # function example(lable, desc)
+    #     """<div style="display:flex;">
+    #    <div style="
+    #    font-size: 112%;
+    #        line-height: 1.3;
+    #        font-weight: 600;
+    #        color: #f9ce4e;
+    #        float: left;
+    #        background-color: #5c5c5c;
+    #        border-left: 10px solid #474546;
+    #        padding: 5px 10px;
+    #        margin: 0 12px 20px 0;
+    #        border-radius: 0;
+    #    ">$lable:</div>
+    #    <div style="flex-grow:3;
+    #    line-height: 1.3;
+    #        font-weight: 600;
+    #        float: left;
+    #        padding: 5px 10px;
+    #        margin: 0 12px 20px 0;
+    #        border-radius: 0;
+    #    ">$desc</div>
+    #    </div>"""
+    # end
+    function example(lable, desc)
+        """<div class="example-box">
+    <div class="example-header">
+      $lable
+    </div>
+    <div class="example-title">
+      $desc
+    </div>
+    <div class="example-content">
+      
+  </div>
+  """
+    end
+
+    @htl("")
+end
+
 # ╔═╡ 1e507853-e2e6-493d-9d62-f33da7a7caa8
 md"""
 # 9.1 Sequences
@@ -1658,181 +1833,6 @@ Use a power series to approximate
 ```
 with an error of less than 0.01 .
 """
-
-# ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
-function rect(x, Δx, xs, f; direction=:x)
-    if direction == :y
-        Shape([(0, x), (0, x + Δx), (f(xs), x + Δx), (f(xs), x)])
-    else
-        Shape([(x, 0), (x + Δx, 0), (x + Δx, f(xs)), (x, f(xs))])
-    end
-
-end
-
-# ╔═╡ 8315fb27-89e4-44a4-a51e-8e55fc3d58e5
-function reimannSum(f, n, a, b; method="l", color=:green, 
-					plot_it=false, 
-					direction=:x,
-					partitioning=nothing
-				   )
-    Δx = (b - a) / n
-    x = a:0.01:b
-    # plot(f;xlim=(-2π,2π), xticks=(-2π:(π/2):2π,["$c π" for c in -2:0.5:2]))
-
-    (partition, recs, ss) = if method == "r"
-        parts = (a+Δx):Δx:b
-        rcs = [rect(p - Δx, Δx, p, f; direction=direction) for p in parts]
-        (parts, rcs, nothing)
-    elseif method == "m"
-        parts = (a+(Δx/2)):Δx:(b-(Δx/2))
-        rcs = [rect(p - Δx / 2, Δx, p, f; direction=direction) for p in parts]
-        (parts, rcs, nothing)
-    elseif method == "l"
-        parts = a:Δx:(b-Δx)
-        rcs = [rect(p, Δx, p, f; direction=direction) for p in parts]
-        (parts, rcs, nothing)
-	elseif method == "u" # for user
-		@assert !isnothing(partitioning) "You must provide a partitioning function."
-        Δxs, parts = partitioning()
-        rcs = [rect(parts[i]-Δxs[i], Δxs[i], parts[i], f; direction=direction) for i in 1:length(parts)]
-		ss = round(sum(f.(parts) .* Δxs), sigdigits=6)
-        (parts, rcs, ss)	
-    else
-        parts = a:Δx:(b-Δx)
-        rcs = [rect(p, Δx, rand(p:0.1:p+Δx), f; direction=direction) for p in parts]
-        (parts, rcs, nothing)
-    end
-    # recs= [rect(sample(p,Δx),Δx,p,f) for p in partition]
-    p = direction == :y ? plot(f.(x), x; legend=nothing) : plot(x, f.(x); legend=nothing)
-    plot!(p, recs, framestyle=:origin, opacity=0.4, color=color)
-    s = isnothing(ss) ? round(sum(f.(partition) * Δx), sigdigits=6) : ss
-    return plot_it ? (p, s) : s
-end
-
-# ╔═╡ ef081dfa-b610-4c7a-a039-7258f4f6e80e
-begin
-    function add_space(n=1)
-        repeat("&nbsp;", n)
-    end
-    function post_img(img::String, w=500)
-        res = Resource(img, :width => w)
-        cm"""
-      <div class="img-container">
-
-      $(res)
-
-      </div>"""
-    end
-    function poolcode()
-        cm"""
-      <div class="img-container">
-
-      $(Resource("https://www.dropbox.com/s/cat9ots4ausfzyc/qrcode_itempool.com_kfupm.png?raw=1",:width=>300))
-
-      </div>"""
-    end
-    function define(t="")
-        beginBlock("Definition", t)
-    end
-    function remark(t="")
-        beginBlock("Remark", t)
-    end
-    function remarks(t="")
-        beginBlock("Remarks", t)
-    end
-    function bbl(t)
-        beginBlock(t, "")
-    end
-    function bbl(t, s)
-        beginBlock(t, s)
-    end
-    ebl() = endBlock()
-    function theorem(s)
-        bth(s)
-    end
-    function bth(s)
-        beginTheorem(s)
-    end
-    eth() = endTheorem()
-    ex(n::Int; s::String="") = ex("Example $n", s)
-    ex(t::Int, s::String) = example("Example $t", s)
-    ex(t, s) = example(t, s)
-    function beginBlock(title, subtitle)
-        """<div style="box-sizing: border-box;">
-       	<div style="display: flex;flex-direction: column;border: 6px solid rgba(200,200,200,0.5);box-sizing: border-box;">
-       	<div style="display: flex;">
-       	<div style="background-color: #FF9733;
-       	    border-left: 10px solid #df7300;
-       	    padding: 5px 10px;
-       	    color: #fff!important;
-       	    clear: left;
-       	    margin-left: 0;font-size: 112%;
-       	    line-height: 1.3;
-       	    font-weight: 600;">$title</div>  <div style="olor: #000!important;
-       	    margin: 0 0 20px 25px;
-       	    float: none;
-       	    clear: none;
-       	    padding: 5px 0 0 0;
-       	    margin: 0 0 0 20px;
-       	    background-color: transparent;
-       	    border: 0;
-       	    overflow: hidden;
-       	    min-width: 100px;font-weight: 600;
-       	    line-height: 1.5;">$subtitle</div>
-       	</div>
-       	<p style="padding:5px;">
-       """
-    end
-    function beginTheorem(subtitle)
-        beginBlock("Theorem", subtitle)
-    end
-    function endBlock()
-        """</p></div></div>"""
-    end
-    function endTheorem()
-        endBlock()
-    end
-    ex() = example("Example", "")
-    # function example(lable, desc)
-    #     """<div style="display:flex;">
-    #    <div style="
-    #    font-size: 112%;
-    #        line-height: 1.3;
-    #        font-weight: 600;
-    #        color: #f9ce4e;
-    #        float: left;
-    #        background-color: #5c5c5c;
-    #        border-left: 10px solid #474546;
-    #        padding: 5px 10px;
-    #        margin: 0 12px 20px 0;
-    #        border-radius: 0;
-    #    ">$lable:</div>
-    #    <div style="flex-grow:3;
-    #    line-height: 1.3;
-    #        font-weight: 600;
-    #        float: left;
-    #        padding: 5px 10px;
-    #        margin: 0 12px 20px 0;
-    #        border-radius: 0;
-    #    ">$desc</div>
-    #    </div>"""
-    # end
-    function example(lable, desc)
-        """<div class="example-box">
-    <div class="example-header">
-      $lable
-    </div>
-    <div class="example-title">
-      $desc
-    </div>
-    <div class="example-content">
-      
-  </div>
-  """
-    end
-
-    @htl("")
-end
 
 # ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
 initialize_eqref()
@@ -3561,6 +3561,9 @@ version = "1.13.0+0"
 # ╠═e414122f-b93a-4510-b8ae-026c303e0df9
 # ╠═cd269caf-ef81-43d7-a1a8-6668932b6363
 # ╠═d6d85087-9ecc-4043-9002-e4a6442b829e
+# ╠═b4599a16-e7f7-4a2a-b349-2648ee45208f
+# ╠═8315fb27-89e4-44a4-a51e-8e55fc3d58e5
+# ╠═ef081dfa-b610-4c7a-a039-7258f4f6e80e
 # ╠═1e507853-e2e6-493d-9d62-f33da7a7caa8
 # ╠═2eb6bb15-066f-4601-8a94-eb1ce880e7ac
 # ╠═8c345896-0123-40a5-8f00-c6ebefcee822
@@ -3722,9 +3725,6 @@ version = "1.13.0+0"
 # ╠═e26ad50a-67db-449b-aa90-1bd87e06d5cb
 # ╠═224f4771-7bf7-4433-9f36-b82875ad4b6c
 # ╠═66e78b57-c224-4beb-bddb-e4b5a2997d2c
-# ╠═b4599a16-e7f7-4a2a-b349-2648ee45208f
-# ╠═8315fb27-89e4-44a4-a51e-8e55fc3d58e5
-# ╠═ef081dfa-b610-4c7a-a039-7258f4f6e80e
 # ╠═da9230a6-088d-4735-b206-9514c12dd223
 # ╠═107407c8-5da0-4833-9965-75a82d84a0fb
 # ╟─00000000-0000-0000-0000-000000000001

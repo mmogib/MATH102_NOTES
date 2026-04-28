@@ -91,6 +91,12 @@ function is_pluto_package_cell(cell::Cell)
     cell.id in ("00000000-0000-0000-0000-000000000001", "00000000-0000-0000-0000-000000000002")
 end
 
+function is_shared_helper_cell(cell::Cell)
+    occursin("function rect(", cell.text) ||
+        occursin("function reimannSum(", cell.text) ||
+        occursin("function post_img(", cell.text)
+end
+
 function cell_order(cells)
     lines = [CELL_ORDER_START]
     for cell in cells
@@ -116,6 +122,8 @@ function main()
     package_cells = filter(is_pluto_package_cell, ordered_cells)
     physical_content_cells = filter(!is_pluto_package_cell, cells)
     ordered_content_cells = filter(!is_pluto_package_cell, ordered_cells)
+    shared_helper_cells = filter(is_shared_helper_cell, physical_content_cells)
+    shared_helper_ids = Set(cell.id for cell in shared_helper_cells)
 
     first_ch5 = nothing
     for cell in physical_content_cells
@@ -127,10 +135,11 @@ function main()
     first_ch5 === nothing && error("Could not find first Chapter 5 cell.")
 
     preamble = choose_preamble(physical_content_cells, first_ch5)
-    assigned = assign_chapter_cells(ordered_content_cells, Set(cell.id for cell in preamble))
+    shared_ids = union(Set(cell.id for cell in preamble), shared_helper_ids)
+    assigned = assign_chapter_cells(ordered_content_cells, shared_ids)
 
     for (chapter, filename) in CHAPTERS
-        write_notebook(filename, vcat(preamble, assigned[chapter], package_cells))
+        write_notebook(filename, vcat(preamble, shared_helper_cells, assigned[chapter], package_cells))
     end
 end
 
