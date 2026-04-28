@@ -21,11 +21,12 @@
 
 ## Export Validation
 
-- `julia --project=. src/export.jl`: pending
-- Generated chapter HTML: pending
-- Landing page links: pending
-- Heading checks: pending
-- Broken local reference scan: pending
+- `julia --project=. src/export.jl`: passed. PlutoSliderServer exported all four notebooks successfully.
+- Generated chapter HTML: passed. `docs/MATH_102_CH5.html`, `docs/MATH_102_CH7.html`, `docs/MATH_102_CH8.html`, and `docs/MATH_102_CH9.html` were generated.
+- Landing page links: passed. `docs/index.html` links to all four chapter pages.
+- Heading checks: passed in generated notebook sources. The Pluto HTML stores notebook source in base64, so direct plain-text heading search in HTML is not useful.
+- Cell-order checks: passed. Every generated notebook has matching cell IDs and cell-order entries.
+- Broken local reference scan: no unresolved required local assets found. Remaining local hits are helper definitions, commented examples, remote Dropbox resources, generated package manifest references, or the existing `net_change_ex10.gif` generation.
 
 ## Legacy Archive
 
