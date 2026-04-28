@@ -4,6 +4,28 @@
 using Markdown
 using InteractiveUtils
 
+# ╔═╡ f2d4c2a5-f486-407b-b31b-d2efcc7476b3
+begin
+    using CommonMark
+    using PlutoUI, PlutoExtras
+    using Plots, PlotThemes, LaTeXStrings
+    using Latexify
+    using HypertextLiteral
+    using Colors
+    using LinearAlgebra, Random, Printf, SparseArrays
+    # using Symbolics
+    using SymPy
+    using QRCoders
+    using PrettyTables
+    # using Primes
+    # using LinearSolve
+    # using NonlinearSolve
+    # using ForwardDiff
+    # using Integrals
+    # using OrdinaryDiffEq
+    using IntervalArithmetic
+end
+
 # ╔═╡ 71bc54d5-d0ed-42d3-9bc1-48aa86e91d1d
 TableOfContents(title="📚 MATH102: Calculus III", indent=true, depth=4)
 
@@ -16,27 +38,6 @@ begin
     function Base.show(io::IO, ::MIME"image/png", w::LocalImage)
         write(io, read(w.filename))
     end
-end
-
-# ╔═╡ 8408e369-40eb-4f9b-a7d7-26cde3e34a74
-begin
-    text_book = post_img("https://www.dropbox.com/scl/fi/upln00gqvnbdy7whr23pj/larson_book.jpg?rlkey=wlkgmzw2ernadd9b8v8qwu2jd&dl=1", 200)
-    md""" # Syllabus
-    ## Syallbus
-    See here [Term 252 - MATH102 - Syllabus](https://math.kfupm.edu.sa/docs/default-source/css-library/math102-252.pdf)
-    ## Textbook
-    __Textbook: Edwards, C. H., Penney, D. E., and Calvis, D. T., Differential Equations and Linear Algebra, Fourth edition, Pearson, 2021__
-    $text_book
-
-    ## Office Hours
-    I strongly encourage all students to make use of my office hours. These dedicated times are a valuable opportunity for you to ask questions, seek clarification on lecture material, discuss challenging problems, and get personalized feedback on your work. Engaging with me during office hours can greatly enhance your understanding of the course content and improve your performance. Whether you're struggling with a specific concept or simply want to delve deeper into the subject, I am here to support your learning journey. Don't hesitate to drop by; __your success is my priority__.
-
-    | Day       | Time        |
-    |-----------|-------------|
-    | Sunday    | 11:00-11:50AM |
-    | Tuesday    | 11:00-11:50AM |
-    Also you can ask for an online meeting through __TEAMS__.
-    """
 end
 
 # ╔═╡ cd269caf-ef81-43d7-a1a8-6668932b6363
@@ -3626,9 +3627,9 @@ version = "1.13.0+0"
 """
 
 # ╔═╡ Cell order:
+# ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
 # ╠═71bc54d5-d0ed-42d3-9bc1-48aa86e91d1d
 # ╠═e414122f-b93a-4510-b8ae-026c303e0df9
-# ╠═8408e369-40eb-4f9b-a7d7-26cde3e34a74
 # ╠═cd269caf-ef81-43d7-a1a8-6668932b6363
 # ╠═d6d85087-9ecc-4043-9002-e4a6442b829e
 # ╠═8b65d45c-ca7c-4e5d-9cfd-a7348547ebe0

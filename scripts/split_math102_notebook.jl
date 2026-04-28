@@ -114,10 +114,11 @@ function main()
     cells_by_id = Dict(cell.id => cell for cell in cells)
     ordered_cells = [cells_by_id[id] for id in order_ids if haskey(cells_by_id, id)]
     package_cells = filter(is_pluto_package_cell, ordered_cells)
-    content_cells = filter(!is_pluto_package_cell, ordered_cells)
+    physical_content_cells = filter(!is_pluto_package_cell, cells)
+    ordered_content_cells = filter(!is_pluto_package_cell, ordered_cells)
 
     first_ch5 = nothing
-    for cell in content_cells
+    for cell in physical_content_cells
         if heading_chapter(cell.text) == "5"
             first_ch5 = cell.id
             break
@@ -125,8 +126,8 @@ function main()
     end
     first_ch5 === nothing && error("Could not find first Chapter 5 cell.")
 
-    preamble = choose_preamble(content_cells, first_ch5)
-    assigned = assign_chapter_cells(ordered_cells, Set(cell.id for cell in preamble))
+    preamble = choose_preamble(physical_content_cells, first_ch5)
+    assigned = assign_chapter_cells(ordered_content_cells, Set(cell.id for cell in preamble))
 
     for (chapter, filename) in CHAPTERS
         write_notebook(filename, vcat(preamble, assigned[chapter], package_cells))
