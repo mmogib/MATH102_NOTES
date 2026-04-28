@@ -30,5 +30,6 @@
 
 ## Legacy Archive
 
-- Archive path: pending
-- Archive completed: no
+- Archive path: `refs/MATH102_NOTES_legacy.jl`
+- Archive completed: yes
+- Source removal: kept in `src/` pending explicit approval.
