@@ -4,6 +4,66 @@
 using Markdown
 using InteractiveUtils
 
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
+macro bind(def, element)
+    #! format: off
+    return quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local el = $(esc(element))
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
+        el
+    end
+    #! format: on
+end
+
+# ╔═╡ f2d4c2a5-f486-407b-b31b-d2efcc7476b3
+begin
+    using CommonMark
+    using PlutoUI, PlutoExtras
+    using Plots, PlotThemes, LaTeXStrings
+    using Latexify
+    using HypertextLiteral
+    using Colors
+    using LinearAlgebra, Random, Printf, SparseArrays
+    # using Symbolics
+    using SymPy
+    using QRCoders
+    using PrettyTables
+    # using Primes
+    # using LinearSolve
+    # using NonlinearSolve
+    # using ForwardDiff
+    # using Integrals
+    # using OrdinaryDiffEq
+    using IntervalArithmetic
+end
+
+# ╔═╡ 71bc54d5-d0ed-42d3-9bc1-48aa86e91d1d
+TableOfContents(title="📚 MATH102: Calculus III", indent=true, depth=4)
+
+# ╔═╡ e414122f-b93a-4510-b8ae-026c303e0df9
+begin
+    struct LocalImage
+        filename
+    end
+
+    function Base.show(io::IO, ::MIME"image/png", w::LocalImage)
+        write(io, read(w.filename))
+    end
+end
+
+# ╔═╡ cd269caf-ef81-43d7-a1a8-6668932b6363
+# exportqrcode("https://www.mathmatize.com/")
+# let
+#     img = LocalImage("../qrcode.png")
+# end
+
+# ╔═╡ d6d85087-9ecc-4043-9002-e4a6442b829e
+md"""
+
+# [AI-STUDY RESOURCE](https://notebooklm.google.com/notebook/f9f5eb4d-5782-4586-9f7e-abdb60f1b694)
+"""
+
 # ╔═╡ 1f1b3439-630e-4db6-9a01-321ed75bed84
 md""" # 7.1 Area of a Region Between Two Curves
 
@@ -92,19 +152,6 @@ let
 
 end
 
-# ╔═╡ 004ab021-15d7-40d8-ace7-41dd5f8b2237
-cm"""
-
-$(bbl("Remark",""))
-- Area = ``y_{top}-y_{bottom}``.
-$(ebl())
-
-$(ex(1,"Finding the area of a region Between Two Curves"))
-
-Find the area of the region bounded above by ``y=e^x``, bounded below by ``y=x``, bounded on the sides by ``x=0`` and ``x=1``.
-
-"""
-
 # ╔═╡ db08f294-cfcf-462a-8fb5-8d8a63563e61
 p1Opt = (framestyle=:origin, aspectration=1)
 
@@ -126,16 +173,6 @@ begin
     $ex1plt
     """
 end
-
-# ╔═╡ ac6fde80-be6b-4292-911a-b51c43de3199
-cm"""
-$(ex(2,"a region Lying Between Two Intersecting Graphs"))
-Find the area of the region enclosed by the parabolas ``y=x^2`` and ``y=2x-x^2``.
-
-*Solution in class*
-
----
-"""
 
 # ╔═╡ d993fe50-4792-4f54-b4a6-23cb91718f00
 let
@@ -167,20 +204,6 @@ let
     """
 end
 
-# ╔═╡ 57d8a03b-71a0-46d9-b908-af7028195db2
-cm"""
-$(ex(3,"A Region Lying Between Two Intersecting Graphs"))
-
-Find the area of the region bounded by the curves
-
-```math
-y=\cos(x), \;\; y=\sin(2x), \;\; x=0, \;\; x=\frac{\pi}{2}
-```
-
-
----
-"""
-
 # ╔═╡ a2a2d894-7588-48a8-84fd-65e5ead80072
 begin
     ex3f1(x) = cos(x)
@@ -201,31 +224,6 @@ begin
     $ex3P
     """
 end
-
-# ╔═╡ 6003b1ce-be7b-4ff1-ab92-fca307cb61a8
-cm"""
-$(ex(4,"Curves That Intersect at More than Two Points"))
-Find the area of the region between the graphs of
-```math
-f(x)=3 x^3-x^2-10 x \quad \text { and } \quad g(x)=-x^2+2 x
-```
-"""
-
-# ╔═╡ f03e35fd-ba04-4692-8e4a-b0880c703e8e
-cm"""
-### Integrating with Respect to ``y``
-
-$(post_img("https://www.dropbox.com/s/r39ny15umqafmls/wrty.png?raw=1",300))
-
-"""
-
-# ╔═╡ 0b5e8985-ecf6-4e84-860b-0891c9638aeb
-cm"""
-$(ex(5,"Horizontal representative rectangles"))
-
- Find the area of the region bounded by the graphs of ``x=3−y^22`` and ``x=y+1``.
-
-"""
 
 # ╔═╡ 64ee7ca1-4feb-470a-900c-fbb8a413b3f5
 let
@@ -263,6 +261,7 @@ Find the area of the region enclosed by the curves ``y= {1\over x}``, ``y=x``, a
 """
 
 # ╔═╡ f952efd6-736c-4895-9510-f1dbf8919942
+
 
 # ╔═╡ 42053189-d0d4-4c70-9c4c-41fbacae9891
 begin
@@ -352,28 +351,6 @@ $(Resource("https://www.dropbox.com/s/9kpj2dcrwj5y5h8/disk_volume_v_h.png?raw=1"
 
 # $(Resource("https://www.dropbox.com/s/uvz7my3n08fgm6w/img3.png?raw=1"))
 
-# ╔═╡ 3d609c61-d2a0-40ae-bbee-77e7b694d482
-cm"""
-$(ex(1,"Using the Disk Method"))
-Find the volume of the solid formed by revolving the region bounded by the graph of
-```math
-f(x) = \sqrt{\sin x}
-```
-and the ``x``-axis (``0\leq x\leq \pi``) about the ``x``-axis
-
-See [Visualization](https://www.geogebra.org/m/u8KtPdqf)
-"""
-
-# ╔═╡ 8889cb18-f44b-4dbd-9ff5-9535f250a8bf
-cm"""
-$(ex(2,"Using a Line That Is Not a Coordinate Axis"))
-Find the volume of the solid formed by revolving the region bounded by the graphs of
-```math
-f(x)=2-x^2
-```
-and ``g(x)=1``  about the line ``y=1``.
-"""
-
 # ╔═╡ e86d6a94-a83c-4eaf-83b2-c86e065c6f6a
 md"## The Washer Method"
 
@@ -402,65 +379,8 @@ V = \pi\int_a^b \bigl[\left(R[x]\right)^2-\left(r[x]\right)^2) dx
 </div>
 """
 
-# ╔═╡ d4963c8b-769c-47f4-8d23-00de15ca049a
-cm"""
-$(ex(3,"Using the Washer Method"))
-Find the volume of the solid formed by revolving the region bounded by the graphs of
-```math
-y=\sqrt{x} \qquad \textrm{and}\qquad  y = x^2
-```
-about the ``x``-axis.
-
-"""
-
-# ╔═╡ 55be9c08-66aa-44bb-86c5-36e45450950b
-cm"""
-$(ex(4,"Integrating with Respect to y: Two-Integral Case"))
-Find the volume of the solid formed by revolving the region bounded by the graphs of
-```math
-y=x^2+1, \quad y=0, \quad x=0, \quad \textrm{and}\quad x=1
-```
-about the ``y``-axis
-"""
-
 # ╔═╡ de12a145-2680-4322-8921-606bc6a7ca42
 md"## Solids with Known Cross Sections"
-
-# ╔═╡ 29f9cc1b-7a08-4219-a31c-91a62a5b85b4
-cm"""
-
-
-[Example 1](https://www.geogebra.org/m/XFgMaKTy) | [Example 2](https://www.geogebra.org/m/XArpgR3A)
-
-$(bth("VOLUMES OF SOLIDS WITH KNOWN CROSS SECTIONS"))
-1. For cross sections of area ``A(x)`` taken perpendicular to the ``x``-axis,
-```math
-V = \int_a^b A(x) dx
-```
-2. For cross sections of area ``A(y)`` taken perpendicular to the ``y``-axis,
-```math
-V = \int_c^d A(y) dy
-```
-$(ebl())
-
-$(ex(6,"Triangular Cross Sections"))
-The base of a solid is the region bounded by the lines
-```math
-f(x)=1-\frac{x}{2},\quad g(x)=-1+\frac{x}{2}\quad \textrm{and}\quad x=0.
-```
-The cross sections perpendicular to the ``x``-axis are equilateral triangles.
-"""
-
-# ╔═╡ cac5724d-f926-4bda-9dac-0534d550e6ad
-cm"""
-$(ex(7,"An Application to Geometry"))
-
-Prove that the volume of a pyramid with a square base is
-```math
-V=\frac{1}{3} h B
-```
-where ``h`` is the height of the pyramid and ``B`` is the area of the base.
-"""
 
 # ╔═╡ 0c507932-5cf6-48f0-84c4-b6ed06a54252
 # md"""
@@ -480,6 +400,7 @@ where ``h`` is the height of the pyramid and ``B`` is the area of the base.
 # Let ``S`` be a solid that lies between ``x=a`` and ``x=b``. If the cross-sectional area of ``S`` in the plane ``P_x`` , through ``x`` and perpendicular to the ``x``-axis, is ``A(x)`` , where ``A`` is a continuous function, then the **volume** of ``S``  is
 # ```math
 # V = \lim_{n\to\infty} \sum_{i=1}^{n} A(x_i^*)\Delta x = \int_{a}^{b}A(x) dx
+
 # ```
 # """
 
@@ -490,6 +411,7 @@ where ``h`` is the height of the pyramid and ``B`` is the area of the base.
 
 # **Example 1**
 # Find the volume of the solid obtained by rotating about the ``x``-axis the region under the curve ``y=\sqrt{x}`` from ``0`` to ``1`` . Illustrate the definition of volume by sketching a typical approximating cylinder.
+
 # """
 
 # ╔═╡ 1525ccb4-2f4c-48f0-8e6c-73cc117f92f0
@@ -538,25 +460,12 @@ md"""
 **Exercise** Find the volume of the solid obtained by rotating the region in the previous Example about the line ``x=-1``.
 """
 
-# ╔═╡ e18ee243-b49e-401f-bda2-2bb8b0ea3a66
-md"""
-**Example 6** Figure below shows a solid with a circular base of radius ``1``. Parallel cross-sections perpendicular to the base are equilateral triangles. Find the volume of the solid.
-$(post_img("https://www.dropbox.com/s/bbxedang718jvvp/img4.png?dl=1"))
-"""
-
 # ╔═╡ e3700fb4-f895-4528-9ef5-0ba59c9703c7
 md"""
 # 7.3 Volume: The Shell Method
 > __Objectives__
 > 1. Find the volume of a solid of revolution using the shell method.
 > 2. Compare the uses of the disk method and the shell method.
-
-"""
-
-# ╔═╡ 19358efb-0bb3-4781-be0c-c07b4bc963f7
-cm"""
-$(bbl("Problem",""))
-Find the volume of the solid generated by rotating the region bounded by ``y=2x^2-x^3`` and ``y=0`` about the ``y-``axis.
 
 """
 
@@ -599,16 +508,6 @@ end
 md"""
 ## The Shell Method
 """
-
-# ╔═╡ cf309f63-2534-45f6-98b4-7bc90100493c
-begin
-
-    md"""
-    A shell is a hallow circular cylinder
-
-    $(post_img("https://www.dropbox.com/s/8a2njc50e2hptok/shell.png?dl=1"))
-    """
-end
 
 # ╔═╡ dbe837f1-85da-4572-b8c3-738ba346d67f
 md"""
@@ -693,24 +592,6 @@ $(Resource("https://www.dropbox.com/s/ivbwuge5ti8vrff/shell_x.png?raw=1"))
 # """
 # end
 
-# ╔═╡ eb56826a-2315-421a-aec8-1c0e17539b0d
-cm"""
-$(ex(1,"Problem Above"))
-Find the volume of the solid generated by rotating the region bounded by ``y=2x^2-x^3`` and ``y=0`` about the ``y-``axis.
-
-"""
-
-# ╔═╡ 4e79e466-384f-40cc-81bc-40d3d0dda3bd
-cm"""
-$(ex(2,"Using the Shell Method to Find Volume"))
- Find the volume of the solid formed by revolving the region bounded by the graph of
-```math
-x =e^{−y^2}
-```
- and the ``y``-axis (``0 ≤ y ≤ 1``) about the ``x``-axis.
-
-"""
-
 # ╔═╡ 3865e317-a19a-4a9a-a8c4-2813ec0a7f0a
 let
     y = 00.0:0.1:1.0
@@ -718,34 +599,6 @@ let
     plot(x, y, aspect_ratio=:1, frame_style=:origin)
 
 end
-
-# ╔═╡ 6a3c2cd4-6c1f-4038-b0ac-d7992aee8d63
-cm"""
-$(ex(3,"Shell Method Preferable"))
-Find the volume of the solid formed by revolving the region bounded by the graphs of
-```math
-y=x^2+1, \quad y=0,\quad x=0, \quad \text{and}\quad x=1
-```
- about the y-axis.
-
-"""
-
-# ╔═╡ 8bb93d52-7813-4ce1-a78c-7eccf4ff559f
-cm"""
-$(ex(4,"Volume of a Pontoon"))
-The pontoon is designed by rotating the graph of
-```math
-y=1 - \frac{x^2}{16}, \quad −4≤x≤4
-```
- about the x-axis, where x and y are measured in feet. Find the volume of the pontoon.
-"""
-
-# ╔═╡ 7d2e7631-5d0f-45cd-baa5-c280963b7973
-cm"""
-$(ex(5,"Shell Method Necessary"))
-Find the volume of the solid formed by revolving the region bounded by the graphs
-of ``y=x^3+x+1``, ``y=1``, and ``x=1`` about the line ``x=2``.
-"""
 
 # ╔═╡ a3c5f9a8-35b4-4daf-9314-5d4af3413770
 md"""
@@ -761,111 +614,8 @@ md"""
 ## Arc Length
 """
 
-# ╔═╡ 85d4c1c6-8791-45b0-83a0-588fcb204233
-cm"""
-$(define("Arc Length"))
-
-Let the function ``y=f(x)`` represents a smooth curve on the interval ``[a,b]``. The __arc length__ of ``f`` between ``a`` and ``b`` is
-```math
-s = \int_a^b\sqrt{1+[f'(x)]^2} dx.
-```
-
-Similarly, for a smooth curve ``x=g(y)``, the arc length of ``g`` between ``c`` and  ``d`` is
-```math
-s = \int_c^d\sqrt{1+[g'(y)]^2} dy.
-```
-
-"""
-
-# ╔═╡ 41ec2ea8-904a-4181-a103-1d140d98d4ab
-cm"""
-$(ex(1,"The Length of a Line Segment"))
-Find the arc length from ``\left(x_1, y_1\right)`` to ``\left(x_2, y_2\right)`` on the graph of
-```math
-f(x)=m x+b
-```
-"""
-
-# ╔═╡ 142f33a6-1355-4095-80f2-6fa48572c64b
-cm"""
-$(ex(2,"Finding Arc Length"))
-Find the arc length of the graph of ``y=\displaystyle \frac{x^3}{6}+\frac{1}{2x}`` on the interval ``[\frac{1}{2},2]``.
-"""
-
-# ╔═╡ 8f7889c4-b786-465e-ba90-e448029399c1
-cm"""
-$(ex(3,"Finding Arc Length"))
-Find the arc length of the graph of ``(y−1)^3=x^2`` on the interval ``[0, 8]``.
-
-"""
-
-# ╔═╡ 786e488c-5c3b-449b-9e44-f7f1e8fcda67
-cm"""
-$(ex(4,"Finding Arc Length"))
-Find the arc length of the graph of ``y=\ln(\cos x)`` from ``x=0`` to ``x=\pi/4``.
-"""
-
 # ╔═╡ eb27f45f-6be2-43df-bf62-1842bae6281b
 md"## Area of a Surface of Revolution"
-
-# ╔═╡ 6e673498-0b02-4a55-8a81-6b7358a3668e
-cm"""
-
-$(define("Surface of Revolution"))
-When the graph of a continuous function is revolved about a line, the resulting surface is a __surface of revolution__.
-
-"""
-
-# ╔═╡ 5d946e8c-9256-473a-adac-7be3741aa2c0
-cm"""
-
-
-<div class="img-container">
-
-$(Resource("https://www.dropbox.com/s/199tfveph8mi2kz/surface_rev.png?raw=1"))
-
-__Surface Area of *frustum*__
-```math
-S=2\pi r L, \quad \text{where}\quad r=\frac{r_1+r_2}{2}
-```
-</div>
-
-Consider a function ``f`` that has a continuous derivative on the interval ``[a,b]``. The graph of ``f`` is revolved about the ``x``-axis
-
-<div class="img-container">
-
-$(Resource("https://www.dropbox.com/s/f454ldbfk1z3o2z/surface_rev2.png?raw=1"))
-
-__Surface Area Formula__
-```math
-S=2\pi \int_a^b x \sqrt{1+[f'(x)]^2} dx.
-```
-</div>
-
-$(define("Area of a Surface of Revolution"))
-
-Let ``y=f(x)`` have a continuous derivative on the interval ``[a,b]``.
-
-<div class="img-container">
-
-$(Resource("https://www.dropbox.com/s/2fup4uwh5uclrmv/surface_rev3.png?raw=1"))
-</div>
-
-The area ``S`` of the surface of revolution formed by revolving the graph of ``f`` about a horizontal or vertical axis is
-
-```math
-S=2\pi \int_a^b r(x) \sqrt{1+[f'(x)]^2} dx, \quad {\color{red} y \text{ is a function of x }}.
-```
-where ``r(x)`` is the distance between the graph of ``f`` and the axis of revolution.
-
-If ``x=g(y)`` on the interval ``[c,d]`` , then the surface area is
-
-```math
-S=2\pi \int_a^b r(y) \sqrt{1+[g'(y)]^2} dy, \quad {\color{red} x \text{ is a function of y }}.
-```
-where ``r(y)`` is the distance between the graph of ``g`` and the axis of revolution.
-
-"""
 
 # ╔═╡ e7cef759-ccba-437b-a418-247d80704808
 cm"""
@@ -884,48 +634,6 @@ where
 ```math
 ds = \sqrt{1+\big[f'(x)\big]^2}dx \quad \text{and}\quad ds = \sqrt{1+\big[g'(y)\big]^2}dy \quad \text{respectively}.
 """
-
-# ╔═╡ 36f63f82-142f-4468-a6ed-7781472d94d7
-cm"""
-$(ex(6,"The Area of a Surface of Revolution")) Find the area of the surface formed by revolving the graph of ``f(x)=x^3`` on the interval ``[0,1]`` about the ``x``-axis.
-
-
-$(ex(7,"The Area of a Surface of Revolution"))
-Find the area of the surface formed by revolving the graph of ``f(x)=x^2`` on the interval ``[0,\sqrt{2}]`` about the ``y``-axis.
-"""
-
-# ╔═╡ e414122f-b93a-4510-b8ae-026c303e0df9
-begin
-    struct LocalImage
-        filename
-    end
-
-    function Base.show(io::IO, ::MIME"image/png", w::LocalImage)
-        write(io, read(w.filename))
-    end
-end
-
-# ╔═╡ f2d4c2a5-f486-407b-b31b-d2efcc7476b3
-begin
-    using CommonMark
-    using PlutoUI, PlutoExtras
-    using Plots, PlotThemes, LaTeXStrings
-    using Latexify
-    using HypertextLiteral
-    using Colors
-    using LinearAlgebra, Random, Printf, SparseArrays
-    # using Symbolics
-    using SymPy
-    using QRCoders
-    using PrettyTables
-    # using Primes
-    # using LinearSolve
-    # using NonlinearSolve
-    # using ForwardDiff
-    # using Integrals
-    # using OrdinaryDiffEq
-    using IntervalArithmetic
-end
 
 # ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
 function rect(x, Δx, xs, f; direction=:x)
@@ -1102,6 +810,412 @@ begin
     @htl("")
 end
 
+# ╔═╡ 8408e369-40eb-4f9b-a7d7-26cde3e34a74
+begin
+    text_book = post_img("https://www.dropbox.com/scl/fi/upln00gqvnbdy7whr23pj/larson_book.jpg?rlkey=wlkgmzw2ernadd9b8v8qwu2jd&dl=1", 200)
+    md""" # Syllabus
+    ## Syallbus
+    See here [Term 252 - MATH102 - Syllabus](https://math.kfupm.edu.sa/docs/default-source/css-library/math102-252.pdf)
+    ## Textbook
+    __Textbook: Edwards, C. H., Penney, D. E., and Calvis, D. T., Differential Equations and Linear Algebra, Fourth edition, Pearson, 2021__
+    $text_book
+
+    ## Office Hours
+    I strongly encourage all students to make use of my office hours. These dedicated times are a valuable opportunity for you to ask questions, seek clarification on lecture material, discuss challenging problems, and get personalized feedback on your work. Engaging with me during office hours can greatly enhance your understanding of the course content and improve your performance. Whether you're struggling with a specific concept or simply want to delve deeper into the subject, I am here to support your learning journey. Don't hesitate to drop by; __your success is my priority__.
+
+    | Day       | Time        |
+    |-----------|-------------|
+    | Sunday    | 11:00-11:50AM |
+    | Tuesday    | 11:00-11:50AM |
+    Also you can ask for an online meeting through __TEAMS__.
+    """
+end
+
+# ╔═╡ 004ab021-15d7-40d8-ace7-41dd5f8b2237
+cm"""
+
+$(bbl("Remark",""))
+- Area = ``y_{top}-y_{bottom}``.
+$(ebl())
+
+$(ex(1,"Finding the area of a region Between Two Curves"))
+
+Find the area of the region bounded above by ``y=e^x``, bounded below by ``y=x``, bounded on the sides by ``x=0`` and ``x=1``.
+
+"""
+
+# ╔═╡ ac6fde80-be6b-4292-911a-b51c43de3199
+cm"""
+$(ex(2,"a region Lying Between Two Intersecting Graphs"))
+Find the area of the region enclosed by the parabolas ``y=x^2`` and ``y=2x-x^2``.
+
+*Solution in class*
+
+---
+"""
+
+# ╔═╡ 57d8a03b-71a0-46d9-b908-af7028195db2
+cm"""
+$(ex(3,"A Region Lying Between Two Intersecting Graphs"))
+
+Find the area of the region bounded by the curves
+
+```math
+y=\cos(x), \;\; y=\sin(2x), \;\; x=0, \;\; x=\frac{\pi}{2}
+```
+
+
+---
+"""
+
+# ╔═╡ 6003b1ce-be7b-4ff1-ab92-fca307cb61a8
+cm"""
+$(ex(4,"Curves That Intersect at More than Two Points"))
+Find the area of the region between the graphs of
+```math
+f(x)=3 x^3-x^2-10 x \quad \text { and } \quad g(x)=-x^2+2 x
+```
+"""
+
+# ╔═╡ f03e35fd-ba04-4692-8e4a-b0880c703e8e
+cm"""
+### Integrating with Respect to ``y``
+
+$(post_img("https://www.dropbox.com/s/r39ny15umqafmls/wrty.png?raw=1",300))
+
+"""
+
+# ╔═╡ 0b5e8985-ecf6-4e84-860b-0891c9638aeb
+cm"""
+$(ex(5,"Horizontal representative rectangles"))
+
+ Find the area of the region bounded by the graphs of ``x=3−y^22`` and ``x=y+1``.
+
+"""
+
+# ╔═╡ 3d609c61-d2a0-40ae-bbee-77e7b694d482
+cm"""
+$(ex(1,"Using the Disk Method"))
+Find the volume of the solid formed by revolving the region bounded by the graph of
+```math
+f(x) = \sqrt{\sin x}
+```
+and the ``x``-axis (``0\leq x\leq \pi``) about the ``x``-axis
+
+See [Visualization](https://www.geogebra.org/m/u8KtPdqf)
+"""
+
+# ╔═╡ 8889cb18-f44b-4dbd-9ff5-9535f250a8bf
+cm"""
+$(ex(2,"Using a Line That Is Not a Coordinate Axis"))
+Find the volume of the solid formed by revolving the region bounded by the graphs of
+```math
+f(x)=2-x^2
+```
+and ``g(x)=1``  about the line ``y=1``.
+"""
+
+# ╔═╡ d4963c8b-769c-47f4-8d23-00de15ca049a
+cm"""
+$(ex(3,"Using the Washer Method"))
+Find the volume of the solid formed by revolving the region bounded by the graphs of
+```math
+y=\sqrt{x} \qquad \textrm{and}\qquad  y = x^2
+```
+about the ``x``-axis.
+
+"""
+
+# ╔═╡ 55be9c08-66aa-44bb-86c5-36e45450950b
+cm"""
+$(ex(4,"Integrating with Respect to y: Two-Integral Case"))
+Find the volume of the solid formed by revolving the region bounded by the graphs of
+```math
+y=x^2+1, \quad y=0, \quad x=0, \quad \textrm{and}\quad x=1
+```
+about the ``y``-axis
+"""
+
+# ╔═╡ 29f9cc1b-7a08-4219-a31c-91a62a5b85b4
+cm"""
+
+
+[Example 1](https://www.geogebra.org/m/XFgMaKTy) | [Example 2](https://www.geogebra.org/m/XArpgR3A)
+
+$(bth("VOLUMES OF SOLIDS WITH KNOWN CROSS SECTIONS"))
+1. For cross sections of area ``A(x)`` taken perpendicular to the ``x``-axis,
+```math
+V = \int_a^b A(x) dx
+```
+2. For cross sections of area ``A(y)`` taken perpendicular to the ``y``-axis,
+```math
+V = \int_c^d A(y) dy
+```
+$(ebl())
+
+$(ex(6,"Triangular Cross Sections"))
+The base of a solid is the region bounded by the lines
+```math
+f(x)=1-\frac{x}{2},\quad g(x)=-1+\frac{x}{2}\quad \textrm{and}\quad x=0.
+```
+The cross sections perpendicular to the ``x``-axis are equilateral triangles.
+"""
+
+# ╔═╡ cac5724d-f926-4bda-9dac-0534d550e6ad
+cm"""
+$(ex(7,"An Application to Geometry"))
+
+Prove that the volume of a pyramid with a square base is
+```math
+V=\frac{1}{3} h B
+```
+where ``h`` is the height of the pyramid and ``B`` is the area of the base.
+"""
+
+# ╔═╡ e18ee243-b49e-401f-bda2-2bb8b0ea3a66
+md"""
+**Example 6** Figure below shows a solid with a circular base of radius ``1``. Parallel cross-sections perpendicular to the base are equilateral triangles. Find the volume of the solid.
+$(post_img("https://www.dropbox.com/s/bbxedang718jvvp/img4.png?dl=1"))
+"""
+
+# ╔═╡ 19358efb-0bb3-4781-be0c-c07b4bc963f7
+cm"""
+$(bbl("Problem",""))
+Find the volume of the solid generated by rotating the region bounded by ``y=2x^2-x^3`` and ``y=0`` about the ``y-``axis.
+
+"""
+
+# ╔═╡ cf309f63-2534-45f6-98b4-7bc90100493c
+begin
+
+    md"""
+    A shell is a hallow circular cylinder
+
+    $(post_img("https://www.dropbox.com/s/8a2njc50e2hptok/shell.png?dl=1"))
+    """
+end
+
+# ╔═╡ eb56826a-2315-421a-aec8-1c0e17539b0d
+cm"""
+$(ex(1,"Problem Above"))
+Find the volume of the solid generated by rotating the region bounded by ``y=2x^2-x^3`` and ``y=0`` about the ``y-``axis.
+
+"""
+
+# ╔═╡ 4e79e466-384f-40cc-81bc-40d3d0dda3bd
+cm"""
+$(ex(2,"Using the Shell Method to Find Volume"))
+ Find the volume of the solid formed by revolving the region bounded by the graph of
+```math
+x =e^{−y^2}
+```
+ and the ``y``-axis (``0 ≤ y ≤ 1``) about the ``x``-axis.
+
+"""
+
+# ╔═╡ 6a3c2cd4-6c1f-4038-b0ac-d7992aee8d63
+cm"""
+$(ex(3,"Shell Method Preferable"))
+Find the volume of the solid formed by revolving the region bounded by the graphs of
+```math
+y=x^2+1, \quad y=0,\quad x=0, \quad \text{and}\quad x=1
+```
+ about the y-axis.
+
+"""
+
+# ╔═╡ 8bb93d52-7813-4ce1-a78c-7eccf4ff559f
+cm"""
+$(ex(4,"Volume of a Pontoon"))
+The pontoon is designed by rotating the graph of
+```math
+y=1 - \frac{x^2}{16}, \quad −4≤x≤4
+```
+ about the x-axis, where x and y are measured in feet. Find the volume of the pontoon.
+"""
+
+# ╔═╡ 7d2e7631-5d0f-45cd-baa5-c280963b7973
+cm"""
+$(ex(5,"Shell Method Necessary"))
+Find the volume of the solid formed by revolving the region bounded by the graphs
+of ``y=x^3+x+1``, ``y=1``, and ``x=1`` about the line ``x=2``.
+"""
+
+# ╔═╡ 85d4c1c6-8791-45b0-83a0-588fcb204233
+cm"""
+$(define("Arc Length"))
+
+Let the function ``y=f(x)`` represents a smooth curve on the interval ``[a,b]``. The __arc length__ of ``f`` between ``a`` and ``b`` is
+```math
+s = \int_a^b\sqrt{1+[f'(x)]^2} dx.
+```
+
+Similarly, for a smooth curve ``x=g(y)``, the arc length of ``g`` between ``c`` and  ``d`` is
+```math
+s = \int_c^d\sqrt{1+[g'(y)]^2} dy.
+```
+
+"""
+
+# ╔═╡ 41ec2ea8-904a-4181-a103-1d140d98d4ab
+cm"""
+$(ex(1,"The Length of a Line Segment"))
+Find the arc length from ``\left(x_1, y_1\right)`` to ``\left(x_2, y_2\right)`` on the graph of
+```math
+f(x)=m x+b
+```
+"""
+
+# ╔═╡ 142f33a6-1355-4095-80f2-6fa48572c64b
+cm"""
+$(ex(2,"Finding Arc Length"))
+Find the arc length of the graph of ``y=\displaystyle \frac{x^3}{6}+\frac{1}{2x}`` on the interval ``[\frac{1}{2},2]``.
+"""
+
+# ╔═╡ 8f7889c4-b786-465e-ba90-e448029399c1
+cm"""
+$(ex(3,"Finding Arc Length"))
+Find the arc length of the graph of ``(y−1)^3=x^2`` on the interval ``[0, 8]``.
+
+"""
+
+# ╔═╡ 786e488c-5c3b-449b-9e44-f7f1e8fcda67
+cm"""
+$(ex(4,"Finding Arc Length"))
+Find the arc length of the graph of ``y=\ln(\cos x)`` from ``x=0`` to ``x=\pi/4``.
+"""
+
+# ╔═╡ 6e673498-0b02-4a55-8a81-6b7358a3668e
+cm"""
+
+$(define("Surface of Revolution"))
+When the graph of a continuous function is revolved about a line, the resulting surface is a __surface of revolution__.
+
+"""
+
+# ╔═╡ 5d946e8c-9256-473a-adac-7be3741aa2c0
+cm"""
+
+
+<div class="img-container">
+
+$(Resource("https://www.dropbox.com/s/199tfveph8mi2kz/surface_rev.png?raw=1"))
+
+__Surface Area of *frustum*__
+```math
+S=2\pi r L, \quad \text{where}\quad r=\frac{r_1+r_2}{2}
+```
+</div>
+
+Consider a function ``f`` that has a continuous derivative on the interval ``[a,b]``. The graph of ``f`` is revolved about the ``x``-axis
+
+<div class="img-container">
+
+$(Resource("https://www.dropbox.com/s/f454ldbfk1z3o2z/surface_rev2.png?raw=1"))
+
+__Surface Area Formula__
+```math
+S=2\pi \int_a^b x \sqrt{1+[f'(x)]^2} dx.
+```
+</div>
+
+$(define("Area of a Surface of Revolution"))
+
+Let ``y=f(x)`` have a continuous derivative on the interval ``[a,b]``.
+
+<div class="img-container">
+
+$(Resource("https://www.dropbox.com/s/2fup4uwh5uclrmv/surface_rev3.png?raw=1"))
+</div>
+
+The area ``S`` of the surface of revolution formed by revolving the graph of ``f`` about a horizontal or vertical axis is
+
+```math
+S=2\pi \int_a^b r(x) \sqrt{1+[f'(x)]^2} dx, \quad {\color{red} y \text{ is a function of x }}.
+```
+where ``r(x)`` is the distance between the graph of ``f`` and the axis of revolution.
+
+If ``x=g(y)`` on the interval ``[c,d]`` , then the surface area is
+
+```math
+S=2\pi \int_a^b r(y) \sqrt{1+[g'(y)]^2} dy, \quad {\color{red} x \text{ is a function of y }}.
+```
+where ``r(y)`` is the distance between the graph of ``g`` and the axis of revolution.
+
+"""
+
+# ╔═╡ 36f63f82-142f-4468-a6ed-7781472d94d7
+cm"""
+$(ex(6,"The Area of a Surface of Revolution")) Find the area of the surface formed by revolving the graph of ``f(x)=x^3`` on the interval ``[0,1]`` about the ``x``-axis.
+
+
+$(ex(7,"The Area of a Surface of Revolution"))
+Find the area of the surface formed by revolving the graph of ``f(x)=x^2`` on the interval ``[0,\sqrt{2}]`` about the ``y``-axis.
+"""
+
+# ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
+initialize_eqref()
+
+# ╔═╡ 107407c8-5da0-4833-9965-75a82d84a0fb
+@htl("""
+<style>
+@import url("https://mmogib.github.io/math102/custom.css");
+
+ul {
+  list-style: none;
+}
+
+ul li:before {
+  content: '💡 ';
+}
+
+.p40 {
+    padding-left: 40px;
+}
+    example-box {
+      max-width: 600px;           /* Limits the box width */
+      margin: 2rem auto;          /* Centers the box and adds vertical spacing */
+      border: 1px solid #ccc;     /* Light border */
+      border-radius: 4px;         /* Slightly rounded corners */
+      overflow: hidden;           /* Ensures the box boundary clips its children */
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+      font-family: Arial, sans-serif;
+    }
+
+    /* Header area for "EXAMPLE 1" */
+    .example-header {
+      background: linear-gradient(90deg, #cc0000, #990000);
+      color: #fff;
+      font-weight: bold;
+      font-size: 1.1rem;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #990000;
+    }
+
+    /* Sub-header area for the title or subtitle */
+    .example-title {
+      background-color: #f9f9f9;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.75rem 1rem;
+      margin: 0;                  /* Remove default heading margins */
+      border-bottom: 1px solid #eee;
+    }
+
+    /* Main content area for the mathematical statement or instructions */
+    .example-content {
+      padding: 1rem;
+      line-height: 1.5;
+    }
+
+    /* Optional styling for inline math or emphasis */
+    em {
+      font-style: italic;
+      color: #333;
+    }
+</style>
+""")
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
@@ -1127,7 +1241,7 @@ SymPy = "24249f21-da20-56a4-8eb1-6a02cf4ae2e6"
 Colors = "~0.12.11"
 CommonMark = "~1.0.1"
 HypertextLiteral = "~0.9.5"
-IntervalArithmetic = "~1.0.1"
+IntervalArithmetic = "~1.0.3"
 LaTeXStrings = "~1.4.0"
 Latexify = "~0.16.10"
 PlotThemes = "~3.3.0"
@@ -1145,7 +1259,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.12.6"
 manifest_format = "2.0"
-project_hash = "4c52055461c1883e4e2b515f368db18e3e537d25"
+project_hash = "9c3b817ffa81ef60e907588fdc68f2644388e5b0"
 
 [[deps.AbstractFFTs]]
 deps = ["LinearAlgebra"]
@@ -1214,10 +1328,10 @@ uuid = "4e9b3aee-d8a1-5a3d-ad8b-7d824db253f0"
 version = "1.0.1+0"
 
 [[deps.Cairo_jll]]
-deps = ["Artifacts", "Bzip2_jll", "CompilerSupportLibraries_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "JLLWrappers", "LZO_jll", "Libdl", "Pixman_jll", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Zlib_jll", "libpng_jll"]
-git-tree-sha1 = "fde3bf89aead2e723284a8ff9cdf5b551ed700e8"
+deps = ["Artifacts", "Bzip2_jll", "CompilerSupportLibraries_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "JLLWrappers", "Libdl", "Pixman_jll", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Zlib_jll", "libpng_jll"]
+git-tree-sha1 = "d0efe2c6fdcdaa1c161d206aa8b933788397ec71"
 uuid = "83423d85-b0ee-5818-9007-b63ccbeb887a"
-version = "1.18.5+0"
+version = "1.18.6+0"
 
 [[deps.CodecZlib]]
 deps = ["TranscodingStreams", "Zlib_jll"]
@@ -1373,9 +1487,9 @@ version = "0.1.11"
 
 [[deps.Expat_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "27af30de8b5445644e8ffe3bcb0d72049c089cf1"
+git-tree-sha1 = "9cb7fe11da6adb8683cbacf8aa9b5237941e3a75"
 uuid = "2e619515-83b5-522b-bb60-26c02a35a201"
-version = "2.7.3+0"
+version = "2.7.5+0"
 
 [[deps.FFMPEG]]
 deps = ["FFMPEG_jll"]
@@ -1384,10 +1498,10 @@ uuid = "c87230d0-a227-11e9-1b43-d7ebe4e7570a"
 version = "0.4.5"
 
 [[deps.FFMPEG_jll]]
-deps = ["Artifacts", "Bzip2_jll", "FreeType2_jll", "FriBidi_jll", "JLLWrappers", "LAME_jll", "Libdl", "Ogg_jll", "OpenSSL_jll", "Opus_jll", "PCRE2_jll", "Zlib_jll", "libaom_jll", "libass_jll", "libfdk_aac_jll", "libvorbis_jll", "x264_jll", "x265_jll"]
-git-tree-sha1 = "ccc81ba5e42497f4e76553a5545665eed577a663"
+deps = ["Artifacts", "Bzip2_jll", "FreeType2_jll", "FriBidi_jll", "JLLWrappers", "LAME_jll", "Libdl", "Ogg_jll", "OpenSSL_jll", "Opus_jll", "PCRE2_jll", "Zlib_jll", "libaom_jll", "libass_jll", "libfdk_aac_jll", "libva_jll", "libvorbis_jll", "x264_jll", "x265_jll"]
+git-tree-sha1 = "cac41ca6b2d399adfc95e51240566f8a60a80806"
 uuid = "b22a6f82-2f65-5046-a5b2-351ab43fb4e5"
-version = "8.0.0+0"
+version = "8.1.0+0"
 
 [[deps.FFTW_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -1428,9 +1542,9 @@ version = "1.3.7"
 
 [[deps.FreeType2_jll]]
 deps = ["Artifacts", "Bzip2_jll", "JLLWrappers", "Libdl", "Zlib_jll"]
-git-tree-sha1 = "2c5512e11c791d1baed2049c5652441b28fc6a31"
+git-tree-sha1 = "70329abc09b886fd2c5d94ad2d9527639c421e3e"
 uuid = "d7e528f0-a631-5988-bf34-fe36492bcfd7"
-version = "2.13.4+0"
+version = "2.14.3+1"
 
 [[deps.FriBidi_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -1440,21 +1554,27 @@ version = "1.0.17+0"
 
 [[deps.GLFW_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libglvnd_jll", "Xorg_libXcursor_jll", "Xorg_libXi_jll", "Xorg_libXinerama_jll", "Xorg_libXrandr_jll", "libdecor_jll", "xkbcommon_jll"]
-git-tree-sha1 = "fcb0584ff34e25155876418979d4c8971243bb89"
+git-tree-sha1 = "9e0fb9e54594c47f278d75063980e43066e26e20"
 uuid = "0656b61e-2033-5cc2-a64a-77c0f6c09b89"
-version = "3.4.0+2"
+version = "3.4.1+1"
 
 [[deps.GR]]
 deps = ["Artifacts", "Base64", "DelimitedFiles", "Downloads", "GR_jll", "HTTP", "JSON", "Libdl", "LinearAlgebra", "Preferences", "Printf", "Qt6Wayland_jll", "Random", "Serialization", "Sockets", "TOML", "Tar", "Test", "p7zip_jll"]
-git-tree-sha1 = "f52c27dd921390146624f3aab95f4e8614ad6531"
+git-tree-sha1 = "44716a1a667cb867ee0e9ec8edc31c3e4aa5afdc"
 uuid = "28b8d3ca-fb5f-59d9-8090-bfdbd6d07a71"
-version = "0.73.18"
+version = "0.73.24"
+
+    [deps.GR.extensions]
+    IJuliaExt = "IJulia"
+
+    [deps.GR.weakdeps]
+    IJulia = "7073ff75-c697-5162-941a-fcdaad2a7d2a"
 
 [[deps.GR_jll]]
 deps = ["Artifacts", "Bzip2_jll", "Cairo_jll", "FFMPEG_jll", "Fontconfig_jll", "FreeType2_jll", "GLFW_jll", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "Pixman_jll", "Qt6Base_jll", "Zlib_jll", "libpng_jll"]
-git-tree-sha1 = "4b0406b866ea9fdbaf1148bc9c0b887e59f9af68"
+git-tree-sha1 = "be8a1b8065959e24fdc1b51402f39f3b6f0f6653"
 uuid = "d2c73de3-f751-5644-a686-071e5b155ba9"
-version = "0.73.18+0"
+version = "0.73.24+0"
 
 [[deps.GettextRuntime_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Libiconv_jll"]
@@ -1476,9 +1596,9 @@ version = "5.2.3+0"
 
 [[deps.Glib_jll]]
 deps = ["Artifacts", "GettextRuntime_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Libiconv_jll", "Libmount_jll", "PCRE2_jll", "Zlib_jll"]
-git-tree-sha1 = "50c11ffab2a3d50192a228c313f05b5b5dc5acb2"
+git-tree-sha1 = "24f6def62397474a297bfcec22384101609142ed"
 uuid = "7746bdde-850d-59dc-9ae8-88ece973131d"
-version = "2.86.0+0"
+version = "2.86.3+0"
 
 [[deps.Graphics]]
 deps = ["Colors", "LinearAlgebra", "NaNMath"]
@@ -1559,9 +1679,9 @@ version = "1.4.2"
 
 [[deps.ImageMagick_jll]]
 deps = ["Artifacts", "Bzip2_jll", "FFTW_jll", "Ghostscript_jll", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "OpenJpeg_jll", "Zlib_jll", "Zstd_jll", "libpng_jll", "libwebp_jll", "libzip_jll"]
-git-tree-sha1 = "d670e8e3adf0332f57054955422e85a4aec6d0b0"
+git-tree-sha1 = "2c232857f2eb9ecfa3ab534df7f060c9afbeb187"
 uuid = "c73af94c-d91f-53ed-93a7-00f77d67a9d7"
-version = "7.1.2005+0"
+version = "7.1.2011+0"
 
 [[deps.ImageMetadata]]
 deps = ["AxisArrays", "ImageAxes", "ImageBase", "ImageCore"]
@@ -1571,9 +1691,9 @@ version = "0.9.9"
 
 [[deps.Imath_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "0936ba688c6d201805a83da835b55c61a180db52"
+git-tree-sha1 = "dcc8d0cd653e55213df9b75ebc6fe4a8d3254c65"
 uuid = "905a6f67-0a94-5f89-b386-d35d92009cd1"
-version = "3.1.11+0"
+version = "3.2.2+0"
 
 [[deps.IndirectArrays]]
 git-tree-sha1 = "012e604e1c7458645cb8b436f8fba789a51b257f"
@@ -1592,9 +1712,9 @@ version = "1.11.0"
 
 [[deps.IntervalArithmetic]]
 deps = ["CRlibm", "MacroTools", "OpenBLASConsistentFPCSR_jll", "Printf", "Random", "RoundingEmulator"]
-git-tree-sha1 = "bf0210c01fb7d67c31fed97d7c1d1716b98ea689"
+git-tree-sha1 = "2cce1fed119ca7b6cc230c4a3b85202478af7924"
 uuid = "d1acc4aa-44c8-5952-acd4-ba5d80a2a253"
-version = "1.0.1"
+version = "1.0.3"
 
     [deps.IntervalArithmetic.extensions]
     IntervalArithmeticArblibExt = "Arblib"
@@ -1672,9 +1792,9 @@ version = "0.1.6"
 
 [[deps.JpegTurbo_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "b6893345fd6658c8e475d40155789f4860ac3b21"
+git-tree-sha1 = "c0c9b76f3520863909825cbecdef58cd63de705a"
 uuid = "aacddb02-875f-59d6-b918-886e6ef4fbf8"
-version = "3.1.4+0"
+version = "3.1.5+0"
 
 [[deps.JuliaSyntaxHighlighting]]
 deps = ["StyledStrings"]
@@ -1689,21 +1809,15 @@ version = "3.100.3+0"
 
 [[deps.LERC_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "aaafe88dccbd957a8d82f7d05be9b69172e0cee3"
+git-tree-sha1 = "17b94ecafcfa45e8360a4fc9ca6b583b049e4e37"
 uuid = "88015f11-f218-50d7-93a8-a6af411a945d"
-version = "4.0.1+0"
+version = "4.1.0+0"
 
 [[deps.LLVMOpenMP_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
 git-tree-sha1 = "eb62a3deb62fc6d8822c0c4bef73e4412419c5d8"
 uuid = "1d63c593-3942-5779-bab2-d838dc0a180e"
 version = "18.1.8+0"
-
-[[deps.LZO_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "1c602b1127f4751facb671441ca72715cc95938a"
-uuid = "dd4b983a-f0e5-5f8d-a1b7-129d4a5fb1ac"
-version = "2.10.3+0"
 
 [[deps.LaTeXStrings]]
 git-tree-sha1 = "dda21b8cbd6a6c40d9d02a73230f9d70fed6918c"
@@ -1782,9 +1896,9 @@ version = "1.18.0+0"
 
 [[deps.Libmount_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "97bbca976196f2a1eb9607131cb108c69ec3f8a6"
+git-tree-sha1 = "cc3ad4faf30015a3e8094c9b5b7f19e85bdf2386"
 uuid = "4b2f31a3-9ecc-558c-b454-b3730dcb73e9"
-version = "2.41.3+0"
+version = "2.42.0+0"
 
 [[deps.Libtiff_jll]]
 deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "LERC_jll", "Libdl", "XZ_jll", "Zlib_jll", "Zstd_jll"]
@@ -1794,9 +1908,9 @@ version = "4.7.2+0"
 
 [[deps.Libuuid_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "d0205286d9eceadc518742860bf23f703779a3d6"
+git-tree-sha1 = "d620582b1f0cbe2c72dd1d5bd195a9ce73370ab1"
 uuid = "38a345b3-de98-5d2b-a5d3-14cd9215e700"
-version = "2.41.3+0"
+version = "2.42.0+0"
 
 [[deps.LinearAlgebra]]
 deps = ["Libdl", "OpenBLAS_jll", "libblastrampoline_jll"]
@@ -1933,9 +2047,9 @@ version = "1.3.6+0"
 
 [[deps.OpenBLASConsistentFPCSR_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "567515ca155d0020a45b05175449b499c63e7015"
+git-tree-sha1 = "f2b3b9e52a5eb6a3434c8cca67ad2dde011194f4"
 uuid = "6cdc7f73-28fd-5e50-80fb-958a8875b1af"
-version = "0.3.29+0"
+version = "0.3.30+0"
 
 [[deps.OpenBLAS_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
@@ -1950,9 +2064,9 @@ version = "0.3.3"
 
 [[deps.OpenEXR_jll]]
 deps = ["Artifacts", "Imath_jll", "JLLWrappers", "Libdl", "Zlib_jll"]
-git-tree-sha1 = "8292dd5c8a38257111ada2174000a33745b06d4e"
+git-tree-sha1 = "135492b7e97fc86d9b132b96a54d2d3dd3e0c6a8"
 uuid = "18a262bb-aa17-5467-a713-aee519bc75cb"
-version = "3.2.4+0"
+version = "3.4.8+0"
 
 [[deps.OpenJpeg_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libtiff_jll", "LittleCMS_jll", "libpng_jll"]
@@ -1984,9 +2098,9 @@ version = "0.5.6+0"
 
 [[deps.Opus_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "c392fc5dd032381919e3b22dd32d6443760ce7ea"
+git-tree-sha1 = "e2bb57a313a74b8104064b7efd01406c0a50d2ff"
 uuid = "91d4177d-7536-5919-b921-800302f37372"
-version = "1.5.2+0"
+version = "1.6.1+0"
 
 [[deps.OrderedCollections]]
 git-tree-sha1 = "05868e21324cede2207c6f0f466b4bfef6d5e7ee"
@@ -2012,9 +2126,9 @@ version = "0.5.12"
 
 [[deps.Pango_jll]]
 deps = ["Artifacts", "Cairo_jll", "Fontconfig_jll", "FreeType2_jll", "FriBidi_jll", "Glib_jll", "HarfBuzz_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "1f7f9bbd5f7a2e5a9f7d96e51c9754454ea7f60b"
+git-tree-sha1 = "58e5ed5e386e156bd93e86b305ebd21ac63d2d04"
 uuid = "36c8627f-9965-5494-a995-c6b170f724f3"
-version = "1.56.4+0"
+version = "1.57.1+0"
 
 [[deps.Parsers]]
 deps = ["Dates", "PrecompileTools", "UUIDs"]
@@ -2142,27 +2256,33 @@ version = "1.4.5"
 
 [[deps.Qt6Base_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Fontconfig_jll", "Glib_jll", "JLLWrappers", "Libdl", "Libglvnd_jll", "OpenSSL_jll", "Vulkan_Loader_jll", "Xorg_libSM_jll", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Xorg_libxcb_jll", "Xorg_xcb_util_cursor_jll", "Xorg_xcb_util_image_jll", "Xorg_xcb_util_keysyms_jll", "Xorg_xcb_util_renderutil_jll", "Xorg_xcb_util_wm_jll", "Zlib_jll", "libinput_jll", "xkbcommon_jll"]
-git-tree-sha1 = "34f7e5d2861083ec7596af8b8c092531facf2192"
+git-tree-sha1 = "d7a4bff94f42208ce3cf6bc8e4e7d1d663e7ee8b"
 uuid = "c0090381-4147-56d7-9ebc-da0b1113ec56"
-version = "6.8.2+2"
+version = "6.10.2+1"
 
 [[deps.Qt6Declarative_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Qt6Base_jll", "Qt6ShaderTools_jll"]
-git-tree-sha1 = "da7adf145cce0d44e892626e647f9dcbe9cb3e10"
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Qt6Base_jll", "Qt6ShaderTools_jll", "Qt6Svg_jll"]
+git-tree-sha1 = "d5b7dd0e226774cbd87e2790e34def09245c7eab"
 uuid = "629bc702-f1f5-5709-abd5-49b8460ea067"
-version = "6.8.2+1"
+version = "6.10.2+1"
 
 [[deps.Qt6ShaderTools_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Qt6Base_jll"]
-git-tree-sha1 = "9eca9fc3fe515d619ce004c83c31ffd3f85c7ccf"
+git-tree-sha1 = "4d85eedf69d875982c46643f6b4f66919d7e157b"
 uuid = "ce943373-25bb-56aa-8eca-768745ed7b5a"
-version = "6.8.2+1"
+version = "6.10.2+1"
+
+[[deps.Qt6Svg_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Qt6Base_jll"]
+git-tree-sha1 = "81587ff5ff25a4e1115ce191e36285ede0334c9d"
+uuid = "6de9746b-f93d-5813-b365-ba18ad4a9cf3"
+version = "6.10.2+0"
 
 [[deps.Qt6Wayland_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Qt6Base_jll", "Qt6Declarative_jll"]
-git-tree-sha1 = "8f528b0851b5b7025032818eb5abbeb8a736f853"
+git-tree-sha1 = "672c938b4b4e3e0169a07a5f227029d4905456f2"
 uuid = "e99dba38-086e-5de3-a5b1-6e4c66e897c3"
-version = "6.8.2+2"
+version = "6.10.2+1"
 
 [[deps.REPL]]
 deps = ["InteractiveUtils", "JuliaSyntaxHighlighting", "Markdown", "Sockets", "StyledStrings", "Unicode"]
@@ -2344,9 +2464,9 @@ version = "0.4.4"
 
 [[deps.StructUtils]]
 deps = ["Dates", "UUIDs"]
-git-tree-sha1 = "fa95b3b097bcef5845c142ea2e085f1b2591e92c"
+git-tree-sha1 = "86f5831495301b2a1387476cb30f86af7ab99194"
 uuid = "ec057cc2-7a8d-4b58-b3b3-92acb9f63b42"
-version = "2.7.1"
+version = "2.8.0"
 
     [deps.StructUtils.extensions]
     StructUtilsMeasurementsExt = ["Measurements"]
@@ -2489,9 +2609,9 @@ version = "1.24.0+0"
 
 [[deps.XZ_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "fee71455b0aaa3440dfdd54a9a36ccef829be7d4"
+git-tree-sha1 = "b29c22e245d092b8b4e8d3c09ad7baa586d9f573"
 uuid = "ffd25f8a-64ca-5728-b0f7-c24cf3aae800"
-version = "5.8.1+0"
+version = "5.8.3+0"
 
 [[deps.Xorg_libICE_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -2564,6 +2684,12 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libX11_jll"]
 git-tree-sha1 = "7ed9347888fac59a618302ee38216dd0379c480d"
 uuid = "ea2f1a96-1ddc-540d-b46f-429655e07cfa"
 version = "0.9.12+0"
+
+[[deps.Xorg_libpciaccess_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Zlib_jll"]
+git-tree-sha1 = "4909eb8f1cbf6bd4b1c30dd18b2ead9019ef2fad"
+uuid = "a65dc6b1-eb27-53a1-bb3e-dea574b5389e"
+version = "0.18.1+0"
 
 [[deps.Xorg_libxcb_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libXau_jll", "Xorg_libXdmcp_jll"]
@@ -2656,9 +2782,9 @@ version = "0.61.1+0"
 
 [[deps.libaom_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "371cc681c00a3ccc3fbc5c0fb91f58ba9bec1ecf"
+git-tree-sha1 = "850b06095ee71f0135d644ffd8a52850699581ed"
 uuid = "a4ae2306-e953-59d6-aa16-d00cac43593b"
-version = "3.13.1+0"
+version = "3.13.3+0"
 
 [[deps.libass_jll]]
 deps = ["Artifacts", "Bzip2_jll", "FreeType2_jll", "FriBidi_jll", "HarfBuzz_jll", "JLLWrappers", "Libdl", "Zlib_jll"]
@@ -2676,6 +2802,12 @@ deps = ["Artifacts", "Dbus_jll", "JLLWrappers", "Libdl", "Libglvnd_jll", "Pango_
 git-tree-sha1 = "9bf7903af251d2050b467f76bdbe57ce541f7f4f"
 uuid = "1183f4f0-6f2a-5f1a-908b-139f9cdfea6f"
 version = "0.2.2+0"
+
+[[deps.libdrm_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libpciaccess_jll"]
+git-tree-sha1 = "63aac0bcb0b582e11bad965cef4a689905456c03"
+uuid = "8e53e030-5e6c-5a89-a30b-be5b7263a166"
+version = "2.4.125+1"
 
 [[deps.libevdev_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -2697,15 +2829,21 @@ version = "1.28.1+0"
 
 [[deps.libpng_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Zlib_jll"]
-git-tree-sha1 = "07b6a107d926093898e82b3b1db657ebe33134ec"
+git-tree-sha1 = "e51150d5ab85cee6fc36726850f0e627ad2e4aba"
 uuid = "b53b4c65-9356-5827-b1ea-8c7a1a84506f"
-version = "1.6.50+0"
+version = "1.6.58+0"
 
 [[deps.libsixel_jll]]
 deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "Libdl", "libpng_jll"]
 git-tree-sha1 = "c1733e347283df07689d71d61e14be986e49e47a"
 uuid = "075b6546-f08a-558a-be8f-8157d0f608a5"
 version = "1.10.5+0"
+
+[[deps.libva_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libX11_jll", "Xorg_libXext_jll", "Xorg_libXfixes_jll", "libdrm_jll"]
+git-tree-sha1 = "7dbf96baae3310fe2fa0df0ccbb3c6288d5816c9"
+uuid = "9a156e7d-b971-5f62-b2c9-67348b8fb97c"
+version = "2.23.0+0"
 
 [[deps.libvorbis_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Ogg_jll"]
@@ -2761,11 +2899,11 @@ version = "1.13.0+0"
 """
 
 # ╔═╡ Cell order:
+# ╠═71bc54d5-d0ed-42d3-9bc1-48aa86e91d1d
 # ╠═e414122f-b93a-4510-b8ae-026c303e0df9
-# ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
-# ╠═b4599a16-e7f7-4a2a-b349-2648ee45208f
-# ╠═8315fb27-89e4-44a4-a51e-8e55fc3d58e5
-# ╠═ef081dfa-b610-4c7a-a039-7258f4f6e80e
+# ╠═8408e369-40eb-4f9b-a7d7-26cde3e34a74
+# ╠═cd269caf-ef81-43d7-a1a8-6668932b6363
+# ╠═d6d85087-9ecc-4043-9002-e4a6442b829e
 # ╠═1f1b3439-630e-4db6-9a01-321ed75bed84
 # ╠═3df06d3d-7bd1-45fe-bd46-c1429b11ee14
 # ╠═dda364fa-80e5-4d6c-8ed1-9b2bfccf4b18
@@ -2833,5 +2971,11 @@ version = "1.13.0+0"
 # ╠═5d946e8c-9256-473a-adac-7be3741aa2c0
 # ╠═e7cef759-ccba-437b-a418-247d80704808
 # ╠═36f63f82-142f-4468-a6ed-7781472d94d7
+# ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
+# ╠═b4599a16-e7f7-4a2a-b349-2648ee45208f
+# ╠═8315fb27-89e4-44a4-a51e-8e55fc3d58e5
+# ╠═ef081dfa-b610-4c7a-a039-7258f4f6e80e
+# ╠═da9230a6-088d-4735-b206-9514c12dd223
+# ╠═107407c8-5da0-4833-9965-75a82d84a0fb
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002

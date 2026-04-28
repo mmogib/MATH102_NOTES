@@ -4,6 +4,66 @@
 using Markdown
 using InteractiveUtils
 
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
+macro bind(def, element)
+    #! format: off
+    return quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local el = $(esc(element))
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
+        el
+    end
+    #! format: on
+end
+
+# ╔═╡ f2d4c2a5-f486-407b-b31b-d2efcc7476b3
+begin
+    using CommonMark
+    using PlutoUI, PlutoExtras
+    using Plots, PlotThemes, LaTeXStrings
+    using Latexify
+    using HypertextLiteral
+    using Colors
+    using LinearAlgebra, Random, Printf, SparseArrays
+    # using Symbolics
+    using SymPy
+    using QRCoders
+    using PrettyTables
+    # using Primes
+    # using LinearSolve
+    # using NonlinearSolve
+    # using ForwardDiff
+    # using Integrals
+    # using OrdinaryDiffEq
+    using IntervalArithmetic
+end
+
+# ╔═╡ 71bc54d5-d0ed-42d3-9bc1-48aa86e91d1d
+TableOfContents(title="📚 MATH102: Calculus III", indent=true, depth=4)
+
+# ╔═╡ e414122f-b93a-4510-b8ae-026c303e0df9
+begin
+    struct LocalImage
+        filename
+    end
+
+    function Base.show(io::IO, ::MIME"image/png", w::LocalImage)
+        write(io, read(w.filename))
+    end
+end
+
+# ╔═╡ cd269caf-ef81-43d7-a1a8-6668932b6363
+# exportqrcode("https://www.mathmatize.com/")
+# let
+#     img = LocalImage("../qrcode.png")
+# end
+
+# ╔═╡ d6d85087-9ecc-4043-9002-e4a6442b829e
+md"""
+
+# [AI-STUDY RESOURCE](https://notebooklm.google.com/notebook/f9f5eb4d-5782-4586-9f7e-abdb60f1b694)
+"""
+
 # ╔═╡ 1e507853-e2e6-493d-9d62-f33da7a7caa8
 md"""
 # 9.1 Sequences
@@ -29,16 +89,6 @@ a_1, a_2, a_3, \cdots, a_n, \cdots
 - ``a_3``: third term,
 - ``\vdots``
 - ``a_n``: ``\text{n}^\text{th}`` term,
-
-"""
-
-# ╔═╡ 25157d2c-d719-438e-b4c4-6fa7d9787820
-cm"""
-$(ex(1,"Writing the Terms of a Sequence"))
-1.  ``\{a_n\}=\{3+(−1)^n\}_{n\geq 1}``
-2.  ``\{b_n\}=\displaystyle\left\{\frac{n}{1-2n}\right\}``
-3.  ``\{c_n\}=\displaystyle\left\{\frac{n^2}{2^n-1}\right\}``
-4.  The terms of the __recursively defined__ sequence ``\{d_n\}``, where ``d_1=25`` and ``d_{n+1}=d_n−5``.
 
 """
 
@@ -73,19 +123,6 @@ end
 
 # ╔═╡ 355007a5-91c8-454e-8463-31c6abc9f87f
 md"## Limit of a Sequence"
-
-# ╔═╡ 5c65c8e6-f08f-42ce-81dd-f80638cbf7b4
-cm"""
-$(define("the Limit of a Sequence"))
-Let ``L`` be a real number. The limit of a sequence ``\left\{a_n\right\}`` is ``L``, written as
-```math
-\lim _{n \rightarrow \infty} a_n=L
-```
-if for each ``\varepsilon>0``, there exists ``M>0`` such that ``\left|a_n-L\right|<\varepsilon`` whenever ``n>M``. If the limit ``L`` of a sequence exists, then the sequence converges to ``L``. If the limit of a sequence does not exist, then the sequence diverges.
-$(ebl())
-
-$(post_img("https://www.dropbox.com/scl/fi/c536ibwk7eycy0v2lb0rj/fig_9_1.png?rlkey=22y9oi2iy52z82iehh59pf0gs&dl=1",500))
-"""
 
 # ╔═╡ eae5658b-a235-40de-84a3-00152a109e93
 begin
@@ -134,156 +171,14 @@ let
     """
 end
 
-# ╔═╡ 9b9a82cc-a3c1-448f-9cb8-375e8dbd59ea
-cm"""
-$(bth("Limit of a Sequence"))
-Let ``L`` be a real number. Let ``f`` be a function of a real variable such that
-```math
-\lim _{x \rightarrow \infty} f(x)=L
-```
-
-If ``\left\{a_n\right\}`` is a sequence such that ``f(n)=a_n`` for every positive integer ``n``, then
-```math
-\lim _{n \rightarrow \infty} a_n=L
-```
-"""
-
-# ╔═╡ 3c9ab8ae-dda1-45eb-a635-92acf6e2f10b
-cm"""
-$(ex(2,"Finding the Limit of a Sequence"))
-Find the limit of the sequence whose ``n``th term is ``a_n=\left(1+\frac{1}{n}\right)^n``.
-"""
-
-# ╔═╡ ff84cfbf-d387-4bde-b9d3-407b88e1bf30
-cm"""
-$(bth("Properties of Limits of Sequences"))
-Let ``\lim _{n \rightarrow \infty} a_n=L`` and ``\lim _{n \rightarrow \infty} b_n=K``.
-1. Scalar multiple: ``\lim _{n \rightarrow \infty}\left(c a_n\right)=c L, c`` is any real number.
-2. Sum or difference: ``\lim _{n \rightarrow \infty}\left(a_n \pm b_n\right)=L \pm K``
-3. Product: ``\lim _{n \rightarrow \infty}\left(a_n b_n\right)=L K``
-4. Quotient: ``\lim _{n \rightarrow \infty} \frac{a_n}{b_n}=\frac{L}{K}, b_n \neq 0`` and ``K \neq 0``
-
-"""
-
-# ╔═╡ 9a594bd8-68f7-4f6a-8dd6-3c70780f098d
-cm"""
-$(ex(3,"Determining Convergence or Divergence"))
-1.  ``\{a_n\}=\{3+(−1)^n\}``
-2.  ``\{b_n\}=\displaystyle\left\{\frac{n}{1-2n}\right\}``
-"""
-
-# ╔═╡ ef95cecf-00fe-429b-b94e-50f2de8a16bb
-cm"""
-$(ex(4,"Using L'Hôpital's Rule to Determine Convergence"))
-Show that the sequence whose ``n``th term is ``a_n=\frac{n^2}{2^n-1}`` converges.
-"""
-
-# ╔═╡ e62d5f92-8ad6-4317-ab62-771b96f0c3f9
-cm"""
-$(bth("Squeeze Theorem for Sequences"))
-If ``\lim _{n \rightarrow \infty} a_n=L=\lim _{n \rightarrow \infty} b_n`` and there exists an integer ``N`` such that ``a_n \leq c_n \leq b_n`` for all ``n>N``, then ``\lim _{n \rightarrow \infty} c_n=L``.
-
-"""
-
-# ╔═╡ 63dbebd7-85d2-42fd-b09a-f0d9c1ce640f
-cm"""
-$(ex(5,"Using the Squeeze Theorem"))
-Show that the sequence ``\left\{c_n\right\}=\left\{(-1)^n \frac{1}{n!}\right\}`` converges, and find its limit.
-"""
-
-# ╔═╡ 664c41b1-6459-4dfc-9999-5b2acad3301c
-cm"""
-$(bbl("Remark",""))
-In fact, it can be shown that for any fixed number ``k``,
-```math
-\lim _{n \rightarrow \infty}\left(k^n / n!\right)=0.
-```
-- This means that the factorial function grows faster than any exponential function.
-"""
-
-# ╔═╡ aa6664e3-5081-4c48-8754-e65ba7263f46
-cm"""
-$(bth("Absolute Value Theorem"))
-For the sequence ``\left\{a_n\right\}``, if
-```math
-\lim _{n \rightarrow \infty}\left|a_n\right|=0 \text { then } \lim _{n \rightarrow \infty} a_n=0
-```
-"""
-
 # ╔═╡ 4507039d-b5e0-4c22-a698-ccbfc7eeb6ed
 md"## Pattern Recognition for Sequences"
-
-# ╔═╡ 7bafde52-30ed-41f9-9522-02b3c9b7316a
-cm"""
-$(ex(6,"Finding the <i>nth</i> Term of a Sequence"))
-Find a sequence ``\left\{a_n\right\}`` whose first five terms are
-```math
-\frac{2}{1}, \frac{4}{3}, \frac{8}{5}, \frac{16}{7}, \frac{32}{9}, \ldots
-```
-and then determine whether the sequence you have chosen converges or diverges.
-"""
-
-# ╔═╡ d3729415-161a-41f0-ad07-120944323d9f
-cm"""
-$(ex(7,"Finding the nth Term of a Sequence"))
-Determine the ``n``th term for a sequence whose first five terms are
-```math
--\frac{2}{1}, \frac{8}{2},-\frac{26}{6}, \frac{80}{24},-\frac{242}{120}, \ldots
-```
-and then decide whether the sequence converges or diverges.
-"""
 
 # ╔═╡ b568193c-ba85-4f59-89e9-6d5b824d08cd
 md"## Monotonic Sequences and Bounded Sequences"
 
-# ╔═╡ 471eba70-40bf-42f9-a476-b13f37ccf823
-cm"""
-$(define("Monotonic Sequence"))
-A sequence ``\left\{a_n\right\}`` is monotonic when its terms are nondecreasing
-```math
-a_1 \leq a_2 \leq a_3 \leq \cdots \leq a_n \leq \cdots
-```
-or when its terms are nonincreasing
-```math
-a_1 \geq a_2 \geq a_3 \geq \cdots \geq a_n \geq \cdots
-```
-
-"""
-
-# ╔═╡ 6c261c5d-d478-4750-ac04-bb36734a6fe1
-cm"""
-$(ex(8,"
-Determining Whether a Sequence Is Monotonic"))
-Determine whether each sequence having the given ``n``th term is monotonic.
-- a. ``a_n=3+(-1)^n``
-- b. ``b_n=\frac{2 n}{1+n}``
-- c. ``c_n=\frac{n^2}{2^n-1}``
-"""
-
 # ╔═╡ f27fe033-30da-4174-9f1c-23910a036481
 
-# ╔═╡ 18d5f404-685e-4781-8edf-ac7374c55526
-cm"""
-$(define("Bounded Sequence"))
-1. A sequence ``\left\{a_n\right\}`` is bounded above when there is a real number ``M`` such that ``a_n \leq M`` for all ``n``. The number ``M`` is called an upper bound of the sequence.
-2. A sequence ``\left\{a_n\right\}`` is bounded below when there is a real number ``N`` such that ``N \leq a_n`` for all ``n``. The number ``N`` is called a lower bound of the sequence.
-3. A sequence ``\left\{a_n\right\}`` is bounded when it is bounded above and bounded below.
-"""
-
-# ╔═╡ 7c50563b-0f12-4974-9acf-598247793200
-cm"""
-$(bth("Bounded Monotonic Sequences"))
-If a sequence ``\left\{a_n\right\}`` is bounded and monotonic, then it converges.
-"""
-
-# ╔═╡ dbc02f9a-5bc9-478e-8de1-767fd64faaec
-cm"""
-$(ex(9,"
-Bounded and Monotonic Sequences"))
-- a. The sequence ``\left\{a_n\right\}=\{1 / n\}`` is both bounded and monotonic. So, by Theorem above , it must converge.
-- b. The divergent sequence ``\left\{b_n\right\}=\left\{n^2 /(n+1)\right\}`` is monotonic but not bounded. (It is bounded below.)
-- c. The divergent sequence ``\left\{c_n\right\}=\left\{(-1)^n\right\}`` is bounded but not monotonic.
-"""
 
 # ╔═╡ 7d460b80-8319-4129-862e-695ebb8cff28
 md"""
@@ -327,22 +222,6 @@ s_n & = & a_1 + a_2 + \cdots + a_n =\sum_{i=1}^n a_i \\
 \end{array}
 ```
 and give the following definition
-"""
-
-# ╔═╡ 137be6c2-5b86-4e1d-b457-b4f71646e633
-cm"""
-$(define("Convergent and Divergent Series"))
-For the infinite series ``\sum_{n=1}^{\infty} a_n``, the ``\boldsymbol{n}`` th partial sum is
-```math
-S_n=a_1+a_2+\cdots+a_n .
-```
-
-If the sequence of partial sums ``\left\{S_n\right\}`` converges to ``S``, then the series ``\sum_{n=1}^{\infty} a_n`` converges. The limit ``S`` is called the sum of the series.
-```math
-S=a_1+a_2+\cdots+a_n+\cdots \quad \color{red}{S=\sum_{n=1}^{\infty} a_n}
-```
-
-If ``\left\{S_n\right\}`` diverges, then the series diverges.
 """
 
 # ╔═╡ 84942358-6f19-4d7f-b367-4dc5e81009f5
@@ -399,88 +278,8 @@ let
 
 end
 
-# ╔═╡ 7eeff659-9f83-47eb-8f96-6fac093f0e64
-cm"""
-$(ex(1,"Convergent and Divergent Series"))
-1. ``\displaystyle \sum_{n=1}^{\infty}\frac{1}{2^n}``
-1. ``\displaystyle \sum_{n=1}^{\infty}\left(\frac{1}{n}-\frac{1}{n+1}\right)`` ``\qquad \quad \color{red}{\text{telescoping series}}``
-1. ``\displaystyle \sum_{n=1}^{\infty} 1``
-
-"""
-
-# ╔═╡ 71e4523b-b68c-49cb-8877-ff819c4a13e9
-cm"""
-$(ex(2,"Writing a Series in telescoping Form"))
- Find the sum of the series  ``\displaystyle \sum_{n=1}^{\infty} \frac{2}{4n^2-1}``
-"""
-
-# ╔═╡ 125169d6-bfd0-443f-87aa-a7117f481088
-cm"""
-Geometric Series
-The series in Example 1(a) is a __geometric series__. In general, the series
-```math
-\sum_{n=0}^{\infty} a r^n=a+a r+a r^2+\cdots+a r^n+\cdots, a \neq 0
-```
-
-is a __geometric series__ with ratio ``r, r \neq 0``.
-
-$(bth("Convergence of a Geometric Series"))
-A geometric series with ratio ``r`` diverges when ``|r| \geq 1``. If ``|r|<1``, then the series converges to the sum
-```math
-\sum_{n=0}^{\infty} a r^n=\frac{a}{1-r}, \quad|r|<1
-```
-"""
-
-# ╔═╡ 4202e249-ca1c-4b00-a482-8fe15a6064ed
-cm"""
-$(ex(3,"Convergent and Divergent Geometric Series"))
-- (a) ``\displaystyle \sum_{n=0}^{\infty}\frac{3}{2^n}``
-- (b) ``\displaystyle \sum_{n=0}^{\infty}\left(\frac{3}{2}\right)^n``
-"""
-
-# ╔═╡ d5965014-2e70-4023-80ef-526f28a0334f
-cm"""
-$(ex(4,"A Geometric Series for a Repeating Decimal"))
-Use a geometric series to write ``0.08`` as the ratio of two integers.
-"""
-
-# ╔═╡ 27a7a6b4-6462-410d-a26a-ffd384efe461
-cm"""
-$(bth("Properties of Infinite Series"))
-Let ``\sum a_n`` and ``\sum b_n`` be convergent series, and let ``A, B``, and ``c`` be real numbers. If ``\sum a_n=A`` and ``\sum b_n=B``, then the following series converge to the indicated sums.
-1. ``\displaystyle\sum_{n=1}^{\infty} c a_n=c A``
-2. ``\displaystyle\sum_{n=1}^{\infty}\left(a_n+b_n\right)=A+B``
-3. ``\displaystyle\sum_{n=1}^{\infty}\left(a_n-b_n\right)=A-B``
-$(ebl())
-## nth-Term Test for Divergence
-
-$(bth("Limit of the nth Term of a Convergent Series"))
-If ``\sum_{n=1}^{\infty} a_n`` converges, then ``\lim _{n \rightarrow \infty} a_n=0``.
-"""
-
-# ╔═╡ 7b3cf490-87d4-4294-95af-f6e6deee043d
-cm"""
-$(bth("nth-Term Test for Divergence"))
-If ``\lim _{n \rightarrow \infty} a_n \neq 0`` then ``\sum_{n=1}^{\infty} a_n`` diverges.
-"""
-
-# ╔═╡ c69ecdb4-a312-45bc-874d-85d4d3747f77
-cm"""
-$(ex(5,"Using the nth-term test for Divergence"))
-1. ``\displaystyle\sum_{n=0}^{\infty} 2^n``
-1. ``\displaystyle\sum_{n=0}^{\infty} \frac{n!}{2n!+1}``
-1. ``\displaystyle\sum_{n=0}^{\infty} \frac{1}{n}``
-
-"""
-
 # ╔═╡ a1b22caf-ec34-4abd-9460-bce43203b742
 
-# ╔═╡ 8c2447b3-c26e-47e1-8701-7e4a18ae92a8
-cm"""
-$(ex(6," Bouncing Ball Problem"))
-A ball is dropped from a height of 6 feet and begins bouncing
-The height of each bounce is three-fourths the height of the previous bounce. Find the  total vertical distance traveled by the ball.
-"""
 
 # ╔═╡ 2abfc0da-1d95-49dd-837d-6718ce473c5d
 md"""
@@ -492,57 +291,8 @@ md"""
 # ╔═╡ f08b1731-59dd-4d82-8b42-6824bc216d5a
 md"## The Integral Test"
 
-# ╔═╡ 3a4b2178-47ee-474e-bbaf-72c00b3d3c2d
-cm"""
-$(bth("The Integral Test"))
-If ``f`` is positive, continuous, and decreasing for ``x \geq 1`` and ``a_n=f(n)``, then
-```math
-\sum_{n=1}^{\infty} a_n \text { and } \int_1^{\infty} f(x) d x
-```
-either both converge or both diverge.
-"""
-
-# ╔═╡ 69abc9da-4596-4268-9dea-95baaf687f67
-cm"""
-$(ex(1,"Using the Integral Test"))
-Apply the Integral Test to the series ``\sum_{n=1}^{\infty} \frac{n}{n^2+1}``.
-"""
-
-# ╔═╡ ced2268b-d0c8-4cb0-9e0d-083d6db388c8
-cm"""
-$(ex(2,"Using the Integral Test"))
-Apply the Integral Test to the series ``\sum_{n=1}^{\infty} \frac{1}{n^2+1}``.
-"""
-
 # ╔═╡ f8f72024-5ea6-474d-8123-dd9b19a03fa7
 md"## p-Series and Harmonic Series"
-
-# ╔═╡ 7df6433b-0c5b-4bd8-a96a-eb70d0efa0e3
-cm"""
-$(bth("Convergence of p-Series"))
-The ``p``-series
-```math
-\sum_{n=1}^{\infty} \frac{1}{n^p}=\frac{1}{1^p}+\frac{1}{2^p}+\frac{1}{3^p}+\frac{1}{4^p}+\cdots
-```
-converges for ``p >1`` and diverges for ``0 < p \leq 1``.
-"""
-
-# ╔═╡ 976a8ef5-fd7f-45a4-8f1d-2a99318ad33a
-cm"""
-$(ex(3,"Convergent and Divergent p-Series"))
-
-Discuss the convergence or divergence of (a) the harmonic series and (b) the ``p``-series with ``p=2``.
-"""
-
-# ╔═╡ db5771f6-1bf6-4996-a515-5e7ad37d1404
-cm"""
-$(ex(4,"Testing a Series for Convergence"))
-Determine whether the series
-```math
-\sum_{n=2}^{\infty} \frac{1}{n \ln n}
-```
-converges or diverges.
-"""
 
 # ╔═╡ 986e1b28-ad65-4d2e-ad70-9dc515c8a08c
 md"""
@@ -554,76 +304,8 @@ md"""
 # ╔═╡ a749dce9-5f63-43f0-95e5-d36558cc6533
 md"## Direct Comparison Test"
 
-# ╔═╡ 22fd0b92-cfad-450e-b855-1ce7648fb93b
-cm"""
-$(bth("Direct Comparison Test"))
-Let ``0 < a_n \leq b_n`` for all ``n``.
-1. If ``\displaystyle\sum_{n=1}^{\infty} b_n`` converges, then ``\displaystyle\sum_{n=1}^{\infty} a_n`` converges.
-2. If ``\displaystyle\sum_{n=1}^{\infty} a_n`` diverges, then ``\displaystyle\sum_{n=1}^{\infty} b_n`` diverges.
-"""
-
-# ╔═╡ be156c4f-af26-4e6e-907d-99e73b68c4aa
-cm"""
-$(ex(1,"Using the Direct Comparison Test"))
-Determine the convergence or divergence of
-```math
-\sum_{n=1}^{\infty} \frac{1}{2+3^n}
-```
-"""
-
-# ╔═╡ 07aa2d3e-0387-4e41-bcbc-d24d5f572497
-cm"""
-$(ex(2,"Using the Direct Comparison Test"))
-Determine the convergence or divergence of
-```math
-\sum_{n=1}^{\infty} \frac{1}{2+\sqrt{n}}
-```
-"""
-
 # ╔═╡ f65563e8-6eef-4526-be12-7051d3e8d437
 md"## Limit Comparison Test"
-
-# ╔═╡ 080f38b7-8cc3-497a-badf-5748c617f56b
-cm"""
-$(bth("Limit Comparison Test"))
-If ``a_n>0, b_n>0``, and
-```math
-\lim _{n \rightarrow \infty} \frac{a_n}{b_n}=L
-```
-where ``L`` is finite and positive, then
-```math
-\sum_{n=1}^{\infty} a_n \text { and } \sum_{n=1}^{\infty} b_n
-```
-either both converge or both diverge.
-"""
-
-# ╔═╡ 8c6ba535-e37f-4210-8d59-5a28afcff45f
-cm"""
-$(ex(3,"Using the Limit Comparison Test"))
-
-Show that the general harmonic series below diverges.
-```math
-\sum_{n=1}^{\infty} \frac{1}{a n+b}, \quad a>0, \quad b>0
-```
-"""
-
-# ╔═╡ d8b8ec7c-fee3-4475-8552-6b33b091a728
-cm"""
-$(ex(4,"Using the Limit Comparison Test"))
-Determine the convergence or divergence of
-```math
-\sum_{n=1}^{\infty} \frac{\sqrt{n}}{n^2+1}
-```
-"""
-
-# ╔═╡ 61ebbc9f-8bc3-4712-9bd5-d1bad2bc6640
-cm"""
-$(ex(5,"Using the Limit Comparison Test"))
-Determine the convergence or divergence of
-```math
-\sum_{n=1}^{\infty} \frac{n 2^n}{4 n^3+1}
-```
-"""
 
 # ╔═╡ caa1abe9-b736-4cc1-a8c6-ecada36e449a
 cm"""
@@ -645,38 +327,6 @@ md"""
 # ╔═╡ 15f491d1-9436-44b1-a307-0ebd98cdf722
 md"## Alternating Series"
 
-# ╔═╡ 222d45a6-60f2-49c1-a10e-ae2688bd6734
-cm"""
-$(bth("Alternating Series Test"))
-Let ``a_n>0``. The alternating series
-```math
-\sum_{n=1}^{\infty}(-1)^n a_n \text { and } \sum_{n=1}^{\infty}(-1)^{n+1} a_n
-```
-converge when these two conditions are met.
-1. ``\lim _{n \rightarrow \infty} a_n=0``
-2. ``a_{n+1} \leq a_n``, for all ``n``
-"""
-
-# ╔═╡ 3cdf3d2b-81e7-4b91-ae61-f7cc214d5154
-cm"""
-$(ex(1,"Using the Alternating Series Test"))
-
-Determine the convergence or divergence of
-```math
-\sum_{n=1}^{\infty}(-1)^{n+1} \frac{1}{n} .
-```
-"""
-
-# ╔═╡ c4a55daf-8b5f-48e2-90e8-1c215deeb804
-cm"""
-$(ex(2,"Using the Alternating Series Test"))
-
-Determine the convergence or divergence of
-```math
-\sum_{n=1}^{\infty} \frac{n}{(-2)^{n-1}} .
-```
-"""
-
 # ╔═╡ f94aa75a-2712-4936-9c4a-06b2a623b904
 let
     a(n) = n / 2^(n - 1)
@@ -685,40 +335,8 @@ let
     s(10), a(11)
 end
 
-# ╔═╡ a946547f-8507-49ec-b5fc-007dc89d0e92
-cm"""
-$(ex(3,"When the Alternating Series Test Does Not Apply"))
-a.
-```math
-\sum_{n=1}^{\infty} \frac{(-1)^{n+1}(n+1)}{n}=\frac{2}{1}-\frac{3}{2}+\frac{4}{3}-\frac{5}{4}+\frac{6}{5}-\cdots
-```
-b.
-```math
-\frac{2}{1}-\frac{1}{1}+\frac{2}{2}-\frac{1}{2}+\frac{2}{3}-\frac{1}{3}+\frac{2}{4}-\frac{1}{4}+\cdots
-```
-"""
-
 # ╔═╡ 376852e6-9a1b-4f86-8681-d307c7fd610a
 md"##  Alternating Series Remainder"
-
-# ╔═╡ 218c723f-8921-475b-b9be-9e88a3522829
-cm"""
-$(bth("Alternating Series Remainder"))
-If a convergent alternating series satisfies the condition ``a_{n+1} \leq a_n``, then the absolute value of the remainder ``R_N`` involved in approximating the sum ``S`` by ``S_N`` is less than (or equal to) the first neglected term. That is,
-```math
-\left|S-S_N\right|=\left|R_N\right| \leq a_{N+1} .
-```
-
-"""
-
-# ╔═╡ b4e85b19-989f-4caf-85f7-519d95178a4d
-cm"""
-$(ex(4,"Approximating the Sum of an Alternating Series"))
-Approximate the sum of the series by its first six terms.
-```math
-\sum_{n=1}^{\infty}(-1)^{n+1}\left(\frac{1}{n!}\right)=\frac{1}{1!}-\frac{1}{2!}+\frac{1}{3!}-\frac{1}{4!}+\frac{1}{5!}-\frac{1}{6!}+\cdots
-```
-"""
 
 # ╔═╡ 4f407428-dd3b-4df4-9fdc-9cff3aaafb56
 let
@@ -729,15 +347,6 @@ let
     s6, a(7)
     s6 - a(7), s6 + a(7)
 end
-
-# ╔═╡ f6330660-6de9-454a-b23a-3b64e763b17a
-cm"""
-$(ex(5,"Finding the Number of Terms"))
-Determine the number of terms required to approximate the sum of the series with an error of less than 0.001 .
-```math
-\sum_{n=1}^{\infty} \frac{(-1)^{n+1}}{n^4}
-```
-"""
 
 # ╔═╡ 10b81e79-03ff-46fb-8557-172b3f51dce3
 let
@@ -752,19 +361,6 @@ end
 # ╔═╡ 47754429-df92-4523-b459-5fb6d76bd67a
 md"## Absolute and Conditional Convergence"
 
-# ╔═╡ bc81fb58-4060-41d3-bc7c-fc96e2627c77
-cm"""
-$(bth("Absolute Convergence"))
-If the series ``\Sigma\left|a_n\right|`` converges, then the series ``\Sigma a_n`` also converges.
-"""
-
-# ╔═╡ 93e8dfc5-8bbe-4642-bef0-e5fcd0c9b781
-cm"""
-$(define("Absolute and Conditional Convergence"))
-1. The series ``\sum a_n`` is __absolutely convergent__ when ``\Sigma\left|a_n\right|`` converges.
-2. The series ``\sum a_n`` is __conditionally convergent__ when ``\sum a_n`` converges but ``\Sigma\left|a_n\right|`` diverges.
-"""
-
 # ╔═╡ ad68d8e3-815a-4498-9132-d144f4f3f958
 cm"""
 - __Abs. Convergence__
@@ -777,27 +373,6 @@ cm"""
 ```
 """
 
-# ╔═╡ 22b0134b-6a5c-4a5c-8daa-966c8c636eeb
-cm"""
-$(ex(6,"Absolute and Conditional Convergence"))
-Determine whether each of the series is convergent or divergent. Classify any convergent series as absolutely or conditionally convergent.
-
-a. ``\sum_{n=0}^{\infty} \frac{(-1)^n n!}{2^n}=\frac{0!}{2^0}-\frac{1!}{2^1}+\frac{2!}{2^2}-\frac{3!}{2^3}+\cdots``
-
-b. ``\sum_{n=1}^{\infty} \frac{(-1)^n}{\sqrt{n}}=-\frac{1}{\sqrt{1}}+\frac{1}{\sqrt{2}}-\frac{1}{\sqrt{3}}+\frac{1}{\sqrt{4}}-\cdots``
-
-"""
-
-# ╔═╡ 485e0d4f-ba2d-4493-bf66-5b4c39eee8c8
-cm"""
-$(ex(7,"Absolute and Conditional Convergence"))
-Determine whether each of the series is convergent or divergent. Classify any convergent series as absolutely or conditionally convergent.
-
-a. ``\displaystyle\sum_{n=1}^{\infty} \frac{(-1)^{n(n+1) / 2}}{3^n}=-\frac{1}{3}-\frac{1}{9}+\frac{1}{27}+\frac{1}{81}-\cdots``
-
-b. ``\displaystyle\sum_{n=1}^{\infty} \frac{(-1)^n}{\ln (n+1)}=-\frac{1}{\ln 2}+\frac{1}{\ln 3}-\frac{1}{\ln 4}+\frac{1}{\ln 5}-\cdots``
-"""
-
 # ╔═╡ 0cfd9bcf-2545-4df2-a70f-3334b8454e31
 md"## Rearrangement of Series"
 
@@ -805,18 +380,6 @@ md"## Rearrangement of Series"
 cm"""
 1. If a series is __absolutely convergent__, then its terms can be rearranged in any order without changing the sum of the series.
 2. If a series is __conditionally convergent__, then its terms can be rearranged to give a different sum.
-"""
-
-# ╔═╡ 54f2a8e1-03c2-4cd9-8159-9b8fbdda29bb
-cm"""
-$(ex(8,"Rearrangement of a Series"))
-
-The alternating harmonic series converges to ``\ln 2``. That is,
-```math
-\sum_{n=1}^{\infty}(-1)^{n+1} \frac{1}{n}=\frac{1}{1}-\frac{1}{2}+\frac{1}{3}-\frac{1}{4}+\cdots=\ln 2 .
-```
-
-Rearrange the terms of the series to produce a different sum.
 """
 
 # ╔═╡ e8c01c5f-4d8b-4fdc-8e37-90fdd449492a
@@ -830,97 +393,11 @@ md"""
 # ╔═╡ f4f976af-baaf-495a-bf31-c7226040fe35
 md"## The Ratio Test"
 
-# ╔═╡ a3c046e9-7c15-46e6-8288-0ec16000fe80
-cm"""
-$(bth("Ratio Test"))
-Let ``\sum a_n`` be a series with nonzero terms.
-1. The series ``\sum a_n`` converges absolutely when ``\displaystyle\lim _{n \rightarrow \infty}\left|\frac{a_{n+1}}{a_n}\right|<1``.
-2. The series ``\sum a_n`` diverges when ``\displaystyle\lim _{n \rightarrow \infty}\left|\frac{a_{n+1}}{a_n}\right|>1`` or ``\displaystyle\lim _{n \rightarrow \infty}\left|\frac{a_{n+1}}{a_n}\right|=\infty``.
-3. The Ratio Test is inconclusive when ``\displaystyle\lim _{n \rightarrow \infty}\left|\frac{a_{n+1}}{a_n}\right|=1``.
-"""
-
-# ╔═╡ 775ee452-d3c0-46e4-a1bb-07939b37d050
-cm"""
-$(ex(1,"Using the Ratio Test"))
-Determine the convergence or divergence of
-```math
-\sum_{n=0}^{\infty} \frac{2^n}{n!} .
-```
-"""
-
-# ╔═╡ af54ce43-acb4-4b14-8f6d-2fffb4a55c69
-cm"""
-$(ex(2,"Using the Ratio Test"))
-Determine whether each series converges or diverges.
-
-a. ``\displaystyle\sum_{n=0}^{\infty} \frac{n^2 2^{n+1}}{3^n}``
-
-b. ``\displaystyle\sum_{n=1}^{\infty} \frac{n^n}{n!}``
-"""
-
-# ╔═╡ d9a49705-1e01-4e98-9915-f285cb16df28
-cm"""
-$(ex(3,"A Failure of the Ratio Test"))
-Determine the convergence or divergence of
-```math
-\sum_{n=1}^{\infty}(-1)^n \frac{\sqrt{n}}{n+1}
-```
-
-"""
-
 # ╔═╡ f1b64d24-e2d4-4f20-83d5-095333a5264c
 md"## The Root Test"
 
-# ╔═╡ cf6f8342-703a-49e7-ab9b-35cce160b9f3
-cm"""
-$(bth("Root Test"))
-1. The series ``\sum a_n`` converges absolutely when ``\displaystyle\lim _{n \rightarrow \infty} \sqrt[n]{\left|a_n\right|}<1``.
-2. The series ``\sum a_n`` diverges when ``\displaystyle\lim _{n \rightarrow \infty} \sqrt[n]{\left|a_n\right|}>1`` or ``\displaystyle\lim _{n \rightarrow \infty} \sqrt[n]{\left|a_n\right|}=\infty``.
-3. The Root Test is inconclusive when ``\displaystyle\lim _{n \rightarrow \infty} \sqrt[n]{\left|a_n\right|}=1``.
-$(ebl())
-
-$(ex(4,"Using the Root Test"))
-Determine the convergence or divergence of
-```math
-\sum_{n=1}^{\infty} \frac{e^{2 n}}{n^n} .
-```
-"""
-
 # ╔═╡ a98edbef-50c2-44fa-ae24-241c9bff99f7
 md"## Strategies for Testing Series"
-
-# ╔═╡ 8e645546-7f33-42a5-b6b6-4f100f93918f
-cm"""
-$(bbl("GUIDELINES FOR TESTING A SERIES FOR CONVERGENCE OR DIVERGENCE",""))
-1. Does the ``n``th term approach 0 ? If not, the series diverges.
-2. Is the series one of the special types-geometric, ``p``-series, telescoping, or alternating?
-3. Can the Integral Test, the Root Test, or the Ratio Test be applied?
-4. Can the series be compared favorably to one of the special types?
-$(ebl())
-
-$(ex(5,"Applying the Strategies for Testing Series"))
-Determine the convergence or divergence of each series.
-
-a. ``\displaystyle \sum_{n=1}^{\infty} \frac{n+1}{3 n+1}``
-
-b. ``\displaystyle \sum_{n=1}^{\infty}\left(\frac{\pi}{6}\right)^n``
-
-c. ``\displaystyle \sum_{n=1}^{\infty} n e^{-n^2}``
-
-d. ``\displaystyle \sum_{n=1}^{\infty} \frac{1}{3 n+1}``
-
-e. ``\displaystyle \sum_{n=1}^{\infty}(-1)^n \frac{3}{4 n+1}``
-
-f. ``\displaystyle \sum_{n=1}^{\infty} \frac{n!}{10^n}``
-
-g. ``\displaystyle \sum_{n=1}^{\infty}\left(\frac{n+1}{2 n+1}\right)^n``
-
-"""
-
-# ╔═╡ a12f4fa0-0597-4447-a731-603849fbdcba
-cm"""
-$(post_img("https://www.dropbox.com/scl/fi/0t0hwwc5omsvbcmahvbxp/SUMMARY_OF_TESTS_FOR_SERIES.png?rlkey=8e9l8eri9mezitxlfoc3r40nq&dl=1",700))
-"""
 
 # ╔═╡ 35b4d21b-c240-4a9c-867f-7a929e933e4e
 md"""
@@ -931,16 +408,6 @@ md"""
 
 # ╔═╡ 4daf8c01-54e8-48b4-a991-f784fdc9f14f
 md"## Polynomial Approximations of Elementary Functions"
-
-# ╔═╡ 2e6b9a41-d56e-4e95-ba78-f360e008335d
-cm"""
-$(ex("Ex",""))
-Find polynomial approximations ``P_n(x)`` of ``\displaystyle f(x)=e^x`` such that
-```math
-P(0)=f(0), P'(0)=f'(0), P''(0)=f''(0), \cdots, P^{(n)}(0)=f^{(n)}(0).
-```
-
-"""
 
 # ╔═╡ 5d2d71fe-1aff-4d28-b1d2-47dc3dd7485a
 sec_97_n_str = @bind sec_97_n NumberField(0:10, default=0);
@@ -1017,31 +484,6 @@ end
 # ╔═╡ e08ab6af-108d-4e87-91fb-051c5fd19fcd
 md"## Taylor and Maclaurin Polynomials"
 
-# ╔═╡ 36431e5d-97bd-4843-9775-6211c4a2d8b3
-cm"""
-$(define("nth Taylor Polynomial and nth Maclaurin Polynomial"))
-If ``f`` has ``n`` derivatives at ``c``, then the polynomial
-```math
-P_n(x)=f(c)+f^{\prime}(c)(x-c)+\frac{f^{\prime \prime}(c)}{2!}(x-c)^2+\cdots+\frac{f^{(n)}(c)}{n!}(x-c)^n
-```
-is called the __``\boldsymbol{n}`` th Taylor polynomial for ``\boldsymbol{f}`` at ``\boldsymbol{c}``__. If ``c=0``, then
-```math
-P_n(x)=f(0)+f^{\prime}(0) x+\frac{f^{\prime \prime}(0)}{2!} x^2+\frac{f^{\prime \prime \prime}(0)}{3!} x^3+\cdots+\frac{f^{(n)}(0)}{n!} x^n
-```
-is also called the __``\boldsymbol{n}`` th Maclaurin polynomial for ``\boldsymbol{f}``__.
-"""
-
-# ╔═╡ 6abdb5a7-5b5b-44ed-9ba8-ac20c59c6dc7
-cm"""
-$(ex(4,"Finding Taylor Polynomials for ln x"))
-
-Find the Taylor polynomials ``P_0, P_1, P_2, P_3``, and ``P_4`` for
-```math
-f(x)=\ln x
-```
-centered at ``c=1``.
-"""
-
 # ╔═╡ e158bb3c-c351-41b1-ae8d-8f60297d6814
 let
     n = 3
@@ -1070,14 +512,6 @@ let
     )
 end
 
-# ╔═╡ 900ab898-f39e-4246-9d50-6430a2d6f645
-cm"""
-$(ex(5,"Finding Maclaurin Polynomials for `cos x`"))
-Find the Maclaurin polynomials ``P_0, P_2, P_4``, and ``P_6`` for ``f(x)=\cos x``.
-
-Use ``P_6(x)`` to approximate the value of ``\cos (0.1)``.
-"""
-
 # ╔═╡ c73fea91-cca0-4f7f-9c38-f85e6f3c56ae
 let
     x = 50
@@ -1085,19 +519,6 @@ let
     Pn(x) = sum((-1)^(i) * x^(2i) / (factorial(2i)) for i in 0:n)
     cos(x), Pn(x)
 end
-
-# ╔═╡ 4bfbb486-642d-4419-9039-eabe2569336a
-cm"""
-$(ex(6,"Finding a Taylor Polynomial for `sin x`"))
-Find the third Taylor polynomial for ``f(x)=\sin x``, expanded about ``c=\pi / 6``.
-"""
-
-# ╔═╡ f1f560ef-630c-4161-98a7-b56ad41ad154
-cm"""
-$(ex(7,"Approximation Using Maclaurin Polynomials"))
-
-Use a fourth Maclaurin polynomial to approximate the value of ``\ln (1.1)``.
-"""
 
 # ╔═╡ b22a52b9-1ffa-49d3-9945-74fb590af5e4
 md"""
@@ -1111,180 +532,17 @@ md"""
 # ╔═╡ 24bb5b72-935e-40a9-b5c1-1d341b1c4392
 md"##  Power Series"
 
-# ╔═╡ fc6da046-815f-4d1b-8a47-e886907f0c3c
-cm"""
-$(define("Power Series"))
-If ``x`` is a variable, then an infinite series of the form
-```math
-\sum_{n=0}^{\infty} a_n x^n=a_0+a_1 x+a_2 x^2+a_3 x^3+\cdots+a_n x^n+\cdots
-```
-is called a __power series__. More generally, an infinite series of the form
-```math
-\sum_{n=0}^{\infty} a_n(x-c)^n=a_0+a_1(x-c)+a_2(x-c)^2+\cdots+a_n(x-c)^n+\cdots
-```
-is called a __power series centered at ``\boldsymbol{c}``__, where ``c`` is a constant.
-"""
-
 # ╔═╡ 42bff813-162c-4ee3-80cf-8a6a2a301de5
 md"##  Radius and Interval of Convergence"
 
-# ╔═╡ 621f4afc-8b5d-4f51-a4e6-4a5a4c65f39b
-cm"""
-A power series in ``x`` can be viewed as a function of ``x``
-```math
-f(x)=\sum_{n=0}^{\infty} a_n(x-c)^n
-```
-where
-```math
-\text{the domain of }f = \left\{x\in \mathbb{R} | \text{ the power series converges at } x\right\}.
-```
-$(bbl("",""))
-<div style="color: #ff4f11;font-size: 1.2em;display:flex;justify-content: center; padding: 2em;">
-
-<div style="width: 50%;">
-<span style="line-height: 2.4;">
-Determination of the domain of a power series is the primary concern in this section.
-</span>
-</div>
-</div>
-</div>
-
-"""
-
-# ╔═╡ 0aa832ba-13d0-4e31-aa02-3e166d4a837c
-cm"""
-$(ex(2,"Finding the Radius of Convergence"))
-Find the radius of convergence of
-```math
-\sum_{n=0}^{\infty} n!x^n.
-```
-"""
-
-# ╔═╡ f38df00c-ce6a-4e5f-ab1f-34f1009c4d57
-cm"""
-$(ex(3,"Finding the Radius of Convergence"))
-Find the radius of convergence of
-```math
-\sum_{n=0}^{\infty} 3(x-2)^n.
-```
-"""
-
 # ╔═╡ 9480006c-fd6a-4d5e-831f-4ef1b923d972
 
-# ╔═╡ 0468a238-b5ce-4c0b-82eb-d3525646c66c
-cm"""
-$(ex(4,"Finding the Radius of Convergence"))
-Find the radius of convergence of
-```math
-\sum_{n=0}^{\infty} \frac{(-1)^n x^{2 n+1}}{(2 n+1)!}
-```
-"""
-
-# ╔═╡ ae9cbf12-fd6c-4a9d-b292-a691bfcdace2
-cm"""
-$(bth("Convergence of a Power Series"))
-For a power series centered at ``c``, precisely one of the following is true.
-1. The series converges only at ``c``.
-2. There exists a real number ``R> 0`` such that the series converges absolutely for
-```math
-|x-c| < R
-```
-$(add_space(10))and diverges for
-```math
-|x-c|>R .
-```
-3. The series converges absolutely for all ``x``.
-
-- The number ``R`` is the __radius of convergence__ of the power series.
-
-- If the series converges only at ``c``, then the radius of convergence is ``R=0``.
-
-- If the series converges for all ``x``, then the radius of convergence is ``R=\infty``.
-
-- The set of all values of ``x`` for which the power series converges is the __interval of convergence__ of the power series.
-"""
 
 # ╔═╡ fa50f561-b6a3-4fea-8b96-d4fbbe8dcc8a
 md"## Endpoint Convergence"
 
-# ╔═╡ 732098bf-c3da-4e88-b3d0-698bcd19f2f9
-cm"""
-$(ex(5,"Finding the Interval of Convergence"))
-
-Find the interval of convergence of
-```math
-\sum_{n=1}^{\infty} \frac{x^n}{n}
-```
-"""
-
-# ╔═╡ a633e01b-7bc0-42ad-a1bc-7e3c0c6323ae
-cm"""
-$(ex(6,"Finding the Interval of Convergence"))
-Find the interval of convergence of
-```math
-\sum_{n=0}^{\infty} \frac{(-1)^n(x+1)^n}{2^n}.
-```
-"""
-
-# ╔═╡ c0cf197b-0638-463f-9472-7418c843d6de
-cm"""
-$(ex(6,"Finding the Interval of Convergence"))
-Find the interval of convergence of
-```math
-\sum_{n=1}^{\infty} \frac{x^n}{n^2}.
-```
-"""
-
 # ╔═╡ 412f219d-f1b3-4ad4-8459-badfc2993532
 md"## Differentiation and Integration of Power Series"
-
-# ╔═╡ fdbb1b07-bdb9-426f-b75d-6b94b0283c11
-cm"""
-$(bth("Properties of Functions Defined by Power Series"))
-If the function
-```math
-\begin{aligned}
-f(x) & =\sum_{n=0}^{\infty} a_n(x-c)^n \\
-& =a_0+a_1(x-c)+a_2(x-c)^2+a_3(x-c)^3+\cdots
-\end{aligned}
-```
-has a radius of convergence of ``R>0``, then, on the interval
-```math
-(c-R, c+R)
-```
-``f`` is differentiable (and therefore continuous). Moreover, the derivative and antiderivative of ``f`` are as follows.
-
-1.
-```math
-\begin{aligned}
-f^{\prime}(x) & =\sum_{n=1}^{\infty} n a_n(x-c)^{n-1} \\
-& =a_1+2 a_2(x-c)+3 a_3(x-c)^2+\cdots
-\end{aligned}
-```
-2.
-```math
-\begin{aligned}
-\int f(x) d x & =C+\sum_{n=0}^{\infty} a_n \frac{(x-c)^{n+1}}{n+1} \\
-& =C+a_0(x-c)+a_1 \frac{(x-c)^2}{2}+a_2 \frac{(x-c)^3}{3}+\cdots
-\end{aligned}
-```
-
-The __radius of convergence__ of the series obtained by differentiating or integrating a power series is the same as that of the original power series. The __interval of convergence__, however, may differ as a result of the behavior at the endpoints.
-"""
-
-# ╔═╡ 457d84d7-7db0-43e3-a76e-810b28236779
-cm"""
-$(ex(8,"Intervals of Convergence for f(x), f'(x), and ∫f(x) d x"))
-Consider the function
-```math
-f(x)=\sum_{n=1}^{\infty} \frac{x^n}{n}=x+\frac{x^2}{2}+\frac{x^3}{3}+\cdots .
-```
-
-Find the interval of convergence for each of the following.
-- a. ``\displaystyle\int f(x) d x``
-- b. ``\displaystyle f(x)``
-- c. ``\displaystyle f^{\prime}(x)``
-"""
 
 # ╔═╡ 11841a6f-c0b0-426a-9d09-3b309f564a9c
 md"""
@@ -1331,60 +589,8 @@ let
     )
 end
 
-# ╔═╡ e2b47e81-0d2f-40bf-a6e9-cda6633ce5c9
-cm"""
-$(ex(1,"Finding a Geometric Power Series Centered at 0"))
-Find a power series for ``f(x)=\displaystyle\frac{4}{x+2}``, centered at ``0`` .
-"""
-
-# ╔═╡ 866e1c81-ee36-4ec5-af9a-bf4aa7874be8
-cm"""
-$(ex(2,"Finding a Geometric Power Series Centered at 1"))
-Find a power series for ``f(x)=\displaystyle\frac{1}{x}``, centered at ``1`` .
-"""
-
 # ╔═╡ 9f65c135-02ba-4f1f-bef9-e9695adb3df9
 md"## Operations with Power Series"
-
-# ╔═╡ d8a67bb3-3805-4ee8-8b5d-12310b128e15
-cm"""
-$(bbl("Operations with Power Series",""))
-Let ``\displaystyle f(x)=\sum_{n=0}^{\infty} a_n x^n`` and ``g(x)=\sum_{n=0}^{\infty} b_n x^n``.
-1. ``\displaystyle f(k x)=\sum_{n=0}^{\infty} a_n k^n x^n``
-2. ``\displaystyle f\left(x^N\right)=\sum_{n=0}^{\infty} a_n x^{n N}``
-3. ``\displaystyle f(x) \pm g(x)=\sum_{n=0}^{\infty}\left(a_n \pm b_n\right) x^n``
-"""
-
-# ╔═╡ b9261546-c5e2-433b-ac9b-e5c59e124768
-cm"""
-$(ex(3,"Adding Two Power Series"))
-Find a power series for
-```math
-f(x)=\frac{3 x-1}{x^2-1}
-```
-centered at 0 .
-"""
-
-# ╔═╡ c2b679dc-4cae-4e83-8408-ac1840000a8b
-cm"""
-$(ex(4,"Finding a Power Series by Integration"))
-Find a power series for
-```math
-f(x)=\ln x
-```
-centered at 1 .
-"""
-
-# ╔═╡ c045541b-b0ca-46e6-8a99-1938b6c7f980
-cm"""
-$(ex(5,"Finding a Power Series by Integration"))
-
-Find a power series for
-```math
-g(x)=\arctan x
-```
-centered at 0 .
-"""
 
 # ╔═╡ 2f54441f-5562-4d7f-a53a-814b67aafdb6
 let
@@ -1496,216 +702,11 @@ Convergence
 # ╔═╡ bdb0ba5e-de80-4289-92ba-8f7366b0e0c9
 md"## Taylor Series and Maclaurin Series"
 
-# ╔═╡ 3d0028e3-55b0-4888-add4-ab689ffa1f23
-cm"""
-$(bth("The Form of a Convergent Power Series"))
-If ``f`` is represented by a power series ``f(x)=\sum a_n(x-c)^n`` for all ``x`` in an open interval ``I`` containing ``c``, then
-```math
-a_n=\frac{f^{(n)}(c)}{n!}
-```
-and
-```math
-\begin{aligned}
-f(x)=f(c) & +f^{\prime}(c)(x-c)+\frac{f^{\prime \prime}(c)}{2!}(x-c)^2+\cdots \\
-& +\frac{f^{(n)}(c)}{n!}(x-c)^n+\cdots
-\end{aligned}
-```
-"""
-
-# ╔═╡ d4980faa-1acc-4d7a-91b4-d95092c97708
-cm"""
-$(define("Taylor and Maclaurin Series"))
-If a function ``f`` has derivatives of all orders at ``x=c``, then the series
-```math
-\sum_{n=0}^{\infty} \frac{f^{(n)}(c)}{n!}(x-c)^n=f(c)+f^{\prime}(c)(x-c)+\cdots+\frac{f^{(n)}(c)}{n!}(x-c)^n+\cdots
-```
-is called the Taylor series for ``\boldsymbol{f}`` at ``\boldsymbol{c}``. Moreover, if ``c=0``, then the series is the Maclaurin series for ``f``.
-"""
-
-# ╔═╡ 1608068c-bdfe-413a-85bf-71f6a6e51357
-cm"""
-$(ex(1,"Forming a Power Series"))
-
-Use the function
-```math
-f(x)=\sin x
-```
-to form the Maclaurin series
-```math
-\sum_{n=0}^{\infty} \frac{f^{(n)}(0)}{n!} x^n=f(0)+f^{\prime}(0) x+\frac{f^{\prime \prime}(0)}{2!} x^2+\frac{f^{\prime \prime \prime}(0)}{3!} x^3+\frac{f^{(4)}(0)}{4!} x^4+\cdots
-```
-and determine the interval of convergence.
-"""
-
-# ╔═╡ 1d24d351-4b8f-471c-92f6-1fb4cc336a3a
-cm"""
-$(ex(3,"Maclaurin Series for a Composite Function"))
-Find the Maclaurin series for
-```math
-f(x)=\sin x^2
-```
-"""
-
 # ╔═╡ 8ef89ddc-1cef-45d4-8887-3588f23df7cf
 md"##  Binomial Series"
 
-# ╔═╡ 55f4cb06-b2e2-4eb8-a952-19fa0a5bc650
-cm"""
-$(ex(4,"Binomial Series"))
-Find the Maclaurin series for ``f(x)=(1+x)^k`` and determine its radius of convergence. Assume that ``k`` is not a positive integer and ``k \neq 0``.
-"""
-
-# ╔═╡ 597d7998-0d50-4e36-8c57-6817b892c11b
-cm"""
-$(ex(5,"Finding a Binomial Series"))
-
-Find the power series for
-```math
-f(x)=\sqrt[3]{1+x}
-```
-"""
-
 # ╔═╡ c7c77627-9b35-4f07-ba63-16a7223eed84
 md"## Deriving Taylor Series from a Basic List"
-
-# ╔═╡ 51275f9c-9d72-450a-8b22-35fe0ebf4d45
-cm"""
-$(ex(6,"Deriving a Power Series from a Basic List"))
-Find the power series for
-```math
-f(x)=\cos \sqrt{x}
-```
-"""
-
-# ╔═╡ d24d51eb-5cef-4b12-b8c5-02b2e549482d
-cm"""
-$(ex(7,"Multiplication of Power Series"))
-Find the first three nonzero terms in the Maclaurin series ``e^x \arctan x``.
-"""
-
-# ╔═╡ e26ad50a-67db-449b-aa90-1bd87e06d5cb
-cm"""
-$(ex(8,"Division of Power Series"))
-
-Find the first three nonzero terms in the Maclaurin series ``\tan x``.
-"""
-
-# ╔═╡ 224f4771-7bf7-4433-9f36-b82875ad4b6c
-cm"""
-$(ex(9,"A Power Series for sin²x"))
-
-Find the power series for
-```math
-f(x)=\sin ^2 x
-```
-"""
-
-# ╔═╡ 66e78b57-c224-4beb-bddb-e4b5a2997d2c
-cm"""
-$(ex(10,"Power Series Approximation of a Definite Integral"))
-
-Use a power series to approximate
-```math
-\int_0^1 e^{-x^2} d x
-```
-with an error of less than 0.01 .
-"""
-
-# ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
-initialize_eqref()
-
-# ╔═╡ 107407c8-5da0-4833-9965-75a82d84a0fb
-@htl("""
-<style>
-@import url("https://mmogib.github.io/math102/custom.css");
-
-ul {
-  list-style: none;
-}
-
-ul li:before {
-  content: '💡 ';
-}
-
-.p40 {
-    padding-left: 40px;
-}
-    example-box {
-      max-width: 600px;           /* Limits the box width */
-      margin: 2rem auto;          /* Centers the box and adds vertical spacing */
-      border: 1px solid #ccc;     /* Light border */
-      border-radius: 4px;         /* Slightly rounded corners */
-      overflow: hidden;           /* Ensures the box boundary clips its children */
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-      font-family: Arial, sans-serif;
-    }
-
-    /* Header area for "EXAMPLE 1" */
-    .example-header {
-      background: linear-gradient(90deg, #cc0000, #990000);
-      color: #fff;
-      font-weight: bold;
-      font-size: 1.1rem;
-      padding: 0.75rem 1rem;
-      border-bottom: 1px solid #990000;
-    }
-
-    /* Sub-header area for the title or subtitle */
-    .example-title {
-      background-color: #f9f9f9;
-      font-weight: 600;
-      font-size: 1rem;
-      padding: 0.75rem 1rem;
-      margin: 0;                  /* Remove default heading margins */
-      border-bottom: 1px solid #eee;
-    }
-
-    /* Main content area for the mathematical statement or instructions */
-    .example-content {
-      padding: 1rem;
-      line-height: 1.5;
-    }
-
-    /* Optional styling for inline math or emphasis */
-    em {
-      font-style: italic;
-      color: #333;
-    }
-</style>
-""")
-
-# ╔═╡ e414122f-b93a-4510-b8ae-026c303e0df9
-begin
-    struct LocalImage
-        filename
-    end
-
-    function Base.show(io::IO, ::MIME"image/png", w::LocalImage)
-        write(io, read(w.filename))
-    end
-end
-
-# ╔═╡ f2d4c2a5-f486-407b-b31b-d2efcc7476b3
-begin
-    using CommonMark
-    using PlutoUI, PlutoExtras
-    using Plots, PlotThemes, LaTeXStrings
-    using Latexify
-    using HypertextLiteral
-    using Colors
-    using LinearAlgebra, Random, Printf, SparseArrays
-    # using Symbolics
-    using SymPy
-    using QRCoders
-    using PrettyTables
-    # using Primes
-    # using LinearSolve
-    # using NonlinearSolve
-    # using ForwardDiff
-    # using Integrals
-    # using OrdinaryDiffEq
-    using IntervalArithmetic
-end
 
 # ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
 function rect(x, Δx, xs, f; direction=:x)
@@ -1882,6 +883,1056 @@ begin
     @htl("")
 end
 
+# ╔═╡ 8408e369-40eb-4f9b-a7d7-26cde3e34a74
+begin
+    text_book = post_img("https://www.dropbox.com/scl/fi/upln00gqvnbdy7whr23pj/larson_book.jpg?rlkey=wlkgmzw2ernadd9b8v8qwu2jd&dl=1", 200)
+    md""" # Syllabus
+    ## Syallbus
+    See here [Term 252 - MATH102 - Syllabus](https://math.kfupm.edu.sa/docs/default-source/css-library/math102-252.pdf)
+    ## Textbook
+    __Textbook:  Larson, R. & Edwards, B., Calculus: Early Transcendental Functions, Metric Version, 7th edition, Cengage Learning, Inc., 2019.__
+    $text_book
+
+    ## Office Hours
+    I strongly encourage all students to make use of my office hours. These dedicated times are a valuable opportunity for you to ask questions, seek clarification on lecture material, discuss challenging problems, and get personalized feedback on your work. Engaging with me during office hours can greatly enhance your understanding of the course content and improve your performance. Whether you're struggling with a specific concept or simply want to delve deeper into the subject, I am here to support your learning journey. Don't hesitate to drop by; __your success is my priority__.
+
+    | Day       | Time        |
+    |-----------|-------------|
+    | Sunday    | 11:00-11:50AM |
+    | Tuesday    | 11:00-11:50AM |
+    Also you can ask for an online meeting through __TEAMS__.
+    """
+end
+
+# ╔═╡ 25157d2c-d719-438e-b4c4-6fa7d9787820
+cm"""
+$(ex(1,"Writing the Terms of a Sequence"))
+1.  ``\{a_n\}=\{3+(−1)^n\}_{n\geq 1}``
+2.  ``\{b_n\}=\displaystyle\left\{\frac{n}{1-2n}\right\}``
+3.  ``\{c_n\}=\displaystyle\left\{\frac{n^2}{2^n-1}\right\}``
+4.  The terms of the __recursively defined__ sequence ``\{d_n\}``, where ``d_1=25`` and ``d_{n+1}=d_n−5``.
+
+"""
+
+# ╔═╡ 5c65c8e6-f08f-42ce-81dd-f80638cbf7b4
+cm"""
+$(define("the Limit of a Sequence"))
+Let ``L`` be a real number. The limit of a sequence ``\left\{a_n\right\}`` is ``L``, written as
+```math
+\lim _{n \rightarrow \infty} a_n=L
+```
+if for each ``\varepsilon>0``, there exists ``M>0`` such that ``\left|a_n-L\right|<\varepsilon`` whenever ``n>M``. If the limit ``L`` of a sequence exists, then the sequence converges to ``L``. If the limit of a sequence does not exist, then the sequence diverges.
+$(ebl())
+
+$(post_img("https://www.dropbox.com/scl/fi/c536ibwk7eycy0v2lb0rj/fig_9_1.png?rlkey=22y9oi2iy52z82iehh59pf0gs&dl=1",500))
+"""
+
+# ╔═╡ 9b9a82cc-a3c1-448f-9cb8-375e8dbd59ea
+cm"""
+$(bth("Limit of a Sequence"))
+Let ``L`` be a real number. Let ``f`` be a function of a real variable such that
+```math
+\lim _{x \rightarrow \infty} f(x)=L
+```
+
+If ``\left\{a_n\right\}`` is a sequence such that ``f(n)=a_n`` for every positive integer ``n``, then
+```math
+\lim _{n \rightarrow \infty} a_n=L
+```
+"""
+
+# ╔═╡ 3c9ab8ae-dda1-45eb-a635-92acf6e2f10b
+cm"""
+$(ex(2,"Finding the Limit of a Sequence"))
+Find the limit of the sequence whose ``n``th term is ``a_n=\left(1+\frac{1}{n}\right)^n``.
+"""
+
+# ╔═╡ ff84cfbf-d387-4bde-b9d3-407b88e1bf30
+cm"""
+$(bth("Properties of Limits of Sequences"))
+Let ``\lim _{n \rightarrow \infty} a_n=L`` and ``\lim _{n \rightarrow \infty} b_n=K``.
+1. Scalar multiple: ``\lim _{n \rightarrow \infty}\left(c a_n\right)=c L, c`` is any real number.
+2. Sum or difference: ``\lim _{n \rightarrow \infty}\left(a_n \pm b_n\right)=L \pm K``
+3. Product: ``\lim _{n \rightarrow \infty}\left(a_n b_n\right)=L K``
+4. Quotient: ``\lim _{n \rightarrow \infty} \frac{a_n}{b_n}=\frac{L}{K}, b_n \neq 0`` and ``K \neq 0``
+
+"""
+
+# ╔═╡ 9a594bd8-68f7-4f6a-8dd6-3c70780f098d
+cm"""
+$(ex(3,"Determining Convergence or Divergence"))
+1.  ``\{a_n\}=\{3+(−1)^n\}``
+2.  ``\{b_n\}=\displaystyle\left\{\frac{n}{1-2n}\right\}``
+"""
+
+# ╔═╡ ef95cecf-00fe-429b-b94e-50f2de8a16bb
+cm"""
+$(ex(4,"Using L'Hôpital's Rule to Determine Convergence"))
+Show that the sequence whose ``n``th term is ``a_n=\frac{n^2}{2^n-1}`` converges.
+"""
+
+# ╔═╡ e62d5f92-8ad6-4317-ab62-771b96f0c3f9
+cm"""
+$(bth("Squeeze Theorem for Sequences"))
+If ``\lim _{n \rightarrow \infty} a_n=L=\lim _{n \rightarrow \infty} b_n`` and there exists an integer ``N`` such that ``a_n \leq c_n \leq b_n`` for all ``n>N``, then ``\lim _{n \rightarrow \infty} c_n=L``.
+
+"""
+
+# ╔═╡ 63dbebd7-85d2-42fd-b09a-f0d9c1ce640f
+cm"""
+$(ex(5,"Using the Squeeze Theorem"))
+Show that the sequence ``\left\{c_n\right\}=\left\{(-1)^n \frac{1}{n!}\right\}`` converges, and find its limit.
+"""
+
+# ╔═╡ 664c41b1-6459-4dfc-9999-5b2acad3301c
+cm"""
+$(bbl("Remark",""))
+In fact, it can be shown that for any fixed number ``k``,
+```math
+\lim _{n \rightarrow \infty}\left(k^n / n!\right)=0.
+```
+- This means that the factorial function grows faster than any exponential function.
+"""
+
+# ╔═╡ aa6664e3-5081-4c48-8754-e65ba7263f46
+cm"""
+$(bth("Absolute Value Theorem"))
+For the sequence ``\left\{a_n\right\}``, if
+```math
+\lim _{n \rightarrow \infty}\left|a_n\right|=0 \text { then } \lim _{n \rightarrow \infty} a_n=0
+```
+"""
+
+# ╔═╡ 7bafde52-30ed-41f9-9522-02b3c9b7316a
+cm"""
+$(ex(6,"Finding the <i>nth</i> Term of a Sequence"))
+Find a sequence ``\left\{a_n\right\}`` whose first five terms are
+```math
+\frac{2}{1}, \frac{4}{3}, \frac{8}{5}, \frac{16}{7}, \frac{32}{9}, \ldots
+```
+and then determine whether the sequence you have chosen converges or diverges.
+"""
+
+# ╔═╡ d3729415-161a-41f0-ad07-120944323d9f
+cm"""
+$(ex(7,"Finding the nth Term of a Sequence"))
+Determine the ``n``th term for a sequence whose first five terms are
+```math
+-\frac{2}{1}, \frac{8}{2},-\frac{26}{6}, \frac{80}{24},-\frac{242}{120}, \ldots
+```
+and then decide whether the sequence converges or diverges.
+"""
+
+# ╔═╡ 471eba70-40bf-42f9-a476-b13f37ccf823
+cm"""
+$(define("Monotonic Sequence"))
+A sequence ``\left\{a_n\right\}`` is monotonic when its terms are nondecreasing
+```math
+a_1 \leq a_2 \leq a_3 \leq \cdots \leq a_n \leq \cdots
+```
+or when its terms are nonincreasing
+```math
+a_1 \geq a_2 \geq a_3 \geq \cdots \geq a_n \geq \cdots
+```
+
+"""
+
+# ╔═╡ 6c261c5d-d478-4750-ac04-bb36734a6fe1
+cm"""
+$(ex(8,"
+Determining Whether a Sequence Is Monotonic"))
+Determine whether each sequence having the given ``n``th term is monotonic.
+- a. ``a_n=3+(-1)^n``
+- b. ``b_n=\frac{2 n}{1+n}``
+- c. ``c_n=\frac{n^2}{2^n-1}``
+"""
+
+# ╔═╡ 18d5f404-685e-4781-8edf-ac7374c55526
+cm"""
+$(define("Bounded Sequence"))
+1. A sequence ``\left\{a_n\right\}`` is bounded above when there is a real number ``M`` such that ``a_n \leq M`` for all ``n``. The number ``M`` is called an upper bound of the sequence.
+2. A sequence ``\left\{a_n\right\}`` is bounded below when there is a real number ``N`` such that ``N \leq a_n`` for all ``n``. The number ``N`` is called a lower bound of the sequence.
+3. A sequence ``\left\{a_n\right\}`` is bounded when it is bounded above and bounded below.
+"""
+
+# ╔═╡ 7c50563b-0f12-4974-9acf-598247793200
+cm"""
+$(bth("Bounded Monotonic Sequences"))
+If a sequence ``\left\{a_n\right\}`` is bounded and monotonic, then it converges.
+"""
+
+# ╔═╡ dbc02f9a-5bc9-478e-8de1-767fd64faaec
+cm"""
+$(ex(9,"
+Bounded and Monotonic Sequences"))
+- a. The sequence ``\left\{a_n\right\}=\{1 / n\}`` is both bounded and monotonic. So, by Theorem above , it must converge.
+- b. The divergent sequence ``\left\{b_n\right\}=\left\{n^2 /(n+1)\right\}`` is monotonic but not bounded. (It is bounded below.)
+- c. The divergent sequence ``\left\{c_n\right\}=\left\{(-1)^n\right\}`` is bounded but not monotonic.
+"""
+
+# ╔═╡ 137be6c2-5b86-4e1d-b457-b4f71646e633
+cm"""
+$(define("Convergent and Divergent Series"))
+For the infinite series ``\sum_{n=1}^{\infty} a_n``, the ``\boldsymbol{n}`` th partial sum is
+```math
+S_n=a_1+a_2+\cdots+a_n .
+```
+
+If the sequence of partial sums ``\left\{S_n\right\}`` converges to ``S``, then the series ``\sum_{n=1}^{\infty} a_n`` converges. The limit ``S`` is called the sum of the series.
+```math
+S=a_1+a_2+\cdots+a_n+\cdots \quad \color{red}{S=\sum_{n=1}^{\infty} a_n}
+```
+
+If ``\left\{S_n\right\}`` diverges, then the series diverges.
+"""
+
+# ╔═╡ 7eeff659-9f83-47eb-8f96-6fac093f0e64
+cm"""
+$(ex(1,"Convergent and Divergent Series"))
+1. ``\displaystyle \sum_{n=1}^{\infty}\frac{1}{2^n}``
+1. ``\displaystyle \sum_{n=1}^{\infty}\left(\frac{1}{n}-\frac{1}{n+1}\right)`` ``\qquad \quad \color{red}{\text{telescoping series}}``
+1. ``\displaystyle \sum_{n=1}^{\infty} 1``
+
+"""
+
+# ╔═╡ 71e4523b-b68c-49cb-8877-ff819c4a13e9
+cm"""
+$(ex(2,"Writing a Series in telescoping Form"))
+ Find the sum of the series  ``\displaystyle \sum_{n=1}^{\infty} \frac{2}{4n^2-1}``
+"""
+
+# ╔═╡ 125169d6-bfd0-443f-87aa-a7117f481088
+cm"""
+Geometric Series
+The series in Example 1(a) is a __geometric series__. In general, the series
+```math
+\sum_{n=0}^{\infty} a r^n=a+a r+a r^2+\cdots+a r^n+\cdots, a \neq 0
+```
+
+is a __geometric series__ with ratio ``r, r \neq 0``.
+
+$(bth("Convergence of a Geometric Series"))
+A geometric series with ratio ``r`` diverges when ``|r| \geq 1``. If ``|r|<1``, then the series converges to the sum
+```math
+\sum_{n=0}^{\infty} a r^n=\frac{a}{1-r}, \quad|r|<1
+```
+"""
+
+# ╔═╡ 4202e249-ca1c-4b00-a482-8fe15a6064ed
+cm"""
+$(ex(3,"Convergent and Divergent Geometric Series"))
+- (a) ``\displaystyle \sum_{n=0}^{\infty}\frac{3}{2^n}``
+- (b) ``\displaystyle \sum_{n=0}^{\infty}\left(\frac{3}{2}\right)^n``
+"""
+
+# ╔═╡ d5965014-2e70-4023-80ef-526f28a0334f
+cm"""
+$(ex(4,"A Geometric Series for a Repeating Decimal"))
+Use a geometric series to write ``0.08`` as the ratio of two integers.
+"""
+
+# ╔═╡ 27a7a6b4-6462-410d-a26a-ffd384efe461
+cm"""
+$(bth("Properties of Infinite Series"))
+Let ``\sum a_n`` and ``\sum b_n`` be convergent series, and let ``A, B``, and ``c`` be real numbers. If ``\sum a_n=A`` and ``\sum b_n=B``, then the following series converge to the indicated sums.
+1. ``\displaystyle\sum_{n=1}^{\infty} c a_n=c A``
+2. ``\displaystyle\sum_{n=1}^{\infty}\left(a_n+b_n\right)=A+B``
+3. ``\displaystyle\sum_{n=1}^{\infty}\left(a_n-b_n\right)=A-B``
+$(ebl())
+## nth-Term Test for Divergence
+
+$(bth("Limit of the nth Term of a Convergent Series"))
+If ``\sum_{n=1}^{\infty} a_n`` converges, then ``\lim _{n \rightarrow \infty} a_n=0``.
+"""
+
+# ╔═╡ 7b3cf490-87d4-4294-95af-f6e6deee043d
+cm"""
+$(bth("nth-Term Test for Divergence"))
+If ``\lim _{n \rightarrow \infty} a_n \neq 0`` then ``\sum_{n=1}^{\infty} a_n`` diverges.
+"""
+
+# ╔═╡ c69ecdb4-a312-45bc-874d-85d4d3747f77
+cm"""
+$(ex(5,"Using the nth-term test for Divergence"))
+1. ``\displaystyle\sum_{n=0}^{\infty} 2^n``
+1. ``\displaystyle\sum_{n=0}^{\infty} \frac{n!}{2n!+1}``
+1. ``\displaystyle\sum_{n=0}^{\infty} \frac{1}{n}``
+
+"""
+
+# ╔═╡ 8c2447b3-c26e-47e1-8701-7e4a18ae92a8
+cm"""
+$(ex(6," Bouncing Ball Problem"))
+A ball is dropped from a height of 6 feet and begins bouncing
+The height of each bounce is three-fourths the height of the previous bounce. Find the  total vertical distance traveled by the ball.
+"""
+
+# ╔═╡ 3a4b2178-47ee-474e-bbaf-72c00b3d3c2d
+cm"""
+$(bth("The Integral Test"))
+If ``f`` is positive, continuous, and decreasing for ``x \geq 1`` and ``a_n=f(n)``, then
+```math
+\sum_{n=1}^{\infty} a_n \text { and } \int_1^{\infty} f(x) d x
+```
+either both converge or both diverge.
+"""
+
+# ╔═╡ 69abc9da-4596-4268-9dea-95baaf687f67
+cm"""
+$(ex(1,"Using the Integral Test"))
+Apply the Integral Test to the series ``\sum_{n=1}^{\infty} \frac{n}{n^2+1}``.
+"""
+
+# ╔═╡ ced2268b-d0c8-4cb0-9e0d-083d6db388c8
+cm"""
+$(ex(2,"Using the Integral Test"))
+Apply the Integral Test to the series ``\sum_{n=1}^{\infty} \frac{1}{n^2+1}``.
+"""
+
+# ╔═╡ 7df6433b-0c5b-4bd8-a96a-eb70d0efa0e3
+cm"""
+$(bth("Convergence of p-Series"))
+The ``p``-series
+```math
+\sum_{n=1}^{\infty} \frac{1}{n^p}=\frac{1}{1^p}+\frac{1}{2^p}+\frac{1}{3^p}+\frac{1}{4^p}+\cdots
+```
+converges for ``p >1`` and diverges for ``0 < p \leq 1``.
+"""
+
+# ╔═╡ 976a8ef5-fd7f-45a4-8f1d-2a99318ad33a
+cm"""
+$(ex(3,"Convergent and Divergent p-Series"))
+
+Discuss the convergence or divergence of (a) the harmonic series and (b) the ``p``-series with ``p=2``.
+"""
+
+# ╔═╡ db5771f6-1bf6-4996-a515-5e7ad37d1404
+cm"""
+$(ex(4,"Testing a Series for Convergence"))
+Determine whether the series
+```math
+\sum_{n=2}^{\infty} \frac{1}{n \ln n}
+```
+converges or diverges.
+"""
+
+# ╔═╡ 22fd0b92-cfad-450e-b855-1ce7648fb93b
+cm"""
+$(bth("Direct Comparison Test"))
+Let ``0 < a_n \leq b_n`` for all ``n``.
+1. If ``\displaystyle\sum_{n=1}^{\infty} b_n`` converges, then ``\displaystyle\sum_{n=1}^{\infty} a_n`` converges.
+2. If ``\displaystyle\sum_{n=1}^{\infty} a_n`` diverges, then ``\displaystyle\sum_{n=1}^{\infty} b_n`` diverges.
+"""
+
+# ╔═╡ be156c4f-af26-4e6e-907d-99e73b68c4aa
+cm"""
+$(ex(1,"Using the Direct Comparison Test"))
+Determine the convergence or divergence of
+```math
+\sum_{n=1}^{\infty} \frac{1}{2+3^n}
+```
+"""
+
+# ╔═╡ 07aa2d3e-0387-4e41-bcbc-d24d5f572497
+cm"""
+$(ex(2,"Using the Direct Comparison Test"))
+Determine the convergence or divergence of
+```math
+\sum_{n=1}^{\infty} \frac{1}{2+\sqrt{n}}
+```
+"""
+
+# ╔═╡ 080f38b7-8cc3-497a-badf-5748c617f56b
+cm"""
+$(bth("Limit Comparison Test"))
+If ``a_n>0, b_n>0``, and
+```math
+\lim _{n \rightarrow \infty} \frac{a_n}{b_n}=L
+```
+where ``L`` is finite and positive, then
+```math
+\sum_{n=1}^{\infty} a_n \text { and } \sum_{n=1}^{\infty} b_n
+```
+either both converge or both diverge.
+"""
+
+# ╔═╡ 8c6ba535-e37f-4210-8d59-5a28afcff45f
+cm"""
+$(ex(3,"Using the Limit Comparison Test"))
+
+Show that the general harmonic series below diverges.
+```math
+\sum_{n=1}^{\infty} \frac{1}{a n+b}, \quad a>0, \quad b>0
+```
+"""
+
+# ╔═╡ d8b8ec7c-fee3-4475-8552-6b33b091a728
+cm"""
+$(ex(4,"Using the Limit Comparison Test"))
+Determine the convergence or divergence of
+```math
+\sum_{n=1}^{\infty} \frac{\sqrt{n}}{n^2+1}
+```
+"""
+
+# ╔═╡ 61ebbc9f-8bc3-4712-9bd5-d1bad2bc6640
+cm"""
+$(ex(5,"Using the Limit Comparison Test"))
+Determine the convergence or divergence of
+```math
+\sum_{n=1}^{\infty} \frac{n 2^n}{4 n^3+1}
+```
+"""
+
+# ╔═╡ 222d45a6-60f2-49c1-a10e-ae2688bd6734
+cm"""
+$(bth("Alternating Series Test"))
+Let ``a_n>0``. The alternating series
+```math
+\sum_{n=1}^{\infty}(-1)^n a_n \text { and } \sum_{n=1}^{\infty}(-1)^{n+1} a_n
+```
+converge when these two conditions are met.
+1. ``\lim _{n \rightarrow \infty} a_n=0``
+2. ``a_{n+1} \leq a_n``, for all ``n``
+"""
+
+# ╔═╡ 3cdf3d2b-81e7-4b91-ae61-f7cc214d5154
+cm"""
+$(ex(1,"Using the Alternating Series Test"))
+
+Determine the convergence or divergence of
+```math
+\sum_{n=1}^{\infty}(-1)^{n+1} \frac{1}{n} .
+```
+"""
+
+# ╔═╡ c4a55daf-8b5f-48e2-90e8-1c215deeb804
+cm"""
+$(ex(2,"Using the Alternating Series Test"))
+
+Determine the convergence or divergence of
+```math
+\sum_{n=1}^{\infty} \frac{n}{(-2)^{n-1}} .
+```
+"""
+
+# ╔═╡ a946547f-8507-49ec-b5fc-007dc89d0e92
+cm"""
+$(ex(3,"When the Alternating Series Test Does Not Apply"))
+a.
+```math
+\sum_{n=1}^{\infty} \frac{(-1)^{n+1}(n+1)}{n}=\frac{2}{1}-\frac{3}{2}+\frac{4}{3}-\frac{5}{4}+\frac{6}{5}-\cdots
+```
+b.
+```math
+\frac{2}{1}-\frac{1}{1}+\frac{2}{2}-\frac{1}{2}+\frac{2}{3}-\frac{1}{3}+\frac{2}{4}-\frac{1}{4}+\cdots
+```
+"""
+
+# ╔═╡ 218c723f-8921-475b-b9be-9e88a3522829
+cm"""
+$(bth("Alternating Series Remainder"))
+If a convergent alternating series satisfies the condition ``a_{n+1} \leq a_n``, then the absolute value of the remainder ``R_N`` involved in approximating the sum ``S`` by ``S_N`` is less than (or equal to) the first neglected term. That is,
+```math
+\left|S-S_N\right|=\left|R_N\right| \leq a_{N+1} .
+```
+
+"""
+
+# ╔═╡ b4e85b19-989f-4caf-85f7-519d95178a4d
+cm"""
+$(ex(4,"Approximating the Sum of an Alternating Series"))
+Approximate the sum of the series by its first six terms.
+```math
+\sum_{n=1}^{\infty}(-1)^{n+1}\left(\frac{1}{n!}\right)=\frac{1}{1!}-\frac{1}{2!}+\frac{1}{3!}-\frac{1}{4!}+\frac{1}{5!}-\frac{1}{6!}+\cdots
+```
+"""
+
+# ╔═╡ f6330660-6de9-454a-b23a-3b64e763b17a
+cm"""
+$(ex(5,"Finding the Number of Terms"))
+Determine the number of terms required to approximate the sum of the series with an error of less than 0.001 .
+```math
+\sum_{n=1}^{\infty} \frac{(-1)^{n+1}}{n^4}
+```
+"""
+
+# ╔═╡ bc81fb58-4060-41d3-bc7c-fc96e2627c77
+cm"""
+$(bth("Absolute Convergence"))
+If the series ``\Sigma\left|a_n\right|`` converges, then the series ``\Sigma a_n`` also converges.
+"""
+
+# ╔═╡ 93e8dfc5-8bbe-4642-bef0-e5fcd0c9b781
+cm"""
+$(define("Absolute and Conditional Convergence"))
+1. The series ``\sum a_n`` is __absolutely convergent__ when ``\Sigma\left|a_n\right|`` converges.
+2. The series ``\sum a_n`` is __conditionally convergent__ when ``\sum a_n`` converges but ``\Sigma\left|a_n\right|`` diverges.
+"""
+
+# ╔═╡ 22b0134b-6a5c-4a5c-8daa-966c8c636eeb
+cm"""
+$(ex(6,"Absolute and Conditional Convergence"))
+Determine whether each of the series is convergent or divergent. Classify any convergent series as absolutely or conditionally convergent.
+
+a. ``\sum_{n=0}^{\infty} \frac{(-1)^n n!}{2^n}=\frac{0!}{2^0}-\frac{1!}{2^1}+\frac{2!}{2^2}-\frac{3!}{2^3}+\cdots``
+
+b. ``\sum_{n=1}^{\infty} \frac{(-1)^n}{\sqrt{n}}=-\frac{1}{\sqrt{1}}+\frac{1}{\sqrt{2}}-\frac{1}{\sqrt{3}}+\frac{1}{\sqrt{4}}-\cdots``
+
+"""
+
+# ╔═╡ 485e0d4f-ba2d-4493-bf66-5b4c39eee8c8
+cm"""
+$(ex(7,"Absolute and Conditional Convergence"))
+Determine whether each of the series is convergent or divergent. Classify any convergent series as absolutely or conditionally convergent.
+
+a. ``\displaystyle\sum_{n=1}^{\infty} \frac{(-1)^{n(n+1) / 2}}{3^n}=-\frac{1}{3}-\frac{1}{9}+\frac{1}{27}+\frac{1}{81}-\cdots``
+
+b. ``\displaystyle\sum_{n=1}^{\infty} \frac{(-1)^n}{\ln (n+1)}=-\frac{1}{\ln 2}+\frac{1}{\ln 3}-\frac{1}{\ln 4}+\frac{1}{\ln 5}-\cdots``
+"""
+
+# ╔═╡ 54f2a8e1-03c2-4cd9-8159-9b8fbdda29bb
+cm"""
+$(ex(8,"Rearrangement of a Series"))
+
+The alternating harmonic series converges to ``\ln 2``. That is,
+```math
+\sum_{n=1}^{\infty}(-1)^{n+1} \frac{1}{n}=\frac{1}{1}-\frac{1}{2}+\frac{1}{3}-\frac{1}{4}+\cdots=\ln 2 .
+```
+
+Rearrange the terms of the series to produce a different sum.
+"""
+
+# ╔═╡ a3c046e9-7c15-46e6-8288-0ec16000fe80
+cm"""
+$(bth("Ratio Test"))
+Let ``\sum a_n`` be a series with nonzero terms.
+1. The series ``\sum a_n`` converges absolutely when ``\displaystyle\lim _{n \rightarrow \infty}\left|\frac{a_{n+1}}{a_n}\right|<1``.
+2. The series ``\sum a_n`` diverges when ``\displaystyle\lim _{n \rightarrow \infty}\left|\frac{a_{n+1}}{a_n}\right|>1`` or ``\displaystyle\lim _{n \rightarrow \infty}\left|\frac{a_{n+1}}{a_n}\right|=\infty``.
+3. The Ratio Test is inconclusive when ``\displaystyle\lim _{n \rightarrow \infty}\left|\frac{a_{n+1}}{a_n}\right|=1``.
+"""
+
+# ╔═╡ 775ee452-d3c0-46e4-a1bb-07939b37d050
+cm"""
+$(ex(1,"Using the Ratio Test"))
+Determine the convergence or divergence of
+```math
+\sum_{n=0}^{\infty} \frac{2^n}{n!} .
+```
+"""
+
+# ╔═╡ af54ce43-acb4-4b14-8f6d-2fffb4a55c69
+cm"""
+$(ex(2,"Using the Ratio Test"))
+Determine whether each series converges or diverges.
+
+a. ``\displaystyle\sum_{n=0}^{\infty} \frac{n^2 2^{n+1}}{3^n}``
+
+b. ``\displaystyle\sum_{n=1}^{\infty} \frac{n^n}{n!}``
+"""
+
+# ╔═╡ d9a49705-1e01-4e98-9915-f285cb16df28
+cm"""
+$(ex(3,"A Failure of the Ratio Test"))
+Determine the convergence or divergence of
+```math
+\sum_{n=1}^{\infty}(-1)^n \frac{\sqrt{n}}{n+1}
+```
+
+"""
+
+# ╔═╡ cf6f8342-703a-49e7-ab9b-35cce160b9f3
+cm"""
+$(bth("Root Test"))
+1. The series ``\sum a_n`` converges absolutely when ``\displaystyle\lim _{n \rightarrow \infty} \sqrt[n]{\left|a_n\right|}<1``.
+2. The series ``\sum a_n`` diverges when ``\displaystyle\lim _{n \rightarrow \infty} \sqrt[n]{\left|a_n\right|}>1`` or ``\displaystyle\lim _{n \rightarrow \infty} \sqrt[n]{\left|a_n\right|}=\infty``.
+3. The Root Test is inconclusive when ``\displaystyle\lim _{n \rightarrow \infty} \sqrt[n]{\left|a_n\right|}=1``.
+$(ebl())
+
+$(ex(4,"Using the Root Test"))
+Determine the convergence or divergence of
+```math
+\sum_{n=1}^{\infty} \frac{e^{2 n}}{n^n} .
+```
+"""
+
+# ╔═╡ 8e645546-7f33-42a5-b6b6-4f100f93918f
+cm"""
+$(bbl("GUIDELINES FOR TESTING A SERIES FOR CONVERGENCE OR DIVERGENCE",""))
+1. Does the ``n``th term approach 0 ? If not, the series diverges.
+2. Is the series one of the special types-geometric, ``p``-series, telescoping, or alternating?
+3. Can the Integral Test, the Root Test, or the Ratio Test be applied?
+4. Can the series be compared favorably to one of the special types?
+$(ebl())
+
+$(ex(5,"Applying the Strategies for Testing Series"))
+Determine the convergence or divergence of each series.
+
+a. ``\displaystyle \sum_{n=1}^{\infty} \frac{n+1}{3 n+1}``
+
+b. ``\displaystyle \sum_{n=1}^{\infty}\left(\frac{\pi}{6}\right)^n``
+
+c. ``\displaystyle \sum_{n=1}^{\infty} n e^{-n^2}``
+
+d. ``\displaystyle \sum_{n=1}^{\infty} \frac{1}{3 n+1}``
+
+e. ``\displaystyle \sum_{n=1}^{\infty}(-1)^n \frac{3}{4 n+1}``
+
+f. ``\displaystyle \sum_{n=1}^{\infty} \frac{n!}{10^n}``
+
+g. ``\displaystyle \sum_{n=1}^{\infty}\left(\frac{n+1}{2 n+1}\right)^n``
+
+"""
+
+# ╔═╡ a12f4fa0-0597-4447-a731-603849fbdcba
+cm"""
+$(post_img("https://www.dropbox.com/scl/fi/0t0hwwc5omsvbcmahvbxp/SUMMARY_OF_TESTS_FOR_SERIES.png?rlkey=8e9l8eri9mezitxlfoc3r40nq&dl=1",700))
+"""
+
+# ╔═╡ 2e6b9a41-d56e-4e95-ba78-f360e008335d
+cm"""
+$(ex("Ex",""))
+Find polynomial approximations ``P_n(x)`` of ``\displaystyle f(x)=e^x`` such that
+```math
+P(0)=f(0), P'(0)=f'(0), P''(0)=f''(0), \cdots, P^{(n)}(0)=f^{(n)}(0).
+```
+
+"""
+
+# ╔═╡ 36431e5d-97bd-4843-9775-6211c4a2d8b3
+cm"""
+$(define("nth Taylor Polynomial and nth Maclaurin Polynomial"))
+If ``f`` has ``n`` derivatives at ``c``, then the polynomial
+```math
+P_n(x)=f(c)+f^{\prime}(c)(x-c)+\frac{f^{\prime \prime}(c)}{2!}(x-c)^2+\cdots+\frac{f^{(n)}(c)}{n!}(x-c)^n
+```
+is called the __``\boldsymbol{n}`` th Taylor polynomial for ``\boldsymbol{f}`` at ``\boldsymbol{c}``__. If ``c=0``, then
+```math
+P_n(x)=f(0)+f^{\prime}(0) x+\frac{f^{\prime \prime}(0)}{2!} x^2+\frac{f^{\prime \prime \prime}(0)}{3!} x^3+\cdots+\frac{f^{(n)}(0)}{n!} x^n
+```
+is also called the __``\boldsymbol{n}`` th Maclaurin polynomial for ``\boldsymbol{f}``__.
+"""
+
+# ╔═╡ 6abdb5a7-5b5b-44ed-9ba8-ac20c59c6dc7
+cm"""
+$(ex(4,"Finding Taylor Polynomials for ln x"))
+
+Find the Taylor polynomials ``P_0, P_1, P_2, P_3``, and ``P_4`` for
+```math
+f(x)=\ln x
+```
+centered at ``c=1``.
+"""
+
+# ╔═╡ 900ab898-f39e-4246-9d50-6430a2d6f645
+cm"""
+$(ex(5,"Finding Maclaurin Polynomials for `cos x`"))
+Find the Maclaurin polynomials ``P_0, P_2, P_4``, and ``P_6`` for ``f(x)=\cos x``.
+
+Use ``P_6(x)`` to approximate the value of ``\cos (0.1)``.
+"""
+
+# ╔═╡ 4bfbb486-642d-4419-9039-eabe2569336a
+cm"""
+$(ex(6,"Finding a Taylor Polynomial for `sin x`"))
+Find the third Taylor polynomial for ``f(x)=\sin x``, expanded about ``c=\pi / 6``.
+"""
+
+# ╔═╡ f1f560ef-630c-4161-98a7-b56ad41ad154
+cm"""
+$(ex(7,"Approximation Using Maclaurin Polynomials"))
+
+Use a fourth Maclaurin polynomial to approximate the value of ``\ln (1.1)``.
+"""
+
+# ╔═╡ fc6da046-815f-4d1b-8a47-e886907f0c3c
+cm"""
+$(define("Power Series"))
+If ``x`` is a variable, then an infinite series of the form
+```math
+\sum_{n=0}^{\infty} a_n x^n=a_0+a_1 x+a_2 x^2+a_3 x^3+\cdots+a_n x^n+\cdots
+```
+is called a __power series__. More generally, an infinite series of the form
+```math
+\sum_{n=0}^{\infty} a_n(x-c)^n=a_0+a_1(x-c)+a_2(x-c)^2+\cdots+a_n(x-c)^n+\cdots
+```
+is called a __power series centered at ``\boldsymbol{c}``__, where ``c`` is a constant.
+"""
+
+# ╔═╡ 621f4afc-8b5d-4f51-a4e6-4a5a4c65f39b
+cm"""
+A power series in ``x`` can be viewed as a function of ``x``
+```math
+f(x)=\sum_{n=0}^{\infty} a_n(x-c)^n
+```
+where
+```math
+\text{the domain of }f = \left\{x\in \mathbb{R} | \text{ the power series converges at } x\right\}.
+```
+$(bbl("",""))
+<div style="color: #ff4f11;font-size: 1.2em;display:flex;justify-content: center; padding: 2em;">
+
+<div style="width: 50%;">
+<span style="line-height: 2.4;">
+Determination of the domain of a power series is the primary concern in this section.
+</span>
+</div>
+</div>
+</div>
+
+"""
+
+# ╔═╡ 0aa832ba-13d0-4e31-aa02-3e166d4a837c
+cm"""
+$(ex(2,"Finding the Radius of Convergence"))
+Find the radius of convergence of
+```math
+\sum_{n=0}^{\infty} n!x^n.
+```
+"""
+
+# ╔═╡ f38df00c-ce6a-4e5f-ab1f-34f1009c4d57
+cm"""
+$(ex(3,"Finding the Radius of Convergence"))
+Find the radius of convergence of
+```math
+\sum_{n=0}^{\infty} 3(x-2)^n.
+```
+"""
+
+# ╔═╡ 0468a238-b5ce-4c0b-82eb-d3525646c66c
+cm"""
+$(ex(4,"Finding the Radius of Convergence"))
+Find the radius of convergence of
+```math
+\sum_{n=0}^{\infty} \frac{(-1)^n x^{2 n+1}}{(2 n+1)!}
+```
+"""
+
+# ╔═╡ ae9cbf12-fd6c-4a9d-b292-a691bfcdace2
+cm"""
+$(bth("Convergence of a Power Series"))
+For a power series centered at ``c``, precisely one of the following is true.
+1. The series converges only at ``c``.
+2. There exists a real number ``R> 0`` such that the series converges absolutely for
+```math
+|x-c| < R
+```
+$(add_space(10))and diverges for
+```math
+|x-c|>R .
+```
+3. The series converges absolutely for all ``x``.
+
+- The number ``R`` is the __radius of convergence__ of the power series.
+
+- If the series converges only at ``c``, then the radius of convergence is ``R=0``.
+
+- If the series converges for all ``x``, then the radius of convergence is ``R=\infty``.
+
+- The set of all values of ``x`` for which the power series converges is the __interval of convergence__ of the power series.
+"""
+
+# ╔═╡ 732098bf-c3da-4e88-b3d0-698bcd19f2f9
+cm"""
+$(ex(5,"Finding the Interval of Convergence"))
+
+Find the interval of convergence of
+```math
+\sum_{n=1}^{\infty} \frac{x^n}{n}
+```
+"""
+
+# ╔═╡ a633e01b-7bc0-42ad-a1bc-7e3c0c6323ae
+cm"""
+$(ex(6,"Finding the Interval of Convergence"))
+Find the interval of convergence of
+```math
+\sum_{n=0}^{\infty} \frac{(-1)^n(x+1)^n}{2^n}.
+```
+"""
+
+# ╔═╡ c0cf197b-0638-463f-9472-7418c843d6de
+cm"""
+$(ex(6,"Finding the Interval of Convergence"))
+Find the interval of convergence of
+```math
+\sum_{n=1}^{\infty} \frac{x^n}{n^2}.
+```
+"""
+
+# ╔═╡ fdbb1b07-bdb9-426f-b75d-6b94b0283c11
+cm"""
+$(bth("Properties of Functions Defined by Power Series"))
+If the function
+```math
+\begin{aligned}
+f(x) & =\sum_{n=0}^{\infty} a_n(x-c)^n \\
+& =a_0+a_1(x-c)+a_2(x-c)^2+a_3(x-c)^3+\cdots
+\end{aligned}
+```
+has a radius of convergence of ``R>0``, then, on the interval
+```math
+(c-R, c+R)
+```
+``f`` is differentiable (and therefore continuous). Moreover, the derivative and antiderivative of ``f`` are as follows.
+
+1.
+```math
+\begin{aligned}
+f^{\prime}(x) & =\sum_{n=1}^{\infty} n a_n(x-c)^{n-1} \\
+& =a_1+2 a_2(x-c)+3 a_3(x-c)^2+\cdots
+\end{aligned}
+```
+2.
+```math
+\begin{aligned}
+\int f(x) d x & =C+\sum_{n=0}^{\infty} a_n \frac{(x-c)^{n+1}}{n+1} \\
+& =C+a_0(x-c)+a_1 \frac{(x-c)^2}{2}+a_2 \frac{(x-c)^3}{3}+\cdots
+\end{aligned}
+```
+
+The __radius of convergence__ of the series obtained by differentiating or integrating a power series is the same as that of the original power series. The __interval of convergence__, however, may differ as a result of the behavior at the endpoints.
+"""
+
+# ╔═╡ 457d84d7-7db0-43e3-a76e-810b28236779
+cm"""
+$(ex(8,"Intervals of Convergence for f(x), f'(x), and ∫f(x) d x"))
+Consider the function
+```math
+f(x)=\sum_{n=1}^{\infty} \frac{x^n}{n}=x+\frac{x^2}{2}+\frac{x^3}{3}+\cdots .
+```
+
+Find the interval of convergence for each of the following.
+- a. ``\displaystyle\int f(x) d x``
+- b. ``\displaystyle f(x)``
+- c. ``\displaystyle f^{\prime}(x)``
+"""
+
+# ╔═╡ e2b47e81-0d2f-40bf-a6e9-cda6633ce5c9
+cm"""
+$(ex(1,"Finding a Geometric Power Series Centered at 0"))
+Find a power series for ``f(x)=\displaystyle\frac{4}{x+2}``, centered at ``0`` .
+"""
+
+# ╔═╡ 866e1c81-ee36-4ec5-af9a-bf4aa7874be8
+cm"""
+$(ex(2,"Finding a Geometric Power Series Centered at 1"))
+Find a power series for ``f(x)=\displaystyle\frac{1}{x}``, centered at ``1`` .
+"""
+
+# ╔═╡ d8a67bb3-3805-4ee8-8b5d-12310b128e15
+cm"""
+$(bbl("Operations with Power Series",""))
+Let ``\displaystyle f(x)=\sum_{n=0}^{\infty} a_n x^n`` and ``g(x)=\sum_{n=0}^{\infty} b_n x^n``.
+1. ``\displaystyle f(k x)=\sum_{n=0}^{\infty} a_n k^n x^n``
+2. ``\displaystyle f\left(x^N\right)=\sum_{n=0}^{\infty} a_n x^{n N}``
+3. ``\displaystyle f(x) \pm g(x)=\sum_{n=0}^{\infty}\left(a_n \pm b_n\right) x^n``
+"""
+
+# ╔═╡ b9261546-c5e2-433b-ac9b-e5c59e124768
+cm"""
+$(ex(3,"Adding Two Power Series"))
+Find a power series for
+```math
+f(x)=\frac{3 x-1}{x^2-1}
+```
+centered at 0 .
+"""
+
+# ╔═╡ c2b679dc-4cae-4e83-8408-ac1840000a8b
+cm"""
+$(ex(4,"Finding a Power Series by Integration"))
+Find a power series for
+```math
+f(x)=\ln x
+```
+centered at 1 .
+"""
+
+# ╔═╡ c045541b-b0ca-46e6-8a99-1938b6c7f980
+cm"""
+$(ex(5,"Finding a Power Series by Integration"))
+
+Find a power series for
+```math
+g(x)=\arctan x
+```
+centered at 0 .
+"""
+
+# ╔═╡ 3d0028e3-55b0-4888-add4-ab689ffa1f23
+cm"""
+$(bth("The Form of a Convergent Power Series"))
+If ``f`` is represented by a power series ``f(x)=\sum a_n(x-c)^n`` for all ``x`` in an open interval ``I`` containing ``c``, then
+```math
+a_n=\frac{f^{(n)}(c)}{n!}
+```
+and
+```math
+\begin{aligned}
+f(x)=f(c) & +f^{\prime}(c)(x-c)+\frac{f^{\prime \prime}(c)}{2!}(x-c)^2+\cdots \\
+& +\frac{f^{(n)}(c)}{n!}(x-c)^n+\cdots
+\end{aligned}
+```
+"""
+
+# ╔═╡ d4980faa-1acc-4d7a-91b4-d95092c97708
+cm"""
+$(define("Taylor and Maclaurin Series"))
+If a function ``f`` has derivatives of all orders at ``x=c``, then the series
+```math
+\sum_{n=0}^{\infty} \frac{f^{(n)}(c)}{n!}(x-c)^n=f(c)+f^{\prime}(c)(x-c)+\cdots+\frac{f^{(n)}(c)}{n!}(x-c)^n+\cdots
+```
+is called the Taylor series for ``\boldsymbol{f}`` at ``\boldsymbol{c}``. Moreover, if ``c=0``, then the series is the Maclaurin series for ``f``.
+"""
+
+# ╔═╡ 1608068c-bdfe-413a-85bf-71f6a6e51357
+cm"""
+$(ex(1,"Forming a Power Series"))
+
+Use the function
+```math
+f(x)=\sin x
+```
+to form the Maclaurin series
+```math
+\sum_{n=0}^{\infty} \frac{f^{(n)}(0)}{n!} x^n=f(0)+f^{\prime}(0) x+\frac{f^{\prime \prime}(0)}{2!} x^2+\frac{f^{\prime \prime \prime}(0)}{3!} x^3+\frac{f^{(4)}(0)}{4!} x^4+\cdots
+```
+and determine the interval of convergence.
+"""
+
+# ╔═╡ 1d24d351-4b8f-471c-92f6-1fb4cc336a3a
+cm"""
+$(ex(3,"Maclaurin Series for a Composite Function"))
+Find the Maclaurin series for
+```math
+f(x)=\sin x^2
+```
+"""
+
+# ╔═╡ 55f4cb06-b2e2-4eb8-a952-19fa0a5bc650
+cm"""
+$(ex(4,"Binomial Series"))
+Find the Maclaurin series for ``f(x)=(1+x)^k`` and determine its radius of convergence. Assume that ``k`` is not a positive integer and ``k \neq 0``.
+"""
+
+# ╔═╡ 597d7998-0d50-4e36-8c57-6817b892c11b
+cm"""
+$(ex(5,"Finding a Binomial Series"))
+
+Find the power series for
+```math
+f(x)=\sqrt[3]{1+x}
+```
+"""
+
+# ╔═╡ 51275f9c-9d72-450a-8b22-35fe0ebf4d45
+cm"""
+$(ex(6,"Deriving a Power Series from a Basic List"))
+Find the power series for
+```math
+f(x)=\cos \sqrt{x}
+```
+"""
+
+# ╔═╡ d24d51eb-5cef-4b12-b8c5-02b2e549482d
+cm"""
+$(ex(7,"Multiplication of Power Series"))
+Find the first three nonzero terms in the Maclaurin series ``e^x \arctan x``.
+"""
+
+# ╔═╡ e26ad50a-67db-449b-aa90-1bd87e06d5cb
+cm"""
+$(ex(8,"Division of Power Series"))
+
+Find the first three nonzero terms in the Maclaurin series ``\tan x``.
+"""
+
+# ╔═╡ 224f4771-7bf7-4433-9f36-b82875ad4b6c
+cm"""
+$(ex(9,"A Power Series for sin²x"))
+
+Find the power series for
+```math
+f(x)=\sin ^2 x
+```
+"""
+
+# ╔═╡ 66e78b57-c224-4beb-bddb-e4b5a2997d2c
+cm"""
+$(ex(10,"Power Series Approximation of a Definite Integral"))
+
+Use a power series to approximate
+```math
+\int_0^1 e^{-x^2} d x
+```
+with an error of less than 0.01 .
+"""
+
+# ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
+initialize_eqref()
+
+# ╔═╡ 107407c8-5da0-4833-9965-75a82d84a0fb
+@htl("""
+<style>
+@import url("https://mmogib.github.io/math102/custom.css");
+
+ul {
+  list-style: none;
+}
+
+ul li:before {
+  content: '💡 ';
+}
+
+.p40 {
+    padding-left: 40px;
+}
+    example-box {
+      max-width: 600px;           /* Limits the box width */
+      margin: 2rem auto;          /* Centers the box and adds vertical spacing */
+      border: 1px solid #ccc;     /* Light border */
+      border-radius: 4px;         /* Slightly rounded corners */
+      overflow: hidden;           /* Ensures the box boundary clips its children */
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+      font-family: Arial, sans-serif;
+    }
+
+    /* Header area for "EXAMPLE 1" */
+    .example-header {
+      background: linear-gradient(90deg, #cc0000, #990000);
+      color: #fff;
+      font-weight: bold;
+      font-size: 1.1rem;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #990000;
+    }
+
+    /* Sub-header area for the title or subtitle */
+    .example-title {
+      background-color: #f9f9f9;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.75rem 1rem;
+      margin: 0;                  /* Remove default heading margins */
+      border-bottom: 1px solid #eee;
+    }
+
+    /* Main content area for the mathematical statement or instructions */
+    .example-content {
+      padding: 1rem;
+      line-height: 1.5;
+    }
+
+    /* Optional styling for inline math or emphasis */
+    em {
+      font-style: italic;
+      color: #333;
+    }
+</style>
+""")
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
@@ -1907,7 +1958,7 @@ SymPy = "24249f21-da20-56a4-8eb1-6a02cf4ae2e6"
 Colors = "~0.12.11"
 CommonMark = "~1.0.1"
 HypertextLiteral = "~0.9.5"
-IntervalArithmetic = "~1.0.1"
+IntervalArithmetic = "~1.0.3"
 LaTeXStrings = "~1.4.0"
 Latexify = "~0.16.10"
 PlotThemes = "~3.3.0"
@@ -1925,7 +1976,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.12.6"
 manifest_format = "2.0"
-project_hash = "4c52055461c1883e4e2b515f368db18e3e537d25"
+project_hash = "9c3b817ffa81ef60e907588fdc68f2644388e5b0"
 
 [[deps.AbstractFFTs]]
 deps = ["LinearAlgebra"]
@@ -1994,10 +2045,10 @@ uuid = "4e9b3aee-d8a1-5a3d-ad8b-7d824db253f0"
 version = "1.0.1+0"
 
 [[deps.Cairo_jll]]
-deps = ["Artifacts", "Bzip2_jll", "CompilerSupportLibraries_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "JLLWrappers", "LZO_jll", "Libdl", "Pixman_jll", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Zlib_jll", "libpng_jll"]
-git-tree-sha1 = "fde3bf89aead2e723284a8ff9cdf5b551ed700e8"
+deps = ["Artifacts", "Bzip2_jll", "CompilerSupportLibraries_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "JLLWrappers", "Libdl", "Pixman_jll", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Zlib_jll", "libpng_jll"]
+git-tree-sha1 = "d0efe2c6fdcdaa1c161d206aa8b933788397ec71"
 uuid = "83423d85-b0ee-5818-9007-b63ccbeb887a"
-version = "1.18.5+0"
+version = "1.18.6+0"
 
 [[deps.CodecZlib]]
 deps = ["TranscodingStreams", "Zlib_jll"]
@@ -2153,9 +2204,9 @@ version = "0.1.11"
 
 [[deps.Expat_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "27af30de8b5445644e8ffe3bcb0d72049c089cf1"
+git-tree-sha1 = "9cb7fe11da6adb8683cbacf8aa9b5237941e3a75"
 uuid = "2e619515-83b5-522b-bb60-26c02a35a201"
-version = "2.7.3+0"
+version = "2.7.5+0"
 
 [[deps.FFMPEG]]
 deps = ["FFMPEG_jll"]
@@ -2164,10 +2215,10 @@ uuid = "c87230d0-a227-11e9-1b43-d7ebe4e7570a"
 version = "0.4.5"
 
 [[deps.FFMPEG_jll]]
-deps = ["Artifacts", "Bzip2_jll", "FreeType2_jll", "FriBidi_jll", "JLLWrappers", "LAME_jll", "Libdl", "Ogg_jll", "OpenSSL_jll", "Opus_jll", "PCRE2_jll", "Zlib_jll", "libaom_jll", "libass_jll", "libfdk_aac_jll", "libvorbis_jll", "x264_jll", "x265_jll"]
-git-tree-sha1 = "ccc81ba5e42497f4e76553a5545665eed577a663"
+deps = ["Artifacts", "Bzip2_jll", "FreeType2_jll", "FriBidi_jll", "JLLWrappers", "LAME_jll", "Libdl", "Ogg_jll", "OpenSSL_jll", "Opus_jll", "PCRE2_jll", "Zlib_jll", "libaom_jll", "libass_jll", "libfdk_aac_jll", "libva_jll", "libvorbis_jll", "x264_jll", "x265_jll"]
+git-tree-sha1 = "cac41ca6b2d399adfc95e51240566f8a60a80806"
 uuid = "b22a6f82-2f65-5046-a5b2-351ab43fb4e5"
-version = "8.0.0+0"
+version = "8.1.0+0"
 
 [[deps.FFTW_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -2208,9 +2259,9 @@ version = "1.3.7"
 
 [[deps.FreeType2_jll]]
 deps = ["Artifacts", "Bzip2_jll", "JLLWrappers", "Libdl", "Zlib_jll"]
-git-tree-sha1 = "2c5512e11c791d1baed2049c5652441b28fc6a31"
+git-tree-sha1 = "70329abc09b886fd2c5d94ad2d9527639c421e3e"
 uuid = "d7e528f0-a631-5988-bf34-fe36492bcfd7"
-version = "2.13.4+0"
+version = "2.14.3+1"
 
 [[deps.FriBidi_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -2220,21 +2271,27 @@ version = "1.0.17+0"
 
 [[deps.GLFW_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libglvnd_jll", "Xorg_libXcursor_jll", "Xorg_libXi_jll", "Xorg_libXinerama_jll", "Xorg_libXrandr_jll", "libdecor_jll", "xkbcommon_jll"]
-git-tree-sha1 = "fcb0584ff34e25155876418979d4c8971243bb89"
+git-tree-sha1 = "9e0fb9e54594c47f278d75063980e43066e26e20"
 uuid = "0656b61e-2033-5cc2-a64a-77c0f6c09b89"
-version = "3.4.0+2"
+version = "3.4.1+1"
 
 [[deps.GR]]
 deps = ["Artifacts", "Base64", "DelimitedFiles", "Downloads", "GR_jll", "HTTP", "JSON", "Libdl", "LinearAlgebra", "Preferences", "Printf", "Qt6Wayland_jll", "Random", "Serialization", "Sockets", "TOML", "Tar", "Test", "p7zip_jll"]
-git-tree-sha1 = "f52c27dd921390146624f3aab95f4e8614ad6531"
+git-tree-sha1 = "44716a1a667cb867ee0e9ec8edc31c3e4aa5afdc"
 uuid = "28b8d3ca-fb5f-59d9-8090-bfdbd6d07a71"
-version = "0.73.18"
+version = "0.73.24"
+
+    [deps.GR.extensions]
+    IJuliaExt = "IJulia"
+
+    [deps.GR.weakdeps]
+    IJulia = "7073ff75-c697-5162-941a-fcdaad2a7d2a"
 
 [[deps.GR_jll]]
 deps = ["Artifacts", "Bzip2_jll", "Cairo_jll", "FFMPEG_jll", "Fontconfig_jll", "FreeType2_jll", "GLFW_jll", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "Pixman_jll", "Qt6Base_jll", "Zlib_jll", "libpng_jll"]
-git-tree-sha1 = "4b0406b866ea9fdbaf1148bc9c0b887e59f9af68"
+git-tree-sha1 = "be8a1b8065959e24fdc1b51402f39f3b6f0f6653"
 uuid = "d2c73de3-f751-5644-a686-071e5b155ba9"
-version = "0.73.18+0"
+version = "0.73.24+0"
 
 [[deps.GettextRuntime_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Libiconv_jll"]
@@ -2256,9 +2313,9 @@ version = "5.2.3+0"
 
 [[deps.Glib_jll]]
 deps = ["Artifacts", "GettextRuntime_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Libiconv_jll", "Libmount_jll", "PCRE2_jll", "Zlib_jll"]
-git-tree-sha1 = "50c11ffab2a3d50192a228c313f05b5b5dc5acb2"
+git-tree-sha1 = "24f6def62397474a297bfcec22384101609142ed"
 uuid = "7746bdde-850d-59dc-9ae8-88ece973131d"
-version = "2.86.0+0"
+version = "2.86.3+0"
 
 [[deps.Graphics]]
 deps = ["Colors", "LinearAlgebra", "NaNMath"]
@@ -2339,9 +2396,9 @@ version = "1.4.2"
 
 [[deps.ImageMagick_jll]]
 deps = ["Artifacts", "Bzip2_jll", "FFTW_jll", "Ghostscript_jll", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "OpenJpeg_jll", "Zlib_jll", "Zstd_jll", "libpng_jll", "libwebp_jll", "libzip_jll"]
-git-tree-sha1 = "d670e8e3adf0332f57054955422e85a4aec6d0b0"
+git-tree-sha1 = "2c232857f2eb9ecfa3ab534df7f060c9afbeb187"
 uuid = "c73af94c-d91f-53ed-93a7-00f77d67a9d7"
-version = "7.1.2005+0"
+version = "7.1.2011+0"
 
 [[deps.ImageMetadata]]
 deps = ["AxisArrays", "ImageAxes", "ImageBase", "ImageCore"]
@@ -2351,9 +2408,9 @@ version = "0.9.9"
 
 [[deps.Imath_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "0936ba688c6d201805a83da835b55c61a180db52"
+git-tree-sha1 = "dcc8d0cd653e55213df9b75ebc6fe4a8d3254c65"
 uuid = "905a6f67-0a94-5f89-b386-d35d92009cd1"
-version = "3.1.11+0"
+version = "3.2.2+0"
 
 [[deps.IndirectArrays]]
 git-tree-sha1 = "012e604e1c7458645cb8b436f8fba789a51b257f"
@@ -2372,9 +2429,9 @@ version = "1.11.0"
 
 [[deps.IntervalArithmetic]]
 deps = ["CRlibm", "MacroTools", "OpenBLASConsistentFPCSR_jll", "Printf", "Random", "RoundingEmulator"]
-git-tree-sha1 = "bf0210c01fb7d67c31fed97d7c1d1716b98ea689"
+git-tree-sha1 = "2cce1fed119ca7b6cc230c4a3b85202478af7924"
 uuid = "d1acc4aa-44c8-5952-acd4-ba5d80a2a253"
-version = "1.0.1"
+version = "1.0.3"
 
     [deps.IntervalArithmetic.extensions]
     IntervalArithmeticArblibExt = "Arblib"
@@ -2452,9 +2509,9 @@ version = "0.1.6"
 
 [[deps.JpegTurbo_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "b6893345fd6658c8e475d40155789f4860ac3b21"
+git-tree-sha1 = "c0c9b76f3520863909825cbecdef58cd63de705a"
 uuid = "aacddb02-875f-59d6-b918-886e6ef4fbf8"
-version = "3.1.4+0"
+version = "3.1.5+0"
 
 [[deps.JuliaSyntaxHighlighting]]
 deps = ["StyledStrings"]
@@ -2469,21 +2526,15 @@ version = "3.100.3+0"
 
 [[deps.LERC_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "aaafe88dccbd957a8d82f7d05be9b69172e0cee3"
+git-tree-sha1 = "17b94ecafcfa45e8360a4fc9ca6b583b049e4e37"
 uuid = "88015f11-f218-50d7-93a8-a6af411a945d"
-version = "4.0.1+0"
+version = "4.1.0+0"
 
 [[deps.LLVMOpenMP_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
 git-tree-sha1 = "eb62a3deb62fc6d8822c0c4bef73e4412419c5d8"
 uuid = "1d63c593-3942-5779-bab2-d838dc0a180e"
 version = "18.1.8+0"
-
-[[deps.LZO_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "1c602b1127f4751facb671441ca72715cc95938a"
-uuid = "dd4b983a-f0e5-5f8d-a1b7-129d4a5fb1ac"
-version = "2.10.3+0"
 
 [[deps.LaTeXStrings]]
 git-tree-sha1 = "dda21b8cbd6a6c40d9d02a73230f9d70fed6918c"
@@ -2562,9 +2613,9 @@ version = "1.18.0+0"
 
 [[deps.Libmount_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "97bbca976196f2a1eb9607131cb108c69ec3f8a6"
+git-tree-sha1 = "cc3ad4faf30015a3e8094c9b5b7f19e85bdf2386"
 uuid = "4b2f31a3-9ecc-558c-b454-b3730dcb73e9"
-version = "2.41.3+0"
+version = "2.42.0+0"
 
 [[deps.Libtiff_jll]]
 deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "LERC_jll", "Libdl", "XZ_jll", "Zlib_jll", "Zstd_jll"]
@@ -2574,9 +2625,9 @@ version = "4.7.2+0"
 
 [[deps.Libuuid_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "d0205286d9eceadc518742860bf23f703779a3d6"
+git-tree-sha1 = "d620582b1f0cbe2c72dd1d5bd195a9ce73370ab1"
 uuid = "38a345b3-de98-5d2b-a5d3-14cd9215e700"
-version = "2.41.3+0"
+version = "2.42.0+0"
 
 [[deps.LinearAlgebra]]
 deps = ["Libdl", "OpenBLAS_jll", "libblastrampoline_jll"]
@@ -2713,9 +2764,9 @@ version = "1.3.6+0"
 
 [[deps.OpenBLASConsistentFPCSR_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "567515ca155d0020a45b05175449b499c63e7015"
+git-tree-sha1 = "f2b3b9e52a5eb6a3434c8cca67ad2dde011194f4"
 uuid = "6cdc7f73-28fd-5e50-80fb-958a8875b1af"
-version = "0.3.29+0"
+version = "0.3.30+0"
 
 [[deps.OpenBLAS_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
@@ -2730,9 +2781,9 @@ version = "0.3.3"
 
 [[deps.OpenEXR_jll]]
 deps = ["Artifacts", "Imath_jll", "JLLWrappers", "Libdl", "Zlib_jll"]
-git-tree-sha1 = "8292dd5c8a38257111ada2174000a33745b06d4e"
+git-tree-sha1 = "135492b7e97fc86d9b132b96a54d2d3dd3e0c6a8"
 uuid = "18a262bb-aa17-5467-a713-aee519bc75cb"
-version = "3.2.4+0"
+version = "3.4.8+0"
 
 [[deps.OpenJpeg_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libtiff_jll", "LittleCMS_jll", "libpng_jll"]
@@ -2764,9 +2815,9 @@ version = "0.5.6+0"
 
 [[deps.Opus_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "c392fc5dd032381919e3b22dd32d6443760ce7ea"
+git-tree-sha1 = "e2bb57a313a74b8104064b7efd01406c0a50d2ff"
 uuid = "91d4177d-7536-5919-b921-800302f37372"
-version = "1.5.2+0"
+version = "1.6.1+0"
 
 [[deps.OrderedCollections]]
 git-tree-sha1 = "05868e21324cede2207c6f0f466b4bfef6d5e7ee"
@@ -2792,9 +2843,9 @@ version = "0.5.12"
 
 [[deps.Pango_jll]]
 deps = ["Artifacts", "Cairo_jll", "Fontconfig_jll", "FreeType2_jll", "FriBidi_jll", "Glib_jll", "HarfBuzz_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "1f7f9bbd5f7a2e5a9f7d96e51c9754454ea7f60b"
+git-tree-sha1 = "58e5ed5e386e156bd93e86b305ebd21ac63d2d04"
 uuid = "36c8627f-9965-5494-a995-c6b170f724f3"
-version = "1.56.4+0"
+version = "1.57.1+0"
 
 [[deps.Parsers]]
 deps = ["Dates", "PrecompileTools", "UUIDs"]
@@ -2922,27 +2973,33 @@ version = "1.4.5"
 
 [[deps.Qt6Base_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Fontconfig_jll", "Glib_jll", "JLLWrappers", "Libdl", "Libglvnd_jll", "OpenSSL_jll", "Vulkan_Loader_jll", "Xorg_libSM_jll", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Xorg_libxcb_jll", "Xorg_xcb_util_cursor_jll", "Xorg_xcb_util_image_jll", "Xorg_xcb_util_keysyms_jll", "Xorg_xcb_util_renderutil_jll", "Xorg_xcb_util_wm_jll", "Zlib_jll", "libinput_jll", "xkbcommon_jll"]
-git-tree-sha1 = "34f7e5d2861083ec7596af8b8c092531facf2192"
+git-tree-sha1 = "d7a4bff94f42208ce3cf6bc8e4e7d1d663e7ee8b"
 uuid = "c0090381-4147-56d7-9ebc-da0b1113ec56"
-version = "6.8.2+2"
+version = "6.10.2+1"
 
 [[deps.Qt6Declarative_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Qt6Base_jll", "Qt6ShaderTools_jll"]
-git-tree-sha1 = "da7adf145cce0d44e892626e647f9dcbe9cb3e10"
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Qt6Base_jll", "Qt6ShaderTools_jll", "Qt6Svg_jll"]
+git-tree-sha1 = "d5b7dd0e226774cbd87e2790e34def09245c7eab"
 uuid = "629bc702-f1f5-5709-abd5-49b8460ea067"
-version = "6.8.2+1"
+version = "6.10.2+1"
 
 [[deps.Qt6ShaderTools_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Qt6Base_jll"]
-git-tree-sha1 = "9eca9fc3fe515d619ce004c83c31ffd3f85c7ccf"
+git-tree-sha1 = "4d85eedf69d875982c46643f6b4f66919d7e157b"
 uuid = "ce943373-25bb-56aa-8eca-768745ed7b5a"
-version = "6.8.2+1"
+version = "6.10.2+1"
+
+[[deps.Qt6Svg_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Qt6Base_jll"]
+git-tree-sha1 = "81587ff5ff25a4e1115ce191e36285ede0334c9d"
+uuid = "6de9746b-f93d-5813-b365-ba18ad4a9cf3"
+version = "6.10.2+0"
 
 [[deps.Qt6Wayland_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Qt6Base_jll", "Qt6Declarative_jll"]
-git-tree-sha1 = "8f528b0851b5b7025032818eb5abbeb8a736f853"
+git-tree-sha1 = "672c938b4b4e3e0169a07a5f227029d4905456f2"
 uuid = "e99dba38-086e-5de3-a5b1-6e4c66e897c3"
-version = "6.8.2+2"
+version = "6.10.2+1"
 
 [[deps.REPL]]
 deps = ["InteractiveUtils", "JuliaSyntaxHighlighting", "Markdown", "Sockets", "StyledStrings", "Unicode"]
@@ -3124,9 +3181,9 @@ version = "0.4.4"
 
 [[deps.StructUtils]]
 deps = ["Dates", "UUIDs"]
-git-tree-sha1 = "fa95b3b097bcef5845c142ea2e085f1b2591e92c"
+git-tree-sha1 = "86f5831495301b2a1387476cb30f86af7ab99194"
 uuid = "ec057cc2-7a8d-4b58-b3b3-92acb9f63b42"
-version = "2.7.1"
+version = "2.8.0"
 
     [deps.StructUtils.extensions]
     StructUtilsMeasurementsExt = ["Measurements"]
@@ -3269,9 +3326,9 @@ version = "1.24.0+0"
 
 [[deps.XZ_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "fee71455b0aaa3440dfdd54a9a36ccef829be7d4"
+git-tree-sha1 = "b29c22e245d092b8b4e8d3c09ad7baa586d9f573"
 uuid = "ffd25f8a-64ca-5728-b0f7-c24cf3aae800"
-version = "5.8.1+0"
+version = "5.8.3+0"
 
 [[deps.Xorg_libICE_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -3344,6 +3401,12 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libX11_jll"]
 git-tree-sha1 = "7ed9347888fac59a618302ee38216dd0379c480d"
 uuid = "ea2f1a96-1ddc-540d-b46f-429655e07cfa"
 version = "0.9.12+0"
+
+[[deps.Xorg_libpciaccess_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Zlib_jll"]
+git-tree-sha1 = "4909eb8f1cbf6bd4b1c30dd18b2ead9019ef2fad"
+uuid = "a65dc6b1-eb27-53a1-bb3e-dea574b5389e"
+version = "0.18.1+0"
 
 [[deps.Xorg_libxcb_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libXau_jll", "Xorg_libXdmcp_jll"]
@@ -3436,9 +3499,9 @@ version = "0.61.1+0"
 
 [[deps.libaom_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "371cc681c00a3ccc3fbc5c0fb91f58ba9bec1ecf"
+git-tree-sha1 = "850b06095ee71f0135d644ffd8a52850699581ed"
 uuid = "a4ae2306-e953-59d6-aa16-d00cac43593b"
-version = "3.13.1+0"
+version = "3.13.3+0"
 
 [[deps.libass_jll]]
 deps = ["Artifacts", "Bzip2_jll", "FreeType2_jll", "FriBidi_jll", "HarfBuzz_jll", "JLLWrappers", "Libdl", "Zlib_jll"]
@@ -3456,6 +3519,12 @@ deps = ["Artifacts", "Dbus_jll", "JLLWrappers", "Libdl", "Libglvnd_jll", "Pango_
 git-tree-sha1 = "9bf7903af251d2050b467f76bdbe57ce541f7f4f"
 uuid = "1183f4f0-6f2a-5f1a-908b-139f9cdfea6f"
 version = "0.2.2+0"
+
+[[deps.libdrm_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libpciaccess_jll"]
+git-tree-sha1 = "63aac0bcb0b582e11bad965cef4a689905456c03"
+uuid = "8e53e030-5e6c-5a89-a30b-be5b7263a166"
+version = "2.4.125+1"
 
 [[deps.libevdev_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -3477,15 +3546,21 @@ version = "1.28.1+0"
 
 [[deps.libpng_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Zlib_jll"]
-git-tree-sha1 = "07b6a107d926093898e82b3b1db657ebe33134ec"
+git-tree-sha1 = "e51150d5ab85cee6fc36726850f0e627ad2e4aba"
 uuid = "b53b4c65-9356-5827-b1ea-8c7a1a84506f"
-version = "1.6.50+0"
+version = "1.6.58+0"
 
 [[deps.libsixel_jll]]
 deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "Libdl", "libpng_jll"]
 git-tree-sha1 = "c1733e347283df07689d71d61e14be986e49e47a"
 uuid = "075b6546-f08a-558a-be8f-8157d0f608a5"
 version = "1.10.5+0"
+
+[[deps.libva_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libX11_jll", "Xorg_libXext_jll", "Xorg_libXfixes_jll", "libdrm_jll"]
+git-tree-sha1 = "7dbf96baae3310fe2fa0df0ccbb3c6288d5816c9"
+uuid = "9a156e7d-b971-5f62-b2c9-67348b8fb97c"
+version = "2.23.0+0"
 
 [[deps.libvorbis_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Ogg_jll"]
@@ -3541,19 +3616,19 @@ version = "1.13.0+0"
 """
 
 # ╔═╡ Cell order:
-# ╠═e414122f-b93a-4510-b8ae-026c303e0df9
-# ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
-# ╠═b4599a16-e7f7-4a2a-b349-2648ee45208f
-# ╠═8315fb27-89e4-44a4-a51e-8e55fc3d58e5
-# ╠═ef081dfa-b610-4c7a-a039-7258f4f6e80e
-# ╠═1e507853-e2e6-493d-9d62-f33da7a7caa8
-# ╠═2eb6bb15-066f-4601-8a94-eb1ce880e7ac
-# ╠═8c345896-0123-40a5-8f00-c6ebefcee822
-# ╠═25157d2c-d719-438e-b4c4-6fa7d9787820
-# ╠═1cc30502-ec6c-4aa9-b178-58b3e425dac9
-# ╠═355007a5-91c8-454e-8463-31c6abc9f87f
-# ╠═5c65c8e6-f08f-42ce-81dd-f80638cbf7b4
-# ╠═eae5658b-a235-40de-84a3-00152a109e93
+# ╟─71bc54d5-d0ed-42d3-9bc1-48aa86e91d1d
+# ╟─e414122f-b93a-4510-b8ae-026c303e0df9
+# ╟─8408e369-40eb-4f9b-a7d7-26cde3e34a74
+# ╟─cd269caf-ef81-43d7-a1a8-6668932b6363
+# ╟─d6d85087-9ecc-4043-9002-e4a6442b829e
+# ╟─1e507853-e2e6-493d-9d62-f33da7a7caa8
+# ╟─2eb6bb15-066f-4601-8a94-eb1ce880e7ac
+# ╟─8c345896-0123-40a5-8f00-c6ebefcee822
+# ╟─25157d2c-d719-438e-b4c4-6fa7d9787820
+# ╟─1cc30502-ec6c-4aa9-b178-58b3e425dac9
+# ╟─355007a5-91c8-454e-8463-31c6abc9f87f
+# ╟─5c65c8e6-f08f-42ce-81dd-f80638cbf7b4
+# ╟─eae5658b-a235-40de-84a3-00152a109e93
 # ╠═af5c9045-66ec-483a-a197-db544f30b1b6
 # ╠═9b9a82cc-a3c1-448f-9cb8-375e8dbd59ea
 # ╠═3c9ab8ae-dda1-45eb-a635-92acf6e2f10b
@@ -3707,6 +3782,10 @@ version = "1.13.0+0"
 # ╠═e26ad50a-67db-449b-aa90-1bd87e06d5cb
 # ╠═224f4771-7bf7-4433-9f36-b82875ad4b6c
 # ╠═66e78b57-c224-4beb-bddb-e4b5a2997d2c
+# ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
+# ╠═b4599a16-e7f7-4a2a-b349-2648ee45208f
+# ╠═8315fb27-89e4-44a4-a51e-8e55fc3d58e5
+# ╠═ef081dfa-b610-4c7a-a039-7258f4f6e80e
 # ╠═da9230a6-088d-4735-b206-9514c12dd223
 # ╠═107407c8-5da0-4833-9965-75a82d84a0fb
 # ╟─00000000-0000-0000-0000-000000000001

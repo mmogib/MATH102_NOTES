@@ -4,6 +4,54 @@
 using Markdown
 using InteractiveUtils
 
+# ╔═╡ f2d4c2a5-f486-407b-b31b-d2efcc7476b3
+begin
+    using CommonMark
+    using PlutoUI, PlutoExtras
+    using Plots, PlotThemes, LaTeXStrings
+    using Latexify
+    using HypertextLiteral
+    using Colors
+    using LinearAlgebra, Random, Printf, SparseArrays
+    # using Symbolics
+    using SymPy
+    using QRCoders
+    using PrettyTables
+    # using Primes
+    # using LinearSolve
+    # using NonlinearSolve
+    # using ForwardDiff
+    # using Integrals
+    # using OrdinaryDiffEq
+    using IntervalArithmetic
+end
+
+# ╔═╡ 71bc54d5-d0ed-42d3-9bc1-48aa86e91d1d
+TableOfContents(title="📚 MATH102: Calculus III", indent=true, depth=4)
+
+# ╔═╡ e414122f-b93a-4510-b8ae-026c303e0df9
+begin
+    struct LocalImage
+        filename
+    end
+
+    function Base.show(io::IO, ::MIME"image/png", w::LocalImage)
+        write(io, read(w.filename))
+    end
+end
+
+# ╔═╡ cd269caf-ef81-43d7-a1a8-6668932b6363
+# exportqrcode("https://www.mathmatize.com/")
+# let
+#     img = LocalImage("../qrcode.png")
+# end
+
+# ╔═╡ d6d85087-9ecc-4043-9002-e4a6442b829e
+md"""
+
+# [AI-STUDY RESOURCE](https://notebooklm.google.com/notebook/f9f5eb4d-5782-4586-9f7e-abdb60f1b694)
+"""
+
 # ╔═╡ 8f8766fa-c168-4f09-8703-347a139b7069
 md"""
 # 8.1 Basic Integration Rules
@@ -26,16 +74,8 @@ $(Resource("https://www.dropbox.com/s/56svdxjfgowjojk/int_table.png?raw=1"))
 
 """
 
-# ╔═╡ 200f43c8-fd32-438e-9582-a995a4026086
-cm"""
-$(ex())
-Find
-```math
-\int \frac{1}{1+e^x} dx.
-```
-"""
-
 # ╔═╡ 681e1450-4011-43c8-ab66-26e0c073ee3d
+
 
 # ╔═╡ 6cc99632-805b-4fcd-98f0-96da071afdb9
 md"""
@@ -52,15 +92,6 @@ md"""
 
 # ╔═╡ 57037db4-318e-40df-af33-f2be564acf56
 md"## Integration by Parts"
-
-# ╔═╡ 7588b15a-3b1e-4232-96e6-45e254c10362
-cm"""
-$(bth("Integration by Parts"))
-If ``u`` and ``v`` are functions of ``x`` and have continuous derivatives, then
-```math
-\int u d v=u v-\int v d u
-```
-"""
 
 # ╔═╡ 9280e821-4518-4697-b55e-a3b806d748e1
 md"""
@@ -93,42 +124,6 @@ begin
     ```
     """
 end
-
-# ╔═╡ 3888f083-86e2-4edb-a700-62028ad295b4
-cm"""
-$(ex(1,"Integration by Parts"))
-Find ``\int x e^x d x``.
-"""
-
-# ╔═╡ 7d50c4c7-e6f0-43b7-8583-7b47cbcc2156
-cm"""
-$(ex(2,"Integration by Parts"))
-Find ``\displaystyle\int x^2 \ln x d x``.
-"""
-
-# ╔═╡ 9a0bbdd2-c9fe-4932-94f3-3727baa6b9a6
-cm"""
-$(ex(3,"An Integrand with a Single Term"))
-Find ``\displaystyle\int_0^1 \sin^{-1}x d x``.
-"""
-
-# ╔═╡ 5c4497e8-e02d-4265-ba7c-aa607231ee6d
-cm"""
-$(ex(4,"Repeated Use of Integration by Parts"))
-Find ``\displaystyle\int x^2\sin x d x``.
-"""
-
-# ╔═╡ fa99131e-13b2-4f4a-a752-4afd26b6596c
-cm"""
-$(ex(5,"Integration by Parts"))
-Find ``\displaystyle\int \sec^3 x d x``.
-"""
-
-# ╔═╡ a856ee7d-a0d9-4d4b-aa13-449a827a954d
-cm"""
-$(ex(7,"Using the tabular method"))
-Find ``\displaystyle\int x^2\sin4 x d x``.
-"""
 
 # ╔═╡ 507bc0c8-ef40-4ef4-ac3f-b66ae162362f
 md"""
@@ -176,59 +171,8 @@ md"""
 # ╔═╡ 42dee241-13c6-4d89-bce0-bac4e846cf7d
 md"## Integrals of Powers of Sine and Cosine"
 
-# ╔═╡ 2ada5eca-3ab9-444b-8350-153cf62abd3b
-cm"""
-$(bbl("GUIDELINES FOR EVALUATING INTEGRALS INVOLVING POWERS OF SINE AND COSINE"))
-1. When the power of the sine is odd and positive, save one sine factor and convert the remaining factors to cosines. Then expand and integrate.
-```math
-\int \sin ^{2 k+1} x \cos ^n x d x=\int \overbrace{\left(\sin ^2 x\right)^k}^{\text {Odd }} \cos ^n x \overbrace{\sin x d x}^{\text {Convert to cosines }}=\int\left(1-\cos ^2 x\right)^k \cos ^n x \sin x d x
-```
-2. When the power of the cosine is odd and positive, save one cosine factor and convert the remaining factors to sines. Then expand and integrate.
-```math
-\int \sin ^m x \cos ^{2 k+1} x d x=\int\left(\sin ^m x\right) \overbrace{\left(\cos ^2 x\right)^k}^{\text {Odd }} \overbrace{\cos x d x}^{\text {Convert to sines }}=\int\left(\sin ^m x\right)\left(1-\sin ^2 x\right)^k \cos x d x
-```
-3. When the powers of both the sine and cosine are even and nonnegative, make repeated use of the formulas
-```math
-\sin ^2 x=\frac{1-\cos 2 x}{2} \text { and } \cos ^2 x=\frac{1+\cos 2 x}{2}
-```
-to convert the integrand to odd powers of the cosine. Then proceed as in the second guideline.
-"""
-
-# ╔═╡ c2941250-feac-4855-97d5-f88c35ed689a
-cm"""
-$(ex(1,"Power of Sine Is Odd and Positive"))
-Find ``\int \sin ^3 x \cos ^4 x d x``.
-"""
-
-# ╔═╡ e40ba504-6b6c-4abc-81c8-67db621b90de
-cm"""
-$(ex(2,"Power of Cosine Is Odd and Positive"))
-Evaluate
-```math
-\int_{\pi / 6}^{\pi / 3} \frac{\cos ^3 x}{\sqrt{\sin x}} d x.
-```
-"""
-
 # ╔═╡ 4ec721e0-f0e4-492b-8791-87b876c57e6b
 
-# ╔═╡ cdd3a632-1020-4df5-b4cf-00a10b6fd255
-cm"""
-$(ex(3,"Power of Cosine Is Even and Nonnegative"))
-Find ``\displaystyle \int \cos ^4 x d x``.
-"""
-
-# ╔═╡ e5c79a58-bd0e-4490-bfee-9cf7938472ff
-cm"""
-$(bbl("Wallis's Formulas",""))
-1. If ``n`` is odd ( ``n \geq 3`` ), then
-```math
-\int_0^{\pi / 2} \cos ^n x d x=\left(\frac{2}{3}\right)\left(\frac{4}{5}\right)\left(\frac{6}{7}\right) \cdots\left(\frac{n-1}{n}\right)
-```
-2. If ``n`` is even ( ``n \geq 2`` ), then
-```math
-\int_0^{\pi / 2} \cos ^n x d x=\left(\frac{1}{2}\right)\left(\frac{3}{4}\right)\left(\frac{5}{6}\right) \cdots\left(\frac{n-1}{n}\right)\left(\frac{\pi}{2}\right)
-```
-"""
 
 # ╔═╡ 6158d974-6a19-4a84-bb10-a9488fca001b
 md"## Integrals of Powers of Secant and Tangent"
@@ -256,41 +200,8 @@ where ``m`` is odd and positive, use integration by parts, as illustrated in Exa
 5. When the first four guidelines do not apply, try converting to sines and cosines.
 """
 
-# ╔═╡ b7c18135-6b5a-4ca6-8169-9643f0815b3b
-cm"""
-$(ex(4,"Power of Tangent Is Odd and Positive"))
-Find ``\int \frac{\tan ^3 x}{\sqrt{\sec x}} d x``.
-
-"""
-
-# ╔═╡ b27f07f2-881c-42f0-8d9d-c49c4c54b780
-cm"""
-$(ex(5,"Power of Secant Is Even and Positive"))
-Find
-```math
-\int \sec ^4 3 x \tan ^3 3 x d x
-```
-"""
-
-# ╔═╡ 95099f5d-61ee-44ca-8d51-b01446f29649
-cm"""
-$(ex(6,"Power of Tangent Is Even"))
-Evaluate
-```math
-\int_0^{\pi / 4} \tan ^4 x d x
-```
-"""
-
 # ╔═╡ b0938d8a-a9b4-4551-9731-7bc738b88e85
 
-# ╔═╡ db377636-d9b6-4742-bf42-050a31860ad2
-cm"""
-$(ex(7,"Converting to Sines and Cosines"))
-Find
-```math
-\int \frac{\sec x}{\tan ^2 x} d x.
-```
-"""
 
 # ╔═╡ 76e4c36b-0cc8-4042-9c63-0610cb669ec9
 md"## Integrals Involving Sine-Cosine Products"
@@ -323,15 +234,6 @@ Use
 
 """
 
-# ╔═╡ d808a001-48ea-4eaa-9501-27d486133480
-cm"""
-$(ex(8,"Using a Product-to-Sum Formula"))
-Find
-```math
-\int \sin 5 x \cos 4 x d x
-```
-"""
-
 # ╔═╡ d1ea53cf-eb1e-4f7a-ad9d-f6f58f48d0b1
 md"""
 # 8.4 Trigonometric Substitution
@@ -342,78 +244,6 @@ md"""
 
 # ╔═╡ 14ea163c-854d-453d-8e00-67571751653d
 md"## Trigonometric Substitution"
-
-# ╔═╡ a533908e-9bb0-4cf5-984f-51a5f099db8f
-cm"""
-$(bbl("Trigonometric Substitution"," (``a>0``) "))
-1. For integrals involving ``\sqrt{a^2-u^2}``, let
-```math
-u=a \sin \theta
-```
-
-Then ``\sqrt{a^2-u^2}=a \cos \theta``, where
-```math
--\pi / 2 \leq \theta \leq \pi / 2
-```
-2. For integrals involving ``\sqrt{a^2+u^2}``, let
-```math
-u=a \tan \theta
-```
-
-Then ``\sqrt{a^2+u^2}=a \sec \theta``, where
-```math
--\pi / 2<\theta<\pi / 2
-```
-3. For integrals involving ``\sqrt{u^2-a^2}``, let ``u=a \sec \theta``.
-```math
-\sqrt{u^2-a^2}=\left\{\begin{array}{l}
-a \tan \theta \text { for } u>a, \text { where } 0 \leq \theta<\pi / 2 \\
--a \tan \theta \text { for } u<-a, \text { where } \pi / 2<\theta \leq \pi .
-\end{array}\right.
-```
-"""
-
-# ╔═╡ 22e8b5e8-8343-4e74-9f28-4b268e3157af
-cm"""
-$(ex(1,"Trigonometric Substitution: u=a sinθ "))
-Find
-```math
-\int \frac{d x}{x^2 \sqrt{9-x^2}}.
-```
-"""
-
-# ╔═╡ 11ebe671-ede6-438d-a896-45eca3beb94c
-cm"""
-$(ex(2,"Trigonometric Substitution: u=a tanθ "))
-Find
-```math
-\int \frac{d x}{\sqrt{4x^2+1}}.
-```
-"""
-
-# ╔═╡ c08feccc-e1aa-4a23-a42e-798dfe4278eb
-cm"""
-$(ex(3,"Trigonometric Substitution: Rational Powers"))
-Find
-```math
-\int \frac{d x}{\left(x^2+1\right)^{3 / 2}}.
-```
-"""
-
-# ╔═╡ f943eff3-357b-4a33-a272-fdf3a7d80a5f
-cm"""
-$(ex(4,"Converting the Limits of Integration"))
-Evaluate
-```math
-\int_{\sqrt{3}}^2 \frac{\sqrt{x^2-3}}{x} d x
-```
-"""
-
-# ╔═╡ da070497-1db3-4250-8d45-128daf2ff54f
-cm"""
-$(ex(5,"Finding Arc Length"))
-Find the arc length of the graph of ``f(x)=\frac{1}{2} x^2`` from ``x=0`` to ``x=1``
-"""
 
 # ╔═╡ c2d68428-99c5-45fb-b056-a1c0ae5f06ad
 md"""
@@ -448,6 +278,7 @@ and apply __STEP 2__ on  ``\frac{R(x)}{Q(x)}``.
 """
 
 # ╔═╡ 5ad8d84d-9f32-4378-bd22-f6004023076c
+
 
 # ╔═╡ 077175a1-b3e0-467b-b5bd-b52616e3936f
 md"""
@@ -499,30 +330,6 @@ then there exist constants ``A_1, B_1, A_2, B_2, \cdots A_r, B_r `` and ``C`` su
 
 """
 
-# ╔═╡ 4ebfeece-3528-43e0-a70f-9e901b28b930
-cm"""
-
-$(bbl("Decomposition of 𝐍(x)/ 𝐃(x) into Partial Fractions"))
-1. Divide when improper: When ``N(x) / D(x)`` is an improper fraction (that is, when the degree of the numerator is greater than or equal to the degree of the denominator), divide the denominator into the numerator to obtain
-```math
-\frac{N(x)}{D(x)}=(\text { a polynomial })+\frac{N_1(x)}{D(x)}
-```
-where the degree of ``N_1(x)`` is less than the degree of ``D(x)``. Then apply Steps 2, 3, and 4 to the proper rational expression ``N_1(x) / D(x)``.
-2. Factor denominator: Completely factor the denominator into factors of the form
-```math
-(p x+q)^m \text { and }\left(a x^2+b x+c\right)^n
-```
-where ``a x^2+b x+c`` is irreducible.
-3. Linear factors: For each factor of the form ``(p x+q)^m``, the partial fraction decomposition must include the following sum of ``m`` fractions.
-```math
-\frac{A_1}{(p x+q)}+\frac{A_2}{(p x+q)^2}+\cdots+\frac{A_m}{(p x+q)^m}
-```
-4. Quadratic factors: For each factor of the form ``\left(a x^2+b x+c\right)^n``, the partial fraction decomposition must include the following sum of ``n`` fractions.
-```math
-\frac{B_1 x+C_1}{a x^2+b x+c}+\frac{B_2 x+C_2}{\left(a x^2+b x+c\right)^2}+\cdots+\frac{B_n x+C_n}{\left(a x^2+b x+c\right)^n}
-```
-"""
-
 # ╔═╡ f65d043c-24ab-4c73-8da9-653ec0f57298
 md"""
 **Example:** Write out the form of the partial fractions decomposition of the function
@@ -535,46 +342,8 @@ md"""
 # ╔═╡ 4eee2e8b-85b3-4986-9e5d-bfea119302dc
 md"## Linear Factors"
 
-# ╔═╡ 3de417dd-e670-4e28-bb27-88abe5476f84
-cm"""
-$(ex(1,"Distinct Linear Factors"))
-Write the partial fraction decomposition for
-```math
- \frac{1}{x^2-5x+6}
-```
-"""
-
-# ╔═╡ 16f26878-cbe0-4ac1-a593-691a2fe55aca
-cm"""
-$(ex(2,"Repeated Linear Factors"))
-Find
-```math
-\int  \frac{5x^2+20x+6}{x^3+2x^2+x}dx.
-```
-"""
-
 # ╔═╡ bc944bad-3868-4fca-af1d-0a6e6ffffbb7
 md"## Quadratic Factors"
-
-# ╔═╡ 7daad386-47a2-44d7-9af8-743d5712cec0
-cm"""
-$(ex(3,"Distinct Linear and Quadratic Factors"))
-
-Find
-```math
-\int  \frac{2x^3-4x-8}{(x^2-x)(x^2+4)}dx.
-
-```
-"""
-
-# ╔═╡ 98e43437-09c0-4b5d-b5b2-cb38d3d1ca20
-cm"""
-$(ex(4," Repeated Quadratic Factors"))
-```math
-\int  \frac{8x^3+13x}{(x^2+2)^2}dx.
-```
-
-"""
 
 # ╔═╡ f8dc9ccf-df39-47a4-b80a-78cc262cfdeb
 md"""
@@ -634,34 +403,6 @@ md"""
 
 """
 
-# ╔═╡ 0cef9fcd-3734-4694-ad23-ca1465d1f96e
-cm"""
-$(bbl("Substitution for Rational Functions of Sine and Cosine",""))
-
-For integrals involving rational functions of sine and cosine, the substitution
-```math
-u=\frac{\sin x}{1+\cos x}=\tan \frac{x}{2}
-```
-yields
-```math
-\cos x=\frac{1-u^2}{1+u^2}, \quad \sin x=\frac{2 u}{1+u^2}, \quad \text { and } \quad d x=\frac{2 d u}{1+u^2}
-```
-
-"""
-
-# ╔═╡ 98f709cb-cccf-42a7-af35-e026f7369bb8
-cm"""
-$(ex())
-Find
-```math
-\begin{array}{lll}
-\text{(1)} & \displaystyle\int \frac{dx}{3\sin x - 4 \cos x}. \\
-\text{(2)} & \displaystyle\int_0^{\pi\over 2} \frac{\sin 2x \;dx}{2+\cos x}. \\
-\end{array}
-```
-
-"""
-
 # ╔═╡ 0a6c72ed-f6f0-4534-ba96-581e685a3d94
 md"""
 # 8.8 Improper Integrals
@@ -682,184 +423,8 @@ md"""
 # ╔═╡ dbd92a84-14c0-4510-9f9f-39e90f50c30e
 md"## Improper Integrals with Infinite Limits of Integration"
 
-# ╔═╡ c2ded1c8-a0a7-48cb-bf1d-7616796a5062
-cm"""
-$(define("Improper Integrals with Infinite Integration Limits"))
-
-**(a)** If ``\int_a^t f(x) dx`` exists for every number ``t\ge a``, then
-```math
-\int_a^{\infty} f(x) dx = \lim_{t\to \infty} \int_a^t f(x) dx
-```
-provided this limit exists (as a finite number).
-
-
-**(b)** If ``\int_t^b f(x) dx`` exists for every number ``t\le b``, then
-```math
-\int_{-\infty}^b f(x) dx = \lim_{t\to -\infty} \int_t^b f(x) dx
-```
-provided this limit exists (as a finite number).
-
-The improper integrals ``\int_a^{\infty} f(x) dx`` and ``\int_{-\infty}^b f(x) dx`` are called *__convergent__* if the corresponding limit exists and *__divergent__* if the limit does not exist.
-
-**(c)** If both ``\int_a^{\infty} f(x) dx`` and ``\int_{-\infty}^b f(x) dx`` are convergent, then we define
-```math
-\int_{-\infty}^{\infty} f(x) dx =  \int_{-\infty}^a f(x) dx +\int_a^{\infty} f(x) dx
-```
-
-In part (c) any real number  can be used
-"""
-
-# ╔═╡ 963f8130-c7f7-4b57-8bac-64c92b46c53a
-cm"""
-$(ex(1,"An Improper Integral That Diverge"))
-
-Evaluate ``\displaystyle \int_1^{\infty} \frac{1}{x} dx``.
-
-$(ex(2,"An Improper Integrals That Converge"))
-
-Evaluate each improper integral
-- (a) ``\displaystyle\int_{0}^{\infty} e^{-x} dx.``
-- (b) ``\displaystyle\int_{0}^{\infty} \frac{1}{1+x^2} dx``.
-
-
-"""
-
-# ╔═╡ 4098c133-f9d4-4198-a39b-f8fa93bf0774
-cm"""
-$(ex(3,"Using L’Hôpital’s Rule with an Improper Integra"))
-
-Evaluate
-```math
-\int_1^{\infty} (1 − x)e^{−x} dx.
-"""
-
-# ╔═╡ 71c6a056-c512-4f00-8195-a6de36bc98c8
-cm"""
-$(ex(4,"Infinite Upper and Lower Limits of Integration"))
-
-Evaluate
-```math
-\int_{-\infty}^{\infty} \frac{e^x}{1+e^{2x}} dx
-```
-"""
-
 # ╔═╡ 3f727233-8150-4008-8fb5-2a83ba616e1e
 md"## Improper Integrals with Infinite Discontinuities"
-
-# ╔═╡ f7b555c6-5844-4971-8693-a8ada5074b20
-cm"""
-$(define("Improper Integrals with Infinite Discontinuities"))
-1. If ``f`` is continuous on the interval ``[a, b)`` and has an infinite discontinuity at ``b``, then
-```math
-\int_a^b f(x) d x=\lim _{c \rightarrow b^{-}} \int_a^c f(x) d x
-```
-2. If ``f`` is continuous on the interval ``(a, b]`` and has an infinite discontinuity at ``a``, then
-```math
-\int_a^b f(x) d x=\lim _{c \rightarrow a^{+}} \int_c^b f(x) d x
-```
-3. If ``f`` is continuous on the interval ``[a, b]``, except for some ``c`` in ``(a, b)`` at which ``f`` has an infinite discontinuity, then
-```math
-\int_a^b f(x) d x=\int_a^c f(x) d x+\int_c^b f(x) d x
-```
-
-In the first two cases, the improper integral __converges__ when the limit existsotherwise, the improper integral __diverges__. In the third case, the improper integral on the left diverges when either of the improper integrals on the right diverges.
-"""
-
-# ╔═╡ dd990994-e154-4d4e-bca7-7fce46fb193b
-cm"""
-$(ex(6,"An Improper Integral with an Infinite Discontinuity"))
-
-Evaluate
-```math
-\int_0^1 \frac{d x}{\sqrt[3]{x}}
-```
-"""
-
-# ╔═╡ aa08f4c7-f3f3-4dc1-874f-e59e50d62e89
-cm"""
-$(ex(8,"An Improper Integral with an Interior Discontinuity"))
-
-Evaluate
-```math
-\int_{-1}^2 \frac{d x}{x^3}
-```
-"""
-
-# ╔═╡ 724736c2-d020-444c-ac64-8c35fb5aed5a
-cm"""
-$(ex(9,"A Doubly Improper Integral"))
-
-Evaluate
-```math
-\int_0^{\infty} \frac{d x}{\sqrt{x}(x+1)}
-```
-"""
-
-# ╔═╡ b7b3ab16-92e7-4e52-ae8f-42675eb8ade1
-cm"""
-$(ex(7,"An Improper Integral That Diverges"))
-
-Evaluate
-```math
-\int_0^2 \frac{d x}{x^3}
-```
-"""
-
-# ╔═╡ c5e81c70-28ae-409b-bb4b-41418fc62fab
-cm"""
-$(ex(10,"An Application Involving Arc Length"))
-
-Use the formula for arc length to show that the circumference of the circle ``x^2+y^2=1`` is ``2 \pi``.
-"""
-
-# ╔═╡ d656cb73-ab16-4d06-80c3-2432fe752c59
-cm"""
-$(bth("A Special Type of Improper Integral"))
-```math
-\int_1^{\infty} \frac{1}{x^p}dx \quad =\begin{cases}\frac{1}{p-1},&\quad & p>1\\
-\text{diverses,}&\quad&p<=1\end{cases}.
-```
-
-"""
-
-# ╔═╡ 0183ce38-0911-49ff-a120-ed8ba21fdda3
-cm"""
-$(ex(11,"An Application Involving a Solid of Revolution"))
-The solid formed by revolving (about the ``x``-axis) the unbounded region lying between the graph of ``f(x)=1 / x`` and the ``x``-axis ``(x \geq 1)`` is called Gabriel's Horn. Show that this solid has a finite volume and an infinite surface area.
-"""
-
-# ╔═╡ e414122f-b93a-4510-b8ae-026c303e0df9
-begin
-    struct LocalImage
-        filename
-    end
-
-    function Base.show(io::IO, ::MIME"image/png", w::LocalImage)
-        write(io, read(w.filename))
-    end
-end
-
-# ╔═╡ f2d4c2a5-f486-407b-b31b-d2efcc7476b3
-begin
-    using CommonMark
-    using PlutoUI, PlutoExtras
-    using Plots, PlotThemes, LaTeXStrings
-    using Latexify
-    using HypertextLiteral
-    using Colors
-    using LinearAlgebra, Random, Printf, SparseArrays
-    # using Symbolics
-    using SymPy
-    using QRCoders
-    using PrettyTables
-    # using Primes
-    # using LinearSolve
-    # using NonlinearSolve
-    # using ForwardDiff
-    # using Integrals
-    # using OrdinaryDiffEq
-    using IntervalArithmetic
-end
 
 # ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
 function rect(x, Δx, xs, f; direction=:x)
@@ -1036,6 +601,544 @@ begin
     @htl("")
 end
 
+# ╔═╡ 8408e369-40eb-4f9b-a7d7-26cde3e34a74
+begin
+    text_book = post_img("https://www.dropbox.com/scl/fi/upln00gqvnbdy7whr23pj/larson_book.jpg?rlkey=wlkgmzw2ernadd9b8v8qwu2jd&dl=1", 200)
+    md""" # Syllabus
+    ## Syallbus
+    See here [Term 252 - MATH102 - Syllabus](https://math.kfupm.edu.sa/docs/default-source/css-library/math102-252.pdf)
+    ## Textbook
+    __Textbook:  Larson, R. & Edwards, B., Calculus: Early Transcendental Functions, Metric Version, 7th edition, Cengage Learning, Inc., 2019.__
+    $text_book
+
+    ## Office Hours
+    I strongly encourage all students to make use of my office hours. These dedicated times are a valuable opportunity for you to ask questions, seek clarification on lecture material, discuss challenging problems, and get personalized feedback on your work. Engaging with me during office hours can greatly enhance your understanding of the course content and improve your performance. Whether you're struggling with a specific concept or simply want to delve deeper into the subject, I am here to support your learning journey. Don't hesitate to drop by; __your success is my priority__.
+
+    | Day       | Time        |
+    |-----------|-------------|
+    | Sunday    | 11:00-11:50AM |
+    | Tuesday    | 11:00-11:50AM |
+    Also you can ask for an online meeting through __TEAMS__.
+    """
+end
+
+# ╔═╡ 200f43c8-fd32-438e-9582-a995a4026086
+cm"""
+$(ex())
+Find
+```math
+\int \frac{1}{1+e^x} dx.
+```
+"""
+
+# ╔═╡ 7588b15a-3b1e-4232-96e6-45e254c10362
+cm"""
+$(bth("Integration by Parts"))
+If ``u`` and ``v`` are functions of ``x`` and have continuous derivatives, then
+```math
+\int u d v=u v-\int v d u
+```
+"""
+
+# ╔═╡ 3888f083-86e2-4edb-a700-62028ad295b4
+cm"""
+$(ex(1,"Integration by Parts"))
+Find ``\int x e^x d x``.
+"""
+
+# ╔═╡ 7d50c4c7-e6f0-43b7-8583-7b47cbcc2156
+cm"""
+$(ex(2,"Integration by Parts"))
+Find ``\displaystyle\int x^2 \ln x d x``.
+"""
+
+# ╔═╡ 9a0bbdd2-c9fe-4932-94f3-3727baa6b9a6
+cm"""
+$(ex(3,"An Integrand with a Single Term"))
+Find ``\displaystyle\int_0^1 \sin^{-1}x d x``.
+"""
+
+# ╔═╡ 5c4497e8-e02d-4265-ba7c-aa607231ee6d
+cm"""
+$(ex(4,"Repeated Use of Integration by Parts"))
+Find ``\displaystyle\int x^2\sin x d x``.
+"""
+
+# ╔═╡ fa99131e-13b2-4f4a-a752-4afd26b6596c
+cm"""
+$(ex(5,"Integration by Parts"))
+Find ``\displaystyle\int \sec^3 x d x``.
+"""
+
+# ╔═╡ a856ee7d-a0d9-4d4b-aa13-449a827a954d
+cm"""
+$(ex(7,"Using the tabular method"))
+Find ``\displaystyle\int x^2\sin4 x d x``.
+"""
+
+# ╔═╡ 2ada5eca-3ab9-444b-8350-153cf62abd3b
+cm"""
+$(bbl("GUIDELINES FOR EVALUATING INTEGRALS INVOLVING POWERS OF SINE AND COSINE"))
+1. When the power of the sine is odd and positive, save one sine factor and convert the remaining factors to cosines. Then expand and integrate.
+```math
+\int \sin ^{2 k+1} x \cos ^n x d x=\int \overbrace{\left(\sin ^2 x\right)^k}^{\text {Odd }} \cos ^n x \overbrace{\sin x d x}^{\text {Convert to cosines }}=\int\left(1-\cos ^2 x\right)^k \cos ^n x \sin x d x
+```
+2. When the power of the cosine is odd and positive, save one cosine factor and convert the remaining factors to sines. Then expand and integrate.
+```math
+\int \sin ^m x \cos ^{2 k+1} x d x=\int\left(\sin ^m x\right) \overbrace{\left(\cos ^2 x\right)^k}^{\text {Odd }} \overbrace{\cos x d x}^{\text {Convert to sines }}=\int\left(\sin ^m x\right)\left(1-\sin ^2 x\right)^k \cos x d x
+```
+3. When the powers of both the sine and cosine are even and nonnegative, make repeated use of the formulas
+```math
+\sin ^2 x=\frac{1-\cos 2 x}{2} \text { and } \cos ^2 x=\frac{1+\cos 2 x}{2}
+```
+to convert the integrand to odd powers of the cosine. Then proceed as in the second guideline.
+"""
+
+# ╔═╡ c2941250-feac-4855-97d5-f88c35ed689a
+cm"""
+$(ex(1,"Power of Sine Is Odd and Positive"))
+Find ``\int \sin ^3 x \cos ^4 x d x``.
+"""
+
+# ╔═╡ e40ba504-6b6c-4abc-81c8-67db621b90de
+cm"""
+$(ex(2,"Power of Cosine Is Odd and Positive"))
+Evaluate
+```math
+\int_{\pi / 6}^{\pi / 3} \frac{\cos ^3 x}{\sqrt{\sin x}} d x.
+```
+"""
+
+# ╔═╡ cdd3a632-1020-4df5-b4cf-00a10b6fd255
+cm"""
+$(ex(3,"Power of Cosine Is Even and Nonnegative"))
+Find ``\displaystyle \int \cos ^4 x d x``.
+"""
+
+# ╔═╡ e5c79a58-bd0e-4490-bfee-9cf7938472ff
+cm"""
+$(bbl("Wallis's Formulas",""))
+1. If ``n`` is odd ( ``n \geq 3`` ), then
+```math
+\int_0^{\pi / 2} \cos ^n x d x=\left(\frac{2}{3}\right)\left(\frac{4}{5}\right)\left(\frac{6}{7}\right) \cdots\left(\frac{n-1}{n}\right)
+```
+2. If ``n`` is even ( ``n \geq 2`` ), then
+```math
+\int_0^{\pi / 2} \cos ^n x d x=\left(\frac{1}{2}\right)\left(\frac{3}{4}\right)\left(\frac{5}{6}\right) \cdots\left(\frac{n-1}{n}\right)\left(\frac{\pi}{2}\right)
+```
+"""
+
+# ╔═╡ b7c18135-6b5a-4ca6-8169-9643f0815b3b
+cm"""
+$(ex(4,"Power of Tangent Is Odd and Positive"))
+Find ``\int \frac{\tan ^3 x}{\sqrt{\sec x}} d x``.
+
+"""
+
+# ╔═╡ b27f07f2-881c-42f0-8d9d-c49c4c54b780
+cm"""
+$(ex(5,"Power of Secant Is Even and Positive"))
+Find
+```math
+\int \sec ^4 3 x \tan ^3 3 x d x
+```
+"""
+
+# ╔═╡ 95099f5d-61ee-44ca-8d51-b01446f29649
+cm"""
+$(ex(6,"Power of Tangent Is Even"))
+Evaluate
+```math
+\int_0^{\pi / 4} \tan ^4 x d x
+```
+"""
+
+# ╔═╡ db377636-d9b6-4742-bf42-050a31860ad2
+cm"""
+$(ex(7,"Converting to Sines and Cosines"))
+Find
+```math
+\int \frac{\sec x}{\tan ^2 x} d x.
+```
+"""
+
+# ╔═╡ d808a001-48ea-4eaa-9501-27d486133480
+cm"""
+$(ex(8,"Using a Product-to-Sum Formula"))
+Find
+```math
+\int \sin 5 x \cos 4 x d x
+```
+"""
+
+# ╔═╡ a533908e-9bb0-4cf5-984f-51a5f099db8f
+cm"""
+$(bbl("Trigonometric Substitution"," (``a>0``) "))
+1. For integrals involving ``\sqrt{a^2-u^2}``, let
+```math
+u=a \sin \theta
+```
+
+Then ``\sqrt{a^2-u^2}=a \cos \theta``, where
+```math
+-\pi / 2 \leq \theta \leq \pi / 2
+```
+2. For integrals involving ``\sqrt{a^2+u^2}``, let
+```math
+u=a \tan \theta
+```
+
+Then ``\sqrt{a^2+u^2}=a \sec \theta``, where
+```math
+-\pi / 2<\theta<\pi / 2
+```
+3. For integrals involving ``\sqrt{u^2-a^2}``, let ``u=a \sec \theta``.
+```math
+\sqrt{u^2-a^2}=\left\{\begin{array}{l}
+a \tan \theta \text { for } u>a, \text { where } 0 \leq \theta<\pi / 2 \\
+-a \tan \theta \text { for } u<-a, \text { where } \pi / 2<\theta \leq \pi .
+\end{array}\right.
+```
+"""
+
+# ╔═╡ 22e8b5e8-8343-4e74-9f28-4b268e3157af
+cm"""
+$(ex(1,"Trigonometric Substitution: u=a sinθ "))
+Find
+```math
+\int \frac{d x}{x^2 \sqrt{9-x^2}}.
+```
+"""
+
+# ╔═╡ 11ebe671-ede6-438d-a896-45eca3beb94c
+cm"""
+$(ex(2,"Trigonometric Substitution: u=a tanθ "))
+Find
+```math
+\int \frac{d x}{\sqrt{4x^2+1}}.
+```
+"""
+
+# ╔═╡ c08feccc-e1aa-4a23-a42e-798dfe4278eb
+cm"""
+$(ex(3,"Trigonometric Substitution: Rational Powers"))
+Find
+```math
+\int \frac{d x}{\left(x^2+1\right)^{3 / 2}}.
+```
+"""
+
+# ╔═╡ f943eff3-357b-4a33-a272-fdf3a7d80a5f
+cm"""
+$(ex(4,"Converting the Limits of Integration"))
+Evaluate
+```math
+\int_{\sqrt{3}}^2 \frac{\sqrt{x^2-3}}{x} d x
+```
+"""
+
+# ╔═╡ da070497-1db3-4250-8d45-128daf2ff54f
+cm"""
+$(ex(5,"Finding Arc Length"))
+Find the arc length of the graph of ``f(x)=\frac{1}{2} x^2`` from ``x=0`` to ``x=1``
+"""
+
+# ╔═╡ 4ebfeece-3528-43e0-a70f-9e901b28b930
+cm"""
+
+$(bbl("Decomposition of 𝐍(x)/ 𝐃(x) into Partial Fractions"))
+1. Divide when improper: When ``N(x) / D(x)`` is an improper fraction (that is, when the degree of the numerator is greater than or equal to the degree of the denominator), divide the denominator into the numerator to obtain
+```math
+\frac{N(x)}{D(x)}=(\text { a polynomial })+\frac{N_1(x)}{D(x)}
+```
+where the degree of ``N_1(x)`` is less than the degree of ``D(x)``. Then apply Steps 2, 3, and 4 to the proper rational expression ``N_1(x) / D(x)``.
+2. Factor denominator: Completely factor the denominator into factors of the form
+```math
+(p x+q)^m \text { and }\left(a x^2+b x+c\right)^n
+```
+where ``a x^2+b x+c`` is irreducible.
+3. Linear factors: For each factor of the form ``(p x+q)^m``, the partial fraction decomposition must include the following sum of ``m`` fractions.
+```math
+\frac{A_1}{(p x+q)}+\frac{A_2}{(p x+q)^2}+\cdots+\frac{A_m}{(p x+q)^m}
+```
+4. Quadratic factors: For each factor of the form ``\left(a x^2+b x+c\right)^n``, the partial fraction decomposition must include the following sum of ``n`` fractions.
+```math
+\frac{B_1 x+C_1}{a x^2+b x+c}+\frac{B_2 x+C_2}{\left(a x^2+b x+c\right)^2}+\cdots+\frac{B_n x+C_n}{\left(a x^2+b x+c\right)^n}
+```
+"""
+
+# ╔═╡ 3de417dd-e670-4e28-bb27-88abe5476f84
+cm"""
+$(ex(1,"Distinct Linear Factors"))
+Write the partial fraction decomposition for
+```math
+ \frac{1}{x^2-5x+6}
+```
+"""
+
+# ╔═╡ 16f26878-cbe0-4ac1-a593-691a2fe55aca
+cm"""
+$(ex(2,"Repeated Linear Factors"))
+Find
+```math
+\int  \frac{5x^2+20x+6}{x^3+2x^2+x}dx.
+```
+"""
+
+# ╔═╡ 7daad386-47a2-44d7-9af8-743d5712cec0
+cm"""
+$(ex(3,"Distinct Linear and Quadratic Factors"))
+
+Find
+```math
+\int  \frac{2x^3-4x-8}{(x^2-x)(x^2+4)}dx.
+
+```
+"""
+
+# ╔═╡ 98e43437-09c0-4b5d-b5b2-cb38d3d1ca20
+cm"""
+$(ex(4," Repeated Quadratic Factors"))
+```math
+\int  \frac{8x^3+13x}{(x^2+2)^2}dx.
+```
+
+"""
+
+# ╔═╡ 0cef9fcd-3734-4694-ad23-ca1465d1f96e
+cm"""
+$(bbl("Substitution for Rational Functions of Sine and Cosine",""))
+
+For integrals involving rational functions of sine and cosine, the substitution
+```math
+u=\frac{\sin x}{1+\cos x}=\tan \frac{x}{2}
+```
+yields
+```math
+\cos x=\frac{1-u^2}{1+u^2}, \quad \sin x=\frac{2 u}{1+u^2}, \quad \text { and } \quad d x=\frac{2 d u}{1+u^2}
+```
+
+"""
+
+# ╔═╡ 98f709cb-cccf-42a7-af35-e026f7369bb8
+cm"""
+$(ex())
+Find
+```math
+\begin{array}{lll}
+\text{(1)} & \displaystyle\int \frac{dx}{3\sin x - 4 \cos x}. \\
+\text{(2)} & \displaystyle\int_0^{\pi\over 2} \frac{\sin 2x \;dx}{2+\cos x}. \\
+\end{array}
+```
+
+"""
+
+# ╔═╡ c2ded1c8-a0a7-48cb-bf1d-7616796a5062
+cm"""
+$(define("Improper Integrals with Infinite Integration Limits"))
+
+**(a)** If ``\int_a^t f(x) dx`` exists for every number ``t\ge a``, then
+```math
+\int_a^{\infty} f(x) dx = \lim_{t\to \infty} \int_a^t f(x) dx
+```
+provided this limit exists (as a finite number).
+
+
+**(b)** If ``\int_t^b f(x) dx`` exists for every number ``t\le b``, then
+```math
+\int_{-\infty}^b f(x) dx = \lim_{t\to -\infty} \int_t^b f(x) dx
+```
+provided this limit exists (as a finite number).
+
+The improper integrals ``\int_a^{\infty} f(x) dx`` and ``\int_{-\infty}^b f(x) dx`` are called *__convergent__* if the corresponding limit exists and *__divergent__* if the limit does not exist.
+
+**(c)** If both ``\int_a^{\infty} f(x) dx`` and ``\int_{-\infty}^b f(x) dx`` are convergent, then we define
+```math
+\int_{-\infty}^{\infty} f(x) dx =  \int_{-\infty}^a f(x) dx +\int_a^{\infty} f(x) dx
+```
+
+In part (c) any real number  can be used
+"""
+
+# ╔═╡ 963f8130-c7f7-4b57-8bac-64c92b46c53a
+cm"""
+$(ex(1,"An Improper Integral That Diverge"))
+
+Evaluate ``\displaystyle \int_1^{\infty} \frac{1}{x} dx``.
+
+$(ex(2,"An Improper Integrals That Converge"))
+
+Evaluate each improper integral
+- (a) ``\displaystyle\int_{0}^{\infty} e^{-x} dx.``
+- (b) ``\displaystyle\int_{0}^{\infty} \frac{1}{1+x^2} dx``.
+
+
+"""
+
+# ╔═╡ 4098c133-f9d4-4198-a39b-f8fa93bf0774
+cm"""
+$(ex(3,"Using L’Hôpital’s Rule with an Improper Integra"))
+
+Evaluate
+```math
+\int_1^{\infty} (1 − x)e^{−x} dx.
+"""
+
+# ╔═╡ 71c6a056-c512-4f00-8195-a6de36bc98c8
+cm"""
+$(ex(4,"Infinite Upper and Lower Limits of Integration"))
+
+Evaluate
+```math
+\int_{-\infty}^{\infty} \frac{e^x}{1+e^{2x}} dx
+```
+"""
+
+# ╔═╡ f7b555c6-5844-4971-8693-a8ada5074b20
+cm"""
+$(define("Improper Integrals with Infinite Discontinuities"))
+1. If ``f`` is continuous on the interval ``[a, b)`` and has an infinite discontinuity at ``b``, then
+```math
+\int_a^b f(x) d x=\lim _{c \rightarrow b^{-}} \int_a^c f(x) d x
+```
+2. If ``f`` is continuous on the interval ``(a, b]`` and has an infinite discontinuity at ``a``, then
+```math
+\int_a^b f(x) d x=\lim _{c \rightarrow a^{+}} \int_c^b f(x) d x
+```
+3. If ``f`` is continuous on the interval ``[a, b]``, except for some ``c`` in ``(a, b)`` at which ``f`` has an infinite discontinuity, then
+```math
+\int_a^b f(x) d x=\int_a^c f(x) d x+\int_c^b f(x) d x
+```
+
+In the first two cases, the improper integral __converges__ when the limit existsotherwise, the improper integral __diverges__. In the third case, the improper integral on the left diverges when either of the improper integrals on the right diverges.
+"""
+
+# ╔═╡ dd990994-e154-4d4e-bca7-7fce46fb193b
+cm"""
+$(ex(6,"An Improper Integral with an Infinite Discontinuity"))
+
+Evaluate
+```math
+\int_0^1 \frac{d x}{\sqrt[3]{x}}
+```
+"""
+
+# ╔═╡ aa08f4c7-f3f3-4dc1-874f-e59e50d62e89
+cm"""
+$(ex(8,"An Improper Integral with an Interior Discontinuity"))
+
+Evaluate
+```math
+\int_{-1}^2 \frac{d x}{x^3}
+```
+"""
+
+# ╔═╡ 724736c2-d020-444c-ac64-8c35fb5aed5a
+cm"""
+$(ex(9,"A Doubly Improper Integral"))
+
+Evaluate
+```math
+\int_0^{\infty} \frac{d x}{\sqrt{x}(x+1)}
+```
+"""
+
+# ╔═╡ b7b3ab16-92e7-4e52-ae8f-42675eb8ade1
+cm"""
+$(ex(7,"An Improper Integral That Diverges"))
+
+Evaluate
+```math
+\int_0^2 \frac{d x}{x^3}
+```
+"""
+
+# ╔═╡ c5e81c70-28ae-409b-bb4b-41418fc62fab
+cm"""
+$(ex(10,"An Application Involving Arc Length"))
+
+Use the formula for arc length to show that the circumference of the circle ``x^2+y^2=1`` is ``2 \pi``.
+"""
+
+# ╔═╡ d656cb73-ab16-4d06-80c3-2432fe752c59
+cm"""
+$(bth("A Special Type of Improper Integral"))
+```math
+\int_1^{\infty} \frac{1}{x^p}dx \quad =\begin{cases}\frac{1}{p-1},&\quad & p>1\\
+\text{diverses,}&\quad&p<=1\end{cases}.
+```
+
+"""
+
+# ╔═╡ 0183ce38-0911-49ff-a120-ed8ba21fdda3
+cm"""
+$(ex(11,"An Application Involving a Solid of Revolution"))
+The solid formed by revolving (about the ``x``-axis) the unbounded region lying between the graph of ``f(x)=1 / x`` and the ``x``-axis ``(x \geq 1)`` is called Gabriel's Horn. Show that this solid has a finite volume and an infinite surface area.
+"""
+
+# ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
+initialize_eqref()
+
+# ╔═╡ 107407c8-5da0-4833-9965-75a82d84a0fb
+@htl("""
+<style>
+@import url("https://mmogib.github.io/math102/custom.css");
+
+ul {
+  list-style: none;
+}
+
+ul li:before {
+  content: '💡 ';
+}
+
+.p40 {
+    padding-left: 40px;
+}
+    example-box {
+      max-width: 600px;           /* Limits the box width */
+      margin: 2rem auto;          /* Centers the box and adds vertical spacing */
+      border: 1px solid #ccc;     /* Light border */
+      border-radius: 4px;         /* Slightly rounded corners */
+      overflow: hidden;           /* Ensures the box boundary clips its children */
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+      font-family: Arial, sans-serif;
+    }
+
+    /* Header area for "EXAMPLE 1" */
+    .example-header {
+      background: linear-gradient(90deg, #cc0000, #990000);
+      color: #fff;
+      font-weight: bold;
+      font-size: 1.1rem;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #990000;
+    }
+
+    /* Sub-header area for the title or subtitle */
+    .example-title {
+      background-color: #f9f9f9;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.75rem 1rem;
+      margin: 0;                  /* Remove default heading margins */
+      border-bottom: 1px solid #eee;
+    }
+
+    /* Main content area for the mathematical statement or instructions */
+    .example-content {
+      padding: 1rem;
+      line-height: 1.5;
+    }
+
+    /* Optional styling for inline math or emphasis */
+    em {
+      font-style: italic;
+      color: #333;
+    }
+</style>
+""")
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
@@ -1061,7 +1164,7 @@ SymPy = "24249f21-da20-56a4-8eb1-6a02cf4ae2e6"
 Colors = "~0.12.11"
 CommonMark = "~1.0.1"
 HypertextLiteral = "~0.9.5"
-IntervalArithmetic = "~1.0.1"
+IntervalArithmetic = "~1.0.3"
 LaTeXStrings = "~1.4.0"
 Latexify = "~0.16.10"
 PlotThemes = "~3.3.0"
@@ -1079,7 +1182,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.12.6"
 manifest_format = "2.0"
-project_hash = "4c52055461c1883e4e2b515f368db18e3e537d25"
+project_hash = "9c3b817ffa81ef60e907588fdc68f2644388e5b0"
 
 [[deps.AbstractFFTs]]
 deps = ["LinearAlgebra"]
@@ -1148,10 +1251,10 @@ uuid = "4e9b3aee-d8a1-5a3d-ad8b-7d824db253f0"
 version = "1.0.1+0"
 
 [[deps.Cairo_jll]]
-deps = ["Artifacts", "Bzip2_jll", "CompilerSupportLibraries_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "JLLWrappers", "LZO_jll", "Libdl", "Pixman_jll", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Zlib_jll", "libpng_jll"]
-git-tree-sha1 = "fde3bf89aead2e723284a8ff9cdf5b551ed700e8"
+deps = ["Artifacts", "Bzip2_jll", "CompilerSupportLibraries_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "JLLWrappers", "Libdl", "Pixman_jll", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Zlib_jll", "libpng_jll"]
+git-tree-sha1 = "d0efe2c6fdcdaa1c161d206aa8b933788397ec71"
 uuid = "83423d85-b0ee-5818-9007-b63ccbeb887a"
-version = "1.18.5+0"
+version = "1.18.6+0"
 
 [[deps.CodecZlib]]
 deps = ["TranscodingStreams", "Zlib_jll"]
@@ -1307,9 +1410,9 @@ version = "0.1.11"
 
 [[deps.Expat_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "27af30de8b5445644e8ffe3bcb0d72049c089cf1"
+git-tree-sha1 = "9cb7fe11da6adb8683cbacf8aa9b5237941e3a75"
 uuid = "2e619515-83b5-522b-bb60-26c02a35a201"
-version = "2.7.3+0"
+version = "2.7.5+0"
 
 [[deps.FFMPEG]]
 deps = ["FFMPEG_jll"]
@@ -1318,10 +1421,10 @@ uuid = "c87230d0-a227-11e9-1b43-d7ebe4e7570a"
 version = "0.4.5"
 
 [[deps.FFMPEG_jll]]
-deps = ["Artifacts", "Bzip2_jll", "FreeType2_jll", "FriBidi_jll", "JLLWrappers", "LAME_jll", "Libdl", "Ogg_jll", "OpenSSL_jll", "Opus_jll", "PCRE2_jll", "Zlib_jll", "libaom_jll", "libass_jll", "libfdk_aac_jll", "libvorbis_jll", "x264_jll", "x265_jll"]
-git-tree-sha1 = "ccc81ba5e42497f4e76553a5545665eed577a663"
+deps = ["Artifacts", "Bzip2_jll", "FreeType2_jll", "FriBidi_jll", "JLLWrappers", "LAME_jll", "Libdl", "Ogg_jll", "OpenSSL_jll", "Opus_jll", "PCRE2_jll", "Zlib_jll", "libaom_jll", "libass_jll", "libfdk_aac_jll", "libva_jll", "libvorbis_jll", "x264_jll", "x265_jll"]
+git-tree-sha1 = "cac41ca6b2d399adfc95e51240566f8a60a80806"
 uuid = "b22a6f82-2f65-5046-a5b2-351ab43fb4e5"
-version = "8.0.0+0"
+version = "8.1.0+0"
 
 [[deps.FFTW_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -1362,9 +1465,9 @@ version = "1.3.7"
 
 [[deps.FreeType2_jll]]
 deps = ["Artifacts", "Bzip2_jll", "JLLWrappers", "Libdl", "Zlib_jll"]
-git-tree-sha1 = "2c5512e11c791d1baed2049c5652441b28fc6a31"
+git-tree-sha1 = "70329abc09b886fd2c5d94ad2d9527639c421e3e"
 uuid = "d7e528f0-a631-5988-bf34-fe36492bcfd7"
-version = "2.13.4+0"
+version = "2.14.3+1"
 
 [[deps.FriBidi_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -1374,21 +1477,27 @@ version = "1.0.17+0"
 
 [[deps.GLFW_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libglvnd_jll", "Xorg_libXcursor_jll", "Xorg_libXi_jll", "Xorg_libXinerama_jll", "Xorg_libXrandr_jll", "libdecor_jll", "xkbcommon_jll"]
-git-tree-sha1 = "fcb0584ff34e25155876418979d4c8971243bb89"
+git-tree-sha1 = "9e0fb9e54594c47f278d75063980e43066e26e20"
 uuid = "0656b61e-2033-5cc2-a64a-77c0f6c09b89"
-version = "3.4.0+2"
+version = "3.4.1+1"
 
 [[deps.GR]]
 deps = ["Artifacts", "Base64", "DelimitedFiles", "Downloads", "GR_jll", "HTTP", "JSON", "Libdl", "LinearAlgebra", "Preferences", "Printf", "Qt6Wayland_jll", "Random", "Serialization", "Sockets", "TOML", "Tar", "Test", "p7zip_jll"]
-git-tree-sha1 = "f52c27dd921390146624f3aab95f4e8614ad6531"
+git-tree-sha1 = "44716a1a667cb867ee0e9ec8edc31c3e4aa5afdc"
 uuid = "28b8d3ca-fb5f-59d9-8090-bfdbd6d07a71"
-version = "0.73.18"
+version = "0.73.24"
+
+    [deps.GR.extensions]
+    IJuliaExt = "IJulia"
+
+    [deps.GR.weakdeps]
+    IJulia = "7073ff75-c697-5162-941a-fcdaad2a7d2a"
 
 [[deps.GR_jll]]
 deps = ["Artifacts", "Bzip2_jll", "Cairo_jll", "FFMPEG_jll", "Fontconfig_jll", "FreeType2_jll", "GLFW_jll", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "Pixman_jll", "Qt6Base_jll", "Zlib_jll", "libpng_jll"]
-git-tree-sha1 = "4b0406b866ea9fdbaf1148bc9c0b887e59f9af68"
+git-tree-sha1 = "be8a1b8065959e24fdc1b51402f39f3b6f0f6653"
 uuid = "d2c73de3-f751-5644-a686-071e5b155ba9"
-version = "0.73.18+0"
+version = "0.73.24+0"
 
 [[deps.GettextRuntime_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Libiconv_jll"]
@@ -1410,9 +1519,9 @@ version = "5.2.3+0"
 
 [[deps.Glib_jll]]
 deps = ["Artifacts", "GettextRuntime_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Libiconv_jll", "Libmount_jll", "PCRE2_jll", "Zlib_jll"]
-git-tree-sha1 = "50c11ffab2a3d50192a228c313f05b5b5dc5acb2"
+git-tree-sha1 = "24f6def62397474a297bfcec22384101609142ed"
 uuid = "7746bdde-850d-59dc-9ae8-88ece973131d"
-version = "2.86.0+0"
+version = "2.86.3+0"
 
 [[deps.Graphics]]
 deps = ["Colors", "LinearAlgebra", "NaNMath"]
@@ -1493,9 +1602,9 @@ version = "1.4.2"
 
 [[deps.ImageMagick_jll]]
 deps = ["Artifacts", "Bzip2_jll", "FFTW_jll", "Ghostscript_jll", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "OpenJpeg_jll", "Zlib_jll", "Zstd_jll", "libpng_jll", "libwebp_jll", "libzip_jll"]
-git-tree-sha1 = "d670e8e3adf0332f57054955422e85a4aec6d0b0"
+git-tree-sha1 = "2c232857f2eb9ecfa3ab534df7f060c9afbeb187"
 uuid = "c73af94c-d91f-53ed-93a7-00f77d67a9d7"
-version = "7.1.2005+0"
+version = "7.1.2011+0"
 
 [[deps.ImageMetadata]]
 deps = ["AxisArrays", "ImageAxes", "ImageBase", "ImageCore"]
@@ -1505,9 +1614,9 @@ version = "0.9.9"
 
 [[deps.Imath_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "0936ba688c6d201805a83da835b55c61a180db52"
+git-tree-sha1 = "dcc8d0cd653e55213df9b75ebc6fe4a8d3254c65"
 uuid = "905a6f67-0a94-5f89-b386-d35d92009cd1"
-version = "3.1.11+0"
+version = "3.2.2+0"
 
 [[deps.IndirectArrays]]
 git-tree-sha1 = "012e604e1c7458645cb8b436f8fba789a51b257f"
@@ -1526,9 +1635,9 @@ version = "1.11.0"
 
 [[deps.IntervalArithmetic]]
 deps = ["CRlibm", "MacroTools", "OpenBLASConsistentFPCSR_jll", "Printf", "Random", "RoundingEmulator"]
-git-tree-sha1 = "bf0210c01fb7d67c31fed97d7c1d1716b98ea689"
+git-tree-sha1 = "2cce1fed119ca7b6cc230c4a3b85202478af7924"
 uuid = "d1acc4aa-44c8-5952-acd4-ba5d80a2a253"
-version = "1.0.1"
+version = "1.0.3"
 
     [deps.IntervalArithmetic.extensions]
     IntervalArithmeticArblibExt = "Arblib"
@@ -1606,9 +1715,9 @@ version = "0.1.6"
 
 [[deps.JpegTurbo_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "b6893345fd6658c8e475d40155789f4860ac3b21"
+git-tree-sha1 = "c0c9b76f3520863909825cbecdef58cd63de705a"
 uuid = "aacddb02-875f-59d6-b918-886e6ef4fbf8"
-version = "3.1.4+0"
+version = "3.1.5+0"
 
 [[deps.JuliaSyntaxHighlighting]]
 deps = ["StyledStrings"]
@@ -1623,21 +1732,15 @@ version = "3.100.3+0"
 
 [[deps.LERC_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "aaafe88dccbd957a8d82f7d05be9b69172e0cee3"
+git-tree-sha1 = "17b94ecafcfa45e8360a4fc9ca6b583b049e4e37"
 uuid = "88015f11-f218-50d7-93a8-a6af411a945d"
-version = "4.0.1+0"
+version = "4.1.0+0"
 
 [[deps.LLVMOpenMP_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
 git-tree-sha1 = "eb62a3deb62fc6d8822c0c4bef73e4412419c5d8"
 uuid = "1d63c593-3942-5779-bab2-d838dc0a180e"
 version = "18.1.8+0"
-
-[[deps.LZO_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "1c602b1127f4751facb671441ca72715cc95938a"
-uuid = "dd4b983a-f0e5-5f8d-a1b7-129d4a5fb1ac"
-version = "2.10.3+0"
 
 [[deps.LaTeXStrings]]
 git-tree-sha1 = "dda21b8cbd6a6c40d9d02a73230f9d70fed6918c"
@@ -1716,9 +1819,9 @@ version = "1.18.0+0"
 
 [[deps.Libmount_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "97bbca976196f2a1eb9607131cb108c69ec3f8a6"
+git-tree-sha1 = "cc3ad4faf30015a3e8094c9b5b7f19e85bdf2386"
 uuid = "4b2f31a3-9ecc-558c-b454-b3730dcb73e9"
-version = "2.41.3+0"
+version = "2.42.0+0"
 
 [[deps.Libtiff_jll]]
 deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "LERC_jll", "Libdl", "XZ_jll", "Zlib_jll", "Zstd_jll"]
@@ -1728,9 +1831,9 @@ version = "4.7.2+0"
 
 [[deps.Libuuid_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "d0205286d9eceadc518742860bf23f703779a3d6"
+git-tree-sha1 = "d620582b1f0cbe2c72dd1d5bd195a9ce73370ab1"
 uuid = "38a345b3-de98-5d2b-a5d3-14cd9215e700"
-version = "2.41.3+0"
+version = "2.42.0+0"
 
 [[deps.LinearAlgebra]]
 deps = ["Libdl", "OpenBLAS_jll", "libblastrampoline_jll"]
@@ -1867,9 +1970,9 @@ version = "1.3.6+0"
 
 [[deps.OpenBLASConsistentFPCSR_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "567515ca155d0020a45b05175449b499c63e7015"
+git-tree-sha1 = "f2b3b9e52a5eb6a3434c8cca67ad2dde011194f4"
 uuid = "6cdc7f73-28fd-5e50-80fb-958a8875b1af"
-version = "0.3.29+0"
+version = "0.3.30+0"
 
 [[deps.OpenBLAS_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
@@ -1884,9 +1987,9 @@ version = "0.3.3"
 
 [[deps.OpenEXR_jll]]
 deps = ["Artifacts", "Imath_jll", "JLLWrappers", "Libdl", "Zlib_jll"]
-git-tree-sha1 = "8292dd5c8a38257111ada2174000a33745b06d4e"
+git-tree-sha1 = "135492b7e97fc86d9b132b96a54d2d3dd3e0c6a8"
 uuid = "18a262bb-aa17-5467-a713-aee519bc75cb"
-version = "3.2.4+0"
+version = "3.4.8+0"
 
 [[deps.OpenJpeg_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libtiff_jll", "LittleCMS_jll", "libpng_jll"]
@@ -1918,9 +2021,9 @@ version = "0.5.6+0"
 
 [[deps.Opus_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "c392fc5dd032381919e3b22dd32d6443760ce7ea"
+git-tree-sha1 = "e2bb57a313a74b8104064b7efd01406c0a50d2ff"
 uuid = "91d4177d-7536-5919-b921-800302f37372"
-version = "1.5.2+0"
+version = "1.6.1+0"
 
 [[deps.OrderedCollections]]
 git-tree-sha1 = "05868e21324cede2207c6f0f466b4bfef6d5e7ee"
@@ -1946,9 +2049,9 @@ version = "0.5.12"
 
 [[deps.Pango_jll]]
 deps = ["Artifacts", "Cairo_jll", "Fontconfig_jll", "FreeType2_jll", "FriBidi_jll", "Glib_jll", "HarfBuzz_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "1f7f9bbd5f7a2e5a9f7d96e51c9754454ea7f60b"
+git-tree-sha1 = "58e5ed5e386e156bd93e86b305ebd21ac63d2d04"
 uuid = "36c8627f-9965-5494-a995-c6b170f724f3"
-version = "1.56.4+0"
+version = "1.57.1+0"
 
 [[deps.Parsers]]
 deps = ["Dates", "PrecompileTools", "UUIDs"]
@@ -2076,27 +2179,33 @@ version = "1.4.5"
 
 [[deps.Qt6Base_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Fontconfig_jll", "Glib_jll", "JLLWrappers", "Libdl", "Libglvnd_jll", "OpenSSL_jll", "Vulkan_Loader_jll", "Xorg_libSM_jll", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Xorg_libxcb_jll", "Xorg_xcb_util_cursor_jll", "Xorg_xcb_util_image_jll", "Xorg_xcb_util_keysyms_jll", "Xorg_xcb_util_renderutil_jll", "Xorg_xcb_util_wm_jll", "Zlib_jll", "libinput_jll", "xkbcommon_jll"]
-git-tree-sha1 = "34f7e5d2861083ec7596af8b8c092531facf2192"
+git-tree-sha1 = "d7a4bff94f42208ce3cf6bc8e4e7d1d663e7ee8b"
 uuid = "c0090381-4147-56d7-9ebc-da0b1113ec56"
-version = "6.8.2+2"
+version = "6.10.2+1"
 
 [[deps.Qt6Declarative_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Qt6Base_jll", "Qt6ShaderTools_jll"]
-git-tree-sha1 = "da7adf145cce0d44e892626e647f9dcbe9cb3e10"
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Qt6Base_jll", "Qt6ShaderTools_jll", "Qt6Svg_jll"]
+git-tree-sha1 = "d5b7dd0e226774cbd87e2790e34def09245c7eab"
 uuid = "629bc702-f1f5-5709-abd5-49b8460ea067"
-version = "6.8.2+1"
+version = "6.10.2+1"
 
 [[deps.Qt6ShaderTools_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Qt6Base_jll"]
-git-tree-sha1 = "9eca9fc3fe515d619ce004c83c31ffd3f85c7ccf"
+git-tree-sha1 = "4d85eedf69d875982c46643f6b4f66919d7e157b"
 uuid = "ce943373-25bb-56aa-8eca-768745ed7b5a"
-version = "6.8.2+1"
+version = "6.10.2+1"
+
+[[deps.Qt6Svg_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Qt6Base_jll"]
+git-tree-sha1 = "81587ff5ff25a4e1115ce191e36285ede0334c9d"
+uuid = "6de9746b-f93d-5813-b365-ba18ad4a9cf3"
+version = "6.10.2+0"
 
 [[deps.Qt6Wayland_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Qt6Base_jll", "Qt6Declarative_jll"]
-git-tree-sha1 = "8f528b0851b5b7025032818eb5abbeb8a736f853"
+git-tree-sha1 = "672c938b4b4e3e0169a07a5f227029d4905456f2"
 uuid = "e99dba38-086e-5de3-a5b1-6e4c66e897c3"
-version = "6.8.2+2"
+version = "6.10.2+1"
 
 [[deps.REPL]]
 deps = ["InteractiveUtils", "JuliaSyntaxHighlighting", "Markdown", "Sockets", "StyledStrings", "Unicode"]
@@ -2278,9 +2387,9 @@ version = "0.4.4"
 
 [[deps.StructUtils]]
 deps = ["Dates", "UUIDs"]
-git-tree-sha1 = "fa95b3b097bcef5845c142ea2e085f1b2591e92c"
+git-tree-sha1 = "86f5831495301b2a1387476cb30f86af7ab99194"
 uuid = "ec057cc2-7a8d-4b58-b3b3-92acb9f63b42"
-version = "2.7.1"
+version = "2.8.0"
 
     [deps.StructUtils.extensions]
     StructUtilsMeasurementsExt = ["Measurements"]
@@ -2423,9 +2532,9 @@ version = "1.24.0+0"
 
 [[deps.XZ_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "fee71455b0aaa3440dfdd54a9a36ccef829be7d4"
+git-tree-sha1 = "b29c22e245d092b8b4e8d3c09ad7baa586d9f573"
 uuid = "ffd25f8a-64ca-5728-b0f7-c24cf3aae800"
-version = "5.8.1+0"
+version = "5.8.3+0"
 
 [[deps.Xorg_libICE_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -2498,6 +2607,12 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libX11_jll"]
 git-tree-sha1 = "7ed9347888fac59a618302ee38216dd0379c480d"
 uuid = "ea2f1a96-1ddc-540d-b46f-429655e07cfa"
 version = "0.9.12+0"
+
+[[deps.Xorg_libpciaccess_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Zlib_jll"]
+git-tree-sha1 = "4909eb8f1cbf6bd4b1c30dd18b2ead9019ef2fad"
+uuid = "a65dc6b1-eb27-53a1-bb3e-dea574b5389e"
+version = "0.18.1+0"
 
 [[deps.Xorg_libxcb_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libXau_jll", "Xorg_libXdmcp_jll"]
@@ -2590,9 +2705,9 @@ version = "0.61.1+0"
 
 [[deps.libaom_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "371cc681c00a3ccc3fbc5c0fb91f58ba9bec1ecf"
+git-tree-sha1 = "850b06095ee71f0135d644ffd8a52850699581ed"
 uuid = "a4ae2306-e953-59d6-aa16-d00cac43593b"
-version = "3.13.1+0"
+version = "3.13.3+0"
 
 [[deps.libass_jll]]
 deps = ["Artifacts", "Bzip2_jll", "FreeType2_jll", "FriBidi_jll", "HarfBuzz_jll", "JLLWrappers", "Libdl", "Zlib_jll"]
@@ -2610,6 +2725,12 @@ deps = ["Artifacts", "Dbus_jll", "JLLWrappers", "Libdl", "Libglvnd_jll", "Pango_
 git-tree-sha1 = "9bf7903af251d2050b467f76bdbe57ce541f7f4f"
 uuid = "1183f4f0-6f2a-5f1a-908b-139f9cdfea6f"
 version = "0.2.2+0"
+
+[[deps.libdrm_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libpciaccess_jll"]
+git-tree-sha1 = "63aac0bcb0b582e11bad965cef4a689905456c03"
+uuid = "8e53e030-5e6c-5a89-a30b-be5b7263a166"
+version = "2.4.125+1"
 
 [[deps.libevdev_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -2631,15 +2752,21 @@ version = "1.28.1+0"
 
 [[deps.libpng_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Zlib_jll"]
-git-tree-sha1 = "07b6a107d926093898e82b3b1db657ebe33134ec"
+git-tree-sha1 = "e51150d5ab85cee6fc36726850f0e627ad2e4aba"
 uuid = "b53b4c65-9356-5827-b1ea-8c7a1a84506f"
-version = "1.6.50+0"
+version = "1.6.58+0"
 
 [[deps.libsixel_jll]]
 deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "Libdl", "libpng_jll"]
 git-tree-sha1 = "c1733e347283df07689d71d61e14be986e49e47a"
 uuid = "075b6546-f08a-558a-be8f-8157d0f608a5"
 version = "1.10.5+0"
+
+[[deps.libva_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Xorg_libX11_jll", "Xorg_libXext_jll", "Xorg_libXfixes_jll", "libdrm_jll"]
+git-tree-sha1 = "7dbf96baae3310fe2fa0df0ccbb3c6288d5816c9"
+uuid = "9a156e7d-b971-5f62-b2c9-67348b8fb97c"
+version = "2.23.0+0"
 
 [[deps.libvorbis_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Ogg_jll"]
@@ -2695,11 +2822,11 @@ version = "1.13.0+0"
 """
 
 # ╔═╡ Cell order:
+# ╠═71bc54d5-d0ed-42d3-9bc1-48aa86e91d1d
 # ╠═e414122f-b93a-4510-b8ae-026c303e0df9
-# ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
-# ╠═b4599a16-e7f7-4a2a-b349-2648ee45208f
-# ╠═8315fb27-89e4-44a4-a51e-8e55fc3d58e5
-# ╠═ef081dfa-b610-4c7a-a039-7258f4f6e80e
+# ╟─8408e369-40eb-4f9b-a7d7-26cde3e34a74
+# ╠═cd269caf-ef81-43d7-a1a8-6668932b6363
+# ╠═d6d85087-9ecc-4043-9002-e4a6442b829e
 # ╠═8f8766fa-c168-4f09-8703-347a139b7069
 # ╠═598055ab-2b36-481e-bb7d-65edfcfe183b
 # ╠═200f43c8-fd32-438e-9582-a995a4026086
@@ -2776,5 +2903,11 @@ version = "1.13.0+0"
 # ╠═c5e81c70-28ae-409b-bb4b-41418fc62fab
 # ╠═d656cb73-ab16-4d06-80c3-2432fe752c59
 # ╠═0183ce38-0911-49ff-a120-ed8ba21fdda3
+# ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
+# ╠═b4599a16-e7f7-4a2a-b349-2648ee45208f
+# ╠═8315fb27-89e4-44a4-a51e-8e55fc3d58e5
+# ╠═ef081dfa-b610-4c7a-a039-7258f4f6e80e
+# ╠═da9230a6-088d-4735-b206-9514c12dd223
+# ╠═107407c8-5da0-4833-9965-75a82d84a0fb
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002

@@ -7,64 +7,109 @@
   <style>
     :root {
       color-scheme: light;
-      --ink: #1f2933;
-      --muted: #52606d;
-      --paper: #f7f4ed;
-      --card: #ffffff;
+      --ink: #1d2430;
+      --muted: #5c6573;
+      --paper: #f4f1e8;
+      --card: rgba(255, 255, 255, 0.92);
       --accent: #0f766e;
+      --accent-soft: rgba(15, 118, 110, 0.12);
+    }
+    * {
+      box-sizing: border-box;
     }
     body {
       margin: 0;
       font-family: Georgia, "Times New Roman", serif;
       color: var(--ink);
       background:
-        radial-gradient(circle at top left, rgba(15, 118, 110, 0.16), transparent 32rem),
-        linear-gradient(135deg, #f7f4ed 0%, #eef2ef 100%);
+        radial-gradient(circle at top left, rgba(15, 118, 110, 0.16), transparent 28rem),
+        radial-gradient(circle at 90% 10%, rgba(220, 138, 47, 0.12), transparent 18rem),
+        linear-gradient(135deg, #f8f5ee 0%, #eef2ef 100%);
     }
     main {
       max-width: 56rem;
       margin: 0 auto;
-      padding: 5rem 1.25rem;
+      padding: 4.5rem 1.25rem 5rem;
     }
     .card {
       background: var(--card);
       border: 1px solid rgba(31, 41, 51, 0.12);
-      border-radius: 1.25rem;
+      border-radius: 1.5rem;
       box-shadow: 0 1.5rem 4rem rgba(31, 41, 51, 0.12);
       padding: clamp(1.5rem, 4vw, 3rem);
+      backdrop-filter: blur(12px);
     }
     h1 {
       margin: 0;
-      font-size: clamp(2.25rem, 7vw, 4.5rem);
+      font-size: clamp(2.4rem, 7vw, 4.75rem);
       line-height: 0.95;
-      letter-spacing: -0.05em;
+      letter-spacing: -0.06em;
     }
-    p {
+    .lede {
       color: var(--muted);
       font-size: 1.15rem;
       line-height: 1.7;
       max-width: 42rem;
+      margin: 1rem 0 0;
     }
-    ul {
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      margin: 1.4rem 0 0;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0.35rem 0.8rem;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .chapter-grid {
       display: grid;
-      gap: 0.9rem;
-      list-style: none;
+      grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+      gap: 0.95rem;
       margin: 2rem 0 0;
       padding: 0;
     }
-    a {
-      display: block;
-      border: 1px solid rgba(15, 118, 110, 0.22);
-      border-radius: 0.85rem;
-      padding: 1rem 1.1rem;
+    .chapter-card {
+      border: 1px solid rgba(15, 118, 110, 0.18);
+      border-radius: 1rem;
+      padding: 1rem 1.05rem;
+      background: rgba(15, 118, 110, 0.04);
+      transition: transform 150ms ease, background 150ms ease, border-color 150ms ease;
+    }
+    .chapter-card:hover {
+      transform: translateY(-2px);
+      background: rgba(15, 118, 110, 0.09);
+      border-color: rgba(15, 118, 110, 0.28);
+    }
+    .chapter-label {
+      color: var(--muted);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .chapter-link {
+      display: inline-block;
+      margin-top: 0.35rem;
       color: var(--accent);
-      font-size: 1.1rem;
+      font-size: 1.08rem;
       font-weight: 700;
       text-decoration: none;
-      background: rgba(15, 118, 110, 0.04);
     }
-    a:hover {
-      background: rgba(15, 118, 110, 0.1);
+    .chapter-link:hover {
+      text-decoration: underline;
+    }
+    .footer {
+      margin-top: 1.5rem;
+      color: var(--muted);
+      font-size: 0.95rem;
     }
   </style>
 </head>
@@ -72,28 +117,40 @@
   <main>
     <section class="card">
       <h1>MATH102<br>Calculus II</h1>
-      <p>
+      <p class="lede">
         Course notes for MATH102, organized as standalone Pluto notebook exports.
         Select a chapter below to open the static notes.
       </p>
-      <ul>
-        <li>
-  <a href="MATH_102_CH5.html">Chapter 5: Integration</a>
-</li>
+      <div class="meta">
+        <span class="chip">Pluto exports</span>
+        <span class="chip">Static notes</span>
+        <span class="chip">4 chapters</span>
+      </div>
+      <div class="chapter-grid">
+        <article class="chapter-card">
+  <div class="chapter-label">Chapter 5</div>
+  <a class="chapter-link" href="MATH_102_CH5.html">Chapter 5: Integration</a>
+</article>
 
-<li>
-  <a href="MATH_102_CH7.html">Chapter 7: Applications of Integration</a>
-</li>
+<article class="chapter-card">
+  <div class="chapter-label">Chapter 7</div>
+  <a class="chapter-link" href="MATH_102_CH7.html">Chapter 7: Applications of Integration</a>
+</article>
 
-<li>
-  <a href="MATH_102_CH8.html">Chapter 8: Integration Techniques and Improper Integrals</a>
-</li>
+<article class="chapter-card">
+  <div class="chapter-label">Chapter 8</div>
+  <a class="chapter-link" href="MATH_102_CH8.html">Chapter 8: Integration Techniques and Improper Integrals</a>
+</article>
 
-<li>
-  <a href="MATH_102_CH9.html">Chapter 9: Sequences and Series</a>
-</li>
+<article class="chapter-card">
+  <div class="chapter-label">Chapter 9</div>
+  <a class="chapter-link" href="MATH_102_CH9.html">Chapter 9: Sequences and Series</a>
+</article>
 
-      </ul>
+      </div>
+      <p class="footer">
+        Each chapter opens as a standalone static notebook export.
+      </p>
     </section>
   </main>
 </body>

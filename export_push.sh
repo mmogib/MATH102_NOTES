@@ -7,7 +7,9 @@ if [[ $# -eq 0 ]]; then
   exit 1
 fi
 
-message="$*"
+message="$1"
+shift
+export_args=("$@")
 
 run_or_fail() {
   "$@"
@@ -19,7 +21,7 @@ run_or_fail() {
   fi
 }
 
-run_or_fail julia --project=. src/export.jl
+run_or_fail julia --project=. src/export.jl "${export_args[@]}"
 run_or_fail git add .
 run_or_fail git commit -m "$message"
 run_or_fail git push

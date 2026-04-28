@@ -16,27 +16,8 @@ macro bind(def, element)
     #! format: on
 end
 
-# ╔═╡ f2d4c2a5-f486-407b-b31b-d2efcc7476b3
-begin
-    using CommonMark
-    using PlutoUI, PlutoExtras
-    using Plots, PlotThemes, LaTeXStrings
-    using Latexify
-    using HypertextLiteral
-    using Colors
-    using LinearAlgebra, Random, Printf, SparseArrays
-    # using Symbolics
-    using SymPy
-    using QRCoders
-    using PrettyTables
-    # using Primes
-    # using LinearSolve
-    # using NonlinearSolve
-    # using ForwardDiff
-    # using Integrals
-    # using OrdinaryDiffEq
-    using IntervalArithmetic
-end
+# ╔═╡ 71bc54d5-d0ed-42d3-9bc1-48aa86e91d1d
+TableOfContents(title="📚 MATH102: Calculus III", indent=true, depth=4)
 
 # ╔═╡ e414122f-b93a-4510-b8ae-026c303e0df9
 begin
@@ -49,180 +30,38 @@ begin
     end
 end
 
-# ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
-function rect(x, Δx, xs, f; direction=:x)
-    if direction == :y
-        Shape([(0, x), (0, x + Δx), (f(xs), x + Δx), (f(xs), x)])
-    else
-        Shape([(x, 0), (x + Δx, 0), (x + Δx, f(xs)), (x, f(xs))])
-    end
-
-end
-
-# ╔═╡ 8315fb27-89e4-44a4-a51e-8e55fc3d58e5
-function reimannSum(f, n, a, b; method="l", color=:green,
-                    plot_it=false,
-                    direction=:x,
-                    partitioning=nothing
-                   )
-    Δx = (b - a) / n
-    x = a:0.01:b
-    # plot(f;xlim=(-2π,2π), xticks=(-2π:(π/2):2π,["$c π" for c in -2:0.5:2]))
-
-    (partition, recs, ss) = if method == "r"
-        parts = (a+Δx):Δx:b
-        rcs = [rect(p - Δx, Δx, p, f; direction=direction) for p in parts]
-        (parts, rcs, nothing)
-    elseif method == "m"
-        parts = (a+(Δx/2)):Δx:(b-(Δx/2))
-        rcs = [rect(p - Δx / 2, Δx, p, f; direction=direction) for p in parts]
-        (parts, rcs, nothing)
-    elseif method == "l"
-        parts = a:Δx:(b-Δx)
-        rcs = [rect(p, Δx, p, f; direction=direction) for p in parts]
-        (parts, rcs, nothing)
-    elseif method == "u" # for user
-        @assert !isnothing(partitioning) "You must provide a partitioning function."
-        Δxs, parts = partitioning()
-        rcs = [rect(parts[i]-Δxs[i], Δxs[i], parts[i], f; direction=direction) for i in 1:length(parts)]
-        ss = round(sum(f.(parts) .* Δxs), sigdigits=6)
-        (parts, rcs, ss)
-    else
-        parts = a:Δx:(b-Δx)
-        rcs = [rect(p, Δx, rand(p:0.1:p+Δx), f; direction=direction) for p in parts]
-        (parts, rcs, nothing)
-    end
-    # recs= [rect(sample(p,Δx),Δx,p,f) for p in partition]
-    p = direction == :y ? plot(f.(x), x; legend=nothing) : plot(x, f.(x); legend=nothing)
-    plot!(p, recs, framestyle=:origin, opacity=0.4, color=color)
-    s = isnothing(ss) ? round(sum(f.(partition) * Δx), sigdigits=6) : ss
-    return plot_it ? (p, s) : s
-end
-
-# ╔═╡ ef081dfa-b610-4c7a-a039-7258f4f6e80e
+# ╔═╡ 8408e369-40eb-4f9b-a7d7-26cde3e34a74
 begin
-    function add_space(n=1)
-        repeat("&nbsp;", n)
-    end
-    function post_img(img::String, w=500)
-        res = Resource(img, :width => w)
-        cm"""
-      <div class="img-container">
+    text_book = post_img("https://www.dropbox.com/scl/fi/upln00gqvnbdy7whr23pj/larson_book.jpg?rlkey=wlkgmzw2ernadd9b8v8qwu2jd&dl=1", 200)
+    md""" # Syllabus
+    ## Syallbus
+    See here [Term 252 - MATH102 - Syllabus](https://math.kfupm.edu.sa/docs/default-source/css-library/math102-252.pdf)
+    ## Textbook
+    __Textbook: Edwards, C. H., Penney, D. E., and Calvis, D. T., Differential Equations and Linear Algebra, Fourth edition, Pearson, 2021__
+    $text_book
 
-      $(res)
+    ## Office Hours
+    I strongly encourage all students to make use of my office hours. These dedicated times are a valuable opportunity for you to ask questions, seek clarification on lecture material, discuss challenging problems, and get personalized feedback on your work. Engaging with me during office hours can greatly enhance your understanding of the course content and improve your performance. Whether you're struggling with a specific concept or simply want to delve deeper into the subject, I am here to support your learning journey. Don't hesitate to drop by; __your success is my priority__.
 
-      </div>"""
-    end
-    function poolcode()
-        cm"""
-      <div class="img-container">
-
-      $(Resource("https://www.dropbox.com/s/cat9ots4ausfzyc/qrcode_itempool.com_kfupm.png?raw=1",:width=>300))
-
-      </div>"""
-    end
-    function define(t="")
-        beginBlock("Definition", t)
-    end
-    function remark(t="")
-        beginBlock("Remark", t)
-    end
-    function remarks(t="")
-        beginBlock("Remarks", t)
-    end
-    function bbl(t)
-        beginBlock(t, "")
-    end
-    function bbl(t, s)
-        beginBlock(t, s)
-    end
-    ebl() = endBlock()
-    function theorem(s)
-        bth(s)
-    end
-    function bth(s)
-        beginTheorem(s)
-    end
-    eth() = endTheorem()
-    ex(n::Int; s::String="") = ex("Example $n", s)
-    ex(t::Int, s::String) = example("Example $t", s)
-    ex(t, s) = example(t, s)
-    function beginBlock(title, subtitle)
-        """<div style="box-sizing: border-box;">
-           <div style="display: flex;flex-direction: column;border: 6px solid rgba(200,200,200,0.5);box-sizing: border-box;">
-           <div style="display: flex;">
-           <div style="background-color: #FF9733;
-               border-left: 10px solid #df7300;
-               padding: 5px 10px;
-               color: #fff!important;
-               clear: left;
-               margin-left: 0;font-size: 112%;
-               line-height: 1.3;
-               font-weight: 600;">$title</div>  <div style="olor: #000!important;
-               margin: 0 0 20px 25px;
-               float: none;
-               clear: none;
-               padding: 5px 0 0 0;
-               margin: 0 0 0 20px;
-               background-color: transparent;
-               border: 0;
-               overflow: hidden;
-               min-width: 100px;font-weight: 600;
-               line-height: 1.5;">$subtitle</div>
-           </div>
-           <p style="padding:5px;">
-       """
-    end
-    function beginTheorem(subtitle)
-        beginBlock("Theorem", subtitle)
-    end
-    function endBlock()
-        """</p></div></div>"""
-    end
-    function endTheorem()
-        endBlock()
-    end
-    ex() = example("Example", "")
-    # function example(lable, desc)
-    #     """<div style="display:flex;">
-    #    <div style="
-    #    font-size: 112%;
-    #        line-height: 1.3;
-    #        font-weight: 600;
-    #        color: #f9ce4e;
-    #        float: left;
-    #        background-color: #5c5c5c;
-    #        border-left: 10px solid #474546;
-    #        padding: 5px 10px;
-    #        margin: 0 12px 20px 0;
-    #        border-radius: 0;
-    #    ">$lable:</div>
-    #    <div style="flex-grow:3;
-    #    line-height: 1.3;
-    #        font-weight: 600;
-    #        float: left;
-    #        padding: 5px 10px;
-    #        margin: 0 12px 20px 0;
-    #        border-radius: 0;
-    #    ">$desc</div>
-    #    </div>"""
-    # end
-    function example(lable, desc)
-        """<div class="example-box">
-    <div class="example-header">
-      $lable
-    </div>
-    <div class="example-title">
-      $desc
-    </div>
-    <div class="example-content">
-
-  </div>
-  """
-    end
-
-    @htl("")
+    | Day       | Time        |
+    |-----------|-------------|
+    | Sunday    | 11:00-11:50AM |
+    | Tuesday    | 11:00-11:50AM |
+    Also you can ask for an online meeting through __TEAMS__.
+    """
 end
+
+# ╔═╡ cd269caf-ef81-43d7-a1a8-6668932b6363
+# exportqrcode("https://www.mathmatize.com/")
+# let
+#     img = LocalImage("../qrcode.png")
+# end
+
+# ╔═╡ d6d85087-9ecc-4043-9002-e4a6442b829e
+md"""
+
+# [AI-STUDY RESOURCE](https://notebooklm.google.com/notebook/f9f5eb4d-5782-4586-9f7e-abdb60f1b694)
+"""
 
 # ╔═╡ 8b65d45c-ca7c-4e5d-9cfd-a7348547ebe0
 md"# 5.2 Area"
@@ -1564,7 +1403,6 @@ md"## Change of Variables for Indefinite Integrals"
 
 # ╔═╡ a73db7b8-3464-4852-a9ef-5d0de43d4395
 
-
 # ╔═╡ 2b68430f-08ac-4bfb-a484-e6fbe08738ba
 
 cm"""
@@ -2140,6 +1978,266 @@ $(Resource("https://www.dropbox.com/s/yc0305sd3i8yr44/inverse_hyper_graphs.jpg?r
 
 
 # end
+
+# ╔═╡ f2d4c2a5-f486-407b-b31b-d2efcc7476b3
+begin
+    using CommonMark
+    using PlutoUI, PlutoExtras
+    using Plots, PlotThemes, LaTeXStrings
+    using Latexify
+    using HypertextLiteral
+    using Colors
+    using LinearAlgebra, Random, Printf, SparseArrays
+    # using Symbolics
+    using SymPy
+    using QRCoders
+    using PrettyTables
+    # using Primes
+    # using LinearSolve
+    # using NonlinearSolve
+    # using ForwardDiff
+    # using Integrals
+    # using OrdinaryDiffEq
+    using IntervalArithmetic
+end
+
+# ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
+function rect(x, Δx, xs, f; direction=:x)
+    if direction == :y
+        Shape([(0, x), (0, x + Δx), (f(xs), x + Δx), (f(xs), x)])
+    else
+        Shape([(x, 0), (x + Δx, 0), (x + Δx, f(xs)), (x, f(xs))])
+    end
+
+end
+
+# ╔═╡ 8315fb27-89e4-44a4-a51e-8e55fc3d58e5
+function reimannSum(f, n, a, b; method="l", color=:green,
+                    plot_it=false,
+                    direction=:x,
+                    partitioning=nothing
+                   )
+    Δx = (b - a) / n
+    x = a:0.01:b
+    # plot(f;xlim=(-2π,2π), xticks=(-2π:(π/2):2π,["$c π" for c in -2:0.5:2]))
+
+    (partition, recs, ss) = if method == "r"
+        parts = (a+Δx):Δx:b
+        rcs = [rect(p - Δx, Δx, p, f; direction=direction) for p in parts]
+        (parts, rcs, nothing)
+    elseif method == "m"
+        parts = (a+(Δx/2)):Δx:(b-(Δx/2))
+        rcs = [rect(p - Δx / 2, Δx, p, f; direction=direction) for p in parts]
+        (parts, rcs, nothing)
+    elseif method == "l"
+        parts = a:Δx:(b-Δx)
+        rcs = [rect(p, Δx, p, f; direction=direction) for p in parts]
+        (parts, rcs, nothing)
+    elseif method == "u" # for user
+        @assert !isnothing(partitioning) "You must provide a partitioning function."
+        Δxs, parts = partitioning()
+        rcs = [rect(parts[i]-Δxs[i], Δxs[i], parts[i], f; direction=direction) for i in 1:length(parts)]
+        ss = round(sum(f.(parts) .* Δxs), sigdigits=6)
+        (parts, rcs, ss)
+    else
+        parts = a:Δx:(b-Δx)
+        rcs = [rect(p, Δx, rand(p:0.1:p+Δx), f; direction=direction) for p in parts]
+        (parts, rcs, nothing)
+    end
+    # recs= [rect(sample(p,Δx),Δx,p,f) for p in partition]
+    p = direction == :y ? plot(f.(x), x; legend=nothing) : plot(x, f.(x); legend=nothing)
+    plot!(p, recs, framestyle=:origin, opacity=0.4, color=color)
+    s = isnothing(ss) ? round(sum(f.(partition) * Δx), sigdigits=6) : ss
+    return plot_it ? (p, s) : s
+end
+
+# ╔═╡ ef081dfa-b610-4c7a-a039-7258f4f6e80e
+begin
+    function add_space(n=1)
+        repeat("&nbsp;", n)
+    end
+    function post_img(img::String, w=500)
+        res = Resource(img, :width => w)
+        cm"""
+      <div class="img-container">
+
+      $(res)
+
+      </div>"""
+    end
+    function poolcode()
+        cm"""
+      <div class="img-container">
+
+      $(Resource("https://www.dropbox.com/s/cat9ots4ausfzyc/qrcode_itempool.com_kfupm.png?raw=1",:width=>300))
+
+      </div>"""
+    end
+    function define(t="")
+        beginBlock("Definition", t)
+    end
+    function remark(t="")
+        beginBlock("Remark", t)
+    end
+    function remarks(t="")
+        beginBlock("Remarks", t)
+    end
+    function bbl(t)
+        beginBlock(t, "")
+    end
+    function bbl(t, s)
+        beginBlock(t, s)
+    end
+    ebl() = endBlock()
+    function theorem(s)
+        bth(s)
+    end
+    function bth(s)
+        beginTheorem(s)
+    end
+    eth() = endTheorem()
+    ex(n::Int; s::String="") = ex("Example $n", s)
+    ex(t::Int, s::String) = example("Example $t", s)
+    ex(t, s) = example(t, s)
+    function beginBlock(title, subtitle)
+        """<div style="box-sizing: border-box;">
+           <div style="display: flex;flex-direction: column;border: 6px solid rgba(200,200,200,0.5);box-sizing: border-box;">
+           <div style="display: flex;">
+           <div style="background-color: #FF9733;
+               border-left: 10px solid #df7300;
+               padding: 5px 10px;
+               color: #fff!important;
+               clear: left;
+               margin-left: 0;font-size: 112%;
+               line-height: 1.3;
+               font-weight: 600;">$title</div>  <div style="olor: #000!important;
+               margin: 0 0 20px 25px;
+               float: none;
+               clear: none;
+               padding: 5px 0 0 0;
+               margin: 0 0 0 20px;
+               background-color: transparent;
+               border: 0;
+               overflow: hidden;
+               min-width: 100px;font-weight: 600;
+               line-height: 1.5;">$subtitle</div>
+           </div>
+           <p style="padding:5px;">
+       """
+    end
+    function beginTheorem(subtitle)
+        beginBlock("Theorem", subtitle)
+    end
+    function endBlock()
+        """</p></div></div>"""
+    end
+    function endTheorem()
+        endBlock()
+    end
+    ex() = example("Example", "")
+    # function example(lable, desc)
+    #     """<div style="display:flex;">
+    #    <div style="
+    #    font-size: 112%;
+    #        line-height: 1.3;
+    #        font-weight: 600;
+    #        color: #f9ce4e;
+    #        float: left;
+    #        background-color: #5c5c5c;
+    #        border-left: 10px solid #474546;
+    #        padding: 5px 10px;
+    #        margin: 0 12px 20px 0;
+    #        border-radius: 0;
+    #    ">$lable:</div>
+    #    <div style="flex-grow:3;
+    #    line-height: 1.3;
+    #        font-weight: 600;
+    #        float: left;
+    #        padding: 5px 10px;
+    #        margin: 0 12px 20px 0;
+    #        border-radius: 0;
+    #    ">$desc</div>
+    #    </div>"""
+    # end
+    function example(lable, desc)
+        """<div class="example-box">
+    <div class="example-header">
+      $lable
+    </div>
+    <div class="example-title">
+      $desc
+    </div>
+    <div class="example-content">
+
+  </div>
+  """
+    end
+
+    @htl("")
+end
+
+# ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
+initialize_eqref()
+
+# ╔═╡ 107407c8-5da0-4833-9965-75a82d84a0fb
+@htl("""
+<style>
+@import url("https://mmogib.github.io/math102/custom.css");
+
+ul {
+  list-style: none;
+}
+
+ul li:before {
+  content: '💡 ';
+}
+
+.p40 {
+    padding-left: 40px;
+}
+    example-box {
+      max-width: 600px;           /* Limits the box width */
+      margin: 2rem auto;          /* Centers the box and adds vertical spacing */
+      border: 1px solid #ccc;     /* Light border */
+      border-radius: 4px;         /* Slightly rounded corners */
+      overflow: hidden;           /* Ensures the box boundary clips its children */
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+      font-family: Arial, sans-serif;
+    }
+
+    /* Header area for "EXAMPLE 1" */
+    .example-header {
+      background: linear-gradient(90deg, #cc0000, #990000);
+      color: #fff;
+      font-weight: bold;
+      font-size: 1.1rem;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #990000;
+    }
+
+    /* Sub-header area for the title or subtitle */
+    .example-title {
+      background-color: #f9f9f9;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.75rem 1rem;
+      margin: 0;                  /* Remove default heading margins */
+      border-bottom: 1px solid #eee;
+    }
+
+    /* Main content area for the mathematical statement or instructions */
+    .example-content {
+      padding: 1rem;
+      line-height: 1.5;
+    }
+
+    /* Optional styling for inline math or emphasis */
+    em {
+      font-style: italic;
+      color: #333;
+    }
+</style>
+""")
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -3800,147 +3898,153 @@ version = "1.13.0+0"
 """
 
 # ╔═╡ Cell order:
-# ╠═e414122f-b93a-4510-b8ae-026c303e0df9
-# ╠═f2d4c2a5-f486-407b-b31b-d2efcc7476b3
-# ╠═b4599a16-e7f7-4a2a-b349-2648ee45208f
-# ╠═8315fb27-89e4-44a4-a51e-8e55fc3d58e5
-# ╠═ef081dfa-b610-4c7a-a039-7258f4f6e80e
-# ╠═8b65d45c-ca7c-4e5d-9cfd-a7348547ebe0
-# ╠═02c15fce-abf1-427e-b648-2554ee18ed5a
-# ╠═38eabacb-a71a-448d-875d-7f7230dba49e
-# ╠═bd6fff85-5fcc-4810-898d-d6f22b8e917d
-# ╠═4da75997-9674-4775-b095-bcf0c0a64b93
-# ╠═d60ca33d-fa31-49a2-9a4a-dfc54aef46ae
-# ╠═6caae83a-3aa3-4f79-9f05-fb969f952286
-# ╠═52333157-9913-489d-8784-dc3b542af1e9
-# ╠═73c7417c-a035-4202-83f1-45e9897e8871
-# ╠═9f50c8be-95e8-4c28-81b4-8ccd638505af
-# ╠═0e340bfb-9807-4061-8901-62133ac44c5f
-# ╠═ebd3dd41-7a3b-4d2b-9c1d-adca89f36af7
-# ╠═19354aee-6de7-448f-8091-f6f68efdf84b
-# ╠═f80cc26d-120b-4f14-b31e-b50c9283c0b9
-# ╠═7086a5a8-d5ad-444b-8d14-056a3fdb99eb
-# ╠═bb77f844-76c9-401f-8c2c-dcc5891b0a09
-# ╠═9463762b-50bb-49be-80be-5f67cb141d1c
-# ╠═15277097-7c11-4b03-8579-8f9c376361cd
-# ╠═523d5a06-fafd-4d67-b8af-457b4d2f76e8
-# ╠═8f673110-65a1-4f6d-8de1-ebcfb49fb50d
-# ╠═8c2f85bb-9b81-4b70-b7e8-1a91e2738838
-# ╠═f89bbb38-906b-45f3-9eff-617924e0b719
-# ╠═a862aa36-d811-427d-bc1a-4502175b71f4
-# ╠═b9434085-81d7-4a3d-bed5-deebea3cd48a
-# ╠═208abdcc-dc12-4a08-a1f8-2177f95886f7
-# ╠═1615be4c-fb84-418f-8406-c274550cfb86
-# ╠═fd7161bc-1e1b-42e3-8758-c8e3e3ec0877
-# ╠═38ab6c6d-c5e0-49f9-8c76-61e0b8dc13c6
-# ╠═812de6c7-f5b3-4b93-bb44-ba147d6fc140
-# ╠═01008c60-bcfa-42a1-b5e8-fa67db2131ba
-# ╠═ee50e46d-6580-4a68-a061-6179c895a219
-# ╠═cff81ba7-fab6-4cd7-ba24-e4a9104177aa
-# ╠═845d8b0a-6550-49f4-9308-13ec2b2bd0c1
-# ╠═1f0c53c0-611f-4b4e-9718-efac2f0b893d
-# ╠═a7c8710c-2256-425e-a946-0e2791773592
-# ╠═6ecb0430-177c-4097-a94e-edbce61725d1
-# ╠═f98989fb-b59a-496f-be73-322b4dcb4960
-# ╠═7e49b1d2-b6c5-4b84-ae6b-ac62d3f58d0c
-# ╠═04922857-61ca-45a7-a3b4-cf35138e4847
-# ╠═c19ba868-ca3b-4987-8e9b-eacffd6f9158
-# ╠═982c228a-a8cd-42cd-a437-1b8c80c89cef
-# ╠═3d54c0f4-3324-4bd6-adee-c343c5153392
-# ╠═1937220c-4467-430b-a745-42294765b6a5
-# ╠═1681a378-aea4-4e23-85a7-5c5731742ad8
-# ╠═5156fbdc-002c-4222-aca0-b835061e3fb7
-# ╠═7f7b1152-5dd0-4f97-b931-4fe74c51b3a3
-# ╠═b5d1d68a-ad7e-4140-a818-addead342c53
-# ╠═d7cb77c3-7875-43d8-bab6-7281455700b0
-# ╠═5f37c3d1-449f-4a6d-9af5-55f9a4c8feec
-# ╠═4aa43e57-d9a4-49da-b7d8-fe39d21df414
-# ╠═a41fcefd-00dd-45c5-86a0-7fe076460674
-# ╠═07f45116-ff8b-4d2c-a7e3-46a4581afc16
-# ╠═229d9694-2751-479d-9872-218f7cea2261
-# ╠═8b1d06a8-dbd0-4dc4-b12a-15425960ecc4
-# ╠═5e23a09b-c96f-40e0-bd8f-af18041f2be9
-# ╠═874e3ccf-4309-42d4-af8d-3921b025239e
-# ╠═4ff28842-9307-4813-8791-197fd6ca5238
-# ╠═1ffb0970-7422-4cb7-9f84-841f68565b80
-# ╠═32b71cdc-e93b-4b05-b8f5-4b9d61a2eb62
-# ╠═4e358ab2-9be7-4d7f-b295-1e85943da027
-# ╠═81e4ac99-3388-49e0-a168-5d9961c80ddf
-# ╠═02d61e1f-b630-443c-b1dd-1fe5d2c81b2f
-# ╠═b51c5bc6-9065-4687-b6cb-e67a372a3b4e
-# ╠═e13d39c8-ac62-460d-bf7e-9a994942731d
-# ╠═9a9bff9d-98c3-4300-bc0b-a7b807a43f99
-# ╠═124a0bb3-b89e-4ac5-9178-01cda06045ec
-# ╠═56a7034f-d702-4877-ab5c-6916ac503043
-# ╠═2b5289ee-8f10-4564-98e1-3a43e648d867
-# ╠═9d6d8399-d063-42c4-af47-dbf5ab38d434
-# ╠═2543320e-dd76-4edf-adb8-ceac71805337
-# ╠═8cc0d5fd-c988-4f16-a07f-a6439fccbc8a
-# ╠═17770e44-b45c-4505-bb61-213ff4eff007
-# ╠═66b482d7-4c12-4f41-9d09-3eb723a1001b
-# ╠═4a9a8e25-2db5-495a-bf55-94d589bdb699
-# ╠═fa78d2d3-afc7-40d8-9e06-4df6f65321ac
-# ╠═269e3d73-0e11-4fcc-a291-031da9817541
-# ╠═fa3f03ce-66a3-447b-ae37-47eef4f10aaa
-# ╠═e200bd3c-2636-4a91-83dd-de6b0e3d5a32
-# ╠═1af2a723-f74f-47b1-a46f-a5452b7da7b1
-# ╠═56153ee8-aa22-40ba-bab3-235cc8b1fef6
-# ╠═b25051b6-8b33-4976-86b9-4db2166c291c
-# ╠═f5c25849-0337-4dca-98cf-dbbc723499f8
-# ╠═af619399-4655-45a0-847b-60357e53d2a5
-# ╠═9cd59dc0-5971-45d0-b076-69df14c3f4cd
-# ╠═71bca4ec-9d80-423c-bbac-16711deccce1
-# ╠═f64e2917-76fc-4ba8-8a47-d8c4c3654880
-# ╠═fb8b488f-f8b4-48e5-9d66-9f3df8919d5d
-# ╠═d6b066d3-0049-4f3d-9acc-55fc16c40adc
-# ╠═14f0a7a7-2264-4170-832e-837a54cd935c
-# ╠═e8cdbe22-f7e1-47b2-bd3f-6130a6fc6207
-# ╠═bb514175-fe2c-498d-8ae5-aa3e59167fa4
-# ╠═e4f23df3-6b96-4333-99e0-1b9dfb7b8cba
-# ╠═42f171ca-09e4-45ed-8910-427ab7dc3aee
-# ╠═df2dff93-465a-404a-9bf5-581907b99f42
-# ╠═e6ba3446-cdb3-41c0-8db7-56b63042ddbc
-# ╠═df2a7927-878c-4d11-9e37-9c519672801e
-# ╠═8458322d-c34a-475f-b11a-f9cb74a91a95
-# ╠═5d0d0bd7-7a85-4b2f-8a39-c6a4ef7d6175
-# ╠═0d547f78-1578-4c4a-9403-bd4ede9a62a7
-# ╠═28d201df-5056-4429-b1ba-a4959e75bc51
-# ╠═8a584c0c-3017-4958-b611-772b3a6e44c5
-# ╠═a73db7b8-3464-4852-a9ef-5d0de43d4395
-# ╠═2b68430f-08ac-4bfb-a484-e6fbe08738ba
-# ╠═1beace3e-3a7e-411b-b6c0-3eca1fbf8536
-# ╠═22d44abf-34e3-496c-910a-5e51a7d90e10
-# ╠═b4279679-50fb-4dfd-9c4e-0e14788e2edd
-# ╠═4bcc7833-6bfb-421f-b54f-3567aea00c1e
-# ╠═655773ab-44a0-4f6e-95b9-353ea7f694ca
-# ╠═b2873160-bdc6-4883-b6a0-fe2b8295f97d
-# ╠═6406249d-f7ac-4ed7-a175-71e6dcdf55f2
-# ╠═253a5368-72ca-4463-9b59-934f45d77a4e
-# ╠═d55a4917-e885-42ee-a8db-24f951501c28
-# ╠═e653c7dd-7359-448d-9690-5d4a9780fc70
-# ╠═a5b5ae97-b4af-435e-a3fb-5a23edf8b0c9
-# ╠═eccd97c8-15b5-47ff-92ef-7e87a054c4ef
-# ╠═01c13365-f758-47c4-9b96-b9f2616b3824
-# ╠═017d38da-5825-4966-8d89-c75ce0b2af11
-# ╠═85c79ec8-6c95-4c76-9851-a4a0b7ec76d7
-# ╠═c9a96c8c-94a5-4b5a-853e-60b35bc7621a
-# ╠═9a998b24-6d36-4f47-b4db-9df9b3d138e2
-# ╠═cd76f697-ce0b-4dba-b818-65ee5b6de23d
-# ╠═238beb06-9d2e-4d15-8eb4-3660aced7ef7
-# ╠═efb4d714-dea7-428a-858c-70c9193ce150
-# ╠═463027a3-7319-43ef-85be-cb8abe5a1d28
-# ╠═b0716945-c4e6-4d3d-a29d-864ff023b0fc
-# ╠═49fe4d0b-124f-4dd8-a34d-9aaf80705175
-# ╠═f608e3b8-4a16-40c9-8ffd-d02af53146e6
-# ╠═fb1499e3-0a58-4b34-b452-3bdc31b82504
-# ╠═c3de1903-845e-4779-b67b-817e703fd1ee
-# ╠═daf5a008-b102-4557-8a18-d83839316eba
-# ╠═13f007b1-b509-40b2-8ad4-ab50588957b0
-# ╠═9c8d6eeb-9d3c-4525-87e3-c540c3a5d38d
-# ╠═66a05cab-f595-43f8-843d-1f845c953868
-# ╠═db150ea2-4895-415e-97a9-f7eff4180d63
-# ╠═cf16ce47-f360-451b-afae-b1fe8b559fc3
-# ╠═cad95270-ba9f-4821-87da-e457a00b9617
-# ╠═9b02faca-b5cb-442d-8a63-82f584b054fd
-# ╟─00000000-0000-0000-0000-000000000001
-# ╟─00000000-0000-0000-0000-000000000002
+# ╔═╡ 00000000-0000-0000-0000-000000000001
+# ╔═╡ 00000000-0000-0000-0000-000000000002
+# ╔═╡ 71bc54d5-d0ed-42d3-9bc1-48aa86e91d1d
+# ╔═╡ f2d4c2a5-f486-407b-b31b-d2efcc7476b3
+# ╔═╡ b4599a16-e7f7-4a2a-b349-2648ee45208f
+# ╔═╡ 8315fb27-89e4-44a4-a51e-8e55fc3d58e5
+# ╔═╡ ef081dfa-b610-4c7a-a039-7258f4f6e80e
+# ╔═╡ da9230a6-088d-4735-b206-9514c12dd223
+# ╔═╡ 107407c8-5da0-4833-9965-75a82d84a0fb
+# ╔═╡ e414122f-b93a-4510-b8ae-026c303e0df9
+# ╔═╡ 8408e369-40eb-4f9b-a7d7-26cde3e34a74
+# ╔═╡ cd269caf-ef81-43d7-a1a8-6668932b6363
+# ╔═╡ d6d85087-9ecc-4043-9002-e4a6442b829e
+# ╔═╡ 8b65d45c-ca7c-4e5d-9cfd-a7348547ebe0
+# ╔═╡ 02c15fce-abf1-427e-b648-2554ee18ed5a
+# ╔═╡ 38eabacb-a71a-448d-875d-7f7230dba49e
+# ╔═╡ bd6fff85-5fcc-4810-898d-d6f22b8e917d
+# ╔═╡ 4da75997-9674-4775-b095-bcf0c0a64b93
+# ╔═╡ d60ca33d-fa31-49a2-9a4a-dfc54aef46ae
+# ╔═╡ 6caae83a-3aa3-4f79-9f05-fb969f952286
+# ╔═╡ 52333157-9913-489d-8784-dc3b542af1e9
+# ╔═╡ 73c7417c-a035-4202-83f1-45e9897e8871
+# ╔═╡ 9f50c8be-95e8-4c28-81b4-8ccd638505af
+# ╔═╡ 0e340bfb-9807-4061-8901-62133ac44c5f
+# ╔═╡ ebd3dd41-7a3b-4d2b-9c1d-adca89f36af7
+# ╔═╡ 19354aee-6de7-448f-8091-f6f68efdf84b
+# ╔═╡ f80cc26d-120b-4f14-b31e-b50c9283c0b9
+# ╔═╡ 7086a5a8-d5ad-444b-8d14-056a3fdb99eb
+# ╔═╡ bb77f844-76c9-401f-8c2c-dcc5891b0a09
+# ╔═╡ 9463762b-50bb-49be-80be-5f67cb141d1c
+# ╔═╡ 15277097-7c11-4b03-8579-8f9c376361cd
+# ╔═╡ 523d5a06-fafd-4d67-b8af-457b4d2f76e8
+# ╔═╡ 8f673110-65a1-4f6d-8de1-ebcfb49fb50d
+# ╔═╡ 8c2f85bb-9b81-4b70-b7e8-1a91e2738838
+# ╔═╡ f89bbb38-906b-45f3-9eff-617924e0b719
+# ╔═╡ a862aa36-d811-427d-bc1a-4502175b71f4
+# ╔═╡ b9434085-81d7-4a3d-bed5-deebea3cd48a
+# ╔═╡ 208abdcc-dc12-4a08-a1f8-2177f95886f7
+# ╔═╡ 1615be4c-fb84-418f-8406-c274550cfb86
+# ╔═╡ fd7161bc-1e1b-42e3-8758-c8e3e3ec0877
+# ╔═╡ 38ab6c6d-c5e0-49f9-8c76-61e0b8dc13c6
+# ╔═╡ 812de6c7-f5b3-4b93-bb44-ba147d6fc140
+# ╔═╡ 01008c60-bcfa-42a1-b5e8-fa67db2131ba
+# ╔═╡ ee50e46d-6580-4a68-a061-6179c895a219
+# ╔═╡ cff81ba7-fab6-4cd7-ba24-e4a9104177aa
+# ╔═╡ 845d8b0a-6550-49f4-9308-13ec2b2bd0c1
+# ╔═╡ 1f0c53c0-611f-4b4e-9718-efac2f0b893d
+# ╔═╡ a7c8710c-2256-425e-a946-0e2791773592
+# ╔═╡ 6ecb0430-177c-4097-a94e-edbce61725d1
+# ╔═╡ f98989fb-b59a-496f-be73-322b4dcb4960
+# ╔═╡ 7e49b1d2-b6c5-4b84-ae6b-ac62d3f58d0c
+# ╔═╡ 04922857-61ca-45a7-a3b4-cf35138e4847
+# ╔═╡ c19ba868-ca3b-4987-8e9b-eacffd6f9158
+# ╔═╡ 982c228a-a8cd-42cd-a437-1b8c80c89cef
+# ╔═╡ 3d54c0f4-3324-4bd6-adee-c343c5153392
+# ╔═╡ 1937220c-4467-430b-a745-42294765b6a5
+# ╔═╡ 1681a378-aea4-4e23-85a7-5c5731742ad8
+# ╔═╡ 5156fbdc-002c-4222-aca0-b835061e3fb7
+# ╔═╡ 7f7b1152-5dd0-4f97-b931-4fe74c51b3a3
+# ╔═╡ b5d1d68a-ad7e-4140-a818-addead342c53
+# ╔═╡ d7cb77c3-7875-43d8-bab6-7281455700b0
+# ╔═╡ 5f37c3d1-449f-4a6d-9af5-55f9a4c8feec
+# ╔═╡ 4aa43e57-d9a4-49da-b7d8-fe39d21df414
+# ╔═╡ a41fcefd-00dd-45c5-86a0-7fe076460674
+# ╔═╡ 07f45116-ff8b-4d2c-a7e3-46a4581afc16
+# ╔═╡ 229d9694-2751-479d-9872-218f7cea2261
+# ╔═╡ 8b1d06a8-dbd0-4dc4-b12a-15425960ecc4
+# ╔═╡ 5e23a09b-c96f-40e0-bd8f-af18041f2be9
+# ╔═╡ 874e3ccf-4309-42d4-af8d-3921b025239e
+# ╔═╡ 4ff28842-9307-4813-8791-197fd6ca5238
+# ╔═╡ 1ffb0970-7422-4cb7-9f84-841f68565b80
+# ╔═╡ 32b71cdc-e93b-4b05-b8f5-4b9d61a2eb62
+# ╔═╡ 4e358ab2-9be7-4d7f-b295-1e85943da027
+# ╔═╡ 81e4ac99-3388-49e0-a168-5d9961c80ddf
+# ╔═╡ 02d61e1f-b630-443c-b1dd-1fe5d2c81b2f
+# ╔═╡ b51c5bc6-9065-4687-b6cb-e67a372a3b4e
+# ╔═╡ e13d39c8-ac62-460d-bf7e-9a994942731d
+# ╔═╡ 9a9bff9d-98c3-4300-bc0b-a7b807a43f99
+# ╔═╡ 124a0bb3-b89e-4ac5-9178-01cda06045ec
+# ╔═╡ 56a7034f-d702-4877-ab5c-6916ac503043
+# ╔═╡ 2b5289ee-8f10-4564-98e1-3a43e648d867
+# ╔═╡ 9d6d8399-d063-42c4-af47-dbf5ab38d434
+# ╔═╡ 2543320e-dd76-4edf-adb8-ceac71805337
+# ╔═╡ 8cc0d5fd-c988-4f16-a07f-a6439fccbc8a
+# ╔═╡ 17770e44-b45c-4505-bb61-213ff4eff007
+# ╔═╡ 66b482d7-4c12-4f41-9d09-3eb723a1001b
+# ╔═╡ 4a9a8e25-2db5-495a-bf55-94d589bdb699
+# ╔═╡ fa78d2d3-afc7-40d8-9e06-4df6f65321ac
+# ╔═╡ 269e3d73-0e11-4fcc-a291-031da9817541
+# ╔═╡ fa3f03ce-66a3-447b-ae37-47eef4f10aaa
+# ╔═╡ e200bd3c-2636-4a91-83dd-de6b0e3d5a32
+# ╔═╡ 1af2a723-f74f-47b1-a46f-a5452b7da7b1
+# ╔═╡ 56153ee8-aa22-40ba-bab3-235cc8b1fef6
+# ╔═╡ b25051b6-8b33-4976-86b9-4db2166c291c
+# ╔═╡ f5c25849-0337-4dca-98cf-dbbc723499f8
+# ╔═╡ af619399-4655-45a0-847b-60357e53d2a5
+# ╔═╡ 9cd59dc0-5971-45d0-b076-69df14c3f4cd
+# ╔═╡ 71bca4ec-9d80-423c-bbac-16711deccce1
+# ╔═╡ f64e2917-76fc-4ba8-8a47-d8c4c3654880
+# ╔═╡ fb8b488f-f8b4-48e5-9d66-9f3df8919d5d
+# ╔═╡ d6b066d3-0049-4f3d-9acc-55fc16c40adc
+# ╔═╡ 14f0a7a7-2264-4170-832e-837a54cd935c
+# ╔═╡ e8cdbe22-f7e1-47b2-bd3f-6130a6fc6207
+# ╔═╡ bb514175-fe2c-498d-8ae5-aa3e59167fa4
+# ╔═╡ e4f23df3-6b96-4333-99e0-1b9dfb7b8cba
+# ╔═╡ 42f171ca-09e4-45ed-8910-427ab7dc3aee
+# ╔═╡ df2dff93-465a-404a-9bf5-581907b99f42
+# ╔═╡ e6ba3446-cdb3-41c0-8db7-56b63042ddbc
+# ╔═╡ df2a7927-878c-4d11-9e37-9c519672801e
+# ╔═╡ 8458322d-c34a-475f-b11a-f9cb74a91a95
+# ╔═╡ 5d0d0bd7-7a85-4b2f-8a39-c6a4ef7d6175
+# ╔═╡ 0d547f78-1578-4c4a-9403-bd4ede9a62a7
+# ╔═╡ 28d201df-5056-4429-b1ba-a4959e75bc51
+# ╔═╡ 8a584c0c-3017-4958-b611-772b3a6e44c5
+# ╔═╡ a73db7b8-3464-4852-a9ef-5d0de43d4395
+# ╔═╡ 2b68430f-08ac-4bfb-a484-e6fbe08738ba
+# ╔═╡ 1beace3e-3a7e-411b-b6c0-3eca1fbf8536
+# ╔═╡ 22d44abf-34e3-496c-910a-5e51a7d90e10
+# ╔═╡ b4279679-50fb-4dfd-9c4e-0e14788e2edd
+# ╔═╡ 4bcc7833-6bfb-421f-b54f-3567aea00c1e
+# ╔═╡ 655773ab-44a0-4f6e-95b9-353ea7f694ca
+# ╔═╡ b2873160-bdc6-4883-b6a0-fe2b8295f97d
+# ╔═╡ 6406249d-f7ac-4ed7-a175-71e6dcdf55f2
+# ╔═╡ 253a5368-72ca-4463-9b59-934f45d77a4e
+# ╔═╡ d55a4917-e885-42ee-a8db-24f951501c28
+# ╔═╡ e653c7dd-7359-448d-9690-5d4a9780fc70
+# ╔═╡ a5b5ae97-b4af-435e-a3fb-5a23edf8b0c9
+# ╔═╡ eccd97c8-15b5-47ff-92ef-7e87a054c4ef
+# ╔═╡ 01c13365-f758-47c4-9b96-b9f2616b3824
+# ╔═╡ 017d38da-5825-4966-8d89-c75ce0b2af11
+# ╔═╡ 85c79ec8-6c95-4c76-9851-a4a0b7ec76d7
+# ╔═╡ c9a96c8c-94a5-4b5a-853e-60b35bc7621a
+# ╔═╡ 9a998b24-6d36-4f47-b4db-9df9b3d138e2
+# ╔═╡ cd76f697-ce0b-4dba-b818-65ee5b6de23d
+# ╔═╡ 238beb06-9d2e-4d15-8eb4-3660aced7ef7
+# ╔═╡ efb4d714-dea7-428a-858c-70c9193ce150
+# ╔═╡ 463027a3-7319-43ef-85be-cb8abe5a1d28
+# ╔═╡ b0716945-c4e6-4d3d-a29d-864ff023b0fc
+# ╔═╡ 49fe4d0b-124f-4dd8-a34d-9aaf80705175
+# ╔═╡ f608e3b8-4a16-40c9-8ffd-d02af53146e6
+# ╔═╡ fb1499e3-0a58-4b34-b452-3bdc31b82504
+# ╔═╡ c3de1903-845e-4779-b67b-817e703fd1ee
+# ╔═╡ daf5a008-b102-4557-8a18-d83839316eba
+# ╔═╡ 13f007b1-b509-40b2-8ad4-ab50588957b0
+# ╔═╡ 9c8d6eeb-9d3c-4525-87e3-c540c3a5d38d
+# ╔═╡ 66a05cab-f595-43f8-843d-1f845c953868
+# ╔═╡ db150ea2-4895-415e-97a9-f7eff4180d63
+# ╔═╡ cf16ce47-f360-451b-afae-b1fe8b559fc3
+# ╔═╡ cad95270-ba9f-4821-87da-e457a00b9617
+# ╔═╡ 9b02faca-b5cb-442d-8a63-82f584b054fd
