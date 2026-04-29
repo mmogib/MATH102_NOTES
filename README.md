@@ -23,6 +23,22 @@ The chapter notes are standalone Pluto notebooks:
 
 Each notebook includes its own imports and helper definitions so it can be opened and exported independently.
 
+The legacy combined source notebook is still kept in place while the chapter split workflow remains in active use:
+
+- `src/MATH102_NOTES.jl`
+
+Use the generic splitter to regenerate standalone chapter notebooks from a Pluto source notebook:
+
+```bash
+julia --project=. scripts/split_pluto_chapters.jl --source src/MATH102_NOTES.jl --output-prefix MATH_102
+```
+
+You can also limit the split to selected chapters:
+
+```bash
+julia --project=. scripts/split_pluto_chapters.jl --source src/MATH102_NOTES.jl --output-prefix MATH_102 --chapters 5,7
+```
+
 ## Build And Export
 
 Install Julia dependencies:
@@ -37,6 +53,13 @@ Export the static site:
 julia --project=. src/export.jl
 ```
 
+Export only selected chapters:
+
+```bash
+julia --project=. src/export.jl --ch=5
+julia --project=. src/export.jl --ch=5,7
+```
+
 Publish with a commit message:
 
 ```bash
@@ -47,6 +70,16 @@ On Windows:
 
 ```bat
 export_push.bat "Update MATH102 notes"
+```
+
+Pass export arguments through the publish scripts after the commit message:
+
+```bash
+./export_push.sh "Update selected chapters" --ch=5,7
+```
+
+```bat
+export_push.bat "Update selected chapters" --ch=5,7
 ```
 
 ## Repository Layout

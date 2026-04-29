@@ -410,8 +410,10 @@ md"""
 md"## Polynomial Approximations of Elementary Functions"
 
 # ╔═╡ 5d2d71fe-1aff-4d28-b1d2-47dc3dd7485a
-sec_97_n_str = @bind sec_97_n NumberField(0:10, default=0);
-md"";
+begin
+	sec_97_n_str = @bind sec_97_n NumberField(0:10, default=0);
+	md"";
+end
 
 # ╔═╡ 32c8cac4-b560-45bf-9c53-6a971b11e731
 cm"""
@@ -514,8 +516,8 @@ end
 
 # ╔═╡ c73fea91-cca0-4f7f-9c38-f85e6f3c56ae
 let
-    x = 50
-    n = 4
+    x = 0.1
+    n = 6
     Pn(x) = sum((-1)^(i) * x^(2i) / (factorial(2i)) for i in 0:n)
     cos(x), Pn(x)
 end
@@ -2137,6 +2139,18 @@ git-tree-sha1 = "9f02045d934dc030edad45944ea80dbd1f0ebea7"
 uuid = "d38c429a-6771-53c6-b99e-75d170b6e991"
 version = "0.5.7"
 
+[[deps.CoreMath]]
+deps = ["CoreMath_jll"]
+git-tree-sha1 = "8c0480f92b1b1796239156a1b9b1bfb1b39499b4"
+uuid = "b7a15901-be09-4a0e-87d2-2e66b0e09b5a"
+version = "0.1.0"
+
+[[deps.CoreMath_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl"]
+git-tree-sha1 = "a692a4c1dc59a4b8bc0b6403876eb3250fde2bc3"
+uuid = "a38c48d9-6df1-5ac9-9223-b6ada3b5572b"
+version = "0.1.0+0"
+
 [[deps.Crayons]]
 git-tree-sha1 = "249fe38abf76d48563e2f4556bebd215aa317e15"
 uuid = "a8cc5b0e-0ffa-5ad4-8c14-923d3ee1735f"
@@ -2204,9 +2218,9 @@ version = "0.1.11"
 
 [[deps.Expat_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "9cb7fe11da6adb8683cbacf8aa9b5237941e3a75"
+git-tree-sha1 = "27af30de8b5445644e8ffe3bcb0d72049c089cf1"
 uuid = "2e619515-83b5-522b-bb60-26c02a35a201"
-version = "2.7.5+0"
+version = "2.7.3+0"
 
 [[deps.FFMPEG]]
 deps = ["FFMPEG_jll"]
@@ -2216,9 +2230,9 @@ version = "0.4.5"
 
 [[deps.FFMPEG_jll]]
 deps = ["Artifacts", "Bzip2_jll", "FreeType2_jll", "FriBidi_jll", "JLLWrappers", "LAME_jll", "Libdl", "Ogg_jll", "OpenSSL_jll", "Opus_jll", "PCRE2_jll", "Zlib_jll", "libaom_jll", "libass_jll", "libfdk_aac_jll", "libva_jll", "libvorbis_jll", "x264_jll", "x265_jll"]
-git-tree-sha1 = "cac41ca6b2d399adfc95e51240566f8a60a80806"
+git-tree-sha1 = "66381d7059b5f3f6162f28831854008040a4e905"
 uuid = "b22a6f82-2f65-5046-a5b2-351ab43fb4e5"
-version = "8.1.0+0"
+version = "8.0.1+1"
 
 [[deps.FFTW_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -2271,9 +2285,9 @@ version = "1.0.17+0"
 
 [[deps.GLFW_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libglvnd_jll", "Xorg_libXcursor_jll", "Xorg_libXi_jll", "Xorg_libXinerama_jll", "Xorg_libXrandr_jll", "libdecor_jll", "xkbcommon_jll"]
-git-tree-sha1 = "9e0fb9e54594c47f278d75063980e43066e26e20"
+git-tree-sha1 = "b7bfd56fa66616138dfe5237da4dc13bbd83c67f"
 uuid = "0656b61e-2033-5cc2-a64a-77c0f6c09b89"
-version = "3.4.1+1"
+version = "3.4.1+0"
 
 [[deps.GR]]
 deps = ["Artifacts", "Base64", "DelimitedFiles", "Downloads", "GR_jll", "HTTP", "JSON", "Libdl", "LinearAlgebra", "Preferences", "Printf", "Qt6Wayland_jll", "Random", "Serialization", "Sockets", "TOML", "Tar", "Test", "p7zip_jll"]
@@ -2428,16 +2442,17 @@ uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 version = "1.11.0"
 
 [[deps.IntervalArithmetic]]
-deps = ["CRlibm", "MacroTools", "OpenBLASConsistentFPCSR_jll", "Printf", "Random", "RoundingEmulator"]
-git-tree-sha1 = "2cce1fed119ca7b6cc230c4a3b85202478af7924"
+deps = ["CRlibm", "CoreMath", "MacroTools", "OpenBLASConsistentFPCSR_jll", "Printf", "Random", "RoundingEmulator"]
+git-tree-sha1 = "1d86f920d19a2eb2b9528d62a834412f4822eaa1"
 uuid = "d1acc4aa-44c8-5952-acd4-ba5d80a2a253"
-version = "1.0.3"
+version = "1.0.5"
 
     [deps.IntervalArithmetic.extensions]
     IntervalArithmeticArblibExt = "Arblib"
     IntervalArithmeticDiffRulesExt = "DiffRules"
     IntervalArithmeticForwardDiffExt = "ForwardDiff"
     IntervalArithmeticIntervalSetsExt = "IntervalSets"
+    IntervalArithmeticIrrationalConstantsExt = "IrrationalConstants"
     IntervalArithmeticLinearAlgebraExt = "LinearAlgebra"
     IntervalArithmeticRecipesBaseExt = "RecipesBase"
     IntervalArithmeticSparseArraysExt = "SparseArrays"
@@ -2447,6 +2462,7 @@ version = "1.0.3"
     DiffRules = "b552c78f-8df3-52c6-915a-8e097449b14b"
     ForwardDiff = "f6369f11-7733-5829-9624-2563aa707210"
     IntervalSets = "8197267c-284f-5f27-9208-e0e47529a953"
+    IrrationalConstants = "92d709cd-6900-40b7-9082-c6be49f344b6"
     LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
     RecipesBase = "3cdcf5f2-1ef4-517c-9805-6587b60abb01"
     SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
@@ -2509,9 +2525,9 @@ version = "0.1.6"
 
 [[deps.JpegTurbo_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "c0c9b76f3520863909825cbecdef58cd63de705a"
+git-tree-sha1 = "b6893345fd6658c8e475d40155789f4860ac3b21"
 uuid = "aacddb02-875f-59d6-b918-886e6ef4fbf8"
-version = "3.1.5+0"
+version = "3.1.4+0"
 
 [[deps.JuliaSyntaxHighlighting]]
 deps = ["StyledStrings"]
@@ -2526,9 +2542,9 @@ version = "3.100.3+0"
 
 [[deps.LERC_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "17b94ecafcfa45e8360a4fc9ca6b583b049e4e37"
+git-tree-sha1 = "aaafe88dccbd957a8d82f7d05be9b69172e0cee3"
 uuid = "88015f11-f218-50d7-93a8-a6af411a945d"
-version = "4.1.0+0"
+version = "4.0.1+0"
 
 [[deps.LLVMOpenMP_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -2613,9 +2629,9 @@ version = "1.18.0+0"
 
 [[deps.Libmount_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "cc3ad4faf30015a3e8094c9b5b7f19e85bdf2386"
+git-tree-sha1 = "97bbca976196f2a1eb9607131cb108c69ec3f8a6"
 uuid = "4b2f31a3-9ecc-558c-b454-b3730dcb73e9"
-version = "2.42.0+0"
+version = "2.41.3+0"
 
 [[deps.Libtiff_jll]]
 deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "LERC_jll", "Libdl", "XZ_jll", "Zlib_jll", "Zstd_jll"]
@@ -2625,9 +2641,9 @@ version = "4.7.2+0"
 
 [[deps.Libuuid_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "d620582b1f0cbe2c72dd1d5bd195a9ce73370ab1"
+git-tree-sha1 = "d0205286d9eceadc518742860bf23f703779a3d6"
 uuid = "38a345b3-de98-5d2b-a5d3-14cd9215e700"
-version = "2.42.0+0"
+version = "2.41.3+0"
 
 [[deps.LinearAlgebra]]
 deps = ["Libdl", "OpenBLAS_jll", "libblastrampoline_jll"]
@@ -2843,9 +2859,9 @@ version = "0.5.12"
 
 [[deps.Pango_jll]]
 deps = ["Artifacts", "Cairo_jll", "Fontconfig_jll", "FreeType2_jll", "FriBidi_jll", "Glib_jll", "HarfBuzz_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "58e5ed5e386e156bd93e86b305ebd21ac63d2d04"
+git-tree-sha1 = "0662b083e11420952f2e62e17eddae7fc07d5997"
 uuid = "36c8627f-9965-5494-a995-c6b170f724f3"
-version = "1.57.1+0"
+version = "1.57.0+0"
 
 [[deps.Parsers]]
 deps = ["Dates", "PrecompileTools", "UUIDs"]
@@ -3181,9 +3197,9 @@ version = "0.4.4"
 
 [[deps.StructUtils]]
 deps = ["Dates", "UUIDs"]
-git-tree-sha1 = "86f5831495301b2a1387476cb30f86af7ab99194"
+git-tree-sha1 = "fa95b3b097bcef5845c142ea2e085f1b2591e92c"
 uuid = "ec057cc2-7a8d-4b58-b3b3-92acb9f63b42"
-version = "2.8.0"
+version = "2.7.1"
 
     [deps.StructUtils.extensions]
     StructUtilsMeasurementsExt = ["Measurements"]
@@ -3326,9 +3342,9 @@ version = "1.24.0+0"
 
 [[deps.XZ_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "b29c22e245d092b8b4e8d3c09ad7baa586d9f573"
+git-tree-sha1 = "9cce64c0fdd1960b597ba7ecda2950b5ed957438"
 uuid = "ffd25f8a-64ca-5728-b0f7-c24cf3aae800"
-version = "5.8.3+0"
+version = "5.8.2+0"
 
 [[deps.Xorg_libICE_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -3499,9 +3515,9 @@ version = "0.61.1+0"
 
 [[deps.libaom_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "850b06095ee71f0135d644ffd8a52850699581ed"
+git-tree-sha1 = "371cc681c00a3ccc3fbc5c0fb91f58ba9bec1ecf"
 uuid = "a4ae2306-e953-59d6-aa16-d00cac43593b"
-version = "3.13.3+0"
+version = "3.13.1+0"
 
 [[deps.libass_jll]]
 deps = ["Artifacts", "Bzip2_jll", "FreeType2_jll", "FriBidi_jll", "HarfBuzz_jll", "JLLWrappers", "Libdl", "Zlib_jll"]
@@ -3546,9 +3562,9 @@ version = "1.28.1+0"
 
 [[deps.libpng_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Zlib_jll"]
-git-tree-sha1 = "e51150d5ab85cee6fc36726850f0e627ad2e4aba"
+git-tree-sha1 = "e2a7072fc0cdd7949528c1455a3e5da4122e1153"
 uuid = "b53b4c65-9356-5827-b1ea-8c7a1a84506f"
-version = "1.6.58+0"
+version = "1.6.56+0"
 
 [[deps.libsixel_jll]]
 deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "Libdl", "libpng_jll"]
@@ -3629,112 +3645,112 @@ version = "1.13.0+0"
 # ╟─355007a5-91c8-454e-8463-31c6abc9f87f
 # ╟─5c65c8e6-f08f-42ce-81dd-f80638cbf7b4
 # ╟─eae5658b-a235-40de-84a3-00152a109e93
-# ╠═af5c9045-66ec-483a-a197-db544f30b1b6
-# ╠═9b9a82cc-a3c1-448f-9cb8-375e8dbd59ea
-# ╠═3c9ab8ae-dda1-45eb-a635-92acf6e2f10b
-# ╠═ff84cfbf-d387-4bde-b9d3-407b88e1bf30
-# ╠═9a594bd8-68f7-4f6a-8dd6-3c70780f098d
-# ╠═ef95cecf-00fe-429b-b94e-50f2de8a16bb
-# ╠═e62d5f92-8ad6-4317-ab62-771b96f0c3f9
-# ╠═63dbebd7-85d2-42fd-b09a-f0d9c1ce640f
-# ╠═664c41b1-6459-4dfc-9999-5b2acad3301c
-# ╠═aa6664e3-5081-4c48-8754-e65ba7263f46
+# ╟─af5c9045-66ec-483a-a197-db544f30b1b6
+# ╟─9b9a82cc-a3c1-448f-9cb8-375e8dbd59ea
+# ╟─3c9ab8ae-dda1-45eb-a635-92acf6e2f10b
+# ╟─ff84cfbf-d387-4bde-b9d3-407b88e1bf30
+# ╟─9a594bd8-68f7-4f6a-8dd6-3c70780f098d
+# ╟─ef95cecf-00fe-429b-b94e-50f2de8a16bb
+# ╟─e62d5f92-8ad6-4317-ab62-771b96f0c3f9
+# ╟─63dbebd7-85d2-42fd-b09a-f0d9c1ce640f
+# ╟─664c41b1-6459-4dfc-9999-5b2acad3301c
+# ╟─aa6664e3-5081-4c48-8754-e65ba7263f46
 # ╠═4507039d-b5e0-4c22-a698-ccbfc7eeb6ed
 # ╠═7bafde52-30ed-41f9-9522-02b3c9b7316a
-# ╠═d3729415-161a-41f0-ad07-120944323d9f
-# ╠═b568193c-ba85-4f59-89e9-6d5b824d08cd
-# ╠═471eba70-40bf-42f9-a476-b13f37ccf823
-# ╠═6c261c5d-d478-4750-ac04-bb36734a6fe1
+# ╟─d3729415-161a-41f0-ad07-120944323d9f
+# ╟─b568193c-ba85-4f59-89e9-6d5b824d08cd
+# ╟─471eba70-40bf-42f9-a476-b13f37ccf823
+# ╟─6c261c5d-d478-4750-ac04-bb36734a6fe1
 # ╠═f27fe033-30da-4174-9f1c-23910a036481
-# ╠═18d5f404-685e-4781-8edf-ac7374c55526
-# ╠═7c50563b-0f12-4974-9acf-598247793200
-# ╠═dbc02f9a-5bc9-478e-8de1-767fd64faaec
-# ╠═7d460b80-8319-4129-862e-695ebb8cff28
-# ╠═d8322419-3ebe-4718-ba84-9c435615d1ba
+# ╟─18d5f404-685e-4781-8edf-ac7374c55526
+# ╟─7c50563b-0f12-4974-9acf-598247793200
+# ╟─dbc02f9a-5bc9-478e-8de1-767fd64faaec
+# ╟─7d460b80-8319-4129-862e-695ebb8cff28
+# ╟─d8322419-3ebe-4718-ba84-9c435615d1ba
 # ╠═12ae12a8-c47b-4d15-af4d-d6bb92c8a026
-# ╠═02def290-7dcd-4c8f-9c41-228033cc3e7c
-# ╠═137be6c2-5b86-4e1d-b457-b4f71646e633
-# ╠═84942358-6f19-4d7f-b367-4dc5e81009f5
-# ╠═9fe2db35-a1d7-4af7-be2c-e34c1ce66929
-# ╠═b73b6b29-6d18-4308-80dd-e0cc2aedd038
-# ╠═7eeff659-9f83-47eb-8f96-6fac093f0e64
-# ╠═71e4523b-b68c-49cb-8877-ff819c4a13e9
-# ╠═125169d6-bfd0-443f-87aa-a7117f481088
-# ╠═4202e249-ca1c-4b00-a482-8fe15a6064ed
-# ╠═d5965014-2e70-4023-80ef-526f28a0334f
-# ╠═27a7a6b4-6462-410d-a26a-ffd384efe461
-# ╠═7b3cf490-87d4-4294-95af-f6e6deee043d
-# ╠═c69ecdb4-a312-45bc-874d-85d4d3747f77
+# ╟─02def290-7dcd-4c8f-9c41-228033cc3e7c
+# ╟─137be6c2-5b86-4e1d-b457-b4f71646e633
+# ╟─84942358-6f19-4d7f-b367-4dc5e81009f5
+# ╟─9fe2db35-a1d7-4af7-be2c-e34c1ce66929
+# ╟─b73b6b29-6d18-4308-80dd-e0cc2aedd038
+# ╟─7eeff659-9f83-47eb-8f96-6fac093f0e64
+# ╟─71e4523b-b68c-49cb-8877-ff819c4a13e9
+# ╟─125169d6-bfd0-443f-87aa-a7117f481088
+# ╟─4202e249-ca1c-4b00-a482-8fe15a6064ed
+# ╟─d5965014-2e70-4023-80ef-526f28a0334f
+# ╟─27a7a6b4-6462-410d-a26a-ffd384efe461
+# ╟─7b3cf490-87d4-4294-95af-f6e6deee043d
+# ╟─c69ecdb4-a312-45bc-874d-85d4d3747f77
 # ╠═a1b22caf-ec34-4abd-9460-bce43203b742
-# ╠═8c2447b3-c26e-47e1-8701-7e4a18ae92a8
-# ╠═2abfc0da-1d95-49dd-837d-6718ce473c5d
-# ╠═f08b1731-59dd-4d82-8b42-6824bc216d5a
-# ╠═3a4b2178-47ee-474e-bbaf-72c00b3d3c2d
-# ╠═69abc9da-4596-4268-9dea-95baaf687f67
-# ╠═ced2268b-d0c8-4cb0-9e0d-083d6db388c8
-# ╠═f8f72024-5ea6-474d-8123-dd9b19a03fa7
-# ╠═7df6433b-0c5b-4bd8-a96a-eb70d0efa0e3
-# ╠═976a8ef5-fd7f-45a4-8f1d-2a99318ad33a
-# ╠═db5771f6-1bf6-4996-a515-5e7ad37d1404
-# ╠═986e1b28-ad65-4d2e-ad70-9dc515c8a08c
-# ╠═a749dce9-5f63-43f0-95e5-d36558cc6533
-# ╠═22fd0b92-cfad-450e-b855-1ce7648fb93b
-# ╠═be156c4f-af26-4e6e-907d-99e73b68c4aa
-# ╠═07aa2d3e-0387-4e41-bcbc-d24d5f572497
-# ╠═f65563e8-6eef-4526-be12-7051d3e8d437
-# ╠═080f38b7-8cc3-497a-badf-5748c617f56b
-# ╠═8c6ba535-e37f-4210-8d59-5a28afcff45f
-# ╠═d8b8ec7c-fee3-4475-8552-6b33b091a728
-# ╠═61ebbc9f-8bc3-4712-9bd5-d1bad2bc6640
-# ╠═caa1abe9-b736-4cc1-a8c6-ecada36e449a
-# ╠═1a9ea230-6841-429e-bcca-f013d39514a9
-# ╠═15f491d1-9436-44b1-a307-0ebd98cdf722
-# ╠═222d45a6-60f2-49c1-a10e-ae2688bd6734
-# ╠═3cdf3d2b-81e7-4b91-ae61-f7cc214d5154
-# ╠═c4a55daf-8b5f-48e2-90e8-1c215deeb804
-# ╠═f94aa75a-2712-4936-9c4a-06b2a623b904
-# ╠═a946547f-8507-49ec-b5fc-007dc89d0e92
-# ╠═376852e6-9a1b-4f86-8681-d307c7fd610a
-# ╠═218c723f-8921-475b-b9be-9e88a3522829
-# ╠═b4e85b19-989f-4caf-85f7-519d95178a4d
-# ╠═4f407428-dd3b-4df4-9fdc-9cff3aaafb56
-# ╠═f6330660-6de9-454a-b23a-3b64e763b17a
-# ╠═10b81e79-03ff-46fb-8557-172b3f51dce3
-# ╠═47754429-df92-4523-b459-5fb6d76bd67a
-# ╠═bc81fb58-4060-41d3-bc7c-fc96e2627c77
-# ╠═93e8dfc5-8bbe-4642-bef0-e5fcd0c9b781
-# ╠═ad68d8e3-815a-4498-9132-d144f4f3f958
-# ╠═22b0134b-6a5c-4a5c-8daa-966c8c636eeb
-# ╠═485e0d4f-ba2d-4493-bf66-5b4c39eee8c8
-# ╠═0cfd9bcf-2545-4df2-a70f-3334b8454e31
-# ╠═c7201240-7f39-4904-8fd1-5cbbd87800ca
-# ╠═54f2a8e1-03c2-4cd9-8159-9b8fbdda29bb
-# ╠═e8c01c5f-4d8b-4fdc-8e37-90fdd449492a
-# ╠═f4f976af-baaf-495a-bf31-c7226040fe35
-# ╠═a3c046e9-7c15-46e6-8288-0ec16000fe80
-# ╠═775ee452-d3c0-46e4-a1bb-07939b37d050
-# ╠═af54ce43-acb4-4b14-8f6d-2fffb4a55c69
-# ╠═d9a49705-1e01-4e98-9915-f285cb16df28
-# ╠═f1b64d24-e2d4-4f20-83d5-095333a5264c
-# ╠═cf6f8342-703a-49e7-ab9b-35cce160b9f3
-# ╠═a98edbef-50c2-44fa-ae24-241c9bff99f7
-# ╠═8e645546-7f33-42a5-b6b6-4f100f93918f
-# ╠═a12f4fa0-0597-4447-a731-603849fbdcba
-# ╠═35b4d21b-c240-4a9c-867f-7a929e933e4e
-# ╠═4daf8c01-54e8-48b4-a991-f784fdc9f14f
-# ╠═2e6b9a41-d56e-4e95-ba78-f360e008335d
-# ╠═5d2d71fe-1aff-4d28-b1d2-47dc3dd7485a
-# ╠═32c8cac4-b560-45bf-9c53-6a971b11e731
-# ╠═01ad1443-6736-41e3-ab73-c5ccdf373ab9
-# ╠═f4dd80e2-3df2-4c9f-bd29-5a8a92d0639a
-# ╠═e08ab6af-108d-4e87-91fb-051c5fd19fcd
-# ╠═36431e5d-97bd-4843-9775-6211c4a2d8b3
-# ╠═6abdb5a7-5b5b-44ed-9ba8-ac20c59c6dc7
-# ╠═e158bb3c-c351-41b1-ae8d-8f60297d6814
-# ╠═900ab898-f39e-4246-9d50-6430a2d6f645
+# ╟─8c2447b3-c26e-47e1-8701-7e4a18ae92a8
+# ╟─2abfc0da-1d95-49dd-837d-6718ce473c5d
+# ╟─f08b1731-59dd-4d82-8b42-6824bc216d5a
+# ╟─3a4b2178-47ee-474e-bbaf-72c00b3d3c2d
+# ╟─69abc9da-4596-4268-9dea-95baaf687f67
+# ╟─ced2268b-d0c8-4cb0-9e0d-083d6db388c8
+# ╟─f8f72024-5ea6-474d-8123-dd9b19a03fa7
+# ╟─7df6433b-0c5b-4bd8-a96a-eb70d0efa0e3
+# ╟─976a8ef5-fd7f-45a4-8f1d-2a99318ad33a
+# ╟─db5771f6-1bf6-4996-a515-5e7ad37d1404
+# ╟─986e1b28-ad65-4d2e-ad70-9dc515c8a08c
+# ╟─a749dce9-5f63-43f0-95e5-d36558cc6533
+# ╟─22fd0b92-cfad-450e-b855-1ce7648fb93b
+# ╟─be156c4f-af26-4e6e-907d-99e73b68c4aa
+# ╟─07aa2d3e-0387-4e41-bcbc-d24d5f572497
+# ╟─f65563e8-6eef-4526-be12-7051d3e8d437
+# ╟─080f38b7-8cc3-497a-badf-5748c617f56b
+# ╟─8c6ba535-e37f-4210-8d59-5a28afcff45f
+# ╟─d8b8ec7c-fee3-4475-8552-6b33b091a728
+# ╟─61ebbc9f-8bc3-4712-9bd5-d1bad2bc6640
+# ╟─caa1abe9-b736-4cc1-a8c6-ecada36e449a
+# ╟─1a9ea230-6841-429e-bcca-f013d39514a9
+# ╟─15f491d1-9436-44b1-a307-0ebd98cdf722
+# ╟─222d45a6-60f2-49c1-a10e-ae2688bd6734
+# ╟─3cdf3d2b-81e7-4b91-ae61-f7cc214d5154
+# ╟─c4a55daf-8b5f-48e2-90e8-1c215deeb804
+# ╟─f94aa75a-2712-4936-9c4a-06b2a623b904
+# ╟─a946547f-8507-49ec-b5fc-007dc89d0e92
+# ╟─376852e6-9a1b-4f86-8681-d307c7fd610a
+# ╟─218c723f-8921-475b-b9be-9e88a3522829
+# ╟─b4e85b19-989f-4caf-85f7-519d95178a4d
+# ╟─4f407428-dd3b-4df4-9fdc-9cff3aaafb56
+# ╟─f6330660-6de9-454a-b23a-3b64e763b17a
+# ╟─10b81e79-03ff-46fb-8557-172b3f51dce3
+# ╟─47754429-df92-4523-b459-5fb6d76bd67a
+# ╟─bc81fb58-4060-41d3-bc7c-fc96e2627c77
+# ╟─93e8dfc5-8bbe-4642-bef0-e5fcd0c9b781
+# ╟─ad68d8e3-815a-4498-9132-d144f4f3f958
+# ╟─22b0134b-6a5c-4a5c-8daa-966c8c636eeb
+# ╟─485e0d4f-ba2d-4493-bf66-5b4c39eee8c8
+# ╟─0cfd9bcf-2545-4df2-a70f-3334b8454e31
+# ╟─c7201240-7f39-4904-8fd1-5cbbd87800ca
+# ╟─54f2a8e1-03c2-4cd9-8159-9b8fbdda29bb
+# ╟─e8c01c5f-4d8b-4fdc-8e37-90fdd449492a
+# ╟─f4f976af-baaf-495a-bf31-c7226040fe35
+# ╟─a3c046e9-7c15-46e6-8288-0ec16000fe80
+# ╟─775ee452-d3c0-46e4-a1bb-07939b37d050
+# ╟─af54ce43-acb4-4b14-8f6d-2fffb4a55c69
+# ╟─d9a49705-1e01-4e98-9915-f285cb16df28
+# ╟─f1b64d24-e2d4-4f20-83d5-095333a5264c
+# ╟─cf6f8342-703a-49e7-ab9b-35cce160b9f3
+# ╟─a98edbef-50c2-44fa-ae24-241c9bff99f7
+# ╟─8e645546-7f33-42a5-b6b6-4f100f93918f
+# ╟─a12f4fa0-0597-4447-a731-603849fbdcba
+# ╟─35b4d21b-c240-4a9c-867f-7a929e933e4e
+# ╟─4daf8c01-54e8-48b4-a991-f784fdc9f14f
+# ╟─2e6b9a41-d56e-4e95-ba78-f360e008335d
+# ╟─5d2d71fe-1aff-4d28-b1d2-47dc3dd7485a
+# ╟─32c8cac4-b560-45bf-9c53-6a971b11e731
+# ╟─01ad1443-6736-41e3-ab73-c5ccdf373ab9
+# ╟─f4dd80e2-3df2-4c9f-bd29-5a8a92d0639a
+# ╟─e08ab6af-108d-4e87-91fb-051c5fd19fcd
+# ╟─36431e5d-97bd-4843-9775-6211c4a2d8b3
+# ╟─6abdb5a7-5b5b-44ed-9ba8-ac20c59c6dc7
+# ╟─e158bb3c-c351-41b1-ae8d-8f60297d6814
+# ╟─900ab898-f39e-4246-9d50-6430a2d6f645
 # ╠═c73fea91-cca0-4f7f-9c38-f85e6f3c56ae
-# ╠═4bfbb486-642d-4419-9039-eabe2569336a
-# ╠═f1f560ef-630c-4161-98a7-b56ad41ad154
+# ╟─4bfbb486-642d-4419-9039-eabe2569336a
+# ╟─f1f560ef-630c-4161-98a7-b56ad41ad154
 # ╠═b22a52b9-1ffa-49d3-9945-74fb590af5e4
 # ╠═24bb5b72-935e-40a9-b5c1-1d341b1c4392
 # ╠═fc6da046-815f-4d1b-8a47-e886907f0c3c
