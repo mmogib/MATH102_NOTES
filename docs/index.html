@@ -3,140 +3,569 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>MATH102 Calculus II</title>
+  <title>MATH102: Calculus II</title>
   <style>
     :root {
       color-scheme: light;
-      --ink: #1d2430;
-      --muted: #5c6573;
-      --paper: #f4f1e8;
-      --card: rgba(255, 255, 255, 0.92);
-      --accent: #0f766e;
-      --accent-soft: rgba(15, 118, 110, 0.12);
+      --kfupm-green: #008540;
+      --kfupm-gold: #dac961;
+      --kfupm-petrol: #003e51;
+      --kfupm-forest: #00573f;
+      --kfupm-light-gray: #d9dae4;
+      --kfupm-dark-gray: #373938;
+      --ccm-accent: #97a5b9;
+      --paper: #f6f8f7;
+      --card: #ffffff;
+      --line: rgba(0, 62, 81, 0.12);
+      --shadow: 0 18px 44px rgba(0, 62, 81, 0.08);
+      --text: #243039;
+      --muted: #5a6771;
     }
+
     * {
       box-sizing: border-box;
     }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       font-family: Georgia, "Times New Roman", serif;
-      color: var(--ink);
+      color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(15, 118, 110, 0.16), transparent 28rem),
-        radial-gradient(circle at 90% 10%, rgba(220, 138, 47, 0.12), transparent 18rem),
-        linear-gradient(135deg, #f8f5ee 0%, #eef2ef 100%);
+        linear-gradient(180deg, rgba(151, 165, 185, 0.12) 0%, rgba(151, 165, 185, 0) 18rem),
+        radial-gradient(circle at top right, rgba(0, 133, 64, 0.08), transparent 20rem),
+        var(--paper);
     }
-    main {
-      max-width: 56rem;
+
+    a {
+      color: inherit;
+    }
+
+    .page {
+      width: min(72rem, calc(100% - 2rem));
       margin: 0 auto;
-      padding: 4.5rem 1.25rem 5rem;
+      padding: 2rem 0 4rem;
     }
-    .card {
+
+    .hero,
+    .section {
       background: var(--card);
-      border: 1px solid rgba(31, 41, 51, 0.12);
+      border: 1px solid var(--line);
       border-radius: 1.5rem;
-      box-shadow: 0 1.5rem 4rem rgba(31, 41, 51, 0.12);
-      padding: clamp(1.5rem, 4vw, 3rem);
-      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
     }
-    h1 {
-      margin: 0;
-      font-size: clamp(2.4rem, 7vw, 4.75rem);
-      line-height: 0.95;
-      letter-spacing: -0.06em;
+
+    .hero {
+      padding: clamp(1.5rem, 3vw, 2.5rem);
+      margin-bottom: 1.25rem;
+      position: relative;
+      overflow: hidden;
     }
-    .lede {
-      color: var(--muted);
-      font-size: 1.15rem;
-      line-height: 1.7;
-      max-width: 42rem;
-      margin: 1rem 0 0;
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -4rem -4rem auto;
+      width: 14rem;
+      height: 14rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(218, 201, 97, 0.18), rgba(218, 201, 97, 0));
+      pointer-events: none;
     }
-    .meta {
+
+    .brandbar {
       display: flex;
-      flex-wrap: wrap;
-      gap: 0.65rem;
-      margin: 1.4rem 0 0;
-    }
-    .chip {
-      display: inline-flex;
       align-items: center;
-      border-radius: 999px;
-      padding: 0.35rem 0.8rem;
-      background: var(--accent-soft);
-      color: var(--accent);
-      font-size: 0.88rem;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .brandbar img {
+      width: clamp(8rem, 18vw, 11rem);
+      height: auto;
+      flex: none;
+    }
+
+    .brandtext {
+      min-width: 0;
+    }
+
+    .brandtext p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.35;
+      font-size: 0.92rem;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin: 0 0 0.75rem;
+      color: var(--kfupm-forest);
+      font-size: 0.82rem;
       font-weight: 700;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
     }
+
+    h1,
+    h2,
+    h3 {
+      color: var(--kfupm-petrol);
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(2.3rem, 6vw, 4.4rem);
+      line-height: 0.96;
+      letter-spacing: -0.04em;
+      max-width: 11ch;
+    }
+
+    .hero-copy {
+      margin: 1rem 0 0;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.8;
+      max-width: 43rem;
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.8rem;
+      margin-top: 1.6rem;
+    }
+
+    .meta-item {
+      border-left: 3px solid var(--ccm-accent);
+      padding: 0.15rem 0 0.15rem 0.8rem;
+      min-height: 3.25rem;
+    }
+
+    .meta-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+
+    .meta-item strong {
+      display: block;
+      font-size: 1rem;
+      line-height: 1.4;
+      color: var(--text);
+    }
+
+    .section {
+      padding: clamp(1.35rem, 2.5vw, 2rem);
+      margin-top: 1.25rem;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .section-heading p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.96rem;
+      line-height: 1.6;
+      max-width: 32rem;
+    }
+
     .chapter-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-      gap: 0.95rem;
-      margin: 2rem 0 0;
-      padding: 0;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
     }
+
     .chapter-card {
-      border: 1px solid rgba(15, 118, 110, 0.18);
-      border-radius: 1rem;
-      padding: 1rem 1.05rem;
-      background: rgba(15, 118, 110, 0.04);
-      transition: transform 150ms ease, background 150ms ease, border-color 150ms ease;
+      text-decoration: none;
+      display: block;
+      padding: 1.2rem 1.25rem;
+      border-radius: 1.2rem;
+      border: 1px solid rgba(0, 133, 64, 0.18);
+      background:
+        linear-gradient(180deg, rgba(0, 133, 64, 0.08), rgba(0, 133, 64, 0.03)),
+        #ffffff;
+      box-shadow: 0 12px 28px rgba(0, 133, 64, 0.08);
+      transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease;
     }
+
     .chapter-card:hover {
       transform: translateY(-2px);
-      background: rgba(15, 118, 110, 0.09);
-      border-color: rgba(15, 118, 110, 0.28);
+      box-shadow: 0 16px 34px rgba(0, 133, 64, 0.12);
+      border-color: rgba(0, 133, 64, 0.34);
     }
-    .chapter-label {
-      color: var(--muted);
+
+    .chapter-card:focus-visible {
+      transform: translateY(-2px);
+      box-shadow:
+        0 16px 34px rgba(0, 133, 64, 0.12),
+        0 0 0 4px rgba(0, 62, 81, 0.2);
+      border-color: var(--kfupm-petrol);
+      outline: 3px solid var(--kfupm-petrol);
+      outline-offset: 4px;
+    }
+
+    .chapter-card span {
+      display: block;
+    }
+
+    .chapter-number {
+      color: var(--kfupm-forest);
       font-size: 0.82rem;
+      font-weight: 700;
       letter-spacing: 0.08em;
       text-transform: uppercase;
+      margin-bottom: 0.45rem;
     }
-    .chapter-link {
-      display: inline-block;
-      margin-top: 0.35rem;
-      color: var(--accent);
-      font-size: 1.08rem;
+
+    .chapter-title {
+      color: var(--kfupm-petrol);
+      font-size: 1.18rem;
       font-weight: 700;
-      text-decoration: none;
+      line-height: 1.35;
     }
-    .chapter-link:hover {
-      text-decoration: underline;
-    }
-    .footer {
-      margin-top: 1.5rem;
+
+    .chapter-note {
+      margin-top: 0.65rem;
       color: var(--muted);
       font-size: 0.95rem;
+      line-height: 1.55;
+    }
+
+    .textbook {
+      display: grid;
+      grid-template-columns: minmax(10rem, 13rem) minmax(0, 1fr);
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    .textbook img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 1rem;
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 24px rgba(0, 62, 81, 0.12);
+    }
+
+    .textbook p,
+    .description,
+    .grade-note {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .citation {
+      margin-top: 0.8rem;
+      padding: 0.95rem 1rem;
+      border-radius: 1rem;
+      background: rgba(217, 218, 228, 0.28);
+      border: 1px solid rgba(151, 165, 185, 0.24);
+      color: var(--text);
+    }
+
+    ol.outcomes {
+      margin: 0;
+      padding-left: 1.4rem;
+      line-height: 1.8;
+      color: var(--text);
+    }
+
+    .grading-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .grade-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+
+    .grade-list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.9rem 1rem;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .grade-list li:last-child {
+      border-bottom: 0;
+    }
+
+    .grade-list strong {
+      color: var(--kfupm-petrol);
+    }
+
+    .formula-card {
+      border-radius: 1rem;
+      background: linear-gradient(180deg, rgba(0, 62, 81, 0.05), rgba(151, 165, 185, 0.12));
+      border: 1px solid rgba(0, 62, 81, 0.12);
+      padding: 1rem;
+    }
+
+    .formula-card h3 {
+      font-size: 1rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .formula {
+      margin: 0 0 0.8rem;
+      padding: 0.8rem 0.9rem;
+      border-radius: 0.85rem;
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--kfupm-petrol);
+      font-size: 1.02rem;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .example {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-left: 3px solid var(--kfupm-gold);
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 0.8rem;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: center;
+      margin-top: 1.5rem;
+      padding: 0.3rem 0 0;
+      color: #4b5560;
+      font-size: 0.92rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-links a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .footer-links a:hover,
+    .footer-links a:focus-visible {
+      text-decoration: underline;
+      outline: none;
+    }
+
+    @media (max-width: 56rem) {
+      .meta,
+      .chapter-grid,
+      .grading-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 42rem) {
+      .page {
+        width: min(100% - 1rem, 42rem);
+        padding-top: 0.75rem;
+      }
+
+      .brandbar,
+      .section-heading,
+      footer,
+      .textbook,
+      .meta,
+      .chapter-grid,
+      .grading-grid {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .brandbar img {
+        width: min(12rem, 70vw);
+      }
+
+      .meta-item,
+      .grade-list li {
+        width: 100%;
+      }
+
+      .grade-list li {
+        flex-direction: column;
+        gap: 0.25rem;
+      }
     }
   </style>
 </head>
 <body>
-  <main>
-    <section class="card">
-      <h1>MATH102<br>Calculus II</h1>
-      <p class="lede">
-        Course notes for MATH102, organized as standalone Pluto notebook exports.
-        Select a chapter below to open the static notes.
+  <main class="page">
+    <section class="hero">
+      <div class="brandbar">
+        <img src="assets/kfupm_logo_secondary_07.png" alt="KFUPM logo">
+        <div class="brandtext">
+          <p>King Fahd University of Petroleum &amp; Minerals</p>
+          <p>College of Computing and Mathematics</p>
+        </div>
+      </div>
+
+      <span class="eyebrow">Course Home</span>
+      <h1>MATH102: Calculus II</h1>
+      <p class="hero-copy">
+        Core chapter notes, course policy highlights, and textbook information for Calculus II.
+        Use the chapter cards below to go directly to the main content.
       </p>
-      <div class="meta">
-        <span class="chip">Pluto exports</span>
-        <span class="chip">Static notes</span>
-        <span class="chip">1 chapter</span>
+
+      <div class="meta" aria-label="Course metadata">
+        <div class="meta-item">
+          <span>Department</span>
+          <strong>Department of Mathematics</strong>
+        </div>
+        <div class="meta-item">
+          <span>College</span>
+          <strong>College of Computing and Mathematics</strong>
+        </div>
+        <div class="meta-item">
+          <span>Prerequisite</span>
+          <strong>MATH101</strong>
+        </div>
+        <div class="meta-item">
+          <span>Credit Hours</span>
+          <strong>4-0-4</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="chapters-title">
+      <div class="section-heading">
+        <h2 id="chapters-title">Chapter Notes</h2>
+        <p>The chapter links are the primary navigation for the course notes.</p>
       </div>
       <div class="chapter-grid">
-        <article class="chapter-card">
-  <div class="chapter-label">Chapter 9</div>
-  <a class="chapter-link" href="MATH_102_CH9.html">Chapter 9: Sequences and Series</a>
-</article>
-
+        <a class="chapter-card" href="MATH_102_CH5.html">
+          <span class="chapter-number">Chapter 5</span>
+          <span class="chapter-title">Integration</span>
+          <span class="chapter-note">Area, Riemann sums, the Fundamental Theorem of Calculus, substitution, and core integration rules.</span>
+        </a>
+        <a class="chapter-card" href="MATH_102_CH7.html">
+          <span class="chapter-number">Chapter 7</span>
+          <span class="chapter-title">Applications of Integration</span>
+          <span class="chapter-note">Areas between curves, volume by disks and shells, arc length, and surfaces of revolution.</span>
+        </a>
+        <a class="chapter-card" href="MATH_102_CH8.html">
+          <span class="chapter-number">Chapter 8</span>
+          <span class="chapter-title">Integration Techniques and Improper Integrals</span>
+          <span class="chapter-note">Integration by parts, trigonometric methods, partial fractions, and improper integrals.</span>
+        </a>
+        <a class="chapter-card" href="MATH_102_CH9.html">
+          <span class="chapter-number">Chapter 9</span>
+          <span class="chapter-title">Sequences and Series</span>
+          <span class="chapter-note">Convergence tests, power series, and Taylor and Maclaurin series.</span>
+        </a>
       </div>
-      <p class="footer">
-        Each chapter opens as a standalone static notebook export.
+    </section>
+
+    <section class="section" aria-labelledby="textbook-title">
+      <div class="section-heading">
+        <h2 id="textbook-title">Textbook</h2>
+      </div>
+      <div class="textbook">
+        <img src="assets/larson_book.jpg" alt="Calculus: Early Transcendental Functions textbook cover">
+        <div>
+          <p>
+            The course follows the official syllabus text and chapter sequencing from the adopted Calculus II textbook.
+          </p>
+          <p class="citation">
+            Larson, R. &amp; Edwards, B., <em>Calculus: Early Transcendental Functions</em>, Metric Version, 7th edition, Cengage Learning, Inc., 2019.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="outcomes-title">
+      <div class="section-heading">
+        <h2 id="outcomes-title">Learning Outcomes</h2>
+        <p>Based on the course syllabus.</p>
+      </div>
+      <ol class="outcomes">
+        <li>Estimate areas and definite integrals by Riemann sums.</li>
+        <li>Apply the Fundamental Theorem of Calculus.</li>
+        <li>Evaluate integrals using various techniques of integration.</li>
+        <li>Calculate the average value of a function, areas between curves, length of curves, volumes and surface areas of solids of revolutions.</li>
+        <li>Evaluate improper integrals and limits of sequences.</li>
+        <li>Apply convergence tests of series and evaluate sum of some selected convergent series.</li>
+        <li>Find interval and radius of convergence of a power series and express a function as a power series (Taylor and Maclaurin).</li>
+      </ol>
+    </section>
+
+    <section class="section" aria-labelledby="grading-title">
+      <div class="section-heading">
+        <h2 id="grading-title">Grading Policy</h2>
+        <p>Summary of the syllabus grading weights and the class work normalization rule.</p>
+      </div>
+      <div class="grading-grid">
+        <ul class="grade-list">
+          <li><strong>Exam I</strong><span>70/300 (23.33%)</span></li>
+          <li><strong>Exam II</strong><span>70/300 (23.33%)</span></li>
+          <li><strong>Final Exam</strong><span>100/300 (33.34%)</span></li>
+          <li><strong>Lab Python</strong><span>30/300 (10%)</span></li>
+          <li><strong>Class Work</strong><span>30/300 (10%)</span></li>
+        </ul>
+        <div class="formula-card">
+          <h3>Class Work Formula</h3>
+          <p class="formula">y = 3 * (median(Exam I %) + median(Exam II %)) / 20</p>
+          <p class="grade-note">Expected interval: <strong>[y - 1, y + 1]</strong></p>
+          <div class="example">
+            If the Exam I median is 72% and the Exam II median is 68%, then
+            <strong>y = 3 * (72 + 68) / 20 = 21</strong>, so the section classwork average should lie in <strong>[20, 22]</strong>.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="description-title">
+      <div class="section-heading">
+        <h2 id="description-title">Course Description</h2>
+      </div>
+      <p class="description">
+        Definite and indefinite integrals of functions of a single variable. Fundamental Theorem of Calculus.
+        Techniques of integration. Hyperbolic functions. Applications of the definite integral to area, volume,
+        arc length and surface area. Improper integrals. Sequences and series: convergence tests, integral,
+        comparison, ratio and root tests. Alternating series. Absolute and conditional convergence. Power series.
+        Taylor and Maclaurin series.
       </p>
     </section>
+
+    <footer>
+      <span>MATH102 course notes</span>
+      <div class="footer-links">
+        <a href="https://mshahrani.website/">mshahrani.website</a>
+        <a href="https://www.kfupm.edu.sa/">kfupm.edu.sa</a>
+        <a href="https://math.kfupm.edu.sa/">math.kfupm.edu.sa</a>
+      </div>
+    </footer>
   </main>
 </body>
 </html>
