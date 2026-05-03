@@ -7,9 +7,14 @@ This repository contains MATH102 Calculus II course notes authored as Pluto note
 ## Workflow
 
 - Edit notebooks in Pluto.
+- Maintain `docs/index.html` directly as a static landing page.
 - Export/publish through `export_push.sh` or `export_push.bat` with a commit message.
 - Use `src/export.jl` as the build/export entry point.
-- Treat `docs/` as generated static-site output.
+- `src/export.jl` exports chapter notebooks only; it must not regenerate `docs/index.html`.
+- Use `julia --project=. src/export.jl --ch=...` for selective chapter exports when needed.
+- Treat `docs/` as the published static-site tree.
+- Keep landing-page-only published assets under `docs/assets/`.
+- Publish wrappers should run from the repository root and stage only `docs/` unless explicitly redesigned.
 - Prefer Julia for repository automation scripts. Do not add Python or a Python environment unless there is a clear technical reason.
 
 ## Notebook Split Conventions
@@ -25,7 +30,8 @@ This repository contains MATH102 Calculus II course notes authored as Pluto note
 ## Repository Folders
 
 - `src/`: Pluto notebooks and export scripts.
-- `docs/`: generated static-site output.
+- `docs/`: published static-site output, including the hand-maintained landing page.
+- `docs/assets/`: published assets used by the static landing page.
 - `imgs/`: course image assets.
 - `refs/`: syllabus/reference files and archived legacy sources.
 - `notes/`: project plans, specs, and discussion notes.

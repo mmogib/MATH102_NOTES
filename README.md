@@ -4,7 +4,7 @@ This repository contains Pluto.jl notes, exercises, and static course materials 
 
 ## Course Material
 
-Open the generated course site:
+Open the published course site:
 
 - [Course landing page](./docs/index.html)
 - [Chapter 5 notes](./docs/MATH_102_CH5.html)
@@ -47,11 +47,13 @@ Install Julia dependencies:
 julia --project=. -e 'using Pkg; Pkg.instantiate()'
 ```
 
-Export the static site:
+Export the chapter notebooks:
 
 ```bash
 julia --project=. src/export.jl
 ```
+
+The exporter updates only the chapter HTML files in `docs/`. It does not regenerate `docs/index.html`.
 
 Export only selected chapters:
 
@@ -82,10 +84,19 @@ Pass export arguments through the publish scripts after the commit message:
 export_push.bat "Update selected chapters" --ch=5,7
 ```
 
+## Landing Page
+
+The landing page is maintained directly at `docs/index.html`.
+
+- It is a static branded page, not a generated Julia template.
+- Published landing-page assets live under `docs/assets/`.
+- Repo-level source assets can remain under `imgs/`, but `docs/index.html` should reference only published paths inside `docs/`.
+
 ## Repository Layout
 
 - `src/`: Pluto notebooks and export scripts.
-- `docs/`: generated static-site output.
+- `docs/`: published static-site output, including the static landing page.
+- `docs/assets/`: published assets used by the landing page.
 - `imgs/`: course image assets.
 - `refs/`: syllabus/reference material and archived legacy sources.
 - `notes/`: project plans, specs, and discussion notes.
